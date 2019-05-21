@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Folder>
+	<name>2019-05-06</name>
+	<visibility>0</visibility>
+	<PhotoOverlay>
+		<name>007A5P3F10-036.jpg</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17296693309815</longitude>
+			<latitude>-22.9088443221323</latitude>
+			<altitude>67.54034185902816</altitude>
+			<heading>-150.0890076808973</heading>
+			<tilt>83.70000000001373</tilt>
+			<roll>0.02720176574135631</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a295805/Pictures/Saved Pictures/007A5P3F10-036.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-21.1084</leftFov>
+			<rightFov>21.1084</rightFov>
+			<bottomFov>-15.71</bottomFov>
+			<topFov>15.71</topFov>
+			<near>23.4027</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17296693309815,-22.9088443221323,67.54034185902816</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002008AV022.jpg</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17722459699987</longitude>
+			<latitude>-22.91916570900004</latitude>
+			<altitude>43.4400000246556</altitude>
+			<heading>131.317220548858</heading>
+			<tilt>82.79537282936866</tilt>
+			<roll>-0.0015769608798838</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a295805/Pictures/Saved Pictures/002008AV022.jpg.png</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-19.025</leftFov>
+			<rightFov>19.025</rightFov>
+			<bottomFov>-14.24</bottomFov>
+			<topFov>14.24</topFov>
+			<near>15.052</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17722459699987,-22.91916570900004,43.4400000246556</coordinates>
+		</Point>
+	</PhotoOverlay>
+</Folder>
+</kml>
