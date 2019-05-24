@@ -21,7 +21,7 @@ const calculateFOVdistance = (height, tilt) => {
 };
 
 const removeStringExtension = (str) => {
-    if (str.lastIndexOf('.') === -1) return str 
+    if (str.lastIndexOf('.') === -1) return str
     return str.substring(0, str.lastIndexOf('.'))
 }
 
@@ -101,11 +101,17 @@ const kmlToCSV = (photoOverlays) => {
     photoOverlays.forEach(photo => {
 
         const name = removeStringExtension(photo.name[0])
-        const fov = parseFloat(photo.ViewVolume[0].rightFov[0]) * 2
-        const camera = photo.Camera[0] 
+        const fov = parseFloat(photo.ViewVolume[0].rightFov[0]).toFixed(1) * 2
+        const camera = photo.Camera[0]
+        const lat = parseFloat(camera.latitude[0]).toFixed(6)
+        const long = parseFloat(camera.longitude[0]).toFixed(6)
+        const height = parseFloat(camera.altitude[0]).toFixed(2)
+        const heading = parseFloat(camera.heading[0]).toFixed(2)
+        const tilt = parseFloat(camera.tilt[0]).toFixed(2)
 
-        const line = (`${name}, ${camera.latitude[0]}, ${camera.longitude[0]}, ${camera.altitude[0]}, ${camera.heading[0]}, ${camera.tilt[0]}, ${fov} \n`)
+        const line = (`${name}, ${lat}, ${long}, ${height}, ${heading}, ${tilt}, ${fov} \n`)
         lines = lines + `${line}`;
+
     });
 
     const file = `name, lat, long, height, heading, tilt, fov \n ${lines}`;
@@ -120,10 +126,11 @@ const kmlToCSVWikidata = (photoOverlays) => {
     photoOverlays.forEach(photo => {
 
         const name = removeStringExtension(photo.name[0])
-        const fov = parseFloat(photo.ViewVolume[0].rightFov[0]) * 2
-        const camera = photo.Camera[0] 
+        const camera = photo.Camera[0]
+        const lat = parseFloat(camera.latitude[0]).toFixed(6)
+        const long = parseFloat(camera.longitude[0]).toFixed(6)
 
-        const line = (`${name}, @${camera.latitude[0]}/${camera.longitude[0]} \n`)
+        const line = (`${name}, @${lat}/${long} \n`)
         linesWikdata = linesWikdata + `${line}`;
     });
 
