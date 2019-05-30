@@ -11,12 +11,16 @@ const builder = new xml2js.Builder();
 
 
 const calculateFOVdistance = (height, tilt) => {
+    const minDistanceValue = 400
+    const distanceExtrapolation = 10
+    // tan = opposite leg / adjacent leg :. opposite leg = adjacent leg * tan
     if (tilt <= 89) {
         const tan = Math.tan((tilt * Math.PI) / 180);
-        // tan = opposite leg / adjacent leg :. opposite leg = adjacent leg * tan
-        return height * tan;
+        const distance = height * tan
+        if (distance < minDistanceValue) return minDistanceValue
+        return distance + (distanceExtrapolation * (height * 2 / 3))
     } else {
-        return 500;
+        return minDistanceValue;
     }
 };
 
