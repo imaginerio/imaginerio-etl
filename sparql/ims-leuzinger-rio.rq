@@ -1,0 +1,17 @@
+#Photographs by George Leuzinger in the Instituto Moreira Salles
+#defaultViewImageGrid
+
+SELECT DISTINCT item itemLabel itemDescription image collection location inventory WHERE {
+    item wdtP31 wdQ125191 ; # Get items that are instances of photographs
+          wdtP170 wdQ5877879 ; # By creator George Leuzinger
+          wdtP195wdtP361 collection . # That are in some collection
+
+    # Only return results where 'collection' is Instituto Moreira Salles
+    FILTER ( collection = wdQ6041378 )
+ 
+    OPTIONAL { item wdtP18 image . }
+    OPTIONAL { item wdtP625 location . }
+    OPTIONAL { item wdtP217 inventory . } # Optionally with an image
+
+    SERVICE wikibaselabel { bdserviceParam wikibaselanguage [AUTO_LANGUAGE],pt }
+}
