@@ -130,7 +130,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007NGBMF2430e1824cx98-14</name>
+		<name>0072430cx098-08</name>
 		<Camera>
 			<longitude>-43.17587844200002</longitude>
 			<latitude>-22.90993421300001</latitude>
@@ -157,7 +157,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>/Users/a295805/code/liquid-galaxy/_demo-1-content/marc-ferrez/ferrez-lg/007NGBMF2430e1824cx98-14.jpg</href>
+			<href>/Users/a295805/code/liquid-galaxy/_demo-1-content/marc-ferrez/ferrez-lg/0072430cx098-08.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
