@@ -2,7 +2,6 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-05-14</name>
-	<visibility>0</visibility>
 	<PhotoOverlay>
 		<name>014GL20.jpg</name>
 		<visibility>0</visibility>
@@ -177,14 +176,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F05-06.jpg</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17531111325621</longitude>
-			<latitude>-22.90958252358425</latitude>
-			<altitude>62.14995687553207</altitude>
-			<heading>179.9070002085541</heading>
-			<tilt>85.73924763592132</tilt>
-			<roll>0.002369721476103214</roll>
+			<longitude>-43.17508875312771</longitude>
+			<latitude>-22.90590835439319</latitude>
+			<altitude>55.32245518108827</altitude>
+			<heading>-179.1803598639072</heading>
+			<tilt>86.49335541127094</tilt>
+			<roll>0.002367585295368254</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -206,16 +204,17 @@
 		<Icon>
 			<href>C:/Users/a295805/Pictures/Saved Pictures/007A5P3F05-06.jpg</href>
 		</Icon>
+		<rotation>0.89</rotation>
 		<ViewVolume>
-			<leftFov>-13.865</leftFov>
-			<rightFov>13.865</rightFov>
-			<bottomFov>-10.86</bottomFov>
-			<topFov>10.86</topFov>
-			<near>21.535</near>
+			<leftFov>-12.11</leftFov>
+			<rightFov>12.11</rightFov>
+			<bottomFov>-9.47</bottomFov>
+			<topFov>9.47</topFov>
+			<near>19.1692</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17531111325621,-22.90958252358425,62.14995687553207</coordinates>
+			<coordinates>-43.17508875312771,-22.90590835439319,55.32245518108827</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
