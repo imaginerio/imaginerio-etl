@@ -178,7 +178,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS016</name>
+		<name>001LE004001</name>
 		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17384656718699</longitude>
@@ -206,7 +206,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS016.jpg</href>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001LE004001.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-28.665</leftFov>
@@ -353,7 +353,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS026</name>
+		<name>001ACL019030</name>
 		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.19680358406336</longitude>
@@ -381,7 +381,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS026.jpg</href>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001ACL019030.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-21.1208</leftFov>

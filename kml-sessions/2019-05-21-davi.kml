@@ -4,7 +4,7 @@
 	<name>2019-05-21-davi</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>014GLAS115</name>
+		<name>001ACL019093</name>
 		<Camera>
 			<longitude>-43.17580529740235</longitude>
 			<latitude>-22.91352100799642</latitude>
@@ -31,7 +31,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>014GLAS115.jpg</href>
+			<href>001ACL019093.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
@@ -88,7 +88,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS114frente.jpg</name>
+		<name>007A5P3FG05-002.jpg</name>
 		<Camera>
 			<longitude>-43.17346919094266</longitude>
 			<latitude>-22.90279580203705</latitude>
@@ -115,7 +115,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>014GLAS114frente.jpg</href>
+			<href>007A5P3FG05-002.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-24.9989</leftFov>

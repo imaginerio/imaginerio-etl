@@ -4,7 +4,7 @@
 	<name>03-06-2019</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>014GLAS110</name>
+		<name>007AFAV09-21</name>
 		<Camera>
 			<longitude>-43.18063639858351</longitude>
 			<latitude>-22.90471326124323</latitude>
@@ -31,7 +31,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS110.jpg</href>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/007AFAV09-21.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
@@ -130,7 +130,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS108</name>
+		<name>007A5P3FG05-003</name>
 		<Camera>
 			<longitude>-43.18266724948948</longitude>
 			<latitude>-22.90704112738221</latitude>
@@ -157,7 +157,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS108.jpg</href>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/007A5P3FG05-003.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
