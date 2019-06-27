@@ -2,6 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-06-11</name>
+	<visibility>0</visibility>
 	<PhotoOverlay>
 		<name>014AM008001</name>
 		<visibility>0</visibility>
@@ -177,6 +178,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001ACL019030</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.1969638756689</longitude>
 			<latitude>-22.90072610411033</latitude>
@@ -219,6 +221,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014GLAS112frente</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17360980473647</longitude>
 			<latitude>-22.90276704404339</latitude>
