@@ -4,49 +4,6 @@
 	<name>2019-05-15</name>
 	<visibility>0</visibility>
 	<PhotoOverlay>
-		<name>0072137cx008-04t.jpg</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17525251699978</longitude>
-			<latitude>-22.90317357599998</latitude>
-			<altitude>4.099998319631227</altitude>
-			<heading>89.54946025007357</heading>
-			<tilt>89.4338721239573</tilt>
-			<roll>2.56786581102554e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Pictures/Saved Pictures/0072137cx008-04t.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-29.0964</leftFov>
-			<rightFov>29.0964</rightFov>
-			<bottomFov>-16.96</bottomFov>
-			<topFov>16.96</topFov>
-			<near>0.928071</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17525251699978,-22.90317357599998,4.099998319631227</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>0071824cx019-09.JPG</name>
 		<visibility>0</visibility>
 		<Camera>

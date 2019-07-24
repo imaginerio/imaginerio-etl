@@ -1793,48 +1793,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN37001</name>
-		<Camera>
-			<longitude>-43.17955314423498</longitude>
-			<latitude>-22.95145475842777</latitude>
-			<altitude>36.31867413980487</altitude>
-			<heading>-35.28089181128011</heading>
-			<tilt>83.50102171385173</tilt>
-			<roll>-1.201802451799449e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize - Copy/001AN37001.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-28.665</leftFov>
-			<rightFov>28.665</rightFov>
-			<bottomFov>-19.415</bottomFov>
-			<topFov>19.415</topFov>
-			<near>6.89028</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17955314423498,-22.95145475842777,36.31867413980487</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>001RJ001001</name>
 		<Camera>
 			<longitude>-43.21001937899997</longitude>

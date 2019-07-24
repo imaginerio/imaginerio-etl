@@ -131,49 +131,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx001-09</name>
-		<Camera>
-			<longitude>-43.13492784399996</longitude>
-			<latitude>-22.93794130500001</latitude>
-			<altitude>20.31000000126989</altitude>
-			<heading>-115.46</heading>
-			<tilt>90.06999999999998</tilt>
-			<roll>-0.0004810872616918704</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>://camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>W:/USUARIOS/MARTIM/resize/0071824cx001-09.jpg</href>
-		</Icon>
-		<rotation>-0.74</rotation>
-		<ViewVolume>
-			<leftFov>-20.7298</leftFov>
-			<rightFov>20.7298</rightFov>
-			<bottomFov>-15.87</bottomFov>
-			<topFov>15.87</topFov>
-			<near>7.03742</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.13492784399996,-22.93794130500001,20.31000000126989</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>0071824cx001-10</name>
 		<Camera>
 			<longitude>-43.12260220418401</longitude>

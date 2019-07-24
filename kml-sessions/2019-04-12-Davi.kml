@@ -382,7 +382,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001ALA011008</name>
+		<name>007A5P3F13-018</name>
 		<Camera>
 			<longitude>-43.16317487018836</longitude>
 			<latitude>-22.95091999666249</latitude>
@@ -409,7 +409,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>001ALA011008.jpg</href>
+			<href>007A5P3F13-018.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>

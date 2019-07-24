@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-06-28</name>
+	<name>2019-07-17</name>
 	<PhotoOverlay>
-		<name>0072430cx036-02</name>
+		<name>0072137cx005-06</name>
 		<Camera>
-			<longitude>-43.16554663694272</longitude>
-			<latitude>-22.95658811699081</latitude>
-			<altitude>8.63993392398187</altitude>
-			<heading>46.37397807646253</heading>
-			<tilt>91.63633717540752</tilt>
-			<roll>-2.078492484336408e-012</roll>
+			<longitude>-43.17460251393379</longitude>
+			<latitude>-22.92398046461443</latitude>
+			<altitude>47.52595803808874</altitude>
+			<heading>-115.1631138989362</heading>
+			<tilt>91.93574527040677</tilt>
+			<roll>2.726728728755122e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -30,31 +30,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx036-02.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx005-06.jpg</href>
 		</Icon>
-		<rotation>1.5</rotation>
+		<rotation>0.38</rotation>
 		<ViewVolume>
-			<leftFov>-23.68</leftFov>
-			<rightFov>23.68</rightFov>
-			<bottomFov>-19.315</bottomFov>
-			<topFov>19.315</topFov>
-			<near>1.70004</near>
+			<leftFov>-26.05</leftFov>
+			<rightFov>26.05</rightFov>
+			<bottomFov>-14.925</bottomFov>
+			<topFov>14.925</topFov>
+			<near>16.4677</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16554663694272,-22.95658811699081,8.63993392398187</coordinates>
+			<coordinates>-43.17460251393379,-22.92398046461443,47.52595803808874</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx065-11</name>
-		<open>1</open>
+		<name>0072137cx016-01</name>
 		<Camera>
-			<longitude>-43.17574551099997</longitude>
-			<latitude>-22.910003991</latitude>
-			<altitude>2.0799999986061</altitude>
-			<heading>-31.10344784807422</heading>
-			<tilt>95.53999999999935</tilt>
-			<roll>1.179985786822965e-012</roll>
+			<longitude>-43.18241629231762</longitude>
+			<latitude>-22.92471752808935</latitude>
+			<altitude>4.310204048066427</altitude>
+			<heading>109.5378439625189</heading>
+			<tilt>83.93003771506108</tilt>
+			<roll>-1.306903594998489e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -74,30 +73,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx065-11.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx016-01.jpg</href>
 		</Icon>
-		<rotation>-1.57</rotation>
+		<rotation>0.3</rotation>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>0.72072</near>
+			<leftFov>-29.805</leftFov>
+			<rightFov>29.805</rightFov>
+			<bottomFov>-17.78</bottomFov>
+			<topFov>17.78</topFov>
+			<near>1.49349</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17574551099997,-22.910003991,2.0799999986061</coordinates>
+			<coordinates>-43.18241629231762,-22.92471752808935,4.310204048066427</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx065-03</name>
+		<name>0072137cx016-10</name>
 		<Camera>
-			<longitude>-43.17627994885628</longitude>
-			<latitude>-22.90970079459314</latitude>
-			<altitude>1.769320336020447</altitude>
-			<heading>18.39055829546118</heading>
-			<tilt>100.5931059980737</tilt>
-			<roll>3.425457391936208e-012</roll>
+			<longitude>-43.18203421800002</longitude>
+			<latitude>-22.924300061</latitude>
+			<altitude>12.74587823515709</altitude>
+			<heading>121.5216380540938</heading>
+			<tilt>86.02498303817808</tilt>
+			<roll>-1.302738340587645e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -117,30 +116,29 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx065-03.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx016-10.jpg</href>
 		</Icon>
-		<rotation>-2.72</rotation>
 		<ViewVolume>
-			<leftFov>-29.395</leftFov>
-			<rightFov>29.395</rightFov>
-			<bottomFov>-22.63</bottomFov>
-			<topFov>22.63</topFov>
-			<near>0.613069</near>
+			<leftFov>-26.295</leftFov>
+			<rightFov>26.295</rightFov>
+			<bottomFov>-14.955</bottomFov>
+			<topFov>14.955</topFov>
+			<near>2.88014</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17627994885628,-22.90970079459314,1.769320336020447</coordinates>
+			<coordinates>-43.18203421800002,-22.924300061,12.74587823515709</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0072430cx043-03</name>
+		<name>0072137cx016-12</name>
 		<Camera>
-			<longitude>-43.17604632851664</longitude>
-			<latitude>-22.90990134433852</latitude>
-			<altitude>2.110530130152287</altitude>
-			<heading>-32.08699309641973</heading>
-			<tilt>97.2665830201929</tilt>
-			<roll>0.7364657982563839</roll>
+			<longitude>-43.18267045999998</longitude>
+			<latitude>-22.92447240799999</latitude>
+			<altitude>20.65104162929889</altitude>
+			<heading>128.258661487852</heading>
+			<tilt>86.78372150564377</tilt>
+			<roll>-1.301650908942052e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -160,30 +158,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx043-03.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx016-12.jpg</href>
 		</Icon>
-		<rotation>-0.85</rotation>
+		<rotation>1.31</rotation>
 		<ViewVolume>
-			<leftFov>-22.825</leftFov>
-			<rightFov>22.825</rightFov>
-			<bottomFov>-18.75</bottomFov>
-			<topFov>18.75</topFov>
-			<near>0.731299</near>
+			<leftFov>-37.4</leftFov>
+			<rightFov>37.4</rightFov>
+			<bottomFov>-22.605</bottomFov>
+			<topFov>22.605</topFov>
+			<near>3.17241</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17604632851664,-22.90990134433852,2.110530130152287</coordinates>
+			<coordinates>-43.18267045999998,-22.92447240799999,20.65104162929889</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0072430cx056a-02</name>
+		<name>0073040cx022b-04</name>
 		<Camera>
-			<longitude>-43.17557515825993</longitude>
-			<latitude>-22.90974865005923</latitude>
-			<altitude>5.955078993728379</altitude>
-			<heading>-52.58138617244376</heading>
-			<tilt>94.71246730691085</tilt>
-			<roll>0.7330219530837845</roll>
+			<longitude>-43.18314610539287</longitude>
+			<latitude>-22.92437151514686</latitude>
+			<altitude>17.37544755929763</altitude>
+			<heading>125.140738284649</heading>
+			<tilt>84.06134049419285</tilt>
+			<roll>-1.306546736763229e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -203,29 +201,29 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx056a-02.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0073040cx022b-04.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-17.955</leftFov>
-			<rightFov>17.955</rightFov>
-			<bottomFov>-14.63</bottomFov>
-			<topFov>14.63</topFov>
-			<near>2.06343</near>
+			<leftFov>-28.21</leftFov>
+			<rightFov>28.21</rightFov>
+			<bottomFov>-22.5</bottomFov>
+			<topFov>22.5</topFov>
+			<near>1.07045</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17557515825993,-22.90974865005923,5.955078993728379</coordinates>
+			<coordinates>-43.18314610539287,-22.92437151514686,17.37544755929763</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0072430cx056a-08</name>
+		<name>007_IMG_3970</name>
 		<Camera>
-			<longitude>-43.17614193799997</longitude>
-			<latitude>-22.90978354899999</latitude>
-			<altitude>9.611710316818003</altitude>
-			<heading>-28.56996755299697</heading>
-			<tilt>90.82846706189235</tilt>
-			<roll>0.7306351371088417</roll>
+			<longitude>-43.181976542</longitude>
+			<latitude>-22.924387451</latitude>
+			<altitude>11.50999999973798</altitude>
+			<heading>118.0558192788104</heading>
+			<tilt>84.61000000000001</tilt>
+			<roll>-1.305349894036594e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -245,115 +243,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx056a-08.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_3970.jpg</href>
 		</Icon>
-		<rotation>-0.06</rotation>
-		<ViewVolume>
-			<leftFov>-21.425</leftFov>
-			<rightFov>21.425</rightFov>
-			<bottomFov>-25.815</bottomFov>
-			<topFov>25.815</topFov>
-			<near>0.825382</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17614193799997,-22.90978354899999,9.611710316818003</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx056a-11</name>
-		<Camera>
-			<longitude>-43.17583605010388</longitude>
-			<latitude>-22.91028173329512</latitude>
-			<altitude>1.737203306276009</altitude>
-			<heading>-30.47583050116554</heading>
-			<tilt>101.0556352736774</tilt>
-			<roll>0.7443664228752881</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx056a-11.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-22.23</leftFov>
-			<rightFov>22.23</rightFov>
-			<bottomFov>-18.055</bottomFov>
-			<topFov>18.055</topFov>
-			<near>0.601941</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17583605010388,-22.91028173329512,1.737203306276009</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx060-05</name>
-		<Camera>
-			<longitude>-43.17392458300002</longitude>
-			<latitude>-22.89636801100002</latitude>
-			<altitude>17.44999999794557</altitude>
-			<heading>-133.377558379663</heading>
-			<tilt>87.93000000000002</tilt>
-			<roll>0.7310164373867228</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx060-05.jpg</href>
-		</Icon>
-		<rotation>-1.06</rotation>
+		<rotation>-2.13</rotation>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>0.825846</near>
+			<bottomFov>-22.605</bottomFov>
+			<topFov>22.605</topFov>
+			<near>2.06301</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17392458300002,-22.89636801100002,17.44999999794557</coordinates>
+			<coordinates>-43.181976542,-22.92438745100001,11.50999999973798</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx040-09</name>
+		<name>002008DV001</name>
 		<Camera>
-			<longitude>-43.1739043263494</longitude>
-			<latitude>-22.89636846286172</latitude>
-			<altitude>14.37408263294608</altitude>
-			<heading>-147.3076251138859</heading>
-			<tilt>90.43931010803765</tilt>
-			<roll>0.7305610604756381</roll>
+			<longitude>-43.18077882956001</longitude>
+			<latitude>-22.89725803023514</latitude>
+			<altitude>22.49322873310761</altitude>
+			<heading>149.7569614973448</heading>
+			<tilt>87.51140506980464</tilt>
+			<roll>-1.300734273082855e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -373,30 +286,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx040-09.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002008DV001.jpg</href>
 		</Icon>
-		<rotation>-1.5</rotation>
+		<rotation>-0.58</rotation>
 		<ViewVolume>
-			<leftFov>-26.85</leftFov>
-			<rightFov>26.85</rightFov>
-			<bottomFov>-20.82</bottomFov>
-			<topFov>20.82</topFov>
-			<near>1.34695</near>
+			<leftFov>-22.13</leftFov>
+			<rightFov>22.13</rightFov>
+			<bottomFov>-16.78</bottomFov>
+			<topFov>16.78</topFov>
+			<near>6.51362</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1739043263494,-22.89636846286172,14.37408263294608</coordinates>
+			<coordinates>-43.18077882956001,-22.89725803023514,22.49322873310761</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx070-12</name>
+		<name>002008DV002</name>
 		<Camera>
-			<longitude>-43.17565994355279</longitude>
-			<latitude>-22.89908128030583</latitude>
-			<altitude>4.620652569860338</altitude>
-			<heading>143.2034888051747</heading>
-			<tilt>90.89903520235987</tilt>
-			<roll>0.7306435259580697</roll>
+			<longitude>-43.18060636707698</longitude>
+			<latitude>-22.89677687027671</latitude>
+			<altitude>11.67108830212837</altitude>
+			<heading>175.6987148968238</heading>
+			<tilt>81.85550521391106</tilt>
+			<roll>-1.312780941994366e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -416,30 +329,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx070-12.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002008DV002.jpg</href>
 		</Icon>
-		<rotation>-0.46</rotation>
+		<rotation>-1.91</rotation>
 		<ViewVolume>
-			<leftFov>-23.315</leftFov>
-			<rightFov>23.315</rightFov>
-			<bottomFov>-17.94</bottomFov>
-			<topFov>17.94</topFov>
-			<near>1.60106</near>
+			<leftFov>-19.33</leftFov>
+			<rightFov>19.33</rightFov>
+			<bottomFov>-25.105</bottomFov>
+			<topFov>25.105</topFov>
+			<near>0.21228</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17565994355279,-22.89908128030583,4.620652569860338</coordinates>
+			<coordinates>-43.18060636707698,-22.8967768702767,11.67108830212837</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx112-02</name>
+		<name>002008DV003</name>
 		<Camera>
-			<longitude>-43.17786643616194</longitude>
-			<latitude>-22.89943276562018</latitude>
-			<altitude>2.787833744435555</altitude>
-			<heading>36.29138284401689</heading>
-			<tilt>101.2725278870463</tilt>
-			<roll>0.744924328915165</roll>
+			<longitude>-43.17797690477156</longitude>
+			<latitude>-22.90464262323009</latitude>
+			<altitude>21.55721739067403</altitude>
+			<heading>-8.240513497917611</heading>
+			<tilt>84.68832636621131</tilt>
+			<roll>-1.645638075517312e-009</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -459,29 +372,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx112-02.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002008DV003.jpg</href>
 		</Icon>
+		<rotation>-2.17</rotation>
 		<ViewVolume>
-			<leftFov>-29.8446</leftFov>
-			<rightFov>29.8446</rightFov>
-			<bottomFov>-23.315</bottomFov>
-			<topFov>23.315</topFov>
-			<near>0.456574</near>
+			<leftFov>-20.435</leftFov>
+			<rightFov>20.435</rightFov>
+			<bottomFov>-15.39</bottomFov>
+			<topFov>15.39</topFov>
+			<near>0.285782</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17786643616194,-22.89943276562019,2.787833744435555</coordinates>
+			<coordinates>-43.17797690477156,-22.90464262323009,21.55721739067403</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx126-06</name>
+		<name>002008DV004</name>
 		<Camera>
-			<longitude>-43.17398941634165</longitude>
-			<latitude>-22.89629540407251</latitude>
-			<altitude>12.41177270362686</altitude>
-			<heading>-138.1941442193695</heading>
-			<tilt>91.0415014852325</tilt>
-			<roll>-1.717499527990299e-013</roll>
+			<longitude>-43.17661585944194</longitude>
+			<latitude>-22.90834555758224</latitude>
+			<altitude>22.27550612659629</altitude>
+			<heading>133.8276439323126</heading>
+			<tilt>86.29657866499147</tilt>
+			<roll>-1.876527262063475e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -501,496 +415,29 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx126-06.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-27.795</leftFov>
-			<rightFov>27.795</rightFov>
-			<bottomFov>-21.6</bottomFov>
-			<topFov>21.6</topFov>
-			<near>2.61743</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17398941634165,-22.89629540407251,12.41177270362686</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx004-03</name>
-		<Camera>
-			<longitude>-43.17398800103853</longitude>
-			<latitude>-22.89630680994547</latitude>
-			<altitude>11.28637204883618</altitude>
-			<heading>-175.6515716854468</heading>
-			<tilt>90.89777703105035</tilt>
-			<roll>-2.989721400575705e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx004-03.jpg</href>
-		</Icon>
-		<rotation>-1.9</rotation>
-		<ViewVolume>
-			<leftFov>-24.57</leftFov>
-			<rightFov>24.57</rightFov>
-			<bottomFov>-20.015</bottomFov>
-			<topFov>20.015</topFov>
-			<near>0.728472</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17398800103853,-22.89630680994547,11.28637204883618</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx044b-04</name>
-		<Camera>
-			<longitude>-43.17445840650569</longitude>
-			<latitude>-22.8963566865998</latitude>
-			<altitude>13.5015679075997</altitude>
-			<heading>-143.7760201349394</heading>
-			<tilt>85.97206320021162</tilt>
-			<roll>7.69694232914171e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx044b-04.jpg</href>
-		</Icon>
-		<rotation>-2.2</rotation>
-		<ViewVolume>
-			<leftFov>-31.045</leftFov>
-			<rightFov>31.045</rightFov>
-			<bottomFov>-25.715</bottomFov>
-			<topFov>25.715</topFov>
-			<near>0.440373</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17445840650569,-22.8963566865998,13.5015679075997</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx126-02</name>
-		<Camera>
-			<longitude>-43.17430342711017</longitude>
-			<latitude>-22.89666241058223</latitude>
-			<altitude>27.31210587309397</altitude>
-			<heading>-150.9215751043574</heading>
-			<tilt>92.44964185365446</tilt>
-			<roll>4.80263756900991e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx126-02.jpg</href>
-		</Icon>
-		<rotation>2.51</rotation>
-		<ViewVolume>
-			<leftFov>-27.72</leftFov>
-			<rightFov>27.72</rightFov>
-			<bottomFov>-21.54</bottomFov>
-			<topFov>21.54</topFov>
-			<near>4.29645</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17430342711017,-22.89666241058223,27.31210587309397</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx044b-03</name>
-		<Camera>
-			<longitude>-43.17476603748202</longitude>
-			<latitude>-22.89651014276992</latitude>
-			<altitude>23.03080878550451</altitude>
-			<heading>-87.47919834488829</heading>
-			<tilt>86.19586454714056</tilt>
-			<roll>-1.440462560376644e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx044b-03.jpg</href>
-		</Icon>
-		<rotation>0.34</rotation>
-		<ViewVolume>
-			<leftFov>-32.805</leftFov>
-			<rightFov>32.805</rightFov>
-			<bottomFov>-27.61</bottomFov>
-			<topFov>27.61</topFov>
-			<near>7.98018</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17476603748202,-22.89651014276992,23.03080878550451</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx092-04</name>
-		<Camera>
-			<longitude>-43.17248423953423</longitude>
-			<latitude>-22.90644341582025</latitude>
-			<altitude>50.02254235568244</altitude>
-			<heading>-0.7999938832001937</heading>
-			<tilt>86.7891706506267</tilt>
-			<roll>-1.439598562697424e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx092-04.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-26.975</leftFov>
-			<rightFov>26.975</rightFov>
-			<bottomFov>-20.925</bottomFov>
-			<topFov>20.925</topFov>
-			<near>17.3328</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17248423953423,-22.90644341582024,50.02254235568244</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx019-13</name>
-		<Camera>
-			<longitude>-43.17465466748735</longitude>
-			<latitude>-22.90636580251829</latitude>
-			<altitude>47.07920368894167</altitude>
-			<heading>7.493486770129467</heading>
-			<tilt>86.21944874554205</tilt>
-			<roll>-1.440266161125064e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx019-13.jpg</href>
-		</Icon>
-		<rotation>-1.03</rotation>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>1.84792</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17465466748735,-22.9063658025183,47.07920368894167</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx058-09</name>
-		<Camera>
-			<longitude>-43.1778662965456</longitude>
-			<latitude>-22.9069279223088</latitude>
-			<altitude>13.70283853918578</altitude>
-			<heading>-65.79348425100014</heading>
-			<tilt>90.17449479624642</tilt>
-			<roll>-8.221860437659513e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx058-09.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25.11</leftFov>
-			<rightFov>25.11</rightFov>
-			<bottomFov>-20.535</bottomFov>
-			<topFov>20.535</topFov>
-			<near>4.74803</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1778662965456,-22.9069279223088,13.70283853918578</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx072-02</name>
-		<Camera>
-			<longitude>-43.17877907696083</longitude>
-			<latitude>-22.90711978190409</latitude>
-			<altitude>18.17022644300203</altitude>
-			<heading>-92.77871894214287</heading>
-			<tilt>100.5301510319624</tilt>
-			<roll>-9.539108468703994e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx072-02.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-28.98</leftFov>
-			<rightFov>28.98</rightFov>
-			<bottomFov>-36.4</bottomFov>
-			<topFov>36.4</topFov>
-			<near>6.29598</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17877907696083,-22.90711978190409,18.17022644300203</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx058-12</name>
-		<Camera>
-			<longitude>-43.17889820388485</longitude>
-			<latitude>-22.90638942669177</latitude>
-			<altitude>8.13455472023956</altitude>
-			<heading>127.0442171174718</heading>
-			<tilt>87.22080068352206</tilt>
-			<roll>-9.390721280317654e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx058-12.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25.06</leftFov>
-			<rightFov>25.06</rightFov>
-			<bottomFov>-20.545</bottomFov>
-			<topFov>20.545</topFov>
-			<near>2.81862</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17889820388485,-22.90638942669177,8.13455472023956</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cxabastagua2-12</name>
-		<Camera>
-			<longitude>-43.17814250960957</longitude>
-			<latitude>-22.90659747579492</latitude>
-			<altitude>12.37435459879566</altitude>
-			<heading>-153.7439981289521</heading>
-			<tilt>87.24851859622505</tilt>
-			<roll>-9.388348586525282e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cxabastagua2-12.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-15.025</leftFov>
-			<rightFov>15.025</rightFov>
-			<bottomFov>-12.19</bottomFov>
-			<topFov>12.19</topFov>
-			<near>4.28771</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17814250960957,-22.90659747579491,12.37435459879566</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx070-09</name>
-		<Camera>
-			<longitude>-43.1788137712291</longitude>
-			<latitude>-22.90646323258541</latitude>
-			<altitude>10.14763954088485</altitude>
-			<heading>145.6116145089287</heading>
-			<tilt>87.99849447918578</tilt>
-			<roll>-9.385218920718723e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx070-09.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002008DV004.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>3.51616</near>
+			<bottomFov>-18.405</bottomFov>
+			<topFov>18.405</topFov>
+			<near>1.50677</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1788137712291,-22.90646323258541,10.14763954088485</coordinates>
+			<coordinates>-43.17661585944194,-22.90834555758224,22.27550612659629</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx011-06</name>
+		<name>002037AAK5014</name>
 		<Camera>
-			<longitude>-43.17882190657976</longitude>
-			<latitude>-22.90628077631458</latitude>
-			<altitude>7.844349533771845</altitude>
-			<heading>158.1639065606037</heading>
-			<tilt>88.17329224138429</tilt>
-			<roll>-9.383568212839044e-009</roll>
+			<longitude>-43.17609053195159</longitude>
+			<latitude>-22.90984720296094</latitude>
+			<altitude>4.260520545095314</altitude>
+			<heading>163.7031360656212</heading>
+			<tilt>103.719888488344</tilt>
+			<roll>3.339582415536692e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1010,29 +457,72 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx011-06.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002037AAK5014.JPG</href>
+		</Icon>
+		<rotation>-3.83</rotation>
+		<ViewVolume>
+			<leftFov>-18.29</leftFov>
+			<rightFov>18.29</rightFov>
+			<bottomFov>-25.435</bottomFov>
+			<topFov>25.435</topFov>
+			<near>1.47627</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17609053195159,-22.90984720296094,4.260520545095314</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0073040cx002-02</name>
+		<Camera>
+			<longitude>-43.17481877627668</longitude>
+			<latitude>-22.9125284925483</latitude>
+			<altitude>2.491930635218361</altitude>
+			<heading>169.7915580848534</heading>
+			<tilt>106.0222169157873</tilt>
+			<roll>6.615553737444115e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0073040cx002-02.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>2.71807</near>
+			<leftFov>-22.215</leftFov>
+			<rightFov>22.215</rightFov>
+			<bottomFov>-27.485</bottomFov>
+			<topFov>27.485</topFov>
+			<near>0.863454</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17882190657976,-22.90628077631458,7.844349533771845</coordinates>
+			<coordinates>-43.17481877627668,-22.91252849254829,2.491930635218361</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx011-06</name>
+		<name>0074050cx006e007-04</name>
 		<Camera>
-			<longitude>-43.28283719899996</longitude>
-			<latitude>-22.98868965400014</latitude>
-			<altitude>41.03711563456776</altitude>
-			<heading>-179.6222676256452</heading>
-			<tilt>81.45313219359028</tilt>
-			<roll>-2.073721652314213e-012</roll>
+			<longitude>-43.17959783522507</longitude>
+			<latitude>-22.89959202880543</latitude>
+			<altitude>11.28789276988539</altitude>
+			<heading>-93.59790738010739</heading>
+			<tilt>90.07547026458248</tilt>
+			<roll>2.448476073628344e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1052,542 +542,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx006-05.JPG</href>
-		</Icon>
-		<rotation>2.15</rotation>
-		<ViewVolume>
-			<leftFov>-23.89</leftFov>
-			<rightFov>23.89</rightFov>
-			<bottomFov>-28.86</bottomFov>
-			<topFov>28.86</topFov>
-			<near>0.331349</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.28283719899996,-22.98868965400014,41.03711563456776</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx013-02</name>
-		<Camera>
-			<longitude>-43.28285478299998</longitude>
-			<latitude>-22.98869062899999</latitude>
-			<altitude>39.5421962940346</altitude>
-			<heading>98.07163641896366</heading>
-			<tilt>77.47590295729104</tilt>
-			<roll>-5.756803973448965e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx013-02.jpg</href>
-		</Icon>
-		<rotation>2.32</rotation>
-		<ViewVolume>
-			<leftFov>-24.12</leftFov>
-			<rightFov>24.12</rightFov>
-			<bottomFov>-19.21</bottomFov>
-			<topFov>19.21</topFov>
-			<near>1.47098</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.28285478299998,-22.98869062899999,39.5421962940346</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx111-05</name>
-		<Camera>
-			<longitude>-43.26227386077689</longitude>
-			<latitude>-22.96828055720206</latitude>
-			<altitude>5.76131336973855</altitude>
-			<heading>-144.2946059397563</heading>
-			<tilt>87.54149063030772</tilt>
-			<roll>-1.812916168434204e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx111-05.jpg</href>
-		</Icon>
-		<rotation>0.71</rotation>
-		<ViewVolume>
-			<leftFov>-27.605</leftFov>
-			<rightFov>27.605</rightFov>
-			<bottomFov>-21.445</bottomFov>
-			<topFov>21.445</topFov>
-			<near>1.9963</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.26227386077689,-22.96828055720206,5.76131336973855</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx017a-07</name>
-		<Camera>
-			<longitude>-43.24370067545566</longitude>
-			<latitude>-22.98687227144207</latitude>
-			<altitude>9.313941216357149</altitude>
-			<heading>-119.8739013728125</heading>
-			<tilt>91.56168137191406</tilt>
-			<roll>5.35439836633126e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx017a-07.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-31.75</leftFov>
-			<rightFov>31.75</rightFov>
-			<bottomFov>-24.93</bottomFov>
-			<topFov>24.93</topFov>
-			<near>1.50373</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.24370067545566,-22.98687227144207,9.313941216357149</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx066-07</name>
-		<Camera>
-			<longitude>-43.19098342499999</longitude>
-			<latitude>-22.989935521</latitude>
-			<altitude>4.809999999110137</altitude>
-			<heading>-97.81971498225234</heading>
-			<tilt>88.78</tilt>
-			<roll>5.353708265479248e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx066-07.jpg</href>
-		</Icon>
-		<rotation>0.39</rotation>
-		<ViewVolume>
-			<leftFov>-21.775</leftFov>
-			<rightFov>21.775</rightFov>
-			<bottomFov>-17.655</bottomFov>
-			<topFov>17.655</topFov>
-			<near>1.46565</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19098342499999,-22.989935521,4.809999999110137</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx037-01</name>
-		<Camera>
-			<longitude>-43.17220475843302</longitude>
-			<latitude>-22.90646671814369</latitude>
-			<altitude>54.00037046530229</altitude>
-			<heading>-29.44118261090201</heading>
-			<tilt>85.99912082723517</tilt>
-			<roll>5.365609742069551e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx037-01.jpg</href>
-		</Icon>
-		<rotation>0.55</rotation>
-		<ViewVolume>
-			<leftFov>-24.39</leftFov>
-			<rightFov>24.39</rightFov>
-			<bottomFov>-18.81</bottomFov>
-			<topFov>18.81</topFov>
-			<near>18.7111</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17220475843302,-22.90646671814369,54.00037046530229</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx037-13</name>
-		<Camera>
-			<longitude>-43.17424351531531</longitude>
-			<latitude>-22.90671975673537</latitude>
-			<altitude>47.87810139066691</altitude>
-			<heading>5.805981565254228</heading>
-			<tilt>87.82348566948983</tilt>
-			<roll>-1.017777498068326e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx037-13.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-24.55</leftFov>
-			<rightFov>24.55</rightFov>
-			<bottomFov>-18.94</bottomFov>
-			<topFov>18.94</topFov>
-			<near>8.94199</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17424351531531,-22.90671975673536,47.87810139066691</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx057-09</name>
-		<Camera>
-			<longitude>-43.17372061881909</longitude>
-			<latitude>-22.90628813891365</latitude>
-			<altitude>49.75120594363214</altitude>
-			<heading>75.57814637630047</heading>
-			<tilt>88.72916113253167</tilt>
-			<roll>1.523675730563242e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx057-09.jpg</href>
-		</Icon>
-		<rotation>1.02</rotation>
-		<ViewVolume>
-			<leftFov>-27.825</leftFov>
-			<rightFov>27.825</rightFov>
-			<bottomFov>-21.625</bottomFov>
-			<topFov>21.625</topFov>
-			<near>9.03316</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17372061881909,-22.90628813891365,49.75120594363214</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx070-13</name>
-		<Camera>
-			<longitude>-43.1742628859358</longitude>
-			<latitude>-22.89846194671236</latitude>
-			<altitude>3.269996064709059</altitude>
-			<heading>160.1179908187106</heading>
-			<tilt>89.39503022463696</tilt>
-			<roll>1.523460247983573e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx070-13.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-21.575</leftFov>
-			<rightFov>21.575</rightFov>
-			<bottomFov>-16.545</bottomFov>
-			<topFov>16.545</topFov>
-			<near>1.13305</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1742628859358,-22.89846194671236,3.269996064709059</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx092-06</name>
-		<Camera>
-			<longitude>-43.17761416145151</longitude>
-			<latitude>-22.8965422648918</latitude>
-			<altitude>28.76745030501062</altitude>
-			<heading>140.571010026198</heading>
-			<tilt>86.28455272344581</tilt>
-			<roll>1.52595380285384e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx092-06.jpg</href>
-		</Icon>
-		<rotation>0.69</rotation>
-		<ViewVolume>
-			<leftFov>-16.585</leftFov>
-			<rightFov>16.585</rightFov>
-			<bottomFov>-12.61</bottomFov>
-			<topFov>12.61</topFov>
-			<near>4.68722</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17761416145151,-22.8965422648918,28.76745030501062</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx003b-04</name>
-		<Camera>
-			<longitude>-43.17844684671614</longitude>
-			<latitude>-22.91859301248868</latitude>
-			<altitude>46.77914126676508</altitude>
-			<heading>29.36533573097341</heading>
-			<tilt>86.06810341605502</tilt>
-			<roll>1.526761663742932e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx003b-04.jpg</href>
-		</Icon>
-		<rotation>-1.1</rotation>
-		<ViewVolume>
-			<leftFov>-22.57</leftFov>
-			<rightFov>22.57</rightFov>
-			<bottomFov>-18.48</bottomFov>
-			<topFov>18.48</topFov>
-			<near>10.6267</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17844684671614,-22.91859301248868,46.77914126676508</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx007-07</name>
-		<Camera>
-			<longitude>-43.17845978954354</longitude>
-			<latitude>-22.91860053845574</latitude>
-			<altitude>45.67739290568817</altitude>
-			<heading>37.69839591915167</heading>
-			<tilt>86.50956702044809</tilt>
-			<roll>1.526227330556446e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx007-07.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-22.93</leftFov>
-			<rightFov>22.93</rightFov>
-			<bottomFov>-18.91</bottomFov>
-			<topFov>18.91</topFov>
-			<near>5.24114</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17845978954354,-22.91860053845574,45.67739290568817</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>007A6P4FP27-10</name>
-		<Camera>
-			<longitude>-43.18007573734941</longitude>
-			<latitude>-22.91629358532135</latitude>
-			<altitude>20.68390155540811</altitude>
-			<heading>47.76224333889385</heading>
-			<tilt>84.36088012284807</tilt>
-			<roll>1.531274870835929e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/007A6P4FP27-10.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0074050cx006e007-04.jpg</href>
 		</Icon>
 		<rotation>0.73</rotation>
 		<ViewVolume>
-			<leftFov>-14.78</leftFov>
-			<rightFov>14.78</rightFov>
-			<bottomFov>-10.785</bottomFov>
-			<topFov>10.785</topFov>
-			<near>7.16697</near>
+			<leftFov>-40.33</leftFov>
+			<rightFov>40.33</rightFov>
+			<bottomFov>-34.56</bottomFov>
+			<topFov>34.56</topFov>
+			<near>0.666733</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18007573734941,-22.91629358532135,20.68390155540811</coordinates>
+			<coordinates>-43.17959783522507,-22.89959202880543,11.28789276988539</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0072430cx055-08</name>
+		<name>007_IMG_2270</name>
 		<Camera>
-			<longitude>-43.17151027944467</longitude>
-			<latitude>-22.9004450353394</latitude>
-			<altitude>1.647027518699018</altitude>
-			<heading>-162.5330588147166</heading>
-			<tilt>95.0234787039286</tilt>
-			<roll>1.529894510104174e-009</roll>
+			<longitude>-43.17558205606026</longitude>
+			<latitude>-22.91057132691326</latitude>
+			<altitude>1.879876759844434</altitude>
+			<heading>-13.06421232101814</heading>
+			<tilt>94.25576073227805</tilt>
+			<roll>2.455375173815641e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1607,457 +585,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx055-08.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_2270.jpg</href>
 		</Icon>
+		<rotation>0.9</rotation>
 		<ViewVolume>
-			<leftFov>-22.06</leftFov>
-			<rightFov>22.06</rightFov>
-			<bottomFov>-17.945</bottomFov>
-			<topFov>17.945</topFov>
-			<near>0.570695</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17151027944467,-22.9004450353394,1.647027518699018</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx003a-09</name>
-		<Camera>
-			<longitude>-43.18094778424339</longitude>
-			<latitude>-22.90481655924089</latitude>
-			<altitude>5.675377026772921</altitude>
-			<heading>156.357895248276</heading>
-			<tilt>99.8555634178764</tilt>
-			<roll>8.269442171805144e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx003a-09.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-20.355</leftFov>
-			<rightFov>20.355</rightFov>
-			<bottomFov>-26.28</bottomFov>
-			<topFov>26.28</topFov>
-			<near>1.96652</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18094778424339,-22.90481655924088,5.675377026772921</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx027-09</name>
-		<Camera>
-			<longitude>-43.18059771684178</longitude>
-			<latitude>-22.90467148010238</latitude>
-			<altitude>7.889240129337554</altitude>
-			<heading>-137.5190991788593</heading>
-			<tilt>89.87653789324446</tilt>
-			<roll>1.151360794689793e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx027-09.jpg</href>
-		</Icon>
-		<rotation>-1.23</rotation>
-		<ViewVolume>
-			<leftFov>-22.98</leftFov>
-			<rightFov>22.98</rightFov>
-			<bottomFov>-18.705</bottomFov>
-			<topFov>18.705</topFov>
-			<near>2.73362</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18059771684178,-22.90467148010238,7.889240129337554</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx042-07</name>
-		<Camera>
-			<longitude>-43.16566094984559</longitude>
-			<latitude>-22.89568388919811</latitude>
-			<altitude>4.874892024982061</altitude>
-			<heading>-150.1454185443503</heading>
-			<tilt>93.24322493954226</tilt>
-			<roll>1.577555122005904e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx042-07.jpg</href>
-		</Icon>
-		<rotation>-2.44</rotation>
-		<ViewVolume>
-			<leftFov>-20.015</leftFov>
-			<rightFov>20.015</rightFov>
-			<bottomFov>-15.305</bottomFov>
-			<topFov>15.305</topFov>
-			<near>1.68915</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16566094984559,-22.89568388919811,4.874892024982061</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx070-03</name>
-		<Camera>
-			<longitude>-43.16630559599998</longitude>
-			<latitude>-22.89870980899998</latitude>
-			<altitude>5.009201856964047</altitude>
-			<heading>-1.158273034615121</heading>
-			<tilt>96.78022334384819</tilt>
-			<roll>3.136026915923027e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx070-03.jpg</href>
-		</Icon>
-		<rotation>-0.49</rotation>
-		<ViewVolume>
-			<leftFov>-23.005</leftFov>
-			<rightFov>23.005</rightFov>
-			<bottomFov>-17.69</bottomFov>
-			<topFov>17.69</topFov>
-			<near>1.73569</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16630559599998,-22.89870980899998,5.009201856964047</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx042-06</name>
-		<Camera>
-			<longitude>-43.16518210996406</longitude>
-			<latitude>-22.89852074802086</latitude>
-			<altitude>6.196181286761776</altitude>
-			<heading>-35.77193129768725</heading>
-			<tilt>97.00521980815252</tilt>
-			<roll>4.23729397437977e-010</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx042-06.jpg</href>
-		</Icon>
-		<rotation>-1.52</rotation>
-		<ViewVolume>
-			<leftFov>-27.905</leftFov>
-			<rightFov>27.905</rightFov>
-			<bottomFov>-21.695</bottomFov>
-			<topFov>21.695</topFov>
-			<near>2.14698</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16518210996406,-22.89852074802086,6.196181286761776</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx042-10</name>
-		<Camera>
-			<longitude>-43.16480690021842</longitude>
-			<latitude>-22.89793332042371</latitude>
-			<altitude>5.113260538048619</altitude>
-			<heading>-58.97918612780754</heading>
-			<tilt>93.72680935250367</tilt>
-			<roll>4.29136340396465e-010</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx042-10.jpg</href>
-		</Icon>
-		<rotation>-0.77</rotation>
-		<ViewVolume>
-			<leftFov>-27.495</leftFov>
-			<rightFov>27.495</rightFov>
-			<bottomFov>-21.355</bottomFov>
-			<topFov>21.355</topFov>
-			<near>1.77174</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16480690021842,-22.89793332042371,5.113260538048619</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx081-06</name>
-		<Camera>
-			<longitude>-43.16742146585222</longitude>
-			<latitude>-22.8960867377373</latitude>
-			<altitude>1.808389014400037</altitude>
-			<heading>135.887495843094</heading>
-			<tilt>95.64276882634967</tilt>
-			<roll>4.315758258371475e-010</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx081-06.jpg</href>
-		</Icon>
-		<rotation>0.96</rotation>
-		<ViewVolume>
-			<leftFov>-26.77</leftFov>
-			<rightFov>26.77</rightFov>
-			<bottomFov>-20.755</bottomFov>
-			<topFov>20.755</topFov>
-			<near>0.626607</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16742146585222,-22.8960867377373,1.808389014400037</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0072430cx023-04</name>
-		<Camera>
-			<longitude>-43.16512752900004</longitude>
-			<latitude>-22.89795136500003</latitude>
-			<altitude>6.427265294246815</altitude>
-			<heading>-42.2680775296716</heading>
-			<tilt>92.70000000000286</tilt>
-			<roll>1.903706374038453e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx023-04.jpg</href>
-		</Icon>
-		<rotation>-2.64</rotation>
-		<ViewVolume>
-			<leftFov>-27.83</leftFov>
-			<rightFov>27.83</rightFov>
-			<bottomFov>-22.775</bottomFov>
-			<topFov>22.775</topFov>
-			<near>2.22705</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16512752900004,-22.89795136500003,6.427265294246815</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx067-02</name>
-		<Camera>
-			<longitude>-43.1709395118544</longitude>
-			<latitude>-22.90340738419203</latitude>
-			<altitude>2.770926299058353</altitude>
-			<heading>-51.61988322645145</heading>
-			<tilt>90.90362367516326</tilt>
-			<roll>-6.306791850076999e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx067-02.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-17.27</leftFov>
-			<rightFov>17.27</rightFov>
-			<bottomFov>-13.145</bottomFov>
-			<topFov>13.145</topFov>
-			<near>0.960126</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1709395118544,-22.90340738419203,2.770926299058353</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx046-06</name>
-		<Camera>
-			<longitude>-43.1861601352895</longitude>
-			<latitude>-22.98613652311239</latitude>
-			<altitude>0.1133237896049614</altitude>
-			<heading>-102.8662061454309</heading>
-			<tilt>86.61587138870719</tilt>
-			<roll>9.509858497575915e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx046-06.jpg</href>
-		</Icon>
-		<rotation>0.47</rotation>
-		<ViewVolume>
-			<leftFov>-22.42</leftFov>
-			<rightFov>22.42</rightFov>
-			<bottomFov>-17.22</bottomFov>
-			<topFov>17.22</topFov>
+			<leftFov>-25.33</leftFov>
+			<rightFov>25.33</rightFov>
+			<bottomFov>-19.44</bottomFov>
+			<topFov>19.44</topFov>
 			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1861601352895,-22.98613652311239,0.1133237896049614</coordinates>
+			<coordinates>-43.17558205606026,-22.91057132691326,1.879876759844434</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx066-08</name>
+		<name>007_IMG_2271</name>
 		<Camera>
-			<longitude>-43.1884950117543</longitude>
-			<latitude>-22.9873863431331</latitude>
-			<altitude>2.428331024490102</altitude>
-			<heading>55.90781050496329</heading>
-			<tilt>87.52063316167066</tilt>
-			<roll>9.80405980561129e-013</roll>
+			<longitude>-43.17623577405067</longitude>
+			<latitude>-22.91036827545196</latitude>
+			<altitude>5.36500347159995</altitude>
+			<heading>43.7661697464784</heading>
+			<tilt>93.533721613412</tilt>
+			<roll>2.453237045931027e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -2077,29 +628,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx066-08.JPG</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_2271.jpg</href>
 		</Icon>
+		<rotation>1.09</rotation>
 		<ViewVolume>
-			<leftFov>-22.365</leftFov>
-			<rightFov>22.365</rightFov>
-			<bottomFov>-17.175</bottomFov>
-			<topFov>17.175</topFov>
-			<near>0.841417</near>
+			<leftFov>-26.235</leftFov>
+			<rightFov>26.235</rightFov>
+			<bottomFov>-20.21</bottomFov>
+			<topFov>20.21</topFov>
+			<near>1.85897</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1884950117543,-22.9873863431331,2.428331024490102</coordinates>
+			<coordinates>-43.17623577405067,-22.91036827545196,5.36500347159995</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx066-14</name>
+		<name>007_IMG_2272</name>
 		<Camera>
-			<longitude>-43.18467903259099</longitude>
-			<latitude>-22.98591809329605</latitude>
-			<altitude>14.93541915430761</altitude>
-			<heading>-108.9242616461594</heading>
-			<tilt>87.18420162783465</tilt>
-			<roll>-1.113458124550792e-008</roll>
+			<longitude>-43.17598640286644</longitude>
+			<latitude>-22.91046274707306</latitude>
+			<altitude>11.25006468214729</altitude>
+			<heading>27.5029493596718</heading>
+			<tilt>90.1918332254395</tilt>
+			<roll>2.448654025662772e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -2119,61 +671,1425 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx066-14.JPG</href>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_2272.jpg</href>
 		</Icon>
-		<ViewVolume>
-			<leftFov>-22.52</leftFov>
-			<rightFov>22.52</rightFov>
-			<bottomFov>-17.3</bottomFov>
-			<topFov>17.3</topFov>
-			<near>0.105</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18467903259099,-22.98591809329605,14.93541915430761</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cxsn2-03</name>
-		<Camera>
-			<longitude>-43.18913884688645</longitude>
-			<latitude>-22.98446380095394</latitude>
-			<altitude>1.388436761047288</altitude>
-			<heading>114.7379557372033</heading>
-			<tilt>94.44340480498732</tilt>
-			<roll>-1.115482229550076e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cxsn2-03.JPG</href>
-		</Icon>
-		<rotation>-0.63</rotation>
+		<rotation>-0.69</rotation>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>0.481093</near>
+			<bottomFov>-19.22</bottomFov>
+			<topFov>19.22</topFov>
+			<near>1.28618</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18913884688645,-22.98446380095394,1.388436761047288</coordinates>
+			<coordinates>-43.17598640286644,-22.91046274707306,11.25006468214729</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007_IMG_2500</name>
+		<Camera>
+			<longitude>-43.1752524136875</longitude>
+			<latitude>-22.90731886009696</latitude>
+			<altitude>49.06741702669547</altitude>
+			<heading>-147.6994151830739</heading>
+			<tilt>88.4204244969231</tilt>
+			<roll>2.449582429574291e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_2500.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-22.89</leftFov>
+			<rightFov>22.89</rightFov>
+			<bottomFov>-21.15</bottomFov>
+			<topFov>21.15</topFov>
+			<near>4.95628</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.1752524136875,-22.90731886009696,49.06741702669547</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007_IMG_3937</name>
+		<Camera>
+			<longitude>-43.18073697773934</longitude>
+			<latitude>-22.89687598964607</latitude>
+			<altitude>2.267743104911383</altitude>
+			<heading>156.0965118963793</heading>
+			<tilt>96.63704715309801</tilt>
+			<roll>-0.5540851619034009</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_3937.jpg</href>
+		</Icon>
+		<rotation>-0.68</rotation>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-22.58</bottomFov>
+			<topFov>22.58</topFov>
+			<near>0.768467</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18073697773934,-22.89687598964607,2.267743104911383</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx005-10</name>
+		<Camera>
+			<longitude>-43.18824434835646</longitude>
+			<latitude>-22.90369114062436</latitude>
+			<altitude>15.00494847422812</altitude>
+			<heading>-69.69333031055172</heading>
+			<tilt>87.09098422741937</tilt>
+			<roll>-0.5510771425317285</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx005-10.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-14.455</bottomFov>
+			<topFov>14.455</topFov>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18824434835646,-22.90369114062436,15.00494847422812</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007_IMG_2327</name>
+		<Camera>
+			<longitude>-43.19053495704517</longitude>
+			<latitude>-22.90601582263954</latitude>
+			<altitude>3.355620325535953</altitude>
+			<heading>-157.6687782414377</heading>
+			<tilt>95.30382089773707</tilt>
+			<roll>-0.5527503255275668</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_2327.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-19.645</bottomFov>
+			<topFov>19.645</topFov>
+			<near>0.250029</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.19053495704517,-22.90601582263954,3.355620325535953</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002037AAK5008</name>
+		<Camera>
+			<longitude>-43.18084557988031</longitude>
+			<latitude>-22.89732752890085</latitude>
+			<altitude>89.95679181991595</altitude>
+			<heading>-157.5755511353661</heading>
+			<tilt>92.05741305470146</tilt>
+			<roll>1.437429742460134e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002037AAK5008.JPG</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-22.5</leftFov>
+			<rightFov>22.5</rightFov>
+			<bottomFov>-15.35</bottomFov>
+			<topFov>15.35</topFov>
+			<near>31.17</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18084557988031,-22.89732752890085,89.95679181991595</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002086AMF02</name>
+		<Camera>
+			<longitude>-43.17453219905757</longitude>
+			<latitude>-22.89665420502725</latitude>
+			<altitude>29.05916398166787</altitude>
+			<heading>-158.2933376538239</heading>
+			<tilt>88.97297158793133</tilt>
+			<roll>1.436771049585603e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002086AMF02.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-55</leftFov>
+			<rightFov>55</rightFov>
+			<bottomFov>-33.72</bottomFov>
+			<topFov>33.72</topFov>
+			<near>7.64257</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17453219905757,-22.89665420502725,29.05916398166787</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002086AMF03</name>
+		<Camera>
+			<longitude>-43.17508526599998</longitude>
+			<latitude>-22.906332332</latitude>
+			<altitude>51.92082776221039</altitude>
+			<heading>49.76467405252028</heading>
+			<tilt>85.42465787460365</tilt>
+			<roll>1.44119679142486e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002086AMF03.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-31.96</leftFov>
+			<rightFov>31.96</rightFov>
+			<bottomFov>-17.635</bottomFov>
+			<topFov>17.635</topFov>
+			<near>0.91275</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17508526599998,-22.906332332,51.92082776221039</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx001-01</name>
+		<Camera>
+			<longitude>-43.17442135349926</longitude>
+			<latitude>-22.89645592457552</latitude>
+			<altitude>8.394479141910074</altitude>
+			<heading>164.180715651905</heading>
+			<tilt>88.54467368810238</tilt>
+			<roll>1.437085288388132e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx001-01.jpg</href>
+		</Icon>
+		<rotation>-2.05</rotation>
+		<ViewVolume>
+			<leftFov>-28.045</leftFov>
+			<rightFov>28.045</rightFov>
+			<bottomFov>-16.065</bottomFov>
+			<topFov>16.065</topFov>
+			<near>2.29322</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17442135349926,-22.89645592457552,8.394479141910074</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx006-04</name>
+		<Camera>
+			<longitude>-43.17447674503454</longitude>
+			<latitude>-22.89641818157017</latitude>
+			<altitude>9.574123657616173</altitude>
+			<heading>-151.9930219683631</heading>
+			<tilt>90.60417583896007</tilt>
+			<roll>1.436711891268528e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx006-04.jpg</href>
+		</Icon>
+		<rotation>0.85</rotation>
+		<ViewVolume>
+			<leftFov>-28.42</leftFov>
+			<rightFov>28.42</rightFov>
+			<bottomFov>-16.59</bottomFov>
+			<topFov>16.59</topFov>
+			<near>3.31743</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17447674503454,-22.89641818157017,9.574123657616173</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx007-14</name>
+		<Camera>
+			<longitude>-43.19460954599989</longitude>
+			<latitude>-22.90072805399998</latitude>
+			<altitude>86.94660540581762</altitude>
+			<heading>67.8005913468408</heading>
+			<tilt>86.09297074140865</tilt>
+			<roll>1.439933636617925e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx007-14.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-30.19</leftFov>
+			<rightFov>30.19</rightFov>
+			<bottomFov>-17.68</bottomFov>
+			<topFov>17.68</topFov>
+			<near>3.89647</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.19460954599989,-22.90072805399998,86.94660540581762</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx014-05</name>
+		<Camera>
+			<longitude>-43.1727823909122</longitude>
+			<latitude>-22.92240569821987</latitude>
+			<altitude>23.4519263050404</altitude>
+			<heading>-8.382120692156795</heading>
+			<tilt>90.40995785978012</tilt>
+			<roll>1.436557952421945e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx014-05.jpg</href>
+		</Icon>
+		<rotation>-1</rotation>
+		<ViewVolume>
+			<leftFov>-34.41</leftFov>
+			<rightFov>34.41</rightFov>
+			<bottomFov>-20.6</bottomFov>
+			<topFov>20.6</topFov>
+			<near>8.12609</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.1727823909122,-22.92240569821987,23.4519263050404</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx021-08</name>
+		<Camera>
+			<longitude>-43.17770024948397</longitude>
+			<latitude>-22.91871908840352</latitude>
+			<altitude>41.84210131998107</altitude>
+			<heading>17.57814038129567</heading>
+			<tilt>86.93261888195477</tilt>
+			<roll>1.43851494771745e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx021-08.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-24.995</leftFov>
+			<rightFov>24.995</rightFov>
+			<bottomFov>-14.265</bottomFov>
+			<topFov>14.265</topFov>
+			<near>4.65664</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17770024948397,-22.91871908840352,41.84210131998107</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx022-02</name>
+		<Camera>
+			<longitude>-43.20404087943663</longitude>
+			<latitude>-22.93303475295444</latitude>
+			<altitude>14.5172526379083</altitude>
+			<heading>26.11835936420004</heading>
+			<tilt>88.8830621039188</tilt>
+			<roll>1.436859469005748e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx022-02.jpg</href>
+		</Icon>
+		<rotation>-0.29</rotation>
+		<ViewVolume>
+			<leftFov>-21.645</leftFov>
+			<rightFov>21.645</rightFov>
+			<bottomFov>-12.115</bottomFov>
+			<topFov>12.115</topFov>
+			<near>5.03023</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.20404087943663,-22.93303475295445,14.5172526379083</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0073040cxsn-03</name>
+		<Camera>
+			<longitude>-43.17532524905933</longitude>
+			<latitude>-22.90658099112176</latitude>
+			<altitude>47.5080313008278</altitude>
+			<heading>-27.2734357364099</heading>
+			<tilt>88.69450610612645</tilt>
+			<roll>1.436835614845637e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0073040cxsn-03.jpg</href>
+		</Icon>
+		<rotation>-0.65</rotation>
+		<ViewVolume>
+			<leftFov>-24.835</leftFov>
+			<rightFov>24.835</rightFov>
+			<bottomFov>-14.1</bottomFov>
+			<topFov>14.1</topFov>
+			<near>16.4615</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17532524905933,-22.90658099112176,47.5080313008278</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0073040cx009b-04</name>
+		<Camera>
+			<longitude>-43.17404771032309</longitude>
+			<latitude>-22.89629165160004</latitude>
+			<altitude>11.64092532786627</altitude>
+			<heading>-138.3097511338924</heading>
+			<tilt>90.96681813834154</tilt>
+			<roll>5.804512293670918e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0073040cx009b-04.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-30.95</leftFov>
+			<rightFov>30.95</rightFov>
+			<bottomFov>-24.91</bottomFov>
+			<topFov>24.91</topFov>
+			<near>1.40986</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17404771032309,-22.89629165160004,11.64092532786627</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx019-08</name>
+		<Camera>
+			<longitude>-43.17466128603358</longitude>
+			<latitude>-22.92391790387701</latitude>
+			<altitude>45.57133202675611</altitude>
+			<heading>-170.2707734210445</heading>
+			<tilt>86.84777776602518</tilt>
+			<roll>3.466804602795233e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx019-08.jpg</href>
+		</Icon>
+		<rotation>1.12</rotation>
+		<ViewVolume>
+			<leftFov>-25.96</leftFov>
+			<rightFov>25.96</rightFov>
+			<bottomFov>-14.62</bottomFov>
+			<topFov>14.62</topFov>
+			<near>1.83428</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17466128603358,-22.92391790387701,45.57133202675611</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx020-10</name>
+		<Camera>
+			<longitude>-43.19332037874717</longitude>
+			<latitude>-22.92919308514905</latitude>
+			<altitude>13.69388408718584</altitude>
+			<heading>110.6472682476202</heading>
+			<tilt>87.70030543352418</tilt>
+			<roll>-1.208610778956136e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx020-10.jpg</href>
+		</Icon>
+		<rotation>0.42</rotation>
+		<ViewVolume>
+			<leftFov>-21.9</leftFov>
+			<rightFov>21.9</rightFov>
+			<bottomFov>-12.945</bottomFov>
+			<topFov>12.945</topFov>
+			<near>3.24496</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.19332037874717,-22.92919308514905,13.69388408718584</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007A5P3FG2-065-066</name>
+		<Camera>
+			<longitude>-43.18498032169252</longitude>
+			<latitude>-22.92847353716738</latitude>
+			<altitude>20.06709923952183</altitude>
+			<heading>157.3256380546143</heading>
+			<tilt>87.42678742104386</tilt>
+			<roll>-4.452776554048923e-014</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007A5P3FG2-065-066.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-27.345</leftFov>
+			<rightFov>27.345</rightFov>
+			<bottomFov>-21.54</bottomFov>
+			<topFov>21.54</topFov>
+			<near>0.549531</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18498032169252,-22.92847353716738,20.06709923952183</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0074050cxsn2-01</name>
+		<Camera>
+			<longitude>-43.18107254938253</longitude>
+			<latitude>-22.92647139399264</latitude>
+			<altitude>16.91989278236866</altitude>
+			<heading>123.5908579643143</heading>
+			<tilt>84.95757691909002</tilt>
+			<roll>-5.7886095202636e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0074050cxsn2-01.jpg</href>
+		</Icon>
+		<rotation>1.73</rotation>
+		<ViewVolume>
+			<leftFov>-32.44</leftFov>
+			<rightFov>32.44</rightFov>
+			<bottomFov>-18.26</bottomFov>
+			<topFov>18.26</topFov>
+			<near>2.93088</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18107254938253,-22.92647139399264,16.91989278236866</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007A5P4F05-112-113</name>
+		<Camera>
+			<longitude>-43.17451456261454</longitude>
+			<latitude>-22.92397987186207</latitude>
+			<altitude>45.96334287832481</altitude>
+			<heading>-167.5295525152123</heading>
+			<tilt>86.89896646099949</tilt>
+			<roll>-4.770832022195274e-014</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/007A5P4F05-112-113.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-26.475</leftFov>
+			<rightFov>26.475</rightFov>
+			<bottomFov>-9.41</bottomFov>
+			<topFov>9.41</topFov>
+			<near>9.81418</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17451456261454,-22.92397987186207,45.9633428783248</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007A5P4F05-114-115</name>
+		<Camera>
+			<longitude>-43.18447931980247</longitude>
+			<latitude>-22.92830625308887</latitude>
+			<altitude>12.76730893964566</altitude>
+			<heading>119.2042681670706</heading>
+			<tilt>87.49554839825169</tilt>
+			<roll>-3.848471164570855e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/007A5P4F05-114-115.jpg</href>
+		</Icon>
+		<rotation>-0.74</rotation>
+		<ViewVolume>
+			<leftFov>-25.95</leftFov>
+			<rightFov>25.95</rightFov>
+			<bottomFov>-8.9</bottomFov>
+			<topFov>8.9</topFov>
+			<near>1.80542</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18447931980247,-22.92830625308887,12.76730893964566</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007A6P3F03-029</name>
+		<Camera>
+			<longitude>-43.18397713399998</longitude>
+			<latitude>-22.92861179500001</latitude>
+			<altitude>12.74944566335578</altitude>
+			<heading>122.1657294646635</heading>
+			<tilt>84.62153285359324</tilt>
+			<roll>-7.601525688697806e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/007A6P3F03-029.jpg</href>
+		</Icon>
+		<rotation>0.33</rotation>
+		<ViewVolume>
+			<leftFov>-30.705</leftFov>
+			<rightFov>30.705</rightFov>
+			<bottomFov>-16.655</bottomFov>
+			<topFov>16.655</topFov>
+			<near>0.916329</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18397713399998,-22.92861179500001,12.74944566335578</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072137cx022-05</name>
+		<Camera>
+			<longitude>-43.20368078899999</longitude>
+			<latitude>-22.93535877700002</latitude>
+			<altitude>15.4817931353437</altitude>
+			<heading>-151.2282991974216</heading>
+			<tilt>93.26139149863529</tilt>
+			<roll>-1.301551993691459e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0072137cx022-05.jpg</href>
+		</Icon>
+		<rotation>1.62</rotation>
+		<ViewVolume>
+			<leftFov>-26.18</leftFov>
+			<rightFov>26.18</rightFov>
+			<bottomFov>-14.75</bottomFov>
+			<topFov>14.75</topFov>
+			<near>5.36444</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.20368078899999,-22.93535877700002,15.4817931353437</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002037AAK5038</name>
+		<Camera>
+			<longitude>-43.21770112678861</longitude>
+			<latitude>-22.94795420703526</latitude>
+			<altitude>13.0465780498436</altitude>
+			<heading>128.0915442638073</heading>
+			<tilt>102.4605690437187</tilt>
+			<roll>-1.330769205106319e-008</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002037AAK5038.JPG</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-18.67</bottomFov>
+			<topFov>18.67</topFov>
+			<near>4.52064</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.21770112678861,-22.94795420703526,13.0465780498436</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007_IMG_2352</name>
+		<Camera>
+			<longitude>-43.18117786000001</longitude>
+			<latitude>-22.90490944500001</latitude>
+			<altitude>5.73681357545358</altitude>
+			<heading>135.1459387819764</heading>
+			<tilt>88.19641884302065</tilt>
+			<roll>0.002514741688438188</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007_IMG_2352.jpg</href>
+		</Icon>
+		<rotation>-2.3</rotation>
+		<ViewVolume>
+			<leftFov>-21.415</leftFov>
+			<rightFov>21.415</rightFov>
+			<bottomFov>-16.4</bottomFov>
+			<topFov>16.4</topFov>
+			<near>1.98781</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18117786000001,-22.90490944500001,5.73681357545358</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002008AV007</name>
+		<Camera>
+			<longitude>-43.18085865633179</longitude>
+			<latitude>-22.90481258123483</latitude>
+			<altitude>4.84623299492188</altitude>
+			<heading>-141.1331538602452</heading>
+			<tilt>93.42109760342093</tilt>
+			<roll>0.002517980753099681</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/002008AV007.jpg</href>
+		</Icon>
+		<rotation>-0.81</rotation>
+		<ViewVolume>
+			<leftFov>-22.875</leftFov>
+			<rightFov>22.875</rightFov>
+			<bottomFov>-17.145</bottomFov>
+			<topFov>17.145</topFov>
+			<near>1.67922</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18085865633179,-22.90481258123482,4.84623299492188</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0074050cx008e009-01</name>
+		<Camera>
+			<longitude>-43.18048234000001</longitude>
+			<latitude>-22.90496069400002</latitude>
+			<altitude>9.199999998585167</altitude>
+			<heading>-106.3802570142759</heading>
+			<tilt>88.56669254842116</tilt>
+			<roll>0.002514283145590452</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0074050cx008e009-01.jpg</href>
+		</Icon>
+		<rotation>0.26</rotation>
+		<ViewVolume>
+			<leftFov>-23.16</leftFov>
+			<rightFov>23.16</rightFov>
+			<bottomFov>-18.685</bottomFov>
+			<topFov>18.685</topFov>
+			<near>3.1878</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18048234000001,-22.90496069400001,9.199999998585167</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0074050cx008e009-02</name>
+		<open>1</open>
+		<Camera>
+			<longitude>-43.18048234</longitude>
+			<latitude>-22.90496069400002</latitude>
+			<altitude>9.200000001417628</altitude>
+			<heading>-106.380257014276</heading>
+			<tilt>88.57000000000004</tilt>
+			<roll>0.002514283145591247</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/0074050cx008e009-02.jpg</href>
+		</Icon>
+		<rotation>0.26</rotation>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-20.55</bottomFov>
+			<topFov>20.55</topFov>
+			<near>3.1878</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18048234,-22.90496069400001,9.200000001417628</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007A5P3F10-086</name>
+		<Camera>
+			<longitude>-43.18055565200667</longitude>
+			<latitude>-22.90478013699908</latitude>
+			<altitude>6.095270927107012</altitude>
+			<heading>-129.8045728692587</heading>
+			<tilt>86.18926826477245</tilt>
+			<roll>0.002519046283720295</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007A5P3F10-086.jpg</href>
+		</Icon>
+		<rotation>-1</rotation>
+		<ViewVolume>
+			<leftFov>-25.875</leftFov>
+			<rightFov>25.875</rightFov>
+			<bottomFov>-19.645</bottomFov>
+			<topFov>19.645</topFov>
+			<near>2.11201</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18055565200667,-22.90478013699909,6.095270927107012</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007A5P4F03-035</name>
+		<Camera>
+			<longitude>-43.18056950899999</longitude>
+			<latitude>-22.90491029400001</latitude>
+			<altitude>9.036348145539044</altitude>
+			<heading>-173.0577208682876</heading>
+			<tilt>103.93</tilt>
+			<roll>0.002589745573236493</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007A5P4F03-035.jpg</href>
+		</Icon>
+		<rotation>0.55</rotation>
+		<ViewVolume>
+			<leftFov>-22.665</leftFov>
+			<rightFov>22.665</rightFov>
+			<bottomFov>-30.245</bottomFov>
+			<topFov>30.245</topFov>
+			<near>3.13109</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18056950899999,-22.90491029400001,9.036348145539044</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>007ALA036</name>
+		<Camera>
+			<longitude>-43.18026953359095</longitude>
+			<latitude>-22.90782354848619</latitude>
+			<altitude>446.546247809736</altitude>
+			<heading>0.1472645156148902</heading>
+			<tilt>31.08978966915203</tilt>
+			<roll>0.00486852950555555</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/007ALA036.jpg</href>
+		</Icon>
+		<rotation>47</rotation>
+		<ViewVolume>
+			<leftFov>-25.295</leftFov>
+			<rightFov>25.295</rightFov>
+			<bottomFov>-18.44</bottomFov>
+			<topFov>18.44</topFov>
+			<near>154.728</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.18026953359095,-22.90782354848619,446.5462478097359</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>001ALA011011</name>
+		<Camera>
+			<longitude>-43.19642702465853</longitude>
+			<latitude>-22.94493405483322</latitude>
+			<altitude>98.14090288709876</altitude>
+			<heading>-177.1401364984506</heading>
+			<tilt>81.96779122137639</tilt>
+			<roll>1.108079010491608e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/001ALA011011.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-18.83</bottomFov>
+			<topFov>18.83</topFov>
+			<near>4.26481</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.19642702465853,-22.94493405483322,98.14090288709876</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>001ALA011013</name>
+		<Camera>
+			<longitude>-43.16527815645084</longitude>
+			<latitude>-22.95162543381343</latitude>
+			<altitude>12.54884249974593</altitude>
+			<heading>-103.5906082552129</heading>
+			<tilt>80.73685928533037</tilt>
+			<roll>1.115383831139625e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize - Copy/001ALA011013.jpg</href>
+		</Icon>
+		<rotation>3.6</rotation>
+		<ViewVolume>
+			<leftFov>-25.8824</leftFov>
+			<rightFov>25.8824</rightFov>
+			<bottomFov>-19.42</bottomFov>
+			<topFov>19.42</topFov>
+			<near>3.77221</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.16527815645084,-22.95162543381343,12.54884249974593</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>

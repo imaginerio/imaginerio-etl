@@ -46,7 +46,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AMF015006</name>
+		<name>0072137cx016-11</name>
 		<Camera>
 			<longitude>-43.1771987807461</longitude>
 			<latitude>-22.9187611069967</latitude>
@@ -73,7 +73,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>/Users/a295805/code/liquid-galaxy/_demo-1-content/marc-ferrez/ferrez-lg/001AMF015006.jpg</href>
+			<href>/Users/a295805/code/liquid-galaxy/_demo-1-content/marc-ferrez/ferrez-lg/0072137cx016-11.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>

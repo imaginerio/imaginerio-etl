@@ -129,48 +129,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01001005</name>
-		<Camera>
-			<longitude>-43.17461621303199</longitude>
-			<latitude>-22.9412028352407</latitude>
-			<altitude>47.09426347187686</altitude>
-			<heading>105.5274791793767</heading>
-			<tilt>84.10426406738289</tilt>
-			<roll>-0.003628965152991695</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a516764/Desktop/resize/001AN01001005.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-24.9974</leftFov>
-			<rightFov>24.9974</rightFov>
-			<bottomFov>-20.105</bottomFov>
-			<topFov>20.105</topFov>
-			<near>1.42505</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17461621303199,-22.9412028352407,47.09426347187686</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>001AN01001007</name>
 		<Camera>
 			<longitude>-43.18994060199999</longitude>
@@ -378,49 +336,6 @@
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 			<coordinates>-43.17032119834029,-22.95746293403586,18.65709400739245</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>001MF014013</name>
-		<Camera>
-			<longitude>-43.16494823026624</longitude>
-			<latitude>-22.89820807546273</latitude>
-			<altitude>5.57949240624175</altitude>
-			<heading>-43.15333346556677</heading>
-			<tilt>91.42518315927838</tilt>
-			<roll>-0.07250140664981844</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/001MF014013.jpg</href>
-		</Icon>
-		<rotation>0.83</rotation>
-		<ViewVolume>
-			<leftFov>-16.59</leftFov>
-			<rightFov>16.59</rightFov>
-			<bottomFov>-12.38</bottomFov>
-			<topFov>12.38</topFov>
-			<near>1.93329</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16494823026624,-22.89820807546273,5.57949240624175</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
