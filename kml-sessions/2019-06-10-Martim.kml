@@ -2,7 +2,6 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-06-10</name>
-	<visibility>0</visibility>
 	<PhotoOverlay>
 		<name>014AAN005015</name>
 		<visibility>0</visibility>
@@ -2385,14 +2384,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014AM007005</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17916442768821</longitude>
-			<latitude>-22.90108829555686</latitude>
-			<altitude>6.537924254591743</altitude>
-			<heading>-15.91492226617898</heading>
-			<tilt>94.85281371141744</tilt>
-			<roll>8.746525374024671e-013</roll>
+			<longitude>-43.1784243854049</longitude>
+			<latitude>-22.90314125960319</latitude>
+			<altitude>1.954803025844933</altitude>
+			<heading>162.7365219921639</heading>
+			<tilt>94.7280524739531</tilt>
+			<roll>9.955136152980805e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -2415,15 +2413,15 @@
 			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014AM007005.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-27.525</leftFov>
-			<rightFov>27.525</rightFov>
+			<leftFov>-27.5252</leftFov>
+			<rightFov>27.5252</rightFov>
 			<bottomFov>-21.215</bottomFov>
 			<topFov>21.215</topFov>
-			<near>2.26539</near>
+			<near>0.677339</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17916442768821,-22.90108829555685,6.537924254591743</coordinates>
+			<coordinates>-43.1784243854049,-22.90314125960319,1.954803025844933</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>
