@@ -1860,50 +1860,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ7303</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.16996403443987</longitude>
-			<latitude>-22.90455562078287</latitude>
-			<altitude>1.618924425724167</altitude>
-			<heading>-127.1084416820573</heading>
-			<tilt>91.17998852001706</tilt>
-			<roll>2.466520155474957e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ7303.jpg</href>
-		</Icon>
-		<rotation>-2.82</rotation>
-		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.560957</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16996403443987,-22.90455562078287,1.618924425724167</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>001CC019013</name>
 		<visibility>0</visibility>
 		<Camera>
