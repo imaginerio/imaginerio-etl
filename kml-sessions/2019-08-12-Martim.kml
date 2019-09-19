@@ -2,7 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-08-12</name>
-	<visibility>0</visibility>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>001AMF015024</name>
 		<visibility>0</visibility>
@@ -1440,7 +1440,6 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx012-01</name>
-		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.19491249697121</longitude>
 			<latitude>-22.89950599586422</latitude>
@@ -2353,14 +2352,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080Vol02Cx0616</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17785645319959</longitude>
-			<latitude>-22.90517511197338</latitude>
-			<altitude>6.475268219992453</altitude>
-			<heading>42.19154677446475</heading>
-			<tilt>90.03490518111599</tilt>
-			<roll>1.199069114911746e-012</roll>
+			<longitude>-43.17752366808404</longitude>
+			<latitude>-22.90475948408233</latitude>
+			<altitude>10.63924237198898</altitude>
+			<heading>-136.6962164031619</heading>
+			<tilt>87.90899128683168</tilt>
+			<roll>1.373999622392239e-012</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -2388,11 +2386,11 @@
 			<rightFov>22.5</rightFov>
 			<bottomFov>-22.5</bottomFov>
 			<topFov>22.5</topFov>
-			<near>1.84045</near>
+			<near>3.6865</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17785645319959,-22.90517511197338,6.475268219992453</coordinates>
+			<coordinates>-43.17752366808404,-22.90475948408233,10.63924237198898</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

@@ -214,48 +214,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS098.jpg</name>
-		<Camera>
-			<longitude>-43.18728315167436</longitude>
-			<latitude>-22.90788840569005</latitude>
-			<altitude>1.819034063108716</altitude>
-			<heading>69.01483225170753</heading>
-			<tilt>97.47364257832516</tilt>
-			<roll>-0.0001516891940445454</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS098.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-24.175</bottomFov>
-			<topFov>24.175</topFov>
-			<near>0.630295</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18728315167436,-22.90788840569005,1.819034063108716</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>014GLAS090</name>
 		<Camera>
 			<longitude>-43.18099236781671</longitude>

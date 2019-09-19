@@ -2,6 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-08-06</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>001ATK012002</name>
 		<visibility>0</visibility>
@@ -1860,6 +1861,50 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
+		<name>002080RJ7303</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.16996403443987</longitude>
+			<latitude>-22.90455562078287</latitude>
+			<altitude>1.618924425724167</altitude>
+			<heading>-127.1084416820573</heading>
+			<tilt>91.17998852001706</tilt>
+			<roll>2.466520155474957e-012</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ7303.jpg</href>
+		</Icon>
+		<rotation>-2.82</rotation>
+		<ViewVolume>
+			<leftFov>-22.5</leftFov>
+			<rightFov>22.5</rightFov>
+			<bottomFov>-22.5</bottomFov>
+			<topFov>22.5</topFov>
+			<near>0.560957</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.16996403443987,-22.90455562078287,1.618924425724167</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
 		<name>001CC019013</name>
 		<visibility>0</visibility>
 		<Camera>
@@ -3032,14 +3077,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007_IMG_2172</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.1697236190119</longitude>
-			<latitude>-22.90525111962484</latitude>
-			<altitude>2.020552854900036</altitude>
-			<heading>41.87693258120147</heading>
-			<tilt>98.1038797163547</tilt>
-			<roll>3.293464372655472e-012</roll>
+			<longitude>-43.17001810243423</longitude>
+			<latitude>-22.90511879292087</latitude>
+			<altitude>1.791072579517218</altitude>
+			<heading>35.08402738165767</heading>
+			<tilt>92.57080663212476</tilt>
+			<roll>3.676721211771826e-012</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -3061,17 +3105,17 @@
 		<Icon>
 			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Ferrez/crop/007_IMG_2172.jpg</href>
 		</Icon>
-		<rotation>1.83</rotation>
+		<rotation>-1.91</rotation>
 		<ViewVolume>
 			<leftFov>-29.92</leftFov>
 			<rightFov>29.92</rightFov>
-			<bottomFov>-28.525</bottomFov>
-			<topFov>28.525</topFov>
-			<near>0.700122</near>
+			<bottomFov>-28.165</bottomFov>
+			<topFov>28.165</topFov>
+			<near>0.620607</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1697236190119,-22.90525111962484,2.020552854900036</coordinates>
+			<coordinates>-43.17001810243423,-22.90511879292087,1.791072579517218</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -3294,6 +3338,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007_IMG_3382</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17167251021751</longitude>
 			<latitude>-22.90619943326146</latitude>
@@ -3337,6 +3382,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007_IMG_3791</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17185548112084</longitude>
 			<latitude>-22.90615731126682</latitude>
@@ -3380,6 +3426,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001CC019014</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.16946975270025</longitude>
 			<latitude>-22.90604951772618</latitude>
@@ -3422,6 +3469,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002051AM002005</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17289901883849</longitude>
 			<latitude>-22.92297147076603</latitude>
@@ -3464,6 +3512,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002051AM002006</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17658971399997</longitude>
 			<latitude>-22.90836648399999</latitude>
@@ -3507,6 +3556,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002057TP007</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.176245785</longitude>
 			<latitude>-22.90920995099998</latitude>
@@ -3550,6 +3600,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080BR0207</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17832629156889</longitude>
 			<latitude>-22.93067699949565</latitude>
@@ -3593,6 +3644,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080BR0211</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17393076665505</longitude>
 			<latitude>-22.93777566613483</latitude>
@@ -3635,6 +3687,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080RJ0101</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.1924367524949</longitude>
 			<latitude>-22.98542310250787</latitude>
@@ -3677,6 +3730,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080RJ0106</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.18071823576258</longitude>
 			<latitude>-22.94959473851255</latitude>
@@ -3720,6 +3774,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080RJ0120</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.18315663398361</longitude>
 			<latitude>-22.9068047091389</latitude>
@@ -3763,6 +3818,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080RJ0121</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.18261803905515</longitude>
 			<latitude>-22.90569072056993</latitude>
@@ -3806,6 +3862,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002010TM026</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.16549166443235</longitude>
 			<latitude>-22.95146890187919</latitude>
@@ -3848,6 +3905,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002010TM027</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.16520183460074</longitude>
 			<latitude>-22.95173565563701</latitude>
@@ -3891,6 +3949,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002010TM028</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.16625852562473</longitude>
 			<latitude>-22.95518667760461</latitude>
@@ -3933,6 +3992,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002010TM016</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.16703342416047</longitude>
 			<latitude>-22.95591681095594</latitude>
@@ -3976,6 +4036,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002010TM014</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.16631413027466</longitude>
 			<latitude>-22.95536822159659</latitude>
