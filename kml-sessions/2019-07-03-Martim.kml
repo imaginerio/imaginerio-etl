@@ -2,7 +2,6 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-07-03</name>
-	<visibility>0</visibility>
 	<open>1</open>
 	<PhotoOverlay>
 		<name>0071824cx106-03</name>
@@ -180,14 +179,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cxsn2-02</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17951440939629</longitude>
-			<latitude>-22.8997027739093</latitude>
-			<altitude>19.9279086848032</altitude>
-			<heading>178.0347252989141</heading>
-			<tilt>86.92736000242024</tilt>
-			<roll>-4.353924914549037e-010</roll>
+			<longitude>-43.17882102388241</longitude>
+			<latitude>-22.90158579783562</latitude>
+			<altitude>14.97567689080809</altitude>
+			<heading>-179.8574550403658</heading>
+			<tilt>85.19970327078421</tilt>
+			<roll>-4.362639634376248e-010</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -210,15 +208,15 @@
 			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cxsn2-02.JPG</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>1.30807</near>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-23.445</bottomFov>
+			<topFov>23.445</topFov>
+			<near>0.490231</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17951440939629,-22.8997027739093,19.9279086848032</coordinates>
+			<coordinates>-43.17882102388241,-22.90158579783562,14.97567689080809</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -524,6 +522,48 @@
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 			<coordinates>-43.17707752745606,-22.90632299440422,3.070519535925613</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0072430cx001-09</name>
+		<Camera>
+			<longitude>-43.17741488783302</longitude>
+			<latitude>-22.90619782889853</latitude>
+			<altitude>7.030217535728948</altitude>
+			<heading>136.3951975567715</heading>
+			<tilt>86.47019587561395</tilt>
+			<roll>-4.431848504244894e-010</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430CX001-09.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-25.93</leftFov>
+			<rightFov>25.93</rightFov>
+			<bottomFov>-21.275</bottomFov>
+			<topFov>21.275</topFov>
+			<near>2.43597</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17741488783302,-22.90619782889853,7.030217535728948</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

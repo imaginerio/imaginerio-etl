@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-08-01</name>
-	<open>1</open>
+	<name>2019-09-23</name>
+	<visibility>0</visibility>
 	<PhotoOverlay>
-		<name>002080RJ1514</name>
+		<name>014AM012025</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17638156421977</longitude>
-			<latitude>-22.90898155444523</latitude>
-			<altitude>10.1719740748654</altitude>
-			<heading>8.656041565686969</heading>
-			<tilt>90.6488173036266</tilt>
-			<roll>-2.180019606434342e-008</roll>
+			<longitude>-43.17668338041582</longitude>
+			<latitude>-22.90694077446606</latitude>
+			<altitude>2.770519029648117</altitude>
+			<heading>117.2463080415647</heading>
+			<tilt>94.37981661447647</tilt>
+			<roll>7.951386703658792e-014</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -32,30 +32,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ1514.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/014AM012025.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-37.59</bottomFov>
+			<topFov>37.59</topFov>
 			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17638156421977,-22.90898155444523,10.1719740748654</coordinates>
+			<coordinates>-43.17668338041582,-22.90694077446606,2.770519029648117</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ3501</name>
+		<name>014AM012006</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17830378129385</longitude>
-			<latitude>-22.90350641437703</latitude>
-			<altitude>1.698028391717208</altitude>
-			<heading>158.5192469791099</heading>
-			<tilt>90.91942986300006</tilt>
-			<roll>-3.988637255216548e-008</roll>
+			<longitude>-43.16793852026926</longitude>
+			<latitude>-22.90606730261439</latitude>
+			<altitude>1.311915567077196</altitude>
+			<heading>-100.1376477359871</heading>
+			<tilt>85.19693617254376</tilt>
+			<roll>-1.875661356051447e-009</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -75,30 +75,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ3501.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/014AM012006.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.588367</near>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-19.44</bottomFov>
+			<topFov>19.44</topFov>
+			<near>0.454579</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17830378129385,-22.90350641437703,1.698028391717208</coordinates>
+			<coordinates>-43.16793852026926,-22.90606730261439,1.311915567077196</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ3602</name>
+		<name>IMG_0246</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17819864400512</longitude>
-			<latitude>-22.9039128540358</latitude>
-			<altitude>1.862664135071551</altitude>
-			<heading>118.8958264013947</heading>
-			<tilt>89.26117731990139</tilt>
-			<roll>-3.98847568303873e-008</roll>
+			<longitude>-43.17714611220221</longitude>
+			<latitude>-22.90147525033177</latitude>
+			<altitude>11.37191077003121</altitude>
+			<heading>105.411284641754</heading>
+			<tilt>89.23880872842176</tilt>
+			<roll>2.493623566113875e-005</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -118,30 +118,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ3602.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Verticais/crop/IMG_0246.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.645413</near>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-33.615</bottomFov>
+			<topFov>33.615</topFov>
+			<near>2.09614</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17819864400512,-22.9039128540358,1.862664135071551</coordinates>
+			<coordinates>-43.17714611220221,-22.90147525033177,11.37191077003121</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ3605</name>
+		<name>IMG_0371</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17830823239078</longitude>
-			<latitude>-22.90357012920774</latitude>
-			<altitude>1.862609184065736</altitude>
-			<heading>101.7573541511207</heading>
-			<tilt>91.79588959230603</tilt>
-			<roll>-3.99009363120519e-008</roll>
+			<longitude>-43.17597561833349</longitude>
+			<latitude>-22.90797787194616</latitude>
+			<altitude>6.825314626468312</altitude>
+			<heading>3.178067724949338</heading>
+			<tilt>90.62481674037083</tilt>
+			<roll>-1.270313539776529e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -161,30 +161,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ3605.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0371.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.645394</near>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-19.64</bottomFov>
+			<topFov>19.64</topFov>
+			<near>2.04889</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17830823239078,-22.90357012920774,1.862609184065736</coordinates>
+			<coordinates>-43.17597561833349,-22.90797787194616,6.825314626468312</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ3606</name>
+		<name>IMG_0427</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.1782522115605</longitude>
-			<latitude>-22.90364665099822</latitude>
-			<altitude>5.846746737659014</altitude>
-			<heading>67.81015328837962</heading>
-			<tilt>90.06393804870601</tilt>
-			<roll>-3.988187482542846e-008</roll>
+			<longitude>-43.17250112857474</longitude>
+			<latitude>-22.90860341281455</latitude>
+			<altitude>14.86749293518429</altitude>
+			<heading>-87.80766713044622</heading>
+			<tilt>99.49039251771688</tilt>
+			<roll>-1.352848933760507e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -204,31 +204,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ3606.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0427.jpg</href>
 		</Icon>
-		<rotation>1.51</rotation>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>1.53533</near>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>4.40119</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1782522115605,-22.90364665099822,5.846746737659014</coordinates>
+			<coordinates>-43.17250112857474,-22.90860341281455,14.86749293518429</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ3607</name>
+		<name>IMG_0435</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17921625770256</longitude>
-			<latitude>-22.90351409184491</latitude>
-			<altitude>10.6871606098133</altitude>
-			<heading>-118.4167714258901</heading>
-			<tilt>83.29530003334595</tilt>
-			<roll>-4.016111920235301e-008</roll>
+			<longitude>-43.17341513717105</longitude>
+			<latitude>-22.90742680923718</latitude>
+			<altitude>50.76365206256353</altitude>
+			<heading>170.8147706331199</heading>
+			<tilt>90.7169844790549</tilt>
+			<roll>-1.331062134192482e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -248,30 +247,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ3607.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0435.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.93768</near>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-19.64</bottomFov>
+			<topFov>19.64</topFov>
+			<near>15.758</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17921625770256,-22.90351409184491,10.6871606098133</coordinates>
+			<coordinates>-43.17341513717105,-22.90742680923718,50.76365206256353</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ3608</name>
+		<name>IMG_0484</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17832451572956</longitude>
-			<latitude>-22.90363230693879</latitude>
-			<altitude>1.780525837916551</altitude>
-			<heading>81.23092050961051</heading>
-			<tilt>88.21452472423474</tilt>
-			<roll>1.431585070808684</roll>
+			<longitude>-43.16861692783828</longitude>
+			<latitude>-22.90492806064696</latitude>
+			<altitude>1.829036260778131</altitude>
+			<heading>-76.93729548028472</heading>
+			<tilt>87.48200518906121</tilt>
+			<roll>-1.409939890292777e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -291,31 +290,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ3608.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0484.jpg</href>
 		</Icon>
-		<rotation>-1.66</rotation>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.616952</near>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>0.633761</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17832451572956,-22.90363230693879,1.780525837916551</coordinates>
+			<coordinates>-43.16861692783828,-22.90492806064696,1.829036260778131</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ3903</name>
+		<name>IMG_0421</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17584754780016</longitude>
-			<latitude>-22.91026990243777</latitude>
-			<altitude>2.303642094324607</altitude>
-			<heading>-40.98228948574235</heading>
-			<tilt>102.0735891728715</tilt>
-			<roll>1.463358273606559</roll>
+			<longitude>-43.17468339644848</longitude>
+			<latitude>-22.90753964087672</latitude>
+			<altitude>4.898227485067843</altitude>
+			<heading>141.8006349641952</heading>
+			<tilt>90.73048800394007</tilt>
+			<roll>-1.415346833251265e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -335,31 +333,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ3903.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0421.jpg</href>
 		</Icon>
-		<rotation>-4.72</rotation>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.798212</near>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>1.69724</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17584754780016,-22.91026990243777,2.303642094324607</coordinates>
+			<coordinates>-43.17468339644848,-22.90753964087672,4.898227485067843</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ4219</name>
+		<name>IMG_0510</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17825047647402</longitude>
-			<latitude>-22.90364439114145</latitude>
-			<altitude>2.715001163062093</altitude>
-			<heading>98.93463587083292</heading>
-			<tilt>96.08745321159339</tilt>
-			<roll>-1.716505346341024</roll>
+			<longitude>-43.17376757467716</longitude>
+			<latitude>-22.90783183669122</latitude>
+			<altitude>35.00249170180223</altitude>
+			<heading>178.2529635410707</heading>
+			<tilt>93.08045024224565</tilt>
+			<roll>-1.405805169206874e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -379,30 +376,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ4219.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Verticais/crop/IMG_0510.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.940748</near>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-33.615</bottomFov>
+			<topFov>33.615</topFov>
+			<near>3.16068</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17825047647402,-22.90364439114146,2.715001163062093</coordinates>
+			<coordinates>-43.17376757467716,-22.90783183669122,35.00249170180223</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ4220</name>
+		<name>IMG_0511</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17912529618697</longitude>
-			<latitude>-22.90111480139298</latitude>
-			<altitude>1.158479143942987</altitude>
-			<heading>162.2598562944179</heading>
-			<tilt>92.38041414711587</tilt>
-			<roll>3.02152694739034e-013</roll>
+			<longitude>-43.17280601245784</longitude>
+			<latitude>-22.91051873512727</latitude>
+			<altitude>4.315590716006271</altitude>
+			<heading>33.71761352664521</heading>
+			<tilt>94.01291375485789</tilt>
+			<roll>-1.399762115312094e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -422,118 +419,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ4220.jpg</href>
-		</Icon>
-		<rotation>-2.19</rotation>
-		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.401413</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17912529618697,-22.90111480139298,1.158479143942987</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>002080RJ6706</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.18054460942083</longitude>
-			<latitude>-22.89593859017028</latitude>
-			<altitude>2.02105110451352</altitude>
-			<heading>164.6582586837461</heading>
-			<tilt>93.21860723564336</tilt>
-			<roll>5.820415067078234e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ6706.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0511.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.53536</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18054460942083,-22.89593859017028,2.02105110451352</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>002080RJ8218</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.1776458316528</longitude>
-			<latitude>-22.9048773368101</latitude>
-			<altitude>1.15350047713142</altitude>
-			<heading>-160.8953196842905</heading>
-			<tilt>101.3656196550946</tilt>
-			<roll>1.150406628285354e-011</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ8218.jpg</href>
-		</Icon>
-		<rotation>0.96</rotation>
-		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-19.64</bottomFov>
+			<topFov>19.64</topFov>
 			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1776458316528,-22.9048773368101,1.15350047713142</coordinates>
+			<coordinates>-43.17280601245784,-22.91051873512727,4.315590716006271</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJN0705</name>
+		<name>IMG_0513</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17687674382534</longitude>
-			<latitude>-22.90703401381205</latitude>
-			<altitude>1.548506075771267</altitude>
-			<heading>-107.2780203120311</heading>
-			<tilt>99.75151029913798</tilt>
-			<roll>-3.88425240473732e-013</roll>
+			<longitude>-43.17439774011919</longitude>
+			<latitude>-22.90870400874415</latitude>
+			<altitude>7.374764986093714</altitude>
+			<heading>89.85120765801669</heading>
+			<tilt>88.94124586103132</tilt>
+			<roll>-1.374953788796678e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -553,31 +462,635 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJN0705.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0513.jpg</href>
 		</Icon>
-		<rotation>-2.17</rotation>
+		<ViewVolume>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>2.55536</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17439774011919,-22.90870400874415,7.374764986093714</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0530</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17246092404592</longitude>
+			<latitude>-22.90956996487059</latitude>
+			<altitude>25.07827606980069</altitude>
+			<heading>-18.59162697640647</heading>
+			<tilt>87.33826620159184</tilt>
+			<roll>-1.471324595645023e-011</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0530.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>8.68962</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17246092404592,-22.90956996487059,25.07827606980069</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0538</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17384384280715</longitude>
+			<latitude>-22.90599255147288</latitude>
+			<altitude>37.33120698283965</altitude>
+			<heading>-119.7962147199497</heading>
+			<tilt>86.42643295040956</tilt>
+			<roll>-1.363066465674708e-011</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0538.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>3.00733</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17384384280715,-22.90599255147288,37.33120698283965</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0549</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17252844028719</longitude>
+			<latitude>-22.90850884590872</latitude>
+			<altitude>25.72444597408121</altitude>
+			<heading>-91.19090653230039</heading>
+			<tilt>94.42185062167609</tilt>
+			<roll>-1.276197565937236e-011</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Verticais/crop/IMG_0549.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-41.965</bottomFov>
+			<topFov>41.965</topFov>
+			<near>3.1401</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17252844028719,-22.90850884590872,25.72444597408121</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0569</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.16868019202268</longitude>
+			<latitude>-22.90649407308196</latitude>
+			<altitude>1.820946452903032</altitude>
+			<heading>16.38388555999484</heading>
+			<tilt>89.78828586419073</tilt>
+			<roll>-1.290987145206042e-011</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0569.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-19.64</bottomFov>
+			<topFov>19.64</topFov>
+			<near>0.630958</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.16868019202268,-22.90649407308196,1.820946452903032</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0614</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.15730745880998</longitude>
+			<latitude>-22.94463733896573</latitude>
+			<altitude>4.89178716395551</altitude>
+			<heading>-57.43344345828476</heading>
+			<tilt>85.66622372157987</tilt>
+			<roll>2.705533364144101e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0614.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-19.64</bottomFov>
+			<topFov>19.64</topFov>
+			<near>1.695</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.15730745880998,-22.94463733896573,4.89178716395551</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0622</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17260825720349</longitude>
+			<latitude>-22.92368889812581</latitude>
+			<altitude>1.779395066479769</altitude>
+			<heading>-66.85116510230361</heading>
+			<tilt>90.19898995161213</tilt>
+			<roll>2.697650599497972e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0622.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>0.61656</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17260825720349,-22.92368889812581,1.779395066479769</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0628</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17267152470852</longitude>
+			<latitude>-22.92360952717189</latitude>
+			<altitude>1.816880515555154</altitude>
+			<heading>139.2707953500067</heading>
+			<tilt>90.37698462690423</tilt>
+			<roll>2.697699817627501e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0628.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-34</leftFov>
+			<rightFov>34</rightFov>
+			<bottomFov>-25.77</bottomFov>
+			<topFov>25.77</topFov>
+			<near>0.629549</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17267152470852,-22.92360952717189,1.816880515555154</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0556</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17022439831212</longitude>
+			<latitude>-22.90805364545416</latitude>
+			<altitude>1.772037176787341</altitude>
+			<heading>49.20060464420241</heading>
+			<tilt>94.11056662587923</tilt>
+			<roll>-5.247915224414803e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0556.jpg</href>
+		</Icon>
+		<rotation>-0.5</rotation>
+		<ViewVolume>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-19.64</bottomFov>
+			<topFov>19.64</topFov>
+			<near>0.614011</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17022439831212,-22.90805364545416,1.772037176787341</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>IMG_0461</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17471655124859</longitude>
+			<latitude>-22.91291863495938</latitude>
+			<altitude>1.383206871836397</altitude>
+			<heading>-19.07450342622645</heading>
+			<tilt>86.04007509160662</tilt>
+			<roll>3.999883096081804e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0461.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-26.5</leftFov>
+			<rightFov>26.5</rightFov>
+			<bottomFov>-19.64</bottomFov>
+			<topFov>19.64</topFov>
+			<near>0.479281</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17471655124859,-22.91291863495937,1.383206871836397</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>001MF018001</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17714970593497</longitude>
+			<latitude>-22.91961495331147</latitude>
+			<altitude>10.41609782595856</altitude>
+			<heading>121.3285076622912</heading>
+			<tilt>88.04026412488352</tilt>
+			<roll>3.992666275974879e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/001MF018001.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-22.505</leftFov>
+			<rightFov>22.505</rightFov>
+			<bottomFov>-12.875</bottomFov>
+			<topFov>12.875</topFov>
+			<near>3.60918</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17714970593497,-22.91961495331147,10.41609782595856</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>001MF018002</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17715482076918</longitude>
+			<latitude>-22.91964025517444</latitude>
+			<altitude>10.64867148244528</altitude>
+			<heading>103.7539408101779</heading>
+			<tilt>89.05711934548197</tilt>
+			<roll>3.990882623453956e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/001MF018002.jpg</href>
+		</Icon>
+		<rotation>1.81</rotation>
+		<ViewVolume>
+			<leftFov>-22.5</leftFov>
+			<rightFov>22.5</rightFov>
+			<bottomFov>-13.94</bottomFov>
+			<topFov>13.94</topFov>
+			<near>3.68976</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17715482076918,-22.91964025517444,10.64867148244528</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002008AV018</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17861488914672</longitude>
+			<latitude>-22.89544195020349</latitude>
+			<altitude>5.364116017076206</altitude>
+			<heading>-144.3514489293255</heading>
+			<tilt>90.43945140284963</tilt>
+			<roll>3.990462898374862e-005</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/002008AV018.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-24.995</leftFov>
+			<rightFov>24.995</rightFov>
+			<bottomFov>-9.905</bottomFov>
+			<topFov>9.905</topFov>
+			<near>1.85867</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17861488914672,-22.89544195020349,5.364116017076206</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>0071824cx112-07</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17593443287567</longitude>
+			<latitude>-22.90245640010163</latitude>
+			<altitude>2.14740377775395</altitude>
+			<heading>-107.2496001957784</heading>
+			<tilt>97.12024655161841</tilt>
+			<roll>6.579190628713618e-006</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/0071824cx112-07.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-37.545</bottomFov>
+			<topFov>37.545</topFov>
+			<near>0.630223</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17593443287567,-22.90245640010163,2.14740377775395</coordinates>
+		</Point>
+	</PhotoOverlay>
+	<PhotoOverlay>
+		<name>002008OBAC014</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17714637609287</longitude>
+			<latitude>-22.90290488867831</latitude>
+			<altitude>4.989068376995618</altitude>
+			<heading>172.4618230078168</heading>
+			<tilt>84.92125537394756</tilt>
+			<roll>2.989721400575706e-013</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/002008OBAC014.jpg</href>
+		</Icon>
+		<rotation>0.88</rotation>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
-			<bottomFov>-25</bottomFov>
-			<topFov>25</topFov>
-			<near>0.536557</near>
+			<bottomFov>-18.625</bottomFov>
+			<topFov>18.625</topFov>
+			<near>1.72871</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17687674382534,-22.90703401381205,1.548506075771267</coordinates>
+			<coordinates>-43.17714637609287,-22.90290488867831,4.989068376995618</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJN0707</name>
+		<name>002008OBAC016</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17719736157255</longitude>
-			<latitude>-22.90636809525881</latitude>
-			<altitude>1.698669172489092</altitude>
-			<heading>-169.8558264344559</heading>
-			<tilt>100.3009507769949</tilt>
-			<roll>-2.95791585376107e-013</roll>
+			<longitude>-43.17921053420255</longitude>
+			<latitude>-22.89980602385102</latitude>
+			<altitude>1.739503052413151</altitude>
+			<heading>31.12756572169155</heading>
+			<tilt>93.63460098329581</tilt>
+			<roll>-9.223608576244199e-014</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -597,31 +1110,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJN0707.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/002008OBAC016.jpg</href>
 		</Icon>
-		<rotation>-1.86</rotation>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.588589</near>
+			<leftFov>-20</leftFov>
+			<rightFov>20</rightFov>
+			<bottomFov>-14.675</bottomFov>
+			<topFov>14.675</topFov>
+			<near>0.602738</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17719736157255,-22.90636809525881,1.698669172489092</coordinates>
+			<coordinates>-43.17921053420255,-22.89980602385102,1.739503052413151</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJN0712</name>
+		<name>002008OBAC020</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17811659644544</longitude>
-			<latitude>-22.90394437742257</latitude>
-			<altitude>1.737299849937763</altitude>
-			<heading>-4.602516480960351</heading>
-			<tilt>97.05542067934341</tilt>
-			<roll>-0.1070233389441965</roll>
+			<longitude>-43.17892836915912</longitude>
+			<latitude>-22.90161701871762</latitude>
+			<altitude>3.011912028666212</altitude>
+			<heading>-19.34638419897234</heading>
+			<tilt>95.79395309920884</tilt>
+			<roll>-5.406942958487979e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -641,31 +1153,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJN0712.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/002008OBAC020.jpg</href>
 		</Icon>
-		<rotation>-1.57</rotation>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.601974</near>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-22.685</bottomFov>
+			<topFov>22.685</topFov>
+			<near>1.04363</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17811659644544,-22.90394437742257,1.737299849937763</coordinates>
+			<coordinates>-43.17892836915912,-22.90161701871762,3.011912028666212</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080Vol01Cx0103</name>
+		<name>002008OBAC017</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17606953410265</longitude>
-			<latitude>-22.90577979021452</latitude>
-			<altitude>13.63357526794866</altitude>
-			<heading>-135.5096821531134</heading>
-			<tilt>85.63077905406648</tilt>
-			<roll>1.291177978486929e-010</roll>
+			<longitude>-43.17899170043565</longitude>
+			<latitude>-22.90145919248852</latitude>
+			<altitude>1.550466074332844</altitude>
+			<heading>-21.22495936868222</heading>
+			<tilt>90.82157178126796</tilt>
+			<roll>3.180554681463517e-015</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -685,30 +1196,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080Vol01Cx0103.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/002008OBAC017.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>4.72403</near>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-32.48</bottomFov>
+			<topFov>32.48</topFov>
+			<near>0.537237</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17606953410265,-22.90577979021452,13.63357526794866</coordinates>
+			<coordinates>-43.17899170043565,-22.90145919248852,1.550466074332844</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080Vol01Cx0301</name>
+		<name>002008OBAC021</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17683465257044</longitude>
-			<latitude>-22.90805608537952</latitude>
-			<altitude>0.9195577322930837</altitude>
-			<heading>112.0609111716474</heading>
-			<tilt>97.10881203010953</tilt>
-			<roll>-4.071109992273301e-013</roll>
+			<longitude>-43.17893264699999</longitude>
+			<latitude>-22.901623167</latitude>
+			<altitude>2.769999998998395</altitude>
+			<heading>-22.72376214090348</heading>
+			<tilt>87.08999999999998</tilt>
+			<roll>-3.784860070941584e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -728,75 +1239,31 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080Vol01Cx0301.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/002008OBAC021.jpg</href>
 		</Icon>
-		<rotation>-0.75</rotation>
+		<rotation>1.03</rotation>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.318627</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17683465257044,-22.90805608537952,0.9195577322930837</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>002080Vol02Cx0316</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17765265814239</longitude>
-			<latitude>-22.9051788615831</latitude>
-			<altitude>0.1298821337601767</altitude>
-			<heading>12.46621100207355</heading>
-			<tilt>100.955681174876</tilt>
-			<roll>6.424720456556304e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080Vol02Cx0316.jpg</href>
-		</Icon>
-		<rotation>-1.48</rotation>
-		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-22.52</bottomFov>
+			<topFov>22.52</topFov>
 			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17765265814239,-22.9051788615831,0.1298821337601767</coordinates>
+			<coordinates>-43.17893264699999,-22.901623167,2.769999998998395</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080Vol05Cx0106</name>
+		<name>002010TM030</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.1780719131718</longitude>
-			<latitude>-22.90378630947148</latitude>
-			<altitude>1.711811529664546</altitude>
-			<heading>176.5369819643634</heading>
-			<tilt>92.56348780149243</tilt>
-			<roll>-9.06333406473589e-008</roll>
+			<longitude>-43.16411014182365</longitude>
+			<latitude>-22.951062898741</latitude>
+			<altitude>0.1225080304181712</altitude>
+			<heading>69.4534389740172</heading>
+			<tilt>90.15146883037893</tilt>
+			<roll>-6.120579915141355e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -816,31 +1283,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080Vol05Cx0106.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/002010TM030.jpg</href>
 		</Icon>
-		<rotation>-3.42</rotation>
 		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>0.593143</near>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-22.52</bottomFov>
+			<topFov>22.52</topFov>
+			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1780719131718,-22.90378630947148,1.711811529664546</coordinates>
+			<coordinates>-43.16411014182365,-22.951062898741,0.1225080304181712</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cxjulioferrez2-01</name>
+		<name>002058aFR017</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17782435570179</longitude>
-			<latitude>-22.90441225413538</latitude>
-			<altitude>1.989638410620481</altitude>
-			<heading>-98.06104490201908</heading>
-			<tilt>97.32904604475677</tilt>
-			<roll>-9.129416608380391e-008</roll>
+			<longitude>-43.12660225356759</longitude>
+			<latitude>-22.89696532026385</latitude>
+			<altitude>31.83375648437138</altitude>
+			<heading>-112.4021634634797</heading>
+			<tilt>86.40905406417218</tilt>
+			<roll>8.635827162259671e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -860,361 +1326,19 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0071824cxjulioferrez2-01.JPG</href>
+			<href>Y:/USUARIOS/MARTIM/resize/002058aFR017.jpg</href>
 		</Icon>
+		<rotation>0.8</rotation>
 		<ViewVolume>
-			<leftFov>-19.95</leftFov>
-			<rightFov>19.95</rightFov>
-			<bottomFov>-25.79</bottomFov>
-			<topFov>25.79</topFov>
-			<near>0.347149</near>
+			<leftFov>-20.63</leftFov>
+			<rightFov>20.63</rightFov>
+			<bottomFov>-16.24</bottomFov>
+			<topFov>16.24</topFov>
+			<near>0.304373</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17782435570179,-22.90441225413538,1.989638410620481</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0073040cx002-01</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17919732682797</longitude>
-			<latitude>-22.90154191069717</latitude>
-			<altitude>14.34903797591664</altitude>
-			<heading>98.99979946894712</heading>
-			<tilt>93.26922959297764</tilt>
-			<roll>-2.507056669483198</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0073040cx002-01.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-24.86</leftFov>
-			<rightFov>24.86</rightFov>
-			<bottomFov>-31.12</bottomFov>
-			<topFov>31.12</topFov>
-			<near>3.07494</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17919732682797,-22.90154191069717,14.34903797591664</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0073040cx023-06</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17835255363424</longitude>
-			<latitude>-22.90355796804866</latitude>
-			<altitude>9.115885444840739</altitude>
-			<heading>106.8634089984491</heading>
-			<tilt>99.50824507916835</tilt>
-			<roll>-0.81567203791193</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0073040cx023-06.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-27.0181</leftFov>
-			<rightFov>27.0181</rightFov>
-			<bottomFov>-32.595</bottomFov>
-			<topFov>32.595</topFov>
-			<near>0.850901</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17835255363424,-22.90355796804866,9.115885444840739</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0074050cx003e004a-01</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.1774643008354</longitude>
-			<latitude>-22.90514483137597</latitude>
-			<altitude>10.90623597361171</altitude>
-			<heading>-111.408502682506</heading>
-			<tilt>89.8645751739773</tilt>
-			<roll>-3.329916908644393e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0074050cx003e004a-01.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-29.71</leftFov>
-			<rightFov>29.71</rightFov>
-			<bottomFov>-24.91</bottomFov>
-			<topFov>24.91</topFov>
-			<near>1.07536</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1774643008354,-22.90514483137597,10.90623597361171</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0074050cx003e004b-02</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17599705209018</longitude>
-			<latitude>-22.90894341652523</latitude>
-			<altitude>7.843049348670611</altitude>
-			<heading>-98.95480508833396</heading>
-			<tilt>94.10092178226441</tilt>
-			<roll>-4.293748819975748e-014</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0074050cx003e004b-02.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-48.185</leftFov>
-			<rightFov>48.185</rightFov>
-			<bottomFov>-43.88</bottomFov>
-			<topFov>43.88</topFov>
-			<near>0.399588</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17599705209018,-22.90894341652523,7.843049348670611</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0074050cx006e007-01</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17489453337551</longitude>
-			<latitude>-22.91204515056669</latitude>
-			<altitude>6.319791756825337</altitude>
-			<heading>-107.7090374211547</heading>
-			<tilt>96.23822604097906</tilt>
-			<roll>2.162777183395192e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0074050cx006e007-01.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-21.175</bottomFov>
-			<topFov>21.175</topFov>
-			<near>2.18981</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17489453337551,-22.9120451505667,6.319791756825337</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0074050cxsn-06</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17909207222657</longitude>
-			<latitude>-22.90173909443608</latitude>
-			<altitude>14.21613905198281</altitude>
-			<heading>68.8066562505179</heading>
-			<tilt>90.81641568267548</tilt>
-			<roll>-1.332851196200805e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0074050cxsn-06.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-29.55</bottomFov>
-			<topFov>29.55</topFov>
-			<near>1.69497</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17909207222657,-22.90173909443608,14.21613905198281</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>007A5P3F04-015</name>
-		<Camera>
-			<longitude>-43.17896504778722</longitude>
-			<latitude>-22.9019807003199</latitude>
-			<altitude>12.28074822198408</altitude>
-			<heading>139.3787853903033</heading>
-			<tilt>88.27481609661901</tilt>
-			<roll>2.671665932429354e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/007A5P3F04-015.JPG</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.355</bottomFov>
-			<topFov>19.355</topFov>
-			<near>1.26409</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17896504778722,-22.9019807003199,12.28074822198408</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>007A5P3F04-023</name>
-		<visibility>0</visibility>
-		<Camera>
-			<longitude>-43.17799804158307</longitude>
-			<latitude>-22.90459602770644</latitude>
-			<altitude>21.02960834684871</altitude>
-			<heading>153.8680802524967</heading>
-			<tilt>86.92609920841476</tilt>
-			<roll>-1.564306438937304</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/007A5P3F04-023.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-17.525</leftFov>
-			<rightFov>17.525</rightFov>
-			<bottomFov>-13.845</bottomFov>
-			<topFov>13.845</topFov>
-			<near>0.670898</near>
-		</ViewVolume>
-		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17799804158307,-22.90459602770643,21.02960834684871</coordinates>
+			<coordinates>-43.12660225356759,-22.89696532026385,31.83375648437138</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>
