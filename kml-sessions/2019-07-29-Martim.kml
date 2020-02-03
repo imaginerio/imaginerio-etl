@@ -1660,14 +1660,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007_IMG_2944</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.18053508829912</longitude>
-			<latitude>-22.94240133245171</latitude>
-			<altitude>2.939277365685467</altitude>
-			<heading>-83.83060521589407</heading>
-			<tilt>93.20188039560624</tilt>
-			<roll>-2.702857950245935e-008</roll>
+			<longitude>-43.18168450159345</longitude>
+			<latitude>-22.94985456163371</latitude>
+			<altitude>0.1261266830871025</altitude>
+			<heading>-143.1527324485667</heading>
+			<tilt>92.91694514636052</tilt>
+			<roll>-2.70214327960901e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1689,16 +1688,17 @@
 		<Icon>
 			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Ferrez/crop/007_IMG_2944.jpg</href>
 		</Icon>
+		<rotation>-1.62</rotation>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
 			<bottomFov>-24.81</bottomFov>
 			<topFov>24.81</topFov>
-			<near>1.01846</near>
+			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18053508829912,-22.94240133245171,2.939277365685467</coordinates>
+			<coordinates>-43.18168450159345,-22.94985456163371,0.1261266830871025</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -3269,6 +3269,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002080Vol01Cx0115</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17462536032102</longitude>
 			<latitude>-22.90516177363954</latitude>
@@ -4182,6 +4183,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007ALA103</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.19936742360581</longitude>
 			<latitude>-22.9544644043526</latitude>
@@ -4225,6 +4227,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007ALA116</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.22190168199997</longitude>
 			<latitude>-22.99052522599999</latitude>
