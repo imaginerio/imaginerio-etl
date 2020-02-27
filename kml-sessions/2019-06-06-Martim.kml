@@ -742,15 +742,14 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GL40</name>
-		<visibility>0</visibility>
+		<name>014GL040</name>
 		<Camera>
-			<longitude>-43.24532919176771</longitude>
-			<latitude>-22.93999627753044</latitude>
-			<altitude>6.548318802216703</altitude>
-			<heading>149.2774637944692</heading>
-			<tilt>87.41965851057654</tilt>
-			<roll>-0.9199469422481285</roll>
+			<longitude>-43.27749575854224</longitude>
+			<latitude>-22.95899361163435</latitude>
+			<altitude>2.019860345219874</altitude>
+			<heading>4.772433451642423</heading>
+			<tilt>103.9399999999999</tilt>
+			<roll>0.9988253863857622</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -770,18 +769,18 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GL40.jpg</href>
+			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GL040.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
 			<bottomFov>-30.51</bottomFov>
 			<topFov>30.51</topFov>
-			<near>2.26899</near>
+			<near>0.699882</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.24532919176771,-22.93999627753044,6.548318802216703</coordinates>
+			<coordinates>-43.27749575854224,-22.95899361163435,2.019860345219874</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

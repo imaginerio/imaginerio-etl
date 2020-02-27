@@ -2,6 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-09-16</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>0071530cx001-01</name>
 		<Camera>
@@ -685,12 +686,12 @@
 	<PhotoOverlay>
 		<name>0071824cx068-13</name>
 		<Camera>
-			<longitude>-43.11996841578682</longitude>
-			<latitude>-22.90528308231324</latitude>
-			<altitude>0.9815689829647358</altitude>
-			<heading>155.7201366179197</heading>
-			<tilt>91.86364789162482</tilt>
-			<roll>0.9195643158099325</roll>
+			<longitude>-43.11839565232673</longitude>
+			<latitude>-22.90471843770197</latitude>
+			<altitude>2.509749212541317</altitude>
+			<heading>158.0055451812172</heading>
+			<tilt>90.77578732590098</tilt>
+			<roll>0.9191621332417469</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -713,15 +714,15 @@
 			<href>Y:/USUARIOS/MARTIM/resize/0071824cx068-13.JPG</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.59</leftFov>
-			<rightFov>22.59</rightFov>
+			<leftFov>-22.5893</leftFov>
+			<rightFov>22.5893</rightFov>
 			<bottomFov>-17.355</bottomFov>
 			<topFov>17.355</topFov>
-			<near>0.340114</near>
+			<near>0.869628</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.11996841578682,-22.90528308231324,0.9815689829647358</coordinates>
+			<coordinates>-43.11839565232673,-22.90471843770197,2.509749212541317</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -1363,12 +1364,12 @@
 	<PhotoOverlay>
 		<name>0072430cx043-07</name>
 		<Camera>
-			<longitude>-43.12012634765625</longitude>
-			<latitude>-22.90529940200255</latitude>
-			<altitude>0.4815890126093235</altitude>
-			<heading>141.5938562812928</heading>
-			<tilt>89.33977094817749</tilt>
-			<roll>1.97194390250738e-013</roll>
+			<longitude>-43.11861643613619</longitude>
+			<latitude>-22.90469661733243</latitude>
+			<altitude>1.098363364247928</altitude>
+			<heading>143.2446176041367</heading>
+			<tilt>89.75297098605492</tilt>
+			<roll>-9.859719512536902e-014</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1390,27 +1391,28 @@
 		<Icon>
 			<href>Y:/USUARIOS/MARTIM/resize/0072430cx043-07.jpg</href>
 		</Icon>
+		<rotation>-1.59</rotation>
 		<ViewVolume>
 			<leftFov>-22.5</leftFov>
 			<rightFov>22.5</rightFov>
 			<bottomFov>-18.435</bottomFov>
 			<topFov>18.435</topFov>
-			<near>0.166871</near>
+			<near>0.380583</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.12012634765625,-22.90529940200254,0.4815890126093235</coordinates>
+			<coordinates>-43.11861643613619,-22.90469661733243,1.098363364247928</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx043-08</name>
 		<Camera>
-			<longitude>-43.12003130252374</longitude>
-			<latitude>-22.90530333559782</latitude>
-			<altitude>0.6542325290695528</altitude>
-			<heading>151.3198823027355</heading>
-			<tilt>92.26758511076328</tilt>
-			<roll>3.307776868722058e-013</roll>
+			<longitude>-43.11853645303816</longitude>
+			<latitude>-22.90453994810201</latitude>
+			<altitude>2.112428748622186</altitude>
+			<heading>153.9336102511731</heading>
+			<tilt>92.16241016724312</tilt>
+			<roll>6.265692722483128e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1433,15 +1435,15 @@
 			<href>Y:/USUARIOS/MARTIM/resize/0072430cx043-08.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-16.64</leftFov>
-			<rightFov>16.64</rightFov>
+			<leftFov>-16.6377</leftFov>
+			<rightFov>16.6377</rightFov>
 			<bottomFov>-13.445</bottomFov>
 			<topFov>13.445</topFov>
-			<near>0.226692</near>
+			<near>0.731957</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.12003130252374,-22.90530333559782,0.6542325290695528</coordinates>
+			<coordinates>-43.11853645303816,-22.90453994810201,2.112428748622186</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
