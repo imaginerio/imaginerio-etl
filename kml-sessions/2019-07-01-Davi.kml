@@ -2,6 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-07-01</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>0071824cx067-03</name>
 		<Camera>
@@ -638,12 +639,12 @@
 	<PhotoOverlay>
 		<name>0071824cx101-07</name>
 		<Camera>
-			<longitude>-43.17076064843691</longitude>
-			<latitude>-22.90331857340504</latitude>
-			<altitude>8.724625235894465</altitude>
-			<heading>-93.06643287454936</heading>
-			<tilt>89.79933355470318</tilt>
-			<roll>3.138601417341345e-005</roll>
+			<longitude>-43.17327269085595</longitude>
+			<latitude>-22.9014039469026</latitude>
+			<altitude>5.209194240011841</altitude>
+			<heading>-172.3650034655243</heading>
+			<tilt>91.16462307382507</tilt>
+			<roll>3.13922671868547e-005</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -663,29 +664,29 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/0071824cx101-07.JPG</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0071824cx101-07.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>3.04221</near>
+			<leftFov>-21.5</leftFov>
+			<rightFov>21.5</rightFov>
+			<bottomFov>-16.44</bottomFov>
+			<topFov>16.44</topFov>
+			<near>1.80499</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17076064843691,-22.90331857340505,8.724625235894465</coordinates>
+			<coordinates>-43.17327269085595,-22.9014039469026,5.209194240011841</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx019-12</name>
 		<Camera>
-			<longitude>-43.17118681289698</longitude>
-			<latitude>-22.9036915508195</latitude>
-			<altitude>0.9621235557855151</altitude>
-			<heading>3.670966481935494</heading>
-			<tilt>89.74538019559354</tilt>
-			<roll>3.13860307393325e-005</roll>
+			<longitude>-43.17296454052751</longitude>
+			<latitude>-22.90170261720948</latitude>
+			<altitude>7.893992380607767</altitude>
+			<heading>-96.42055129529911</heading>
+			<tilt>88.46390108824596</tilt>
+			<roll>3.139700377861546e-005</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -705,18 +706,18 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/0071824cx019-12.JPG</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0071824cx019-12.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
+			<leftFov>-25.0646</leftFov>
+			<rightFov>25.0646</rightFov>
 			<bottomFov>-19.305</bottomFov>
 			<topFov>19.305</topFov>
-			<near>0.333376</near>
+			<near>0.353355</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17118681289698,-22.9036915508195,0.9621235557855151</coordinates>
+			<coordinates>-43.17296454052751,-22.90170261720948,7.893992380607767</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -764,12 +765,12 @@
 	<PhotoOverlay>
 		<name>0071824cx109a-06</name>
 		<Camera>
-			<longitude>-43.17214508289826</longitude>
-			<latitude>-22.90280218054816</latitude>
-			<altitude>14.36923907980373</altitude>
-			<heading>-79.05867035179958</heading>
-			<tilt>87.9758023235095</tilt>
-			<roll>6.383475183430305e-005</roll>
+			<longitude>-43.17205718675254</longitude>
+			<latitude>-22.90277185382131</latitude>
+			<altitude>14.05735239558945</altitude>
+			<heading>-80.84228173008172</heading>
+			<tilt>88.78449450441187</tilt>
+			<roll>6.380957008522359e-005</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -789,18 +790,19 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/0071824cx109a-06.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0071824cx109a-06.jpg</href>
 		</Icon>
+		<rotation>-0.45</rotation>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>4.97894</near>
+			<leftFov>-22.59</leftFov>
+			<rightFov>22.59</rightFov>
+			<bottomFov>-17.245</bottomFov>
+			<topFov>17.245</topFov>
+			<near>0.734926</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17214508289826,-22.90280218054816,14.36923907980373</coordinates>
+			<coordinates>-43.17205718675254,-22.90277185382131,14.05735239558945</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

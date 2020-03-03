@@ -2,7 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-08-15</name>
-	<visibility>0</visibility>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>0072137cx001-11</name>
 		<visibility>0</visibility>
@@ -222,14 +222,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx006-02</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.181281923421</longitude>
-			<latitude>-22.90837176504261</latitude>
-			<altitude>32.9270304145193</altitude>
-			<heading>-48.09179574684651</heading>
-			<tilt>85.34424476439243</tilt>
-			<roll>-6.843917563573195e-011</roll>
+			<longitude>-43.18144637138527</longitude>
+			<latitude>-22.90787965875592</latitude>
+			<altitude>18.13767734408735</altitude>
+			<heading>-48.51522152578404</heading>
+			<tilt>88.1456232450315</tilt>
+			<roll>1.952542518950453e-011</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -252,15 +251,15 @@
 			<href>Y:/USUARIOS/MARTIM/resize/0072137cx006-02.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25.005</leftFov>
-			<rightFov>25.005</rightFov>
-			<bottomFov>-13.995</bottomFov>
-			<topFov>13.995</topFov>
-			<near>11.4092</near>
+			<leftFov>-27.075</leftFov>
+			<rightFov>27.075</rightFov>
+			<bottomFov>-15.28</bottomFov>
+			<topFov>15.28</topFov>
+			<near>6.28471</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.181281923421,-22.90837176504261,32.9270304145193</coordinates>
+			<coordinates>-43.18144637138527,-22.90787965875592,18.13767734408735</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
