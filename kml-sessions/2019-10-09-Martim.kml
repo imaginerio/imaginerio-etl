@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-05-27</name>
-	<visibility>0</visibility>
+	<name>2019-10-09</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>014GLAS021</name>
-		<visibility>0</visibility>
+		<name>007_IMG_2353</name>
 		<Camera>
-			<longitude>-43.19625644399995</longitude>
-			<latitude>-22.90127499500004</latitude>
-			<altitude>37.37105008860444</altitude>
-			<heading>-139.9937034426121</heading>
-			<tilt>85.11237749766714</tilt>
-			<roll>-5.359234638266025e-013</roll>
+			<longitude>-43.17628873399997</longitude>
+			<latitude>-22.90189222</latitude>
+			<altitude>5.629999999771589</altitude>
+			<heading>-3.576602112646543</heading>
+			<tilt>95.81000000000002</tilt>
+			<roll>7.88777561002952e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -33,31 +31,31 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS021.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Invertidas/007_IMG_2353.jpg</href>
 		</Icon>
-		<rotation>1.52</rotation>
+		<rotation>0.82</rotation>
 		<ViewVolume>
-			<leftFov>-28.3238</leftFov>
-			<rightFov>28.3238</rightFov>
-			<bottomFov>-22.775</bottomFov>
-			<topFov>22.775</topFov>
-			<near>12.9491</near>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-19.04</bottomFov>
+			<topFov>19.04</topFov>
+			<near>1.39291</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19625644399995,-22.90127499500004,37.37105008860444</coordinates>
+			<coordinates>-43.17628873399997,-22.90189222,5.629999999771589</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001ACL017002</name>
+		<name>007_IMG_2836</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17371909469376</longitude>
-			<latitude>-22.90824677790331</latitude>
-			<altitude>64.74054776073885</altitude>
-			<heading>0.1544842902038165</heading>
-			<tilt>87.0111398193154</tilt>
-			<roll>4.727786395136348e-009</roll>
+			<longitude>-43.17768099809977</longitude>
+			<latitude>-22.91850795778789</latitude>
+			<altitude>43.74808619128584</altitude>
+			<heading>30.82236731599577</heading>
+			<tilt>84.66919326302406</tilt>
+			<roll>1.558471793917123e-012</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -77,30 +75,31 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001ACL017002.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Invertidas/007_IMG_2836.jpg</href>
 		</Icon>
+		<rotation>-3.22</rotation>
 		<ViewVolume>
-			<leftFov>-24.9991</leftFov>
-			<rightFov>24.9991</rightFov>
-			<bottomFov>-19.82</bottomFov>
-			<topFov>19.82</topFov>
-			<near>22.4326</near>
+			<leftFov>-25.01</leftFov>
+			<rightFov>25.01</rightFov>
+			<bottomFov>-25.01</bottomFov>
+			<topFov>25.01</topFov>
+			<near>0.680168</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17371909469376,-22.90824677790331,64.74054776073885</coordinates>
+			<coordinates>-43.17768099809977,-22.91850795778789,43.74808619128584</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS034</name>
+		<name>007_IMG_2837</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17575336430566</longitude>
-			<latitude>-22.90834358942148</latitude>
-			<altitude>83.11113017175634</altitude>
-			<heading>-178.7164075006457</heading>
-			<tilt>82.83610677615266</tilt>
-			<roll>4.760523844472652e-009</roll>
+			<longitude>-43.17861820077052</longitude>
+			<latitude>-22.91791278081673</latitude>
+			<altitude>24.56881680376138</altitude>
+			<heading>26.99357059947882</heading>
+			<tilt>86.27586455956914</tilt>
+			<roll>1.698416199901518e-012</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -120,31 +119,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS034.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Invertidas/007_IMG_2837.jpg</href>
 		</Icon>
-		<rotation>1.13</rotation>
 		<ViewVolume>
-			<leftFov>-29.3373</leftFov>
-			<rightFov>29.3373</rightFov>
-			<bottomFov>-23.685</bottomFov>
-			<topFov>23.685</topFov>
-			<near>28.798</near>
+			<leftFov>-30.02</leftFov>
+			<rightFov>30.02</rightFov>
+			<bottomFov>-30.02</bottomFov>
+			<topFov>30.02</topFov>
+			<near>0.264567</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17575336430566,-22.90834358942148,83.11113017175634</coordinates>
+			<coordinates>-43.17861820077052,-22.91791278081673,24.56881680376138</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS033</name>
+		<name>007_IMG_2839</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17344120906792</longitude>
-			<latitude>-22.90820928743796</latitude>
-			<altitude>85.03656327550918</altitude>
-			<heading>141.5583846860564</heading>
-			<tilt>83.8162786327959</tilt>
-			<roll>4.751211180365326e-009</roll>
+			<longitude>-43.18170000331254</longitude>
+			<latitude>-22.94985675631238</latitude>
+			<altitude>1.16083599865372</altitude>
+			<heading>158.4453877988561</heading>
+			<tilt>96.85688143567907</tilt>
+			<roll>-1.635905875573919e-005</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -164,30 +162,31 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS033.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Invertidas/007_IMG_2839.jpg</href>
 		</Icon>
+		<rotation>-2.29</rotation>
 		<ViewVolume>
-			<leftFov>-27.0485</leftFov>
-			<rightFov>27.0485</rightFov>
-			<bottomFov>-22.36</bottomFov>
-			<topFov>22.36</topFov>
-			<near>29.4652</near>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-25</bottomFov>
+			<topFov>25</topFov>
+			<near>0.40223</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17344120906792,-22.90820928743796,85.03656327550918</coordinates>
+			<coordinates>-43.18170000331254,-22.94985675631238,1.16083599865372</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS036</name>
+		<name>007_IMG_3651</name>
 		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17555054308341</longitude>
-			<latitude>-22.90614853819906</latitude>
-			<altitude>46.63364399449396</altitude>
-			<heading>-104.4641043079839</heading>
-			<tilt>89.10980048434554</tilt>
-			<roll>3.905721148837198e-012</roll>
+			<longitude>-43.19090686051427</longitude>
+			<latitude>-22.91518638428825</latitude>
+			<altitude>10.35578435248026</altitude>
+			<heading>77.09224962231828</heading>
+			<tilt>87.33978909619465</tilt>
+			<roll>-1.625927450604422e-005</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -207,19 +206,19 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS036.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/Invertidas/007_IMG_3651.jpg</href>
 		</Icon>
-		<rotation>-1.48</rotation>
+		<rotation>-1.08</rotation>
 		<ViewVolume>
-			<leftFov>-16.3665</leftFov>
-			<rightFov>16.3665</rightFov>
-			<bottomFov>-12.91</bottomFov>
-			<topFov>12.91</topFov>
-			<near>16.1586</near>
+			<leftFov>-20.94</leftFov>
+			<rightFov>20.94</rightFov>
+			<bottomFov>-16.5</bottomFov>
+			<topFov>16.5</topFov>
+			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17555054308341,-22.90614853819905,46.63364399449396</coordinates>
+			<coordinates>-43.19090686051427,-22.91518638428825,10.35578435248026</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>

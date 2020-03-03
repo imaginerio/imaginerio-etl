@@ -4,14 +4,13 @@
 	<name>2019-05-14</name>
 	<PhotoOverlay>
 		<name>014GL20.jpg</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17319394799979</longitude>
-			<latitude>-22.89449191700011</latitude>
-			<altitude>59.95080500907397</altitude>
-			<heading>156.3961790494988</heading>
-			<tilt>88.95387669707077</tilt>
-			<roll>-0.205235014743791</roll>
+			<longitude>-43.17300169895182</longitude>
+			<latitude>-22.89584536713015</latitude>
+			<altitude>25.18633341360721</altitude>
+			<heading>156.2639083770955</heading>
+			<tilt>89.02857750775428</tilt>
+			<roll>-0.2052295270080678</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -34,15 +33,15 @@
 			<href>C:/Users/a295805/Pictures/Saved Pictures/014GL20.jpg.png</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-26.0261</leftFov>
-			<rightFov>26.0261</rightFov>
-			<bottomFov>-12.305</bottomFov>
-			<topFov>12.305</topFov>
-			<near>20.773</near>
+			<leftFov>-26.215</leftFov>
+			<rightFov>26.215</rightFov>
+			<bottomFov>-12.405</bottomFov>
+			<topFov>12.405</topFov>
+			<near>5.51858</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17319394799979,-22.89449191700011,59.95080500907397</coordinates>
+			<coordinates>-43.17300169895182,-22.89584536713015,25.18633341360721</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

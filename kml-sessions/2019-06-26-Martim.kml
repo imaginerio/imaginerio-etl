@@ -2,7 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-06-26</name>
-	<visibility>0</visibility>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>0071824cx037-02</name>
 		<visibility>0</visibility>
@@ -1186,14 +1186,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx114-01</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.18176173011095</longitude>
-			<latitude>-22.93949258826683</latitude>
-			<altitude>18.35567521024533</altitude>
-			<heading>167.2719471266739</heading>
-			<tilt>88.71597635703732</tilt>
-			<roll>-2.862499213317165e-014</roll>
+			<longitude>-43.18226129861078</longitude>
+			<latitude>-22.94328648223144</latitude>
+			<altitude>30.14104990109446</altitude>
+			<heading>163.0253528884512</heading>
+			<tilt>88.86783204097615</tilt>
+			<roll>3.180554681463517e-015</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1213,30 +1212,29 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx114-01.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0071824cx114-01.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-18.955</leftFov>
-			<rightFov>18.955</rightFov>
-			<bottomFov>-14.465</bottomFov>
-			<topFov>14.465</topFov>
-			<near>6.35798</near>
+			<leftFov>-22.09</leftFov>
+			<rightFov>22.09</rightFov>
+			<bottomFov>-16.91</bottomFov>
+			<topFov>16.91</topFov>
+			<near>5.27835</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18176173011095,-22.93949258826683,18.35567521024533</coordinates>
+			<coordinates>-43.18226129861078,-22.94328648223144,30.14104990109446</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx003b-03</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.18225841635071</longitude>
-			<latitude>-22.9474821421847</latitude>
-			<altitude>1.520291431226709</altitude>
-			<heading>78.93514057886054</heading>
-			<tilt>95.9811467464733</tilt>
-			<roll>-8.16607414465758e-013</roll>
+			<longitude>-43.18263940930562</longitude>
+			<latitude>-22.94728496182762</latitude>
+			<altitude>1.781717222585559</altitude>
+			<heading>79.37612229499467</heading>
+			<tilt>97.58417597436797</tilt>
+			<roll>-0.04414548832756424</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1256,30 +1254,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx003b-03.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0072430cx003b-03.jpg</href>
 		</Icon>
+		<rotation>-0.6</rotation>
 		<ViewVolume>
-			<leftFov>-30.995</leftFov>
-			<rightFov>30.995</rightFov>
-			<bottomFov>-25.985</bottomFov>
-			<topFov>25.985</topFov>
-			<near>0.526781</near>
+			<leftFov>-32.34</leftFov>
+			<rightFov>32.34</rightFov>
+			<bottomFov>-27.18</bottomFov>
+			<topFov>27.18</topFov>
+			<near>0.617365</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18225841635071,-22.9474821421847,1.520291431226709</coordinates>
+			<coordinates>-43.18263940930562,-22.94728496182762,1.781717222585559</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx003b-11</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.18270881901409</longitude>
-			<latitude>-22.94757670170538</latitude>
-			<altitude>1.1221736502424</altitude>
-			<heading>125.1067588658923</heading>
-			<tilt>93.58698045367825</tilt>
-			<roll>-7.315275767366089e-013</roll>
+			<longitude>-43.18259332245178</longitude>
+			<latitude>-22.94711644167159</latitude>
+			<altitude>1.971266301429047</altitude>
+			<heading>125.6711694831388</heading>
+			<tilt>92.61680536160797</tilt>
+			<roll>-1.160902458734183e-012</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1299,18 +1297,18 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx003b-11.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0072430cx003b-11.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-26.725</leftFov>
-			<rightFov>26.725</rightFov>
-			<bottomFov>-22.22</bottomFov>
-			<topFov>22.22</topFov>
-			<near>0.388833</near>
+			<leftFov>-25.35</leftFov>
+			<rightFov>25.35</rightFov>
+			<bottomFov>-21.09</bottomFov>
+			<topFov>21.09</topFov>
+			<near>0.683044</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18270881901409,-22.94757670170538,1.1221736502424</coordinates>
+			<coordinates>-43.18259332245178,-22.94711644167159,1.971266301429047</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

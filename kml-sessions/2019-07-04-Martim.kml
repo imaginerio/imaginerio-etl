@@ -1392,6 +1392,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx033b-01</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.18332901676229</longitude>
 			<latitude>-22.90561743226428</latitude>
@@ -1696,14 +1697,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cxrio3-07</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.12752240776823</longitude>
-			<latitude>-22.87500607074539</latitude>
-			<altitude>1.271356307618401</altitude>
-			<heading>-136.5541937039388</heading>
-			<tilt>88.35330137603124</tilt>
-			<roll>-6.64735928425875e-013</roll>
+			<longitude>-43.11640152995364</longitude>
+			<latitude>-22.92599376102595</latitude>
+			<altitude>3.570496601577688</altitude>
+			<heading>-108.4597561274597</heading>
+			<tilt>90.28455978472938</tilt>
+			<roll>-8.514716808390898e-008</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1723,18 +1723,19 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cxrio3-07.JPG</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0071824cxrio3-07.jpg</href>
 		</Icon>
+		<rotation>0.31</rotation>
 		<ViewVolume>
-			<leftFov>-21.78</leftFov>
-			<rightFov>21.78</rightFov>
-			<bottomFov>-16.705</bottomFov>
-			<topFov>16.705</topFov>
-			<near>0.440525</near>
+			<leftFov>-18.18</leftFov>
+			<rightFov>18.18</rightFov>
+			<bottomFov>-13.785</bottomFov>
+			<topFov>13.785</topFov>
+			<near>1.23718</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.12752240776823,-22.87500607074539,1.271356307618401</coordinates>
+			<coordinates>-43.11640152995364,-22.92599376102595,3.570496601577688</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

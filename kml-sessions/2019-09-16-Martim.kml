@@ -5,6 +5,7 @@
 	<open>1</open>
 	<PhotoOverlay>
 		<name>0071530cx001-01</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.10199514831219</longitude>
 			<latitude>-22.75178005811197</latitude>
@@ -47,6 +48,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071530cx001-03</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.10263710476585</longitude>
 			<latitude>-22.75065644722966</latitude>
@@ -89,6 +91,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071530cx001-05</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.10214456085377</longitude>
 			<latitude>-22.75240370092807</latitude>
@@ -132,6 +135,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx016-04</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.22334391591881</longitude>
 			<latitude>-22.84272741178797</latitude>
@@ -175,6 +179,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx017a-08</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.23001793827774</longitude>
 			<latitude>-22.9126054549081</latitude>
@@ -218,6 +223,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx038-13</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.21259018283448</longitude>
 			<latitude>-22.94710936274018</latitude>
@@ -260,6 +266,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx038-14</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.2125857444078</longitude>
 			<latitude>-22.94711099330701</latitude>
@@ -302,6 +309,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx040-01</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.22562979580994</longitude>
 			<latitude>-22.96803192279281</latitude>
@@ -344,6 +352,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx040-03</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.22980256103057</longitude>
 			<latitude>-22.91241051996104</latitude>
@@ -387,6 +396,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx042-02</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.12318773624376</longitude>
 			<latitude>-22.80597217098033</latitude>
@@ -430,6 +440,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx042-03</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.11800372038351</longitude>
 			<latitude>-22.80330756316127</latitude>
@@ -472,6 +483,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx060-01</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.12568124787763</longitude>
 			<latitude>-22.93406693068853</latitude>
@@ -515,6 +527,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx063-08</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.22475722371062</longitude>
 			<latitude>-22.84125293412118</latitude>
@@ -559,12 +572,12 @@
 	<PhotoOverlay>
 		<name>0071824cx064-10</name>
 		<Camera>
-			<longitude>-43.12513220185709</longitude>
-			<latitude>-22.90979891145056</latitude>
-			<altitude>4.962712577016662</altitude>
-			<heading>-133.2680878860544</heading>
-			<tilt>97.48784147467984</tilt>
-			<roll>2.989721400575706e-013</roll>
+			<longitude>-43.11805807913495</longitude>
+			<latitude>-22.90490918617475</latitude>
+			<altitude>0.1325119023557697</altitude>
+			<heading>-144.889022041579</heading>
+			<tilt>92.98831703690013</tilt>
+			<roll>1.463055153473218e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -587,26 +600,26 @@
 			<href>Y:/USUARIOS/MARTIM/resize/0071824cx064-10.JPG</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-14.585</leftFov>
-			<rightFov>14.585</rightFov>
+			<leftFov>-14.5859</leftFov>
+			<rightFov>14.5859</rightFov>
 			<bottomFov>-19.105</bottomFov>
 			<topFov>19.105</topFov>
-			<near>1.71958</near>
+			<near>0.105</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.12513220185709,-22.90979891145056,4.962712577016662</coordinates>
+			<coordinates>-43.11805807913495,-22.90490918617475,0.1325119023557697</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx064-11</name>
 		<Camera>
-			<longitude>-43.12473887874182</longitude>
-			<latitude>-22.90932174934007</latitude>
-			<altitude>3.775085788523504</altitude>
-			<heading>-135.0764134130665</heading>
-			<tilt>93.00783147331772</tilt>
-			<roll>9.223608576244198e-013</roll>
+			<longitude>-43.11792121321113</longitude>
+			<latitude>-22.90478087081416</latitude>
+			<altitude>1.415811753291062</altitude>
+			<heading>-133.1796597932548</heading>
+			<tilt>92.65750354658984</tilt>
+			<roll>1.968763347825917e-012</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -628,21 +641,22 @@
 		<Icon>
 			<href>Y:/USUARIOS/MARTIM/resize/0071824cx064-11.JPG</href>
 		</Icon>
-		<rotation>-2.25</rotation>
+		<rotation>-0.84</rotation>
 		<ViewVolume>
-			<leftFov>-17.5</leftFov>
-			<rightFov>17.5</rightFov>
-			<bottomFov>-13.325</bottomFov>
-			<topFov>13.325</topFov>
-			<near>1.30807</near>
+			<leftFov>-15.135</leftFov>
+			<rightFov>15.135</rightFov>
+			<bottomFov>-11.485</bottomFov>
+			<topFov>11.485</topFov>
+			<near>0.490579</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.12473887874182,-22.90932174934007,3.775085788523504</coordinates>
+			<coordinates>-43.11792121321113,-22.90478087081416,1.415811753291062</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx064-14</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.22424871481007</longitude>
 			<latitude>-22.84269950321884</latitude>
@@ -685,13 +699,14 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx068-13</name>
+		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.11839565232673</longitude>
-			<latitude>-22.90471843770197</latitude>
-			<altitude>2.509749212541317</altitude>
-			<heading>158.0055451812172</heading>
-			<tilt>90.77578732590098</tilt>
-			<roll>0.9191621332417469</roll>
+			<longitude>-43.11996841578682</longitude>
+			<latitude>-22.90528308231324</latitude>
+			<altitude>0.9815689829647358</altitude>
+			<heading>155.7201366179197</heading>
+			<tilt>91.86364789162482</tilt>
+			<roll>0.9195643158099325</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -714,19 +729,20 @@
 			<href>Y:/USUARIOS/MARTIM/resize/0071824cx068-13.JPG</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-22.5893</leftFov>
-			<rightFov>22.5893</rightFov>
+			<leftFov>-22.59</leftFov>
+			<rightFov>22.59</rightFov>
 			<bottomFov>-17.355</bottomFov>
 			<topFov>17.355</topFov>
-			<near>0.869628</near>
+			<near>0.340114</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.11839565232673,-22.90471843770197,2.509749212541317</coordinates>
+			<coordinates>-43.11996841578682,-22.90528308231324,0.9815689829647358</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx083-15</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17873334559577</longitude>
 			<latitude>-22.95008968825505</latitude>
@@ -770,6 +786,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx101-09</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.12573859339763</longitude>
 			<latitude>-22.93401380901568</latitude>
@@ -812,6 +829,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cxrio1-09</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.115424216</longitude>
 			<latitude>-22.94362872700001</latitude>
@@ -855,6 +873,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cxrio3-02</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.13036104373581</longitude>
 			<latitude>-22.90839593978437</latitude>
@@ -897,6 +916,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx006-10</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.181091545</longitude>
 			<latitude>-22.94606712300001</latitude>
@@ -939,6 +959,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx008-02</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17741826857458</longitude>
 			<latitude>-22.89033742793338</latitude>
@@ -982,6 +1003,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx013-02</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.1777567511043</longitude>
 			<latitude>-22.88715860910795</latitude>
@@ -1025,6 +1047,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx014-04</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17957951601626</longitude>
 			<latitude>-22.91646708496521</latitude>
@@ -1067,6 +1090,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx017-02</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.10220538779653</longitude>
 			<latitude>-22.75232974890566</latitude>
@@ -1110,6 +1134,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx020-01</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.16163505885783</longitude>
 			<latitude>-22.96151834960185</latitude>
@@ -1195,6 +1220,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx031-11</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.22186580699997</longitude>
 			<latitude>-22.96924271400001</latitude>
@@ -1237,6 +1263,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx032b-07</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.12569300076855</longitude>
 			<latitude>-22.93404988182548</latitude>
@@ -1279,6 +1306,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx037-06</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17630773021222</longitude>
 			<latitude>-22.90433673802692</latitude>
@@ -1321,6 +1349,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx043-06</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.19247644235632</longitude>
 			<latitude>-22.9504640351926</latitude>
@@ -1363,13 +1392,14 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx043-07</name>
+		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.11861643613619</longitude>
-			<latitude>-22.90469661733243</latitude>
-			<altitude>1.098363364247928</altitude>
-			<heading>143.2446176041367</heading>
-			<tilt>89.75297098605492</tilt>
-			<roll>-9.859719512536902e-014</roll>
+			<longitude>-43.12012634765625</longitude>
+			<latitude>-22.90529940200255</latitude>
+			<altitude>0.4815890126093235</altitude>
+			<heading>141.5938562812928</heading>
+			<tilt>89.33977094817749</tilt>
+			<roll>1.97194390250738e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1391,28 +1421,28 @@
 		<Icon>
 			<href>Y:/USUARIOS/MARTIM/resize/0072430cx043-07.jpg</href>
 		</Icon>
-		<rotation>-1.59</rotation>
 		<ViewVolume>
 			<leftFov>-22.5</leftFov>
 			<rightFov>22.5</rightFov>
 			<bottomFov>-18.435</bottomFov>
 			<topFov>18.435</topFov>
-			<near>0.380583</near>
+			<near>0.166871</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.11861643613619,-22.90469661733243,1.098363364247928</coordinates>
+			<coordinates>-43.12012634765625,-22.90529940200254,0.4815890126093235</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx043-08</name>
+		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.11853645303816</longitude>
-			<latitude>-22.90453994810201</latitude>
-			<altitude>2.112428748622186</altitude>
-			<heading>153.9336102511731</heading>
-			<tilt>92.16241016724312</tilt>
-			<roll>6.265692722483128e-013</roll>
+			<longitude>-43.12003130252374</longitude>
+			<latitude>-22.90530333559782</latitude>
+			<altitude>0.6542325290695528</altitude>
+			<heading>151.3198823027355</heading>
+			<tilt>92.26758511076328</tilt>
+			<roll>3.307776868722058e-013</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -1435,19 +1465,20 @@
 			<href>Y:/USUARIOS/MARTIM/resize/0072430cx043-08.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-16.6377</leftFov>
-			<rightFov>16.6377</rightFov>
+			<leftFov>-16.64</leftFov>
+			<rightFov>16.64</rightFov>
 			<bottomFov>-13.445</bottomFov>
 			<topFov>13.445</topFov>
-			<near>0.731957</near>
+			<near>0.226692</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.11853645303816,-22.90453994810201,2.112428748622186</coordinates>
+			<coordinates>-43.12003130252374,-22.90530333559782,0.6542325290695528</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072430cx045a-06</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.2013855470036</longitude>
 			<latitude>-22.96294137703951</latitude>
@@ -1491,6 +1522,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0073040cx048-05</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.20332867227049</longitude>
 			<latitude>-22.90441299057637</latitude>
@@ -1533,6 +1565,7 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F05-003</name>
+		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17380304707033</longitude>
 			<latitude>-22.8956810500365</latitude>

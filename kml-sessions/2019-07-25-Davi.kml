@@ -2,6 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-07-25</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>007A5P3FG05-008</name>
 		<Camera>
@@ -300,14 +301,14 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>P009MF047</name>
+		<name>001CO001003</name>
 		<Camera>
-			<longitude>-43.17936374690458</longitude>
-			<latitude>-22.93120569311089</latitude>
-			<altitude>2.942085380658154</altitude>
-			<heading>-76.43712323514903</heading>
-			<tilt>99.4280290979103</tilt>
-			<roll>-0.0009069827074338441</roll>
+			<longitude>-43.17936374690454</longitude>
+			<latitude>-22.9312056931109</latitude>
+			<altitude>2.942085377561715</altitude>
+			<heading>-76.43712323514899</heading>
+			<tilt>99.42802909791034</tilt>
+			<roll>-0.0009069827074497469</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -338,7 +339,7 @@
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17936374690458,-22.93120569311089,2.942085380658154</coordinates>
+			<coordinates>-43.17936374690454,-22.9312056931109,2.942085377561715</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
