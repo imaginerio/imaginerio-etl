@@ -132,12 +132,12 @@
 	<PhotoOverlay>
 		<name>0071824cxrio2-03</name>
 		<Camera>
-			<longitude>-43.1741037097886</longitude>
-			<latitude>-22.9081229273252</latitude>
-			<altitude>74.38044484193769</altitude>
-			<heading>14.88494329382486</heading>
-			<tilt>89.7700285556178</tilt>
-			<roll>1.358096848984922e-012</roll>
+			<longitude>-43.17242231796465</longitude>
+			<latitude>-22.90695058261217</latitude>
+			<altitude>49.10896425864456</altitude>
+			<heading>6.522581350970616</heading>
+			<tilt>90.87560213146026</tilt>
+			<roll>3.323679642129375e-012</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -157,18 +157,18 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/0071824cxrio2-03.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0071824cxrio2-03.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.305</bottomFov>
-			<topFov>19.305</topFov>
-			<near>24.9707</near>
+			<leftFov>-25.01</leftFov>
+			<rightFov>25.01</rightFov>
+			<bottomFov>-19.31</bottomFov>
+			<topFov>19.31</topFov>
+			<near>17.0163</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1741037097886,-22.90812292732521,74.38044484193769</coordinates>
+			<coordinates>-43.17242231796465,-22.90695058261217,49.10896425864456</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
