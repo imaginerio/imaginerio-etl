@@ -2,7 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-09-04</name>
-	<visibility>0</visibility>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>IMG_0434</name>
 		<visibility>0</visibility>
@@ -2902,14 +2902,13 @@
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0071824cx019-05</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17936635065984</longitude>
-			<latitude>-22.90431008992958</latitude>
-			<altitude>4.771783974446212</altitude>
-			<heading>-117.0730664706938</heading>
-			<tilt>96.27437007938993</tilt>
-			<roll>7.18836129877298e-009</roll>
+			<longitude>-43.17832082096801</longitude>
+			<latitude>-22.90375056964942</latitude>
+			<altitude>6.05180234035757</altitude>
+			<heading>-117.1058274711963</heading>
+			<tilt>95.11448621108906</tilt>
+			<roll>7.174309608190275e-009</roll>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
@@ -2929,18 +2928,18 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0071824cx019-05.JPG</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0071824cx019-05.jpg</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25.0015</leftFov>
-			<rightFov>25.0015</rightFov>
-			<bottomFov>-31.83</bottomFov>
-			<topFov>31.83</topFov>
-			<near>0.167768</near>
+			<leftFov>-21.58</leftFov>
+			<rightFov>21.58</rightFov>
+			<bottomFov>-27.745</bottomFov>
+			<topFov>27.745</topFov>
+			<near>0.154282</near>
 		</ViewVolume>
 		<Point>
 			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17936635065984,-22.90431008992958,4.771783974446212</coordinates>
+			<coordinates>-43.17832082096801,-22.90375056964942,6.05180234035757</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>
