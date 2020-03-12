@@ -132,12 +132,12 @@
 	<PhotoOverlay>
 		<name>0072430cx098-08</name>
 		<Camera>
-			<longitude>-43.17587844200003</longitude>
-			<latitude>-22.90993421300001</latitude>
-			<altitude>27.85594552927678</altitude>
-			<heading>-15.85634124968636</heading>
-			<tilt>84.74999999999997</tilt>
-			<roll>0.03001996401223839</roll>
+			<longitude>-43.17583331522513</longitude>
+			<latitude>-22.91004619002367</latitude>
+			<altitude>9.698294467521187</altitude>
+			<heading>-23.75162420873408</heading>
+			<tilt>96.24225088199249</tilt>
+			<roll>0.0300723253138876</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -157,18 +157,18 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>/Users/a295805/code/liquid-galaxy/_demo-1-content/marc-ferrez/ferrez-lg/0072430cx098-08.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/master/images/0072430cx098-08.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
-			<bottomFov>-20.475</bottomFov>
-			<topFov>20.475</topFov>
-			<near>6.93</near>
+			<bottomFov>-20.41</bottomFov>
+			<topFov>20.41</topFov>
+			<near>1.01344</near>
 		</ViewVolume>
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17587844200003,-22.90993421300001,27.85594552927678</coordinates>
+			<coordinates>-43.17583331522513,-22.91004619002367,9.698294467521187</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
