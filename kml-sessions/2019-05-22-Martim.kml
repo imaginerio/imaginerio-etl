@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-05-22</name>
-	<visibility>0</visibility>
+	<name>2019-05-22-Martim</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>001AN01002034.jpg</name>
-		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.24095937653684</longitude>
-			<latitude>-22.9999991102176</latitude>
-			<altitude>17.42888004578043</altitude>
-			<heading>-99.34701798797788</heading>
-			<tilt>89.23494466593446</tilt>
-			<roll>-0.001021524186851456</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<latitude>-22.99999911021761</latitude>
+			<altitude>39.67658334390319</altitude>
+			<heading>-99.34701798797786</heading>
+			<tilt>89.23494466593452</tilt>
+			<roll>-0.001021524186849866</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -42,21 +41,20 @@
 			<near>6.03911</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.24095937653684,-22.99999911021759,17.42888004578043</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.24095937653684,-22.99999911021761,39.67658334390319</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN01002075.jpg</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.16686659403997</longitude>
-			<latitude>-22.89615868889281</latitude>
-			<altitude>26.3181122358462</altitude>
+			<longitude>-43.16686659404</longitude>
+			<latitude>-22.89615868889282</latitude>
+			<altitude>28.67696240533581</altitude>
 			<heading>-85.87363574252389</heading>
-			<tilt>88.3783015451624</tilt>
-			<roll>-0.001021841175789818</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>88.37830154516237</tilt>
+			<roll>-0.001021841175818443</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -85,8 +83,8 @@
 			<near>9.11923</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16686659403997,-22.89615868889281,26.3181122358462</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.16686659404,-22.89615868889282,28.67696240533581</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>

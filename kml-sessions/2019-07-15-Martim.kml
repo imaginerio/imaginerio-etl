@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-07-15</name>
+	<name>2019-07-15-Martim</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>001AMF013007</name>
 		<Camera>
 			<longitude>-43.17769818099999</longitude>
 			<latitude>-22.941039609</latitude>
-			<altitude>1.650000002329943</altitude>
+			<altitude>8.631885112325289</altitude>
 			<heading>-116.08</heading>
-			<tilt>92.91</tilt>
-			<roll>-5.764755360152625e-014</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>92.91000000000003</tilt>
+			<roll>-2.981770013872047e-014</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -40,20 +41,20 @@
 			<near>0.571725</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17769818099999,-22.941039609,1.650000002329943</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17769818099999,-22.941039609,8.631885112325289</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx001-12</name>
 		<Camera>
-			<longitude>-43.16802399199999</longitude>
-			<latitude>-22.95560462399999</latitude>
-			<altitude>3.950470741413187</altitude>
-			<heading>66.7850429291133</heading>
+			<longitude>-43.16802399199995</longitude>
+			<latitude>-22.95560462399998</latitude>
+			<altitude>27.99885680309106</altitude>
+			<heading>66.78504292911329</heading>
 			<tilt>94.71789660467101</tilt>
-			<roll>-8.281369251860632e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-8.140232137870688e-013</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -80,23 +81,23 @@
 			<rightFov>25.39</rightFov>
 			<bottomFov>-14.635</bottomFov>
 			<topFov>14.635</topFov>
-			<near>0.246778</near>
+			<near>1.36884</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16802399199999,-22.95560462399999,3.950470741413187</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.16802399199995,-22.95560462399998,27.99885680309106</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx019-03</name>
 		<Camera>
-			<longitude>-43.18398934552395</longitude>
+			<longitude>-43.18398934552393</longitude>
 			<latitude>-22.94209301724337</latitude>
-			<altitude>44.78106011760681</altitude>
+			<altitude>60.18422890843915</altitude>
 			<heading>114.2813988219137</heading>
-			<tilt>87.63553954428691</tilt>
-			<roll>-3.16526257455504e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>87.63553954428693</tilt>
+			<roll>-3.165275296773766e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -123,23 +124,23 @@
 			<rightFov>27.05</rightFov>
 			<bottomFov>-15.58</bottomFov>
 			<topFov>15.58</topFov>
-			<near>5.79814</near>
+			<near>15.5166</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18398934552395,-22.94209301724337,44.78106011760681</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18398934552393,-22.94209301724337,60.18422890843915</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AMF015022</name>
 		<Camera>
-			<longitude>-43.21001276699997</longitude>
+			<longitude>-43.21001276699994</longitude>
 			<latitude>-22.951839155</latitude>
-			<altitude>233.9358144222117</altitude>
+			<altitude>710.6087810774692</altitude>
 			<heading>80.11406471977409</heading>
-			<tilt>79.99910141968404</tilt>
-			<roll>-3.211122992507063e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>79.99910141968405</tilt>
+			<roll>-3.211111860565678e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -166,23 +167,23 @@
 			<rightFov>28.165</rightFov>
 			<bottomFov>-14.915</bottomFov>
 			<topFov>14.915</topFov>
-			<near>0.469282</near>
+			<near>81.0588</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21001276699997,-22.951839155,233.9358144222117</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21001276699994,-22.951839155,710.6087810774692</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN01001002</name>
 		<Camera>
-			<longitude>-43.17512832700425</longitude>
+			<longitude>-43.17512832700424</longitude>
 			<latitude>-22.94186817701694</latitude>
-			<altitude>15.78745234523782</altitude>
+			<altitude>54.89942543882538</altitude>
 			<heading>-108.0553847485324</heading>
-			<tilt>93.27546608621854</tilt>
-			<roll>-3.167107693839624e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>93.27546608621856</tilt>
+			<roll>-3.167087020234195e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -209,23 +210,23 @@
 			<rightFov>19.105</rightFov>
 			<bottomFov>-14.365</bottomFov>
 			<topFov>14.365</topFov>
-			<near>5.46425</near>
+			<near>5.47035</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17512832700425,-22.94186817701694,15.78745234523782</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17512832700424,-22.94186817701694,54.89942543882538</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN01002001</name>
 		<Camera>
-			<longitude>-43.17575190099999</longitude>
+			<longitude>-43.17575190099997</longitude>
 			<latitude>-22.94218967099999</latitude>
-			<altitude>32.70999999983883</altitude>
+			<altitude>56.72492973883198</altitude>
 			<heading>-116.1601521544476</heading>
-			<tilt>91.99</tilt>
-			<roll>-3.163249283441674e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>91.99000000000002</tilt>
+			<roll>-3.163250476149679e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -252,23 +253,23 @@
 			<rightFov>14.025</rightFov>
 			<bottomFov>-10.645</bottomFov>
 			<topFov>10.645</topFov>
-			<near>0.219852</near>
+			<near>11.334</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17575190099999,-22.94218967099999,32.70999999983883</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17575190099997,-22.94218967099999,56.72492973883198</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001ANV022016</name>
 		<Camera>
-			<longitude>-43.17561984461057</longitude>
+			<longitude>-43.17561984461054</longitude>
 			<latitude>-22.94198409788652</latitude>
-			<altitude>29.2247137756996</altitude>
+			<altitude>56.64259787729855</altitude>
 			<heading>-107.2554523071516</heading>
-			<tilt>88.29109159286611</tilt>
-			<roll>-3.162167894849976e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>88.29109159286615</tilt>
+			<roll>-3.162105078895017e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -295,23 +296,23 @@
 			<rightFov>21.31</rightFov>
 			<bottomFov>-15.895</bottomFov>
 			<topFov>15.895</topFov>
-			<near>2.12636</near>
+			<near>10.1264</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17561984461057,-22.94198409788652,29.2247137756996</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17561984461054,-22.94198409788652,56.64259787729855</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001MF015004</name>
 		<Camera>
-			<longitude>-43.17584502067292</longitude>
-			<latitude>-22.94242984567961</latitude>
-			<altitude>19.80946769402054</altitude>
+			<longitude>-43.1758450206729</longitude>
+			<latitude>-22.94242984567962</latitude>
+			<altitude>41.05951184168673</altitude>
 			<heading>-116.5287696892482</heading>
-			<tilt>90.44730569460775</tilt>
-			<roll>-4.253139736344423e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>90.44730569460778</tilt>
+			<roll>-4.253136635303609e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -338,11 +339,11 @@
 			<rightFov>20.595</rightFov>
 			<bottomFov>-15.3</bottomFov>
 			<topFov>15.3</topFov>
-			<near>1.1327</near>
+			<near>6.86398</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17584502067292,-22.94242984567961,19.80946769402054</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1758450206729,-22.94242984567962,41.05951184168673</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -350,11 +351,11 @@
 		<Camera>
 			<longitude>-43.17215494420271</longitude>
 			<latitude>-22.9397957055325</latitude>
-			<altitude>77.2392738777378</altitude>
-			<heading>-65.61260123058507</heading>
-			<tilt>90.12840517635054</tilt>
-			<roll>7.824164516400251e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>88.03607310934299</altitude>
+			<heading>-65.61260123058516</heading>
+			<tilt>90.1284051763507</tilt>
+			<roll>7.633331235512441e-013</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -380,23 +381,23 @@
 			<rightFov>55</rightFov>
 			<bottomFov>-19.32</bottomFov>
 			<topFov>19.32</topFov>
-			<near>9.94986</near>
+			<near>26.7634</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17215494420271,-22.9397957055325,77.2392738777378</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17215494420271,-22.9397957055325,88.03607310934299</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AE001002</name>
 		<Camera>
-			<longitude>-43.17563033409677</longitude>
+			<longitude>-43.17563033409676</longitude>
 			<latitude>-22.94217298002408</latitude>
-			<altitude>32.14449571594397</altitude>
-			<heading>-104.9438268234066</heading>
-			<tilt>87.69231425032611</tilt>
-			<roll>7.740925663234601e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>58.06188895745576</altitude>
+			<heading>-104.9438268234067</heading>
+			<tilt>87.69231425032618</tilt>
+			<roll>7.740929400386351e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -423,23 +424,23 @@
 			<rightFov>22.675</rightFov>
 			<bottomFov>-15.665</bottomFov>
 			<topFov>15.665</topFov>
-			<near>0.222152</near>
+			<near>11.0404</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17563033409677,-22.94217298002408,32.14449571594397</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17563033409676,-22.94217298002408,58.06188895745576</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AMF013001</name>
 		<Camera>
-			<longitude>-43.18139534375252</longitude>
+			<longitude>-43.18139534375251</longitude>
 			<latitude>-22.91996227257516</latitude>
-			<altitude>21.98270901499983</altitude>
+			<altitude>85.88452731076481</altitude>
 			<heading>140.4483384240017</heading>
 			<tilt>84.1269523154474</tilt>
-			<roll>4.134721085902572e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>4.039304445458666e-013</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -469,8 +470,8 @@
 			<near>7.61701</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18139534375252,-22.91996227257517,21.98270901499983</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18139534375251,-22.91996227257517,85.88452731076481</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -478,11 +479,11 @@
 		<Camera>
 			<longitude>-43.17566579212362</longitude>
 			<latitude>-22.94206436135296</latitude>
-			<altitude>31.67410116382677</altitude>
-			<heading>-85.27801043915176</heading>
-			<tilt>87.01078360149745</tilt>
-			<roll>1.281763536629797e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>57.84567870459757</altitude>
+			<heading>-85.27801043915177</heading>
+			<tilt>87.01078360149747</tilt>
+			<roll>1.28494409131126e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -508,23 +509,23 @@
 			<rightFov>25.425</rightFov>
 			<bottomFov>-19.635</bottomFov>
 			<topFov>19.635</topFov>
-			<near>1.46691</near>
+			<near>10.9751</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17566579212362,-22.94206436135296,31.67410116382677</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17566579212362,-22.94206436135296,57.84567870459757</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002008AV025</name>
 		<Camera>
-			<longitude>-43.17550288728054</longitude>
+			<longitude>-43.17550288728052</longitude>
 			<latitude>-22.94179268685118</latitude>
-			<altitude>21.24217670800553</altitude>
-			<heading>-90.94736888360626</heading>
-			<tilt>88.27405244210915</tilt>
-			<roll>1.159312181393452e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>51.87280517476995</altitude>
+			<heading>-90.94736888360629</heading>
+			<tilt>88.27405244210922</tilt>
+			<roll>1.207020501615405e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -551,23 +552,23 @@
 			<rightFov>19.545</rightFov>
 			<bottomFov>-14.475</bottomFov>
 			<topFov>14.475</topFov>
-			<near>3.49091</near>
+			<near>7.36041</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17550288728054,-22.94179268685118,21.24217670800553</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17550288728052,-22.94179268685118,51.87280517476995</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0073040cx024-08</name>
 		<Camera>
-			<longitude>-43.17529572699989</longitude>
+			<longitude>-43.17529572699986</longitude>
 			<latitude>-22.941756179</latitude>
-			<altitude>14.21743978690227</altitude>
+			<altitude>56.44843005122995</altitude>
 			<heading>-101.5168780580848</heading>
-			<tilt>86.12353259836098</tilt>
-			<roll>2.699495785892159e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>86.12353259836104</tilt>
+			<roll>2.748794383454844e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -594,23 +595,23 @@
 			<rightFov>27.45</rightFov>
 			<bottomFov>-21.745</bottomFov>
 			<topFov>21.745</topFov>
-			<near>0.169125</near>
+			<near>4.92634</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17529572699989,-22.94175617899999,14.21743978690227</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17529572699986,-22.94175617899999,56.44843005122995</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F05-007</name>
 		<Camera>
-			<longitude>-43.17604460300962</longitude>
-			<latitude>-22.9421988002189</latitude>
-			<altitude>12.16005726330934</altitude>
-			<heading>-94.76322698262253</heading>
+			<longitude>-43.17604460300959</longitude>
+			<latitude>-22.94219880021889</latitude>
+			<altitude>31.06091758686392</altitude>
+			<heading>-94.7632269826225</heading>
 			<tilt>92.95058406503421</tilt>
-			<roll>3.155110244011809e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>3.156700521352541e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -636,23 +637,23 @@
 			<rightFov>14.89</rightFov>
 			<bottomFov>-11.995</bottomFov>
 			<topFov>11.995</topFov>
-			<near>4.24567</near>
+			<near>1.59968</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17604460300962,-22.94219880021889,12.16005726330934</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17604460300959,-22.94219880021889,31.06091758686392</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F13-021</name>
 		<Camera>
-			<longitude>-43.17553075299996</longitude>
+			<longitude>-43.17553075299993</longitude>
 			<latitude>-22.94201364900001</latitude>
-			<altitude>28.96622348950622</altitude>
+			<altitude>57.74984276932514</altitude>
 			<heading>-116.5336098645042</heading>
-			<tilt>90.74404851319306</tilt>
-			<roll>3.466804602795234e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>90.74404851319308</tilt>
+			<roll>3.496622302933954e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -682,20 +683,20 @@
 			<near>0.105</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17553075299996,-22.94201364900001,28.96622348950622</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17553075299993,-22.94201364900001,57.74984276932514</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F13-030</name>
 		<Camera>
-			<longitude>-43.17543710545899</longitude>
+			<longitude>-43.17543710545896</longitude>
 			<latitude>-22.94188516205703</latitude>
-			<altitude>23.50256398929859</altitude>
+			<altitude>56.61676819967521</altitude>
 			<heading>-107.8914225124405</heading>
-			<tilt>86.67950751721163</tilt>
-			<roll>2.057502055903688e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>86.67950751721169</tilt>
+			<roll>2.057504163021164e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -722,23 +723,23 @@
 			<rightFov>28.97</rightFov>
 			<bottomFov>-22.04</bottomFov>
 			<topFov>22.04</topFov>
-			<near>0.585795</near>
+			<near>0.56036</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17543710545899,-22.94188516205703,23.50256398929859</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17543710545896,-22.94188516205703,56.61676819967521</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F13-032</name>
 		<Camera>
-			<longitude>-43.17543773536904</longitude>
+			<longitude>-43.17543773536902</longitude>
 			<latitude>-22.94186532531494</latitude>
-			<altitude>22.1201831434521</altitude>
+			<altitude>55.45373467046238</altitude>
 			<heading>-105.6912124857374</heading>
 			<tilt>92.93450133843336</tilt>
-			<roll>2.056739637189608e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>2.056741306980816e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -765,23 +766,23 @@
 			<rightFov>25</rightFov>
 			<bottomFov>-18.94</bottomFov>
 			<topFov>18.94</topFov>
-			<near>1.82854</near>
+			<near>1.88387</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17543773536904,-22.94186532531494,22.1201831434521</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17543773536902,-22.94186532531494,55.45373467046238</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P4F05-116-117</name>
 		<Camera>
-			<longitude>-43.17622027263534</longitude>
-			<latitude>-22.94312475706298</latitude>
-			<altitude>4.153833176747596</altitude>
+			<longitude>-43.17622027263533</longitude>
+			<latitude>-22.94312475706299</latitude>
+			<altitude>9.690434966368493</altitude>
 			<heading>-110.8551182948093</heading>
-			<tilt>93.4934903380526</tilt>
-			<roll>2.057859669520685e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>93.49349033805264</tilt>
+			<roll>2.057861498339627e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -810,20 +811,20 @@
 			<near>1.4393</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17622027263534,-22.94312475706298,4.153833176747596</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17622027263533,-22.943124757063,9.690434966368493</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007_IMG_2509</name>
 		<Camera>
-			<longitude>-43.17579019905862</longitude>
-			<latitude>-22.94212605648496</latitude>
-			<altitude>24.10094096176203</altitude>
-			<heading>-97.53344609081839</heading>
-			<tilt>88.06290243762615</tilt>
-			<roll>2.055260679262727e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<longitude>-43.1757901990586</longitude>
+			<latitude>-22.94212605648497</latitude>
+			<altitude>47.69913598092818</altitude>
+			<heading>-97.5334460908184</heading>
+			<tilt>88.06290243762624</tilt>
+			<roll>2.055263064678738e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -850,23 +851,23 @@
 			<rightFov>28.42</rightFov>
 			<bottomFov>-26.51</bottomFov>
 			<topFov>26.51</topFov>
-			<near>0.580592</near>
+			<near>8.35098</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17579019905862,-22.94212605648496,24.10094096176203</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1757901990586,-22.94212605648497,47.69913598092818</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014GL31</name>
 		<Camera>
-			<longitude>-43.17537637893798</longitude>
+			<longitude>-43.17537637893795</longitude>
 			<latitude>-22.94154168561608</latitude>
-			<altitude>34.72317845767598</altitude>
+			<altitude>59.64050392134087</altitude>
 			<heading>-127.1118691955443</heading>
-			<tilt>92.06782429329762</tilt>
-			<roll>3.300105370830367e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>92.06782429329765</tilt>
+			<roll>3.300122863881115e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -893,11 +894,11 @@
 			<rightFov>21.835</rightFov>
 			<bottomFov>-16.62</bottomFov>
 			<topFov>16.62</topFov>
-			<near>1.64193</near>
+			<near>11.5871</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17537637893798,-22.94154168561608,34.72317845767598</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17537637893795,-22.94154168561608,59.64050392134087</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -905,11 +906,11 @@
 		<Camera>
 			<longitude>-43.17587957502117</longitude>
 			<latitude>-22.94211905101371</latitude>
-			<altitude>28.24610086177368</altitude>
+			<altitude>50.09253175659465</altitude>
 			<heading>-109.6699857910061</heading>
-			<tilt>86.45506844363723</tilt>
-			<roll>6.26144608562937e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>86.45506844363727</tilt>
+			<roll>6.261520828664386e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -936,23 +937,23 @@
 			<rightFov>32.19</rightFov>
 			<bottomFov>-25.265</bottomFov>
 			<topFov>25.265</topFov>
-			<near>3.88203</near>
+			<near>3.93281</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17587957502117,-22.94211905101371,28.24610086177368</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17587957502117,-22.94211905101371,50.09253175659465</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN01002003</name>
 		<Camera>
-			<longitude>-43.17585241275019</longitude>
+			<longitude>-43.17585241275016</longitude>
 			<latitude>-22.94223867491535</latitude>
-			<altitude>24.61867458452824</altitude>
-			<heading>-82.88982765564008</heading>
-			<tilt>93.09691623890171</tilt>
-			<roll>6.258978571550559e-009</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>46.98150252861984</altitude>
+			<heading>-82.8898276556401</heading>
+			<tilt>93.09691623890177</tilt>
+			<roll>6.259016738206736e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -979,23 +980,23 @@
 			<rightFov>22.95</rightFov>
 			<bottomFov>-17.69</bottomFov>
 			<topFov>17.69</topFov>
-			<near>3.71086</near>
+			<near>4.68246</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17585241275019,-22.94223867491535,24.61867458452824</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17585241275016,-22.94223867491535,46.98150252861984</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001ANV022021</name>
 		<Camera>
-			<longitude>-43.18051310187598</longitude>
-			<latitude>-22.94233134571812</latitude>
-			<altitude>1.532503956036961</altitude>
+			<longitude>-43.18051310187596</longitude>
+			<latitude>-22.94233134571813</latitude>
+			<altitude>6.973113222527165</altitude>
 			<heading>-109.7550082916449</heading>
-			<tilt>95.75701249069674</tilt>
-			<roll>-2.712320696777292e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>95.75701249069677</tilt>
+			<roll>-2.712316681327006e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1024,20 +1025,20 @@
 			<near>0.531013</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18051310187598,-22.94233134571812,1.532503956036961</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18051310187596,-22.94233134571813,6.973113222527165</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001MFRJ11</name>
 		<Camera>
-			<longitude>-43.17743292856761</longitude>
+			<longitude>-43.17743292856759</longitude>
 			<latitude>-22.94109897749082</latitude>
-			<altitude>1.559934986385535</altitude>
+			<altitude>7.055517913737528</altitude>
 			<heading>-116.9600074154621</heading>
 			<tilt>95.72799465754439</tilt>
-			<roll>-2.699711666041164e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-2.699711546770364e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1063,23 +1064,23 @@
 			<rightFov>16.89</rightFov>
 			<bottomFov>-12.63</bottomFov>
 			<topFov>12.63</topFov>
-			<near>0.427029</near>
+			<near>0.540517</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17743292856761,-22.94109897749082,1.559934986385535</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17743292856759,-22.94109897749082,7.055517913737528</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001RJ008001</name>
 		<Camera>
-			<longitude>-43.18037309214434</longitude>
+			<longitude>-43.1803730921443</longitude>
 			<latitude>-22.94224404648844</latitude>
-			<altitude>1.371036130027719</altitude>
+			<altitude>6.97167230524908</altitude>
 			<heading>-120.8425800492728</heading>
-			<tilt>96.51824417206031</tilt>
-			<roll>2.464929878134225e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>96.51824417206028</tilt>
+			<roll>2.759131186169601e-013</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1108,20 +1109,20 @@
 			<near>0.475064</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18037309214434,-22.94224404648844,1.371036130027719</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1803730921443,-22.94224404648844,6.97167230524908</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001RO002008</name>
 		<Camera>
-			<longitude>-43.17820804130603</longitude>
+			<longitude>-43.17820804130601</longitude>
 			<latitude>-22.9414018990466</latitude>
-			<altitude>3.831380265341065</altitude>
+			<altitude>9.806160209847972</altitude>
 			<heading>-108.357992379755</heading>
 			<tilt>94.53483602856508</tilt>
-			<roll>-2.707096556199121e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-2.707095085192581e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1150,20 +1151,20 @@
 			<near>1.32757</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17820804130603,-22.9414018990466,3.831380265341065</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17820804130601,-22.9414018990466,9.806160209847972</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002014RJRJ006</name>
 		<Camera>
-			<longitude>-43.17707977779971</longitude>
+			<longitude>-43.17707977779968</longitude>
 			<latitude>-22.94128716434776</latitude>
-			<altitude>0.3212591953379363</altitude>
+			<altitude>5.68292273552435</altitude>
 			<heading>-112.1890435759086</heading>
-			<tilt>91.84067521292964</tilt>
-			<roll>-5.692226053316739e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>91.84067521292971</tilt>
+			<roll>-5.692227755410455e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1192,8 +1193,8 @@
 			<near>0.111316</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17707977779971,-22.94128716434776,0.3212591953379363</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17707977779968,-22.94128716434776,5.68292273552435</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -1201,11 +1202,11 @@
 		<Camera>
 			<longitude>-43.1758672436689</longitude>
 			<latitude>-22.94361387967947</latitude>
-			<altitude>4.791514660490891</altitude>
+			<altitude>11.3060163779285</altitude>
 			<heading>-119.7197373592987</heading>
-			<tilt>86.93979963359251</tilt>
-			<roll>-8.995802698920113e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>86.93979963359254</tilt>
+			<roll>-8.995800552045703e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1232,23 +1233,23 @@
 			<rightFov>27.565</rightFov>
 			<bottomFov>-18.555</bottomFov>
 			<topFov>18.555</topFov>
-			<near>1.50757</near>
+			<near>1.66026</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1758672436689,-22.94361387967947,4.791514660490891</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1758672436689,-22.94361387967947,11.3060163779285</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx015-01</name>
 		<Camera>
-			<longitude>-43.17823286856996</longitude>
+			<longitude>-43.17823286856995</longitude>
 			<latitude>-22.94136707060216</latitude>
-			<altitude>2.889613798907508</altitude>
+			<altitude>8.775872360527449</altitude>
 			<heading>-116.5747512107819</heading>
-			<tilt>95.93867848865365</tilt>
-			<roll>-9.031392111882353e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>95.93867848865371</tilt>
+			<roll>-9.031387659105799e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1274,23 +1275,23 @@
 			<rightFov>23.025</rightFov>
 			<bottomFov>-12.905</bottomFov>
 			<topFov>12.905</topFov>
-			<near>0.420709</near>
+			<near>1.00125</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17823286856996,-22.94136707060216,2.889613798907508</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17823286856995,-22.94136707060216,8.775872360527449</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN01002016</name>
 		<Camera>
 			<longitude>-43.19643924499997</longitude>
-			<latitude>-22.94490866300001</latitude>
-			<altitude>100.5100000010194</altitude>
+			<latitude>-22.94490866300002</latitude>
+			<altitude>375.8758862782852</altitude>
 			<heading>172.5628944319496</heading>
 			<tilt>86.07145614506939</tilt>
-			<roll>-9.004185925435649e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-9.004182426825499e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1316,23 +1317,23 @@
 			<rightFov>17.415</rightFov>
 			<bottomFov>-13.39</bottomFov>
 			<topFov>13.39</topFov>
-			<near>3.47375</near>
+			<near>34.8267</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19643924499997,-22.944908663,100.5100000010194</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19643924499997,-22.94490866300002,375.8758862782852</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN01002019</name>
 		<Camera>
-			<longitude>-43.17550897999118</longitude>
+			<longitude>-43.17550897999119</longitude>
 			<latitude>-22.94239424098282</latitude>
-			<altitude>38.0296753093297</altitude>
+			<altitude>61.89048607615926</altitude>
 			<heading>102.1709773433633</heading>
 			<tilt>85.98773268666061</tilt>
-			<roll>-1.141241001220953e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-1.141240937609859e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1359,23 +1360,23 @@
 			<rightFov>22.745</rightFov>
 			<bottomFov>-18.25</bottomFov>
 			<topFov>18.25</topFov>
-			<near>2.11535</near>
+			<near>13.1773</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17550897999118,-22.94239424098282,38.0296753093297</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17550897999119,-22.94239424098282,61.89048607615926</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001ANV022024</name>
 		<Camera>
-			<longitude>-43.17613614486956</longitude>
-			<latitude>-22.94318754153735</latitude>
-			<altitude>3.581525102195731</altitude>
+			<longitude>-43.17613614486957</longitude>
+			<latitude>-22.94318754153736</latitude>
+			<altitude>8.948851443999685</altitude>
 			<heading>120.1629986334193</heading>
 			<tilt>96.18698501092037</tilt>
-			<roll>-1.145134763484188e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-1.145134668067547e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1405,20 +1406,20 @@
 			<near>1.241</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17613614486956,-22.94318754153735,3.581525102195731</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17613614486957,-22.94318754153736,8.948851443999685</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001GU001002</name>
 		<Camera>
-			<longitude>-43.17762558738933</longitude>
+			<longitude>-43.1776255873893</longitude>
 			<latitude>-22.95116890158881</latitude>
-			<altitude>49.80134671173597</altitude>
-			<heading>83.51952162593125</heading>
+			<altitude>61.34515637617542</altitude>
+			<heading>83.51952162593122</heading>
 			<tilt>87.09408739781864</tilt>
-			<roll>-1.139932457413905e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-1.139932632344413e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1444,23 +1445,23 @@
 			<rightFov>21.385</rightFov>
 			<bottomFov>-16.95</bottomFov>
 			<topFov>16.95</topFov>
-			<near>2.50825</near>
+			<near>17.2562</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17762558738933,-22.95116890158881,49.80134671173597</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1776255873893,-22.95116890158881,61.34515637617542</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001RO002007</name>
 		<Camera>
 			<longitude>-43.17730567827082</longitude>
-			<latitude>-22.94092274151986</latitude>
-			<altitude>1.531759939808483</altitude>
+			<latitude>-22.94092274151985</latitude>
+			<altitude>8.202416132474207</altitude>
 			<heading>-104.7663452661585</heading>
-			<tilt>96.23577767013387</tilt>
-			<roll>-1.108161348055084e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>96.23577767013391</tilt>
+			<roll>-1.10816123673567e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1489,20 +1490,20 @@
 			<near>0.530755</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17730567827082,-22.94092274151986,1.531759939808483</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17730567827082,-22.94092274151985,8.202416132474207</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002008AV032</name>
 		<Camera>
-			<longitude>-43.1806465883231</longitude>
+			<longitude>-43.18064658832309</longitude>
 			<latitude>-22.94203999583132</latitude>
-			<altitude>4.356653275085984</altitude>
+			<altitude>10.09091015796701</altitude>
 			<heading>164.6928382119455</heading>
-			<tilt>89.70307003547264</tilt>
-			<roll>-1.101608618223985e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>89.70307003547265</tilt>
+			<roll>-1.101608427390704e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1529,11 +1530,11 @@
 			<rightFov>17.15</rightFov>
 			<bottomFov>-12.695</bottomFov>
 			<topFov>12.695</topFov>
-			<near>1.50943</near>
+			<near>1.50958</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1806465883231,-22.94203999583132,4.356653275085984</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18064658832309,-22.94203999583132,10.09091015796701</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -1541,11 +1542,11 @@
 		<Camera>
 			<longitude>-43.18539940055344</longitude>
 			<latitude>-22.94068387077175</latitude>
-			<altitude>13.44762355423045</altitude>
+			<altitude>142.3791141076462</altitude>
 			<heading>102.7290346672909</heading>
-			<tilt>87.92673680622865</tilt>
+			<tilt>87.92673680622863</tilt>
 			<roll>-1.10231470136327e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1571,23 +1572,23 @@
 			<rightFov>25</rightFov>
 			<bottomFov>-18.515</bottomFov>
 			<topFov>18.515</topFov>
-			<near>1.84194</near>
+			<near>4.6596</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18539940055344,-22.94068387077175,13.44762355423045</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18539940055344,-22.94068387077175,142.3791141076462</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002058aFR007</name>
 		<Camera>
-			<longitude>-43.19300341928609</longitude>
-			<latitude>-22.95953320532429</latitude>
-			<altitude>39.13812489039335</altitude>
-			<heading>30.02457015619013</heading>
-			<tilt>87.95340455197471</tilt>
-			<roll>-1.10735956997682e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<longitude>-43.19300341928607</longitude>
+			<latitude>-22.9595332053243</latitude>
+			<altitude>62.42874923686514</altitude>
+			<heading>30.02457015619014</heading>
+			<tilt>87.95340455197474</tilt>
+			<roll>-1.107359347337993e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1614,23 +1615,23 @@
 			<rightFov>24.775</rightFov>
 			<bottomFov>-20.175</bottomFov>
 			<topFov>20.175</topFov>
-			<near>7.6868</near>
+			<near>13.5614</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19300341928609,-22.95953320532429,39.13812489039335</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19300341928607,-22.9595332053243,62.42874923686514</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002058aFR015</name>
 		<Camera>
-			<longitude>-43.17693205412472</longitude>
+			<longitude>-43.1769320541247</longitude>
 			<latitude>-22.956179941965</latitude>
-			<altitude>13.02544279612242</altitude>
-			<heading>78.88509614730158</heading>
+			<altitude>21.49001556376744</altitude>
+			<heading>78.8850961473016</heading>
 			<tilt>90.52066244201393</tilt>
-			<roll>-1.106698300852997e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-1.106698499637665e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1660,20 +1661,20 @@
 			<near>4.51332</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17693205412472,-22.956179941965,13.02544279612242</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1769320541247,-22.956179941965,21.49001556376744</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002058aFR016</name>
 		<Camera>
-			<longitude>-43.20225784199996</longitude>
+			<longitude>-43.20225784199995</longitude>
 			<latitude>-22.958121326</latitude>
-			<altitude>50.13000000038166</altitude>
-			<heading>73.78456044278633</heading>
+			<altitude>77.51058481354902</altitude>
+			<heading>73.78456044278634</heading>
 			<tilt>89.31999999999998</tilt>
-			<roll>-1.194133323420996e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-1.194133323420997e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1700,23 +1701,23 @@
 			<rightFov>25</rightFov>
 			<bottomFov>-20</bottomFov>
 			<topFov>20</topFov>
-			<near>1.65264</near>
+			<near>17.37</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.20225784199996,-22.958121326,50.13000000038166</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.20225784199995,-22.958121326,77.51058481354902</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx001-04</name>
 		<Camera>
-			<longitude>-43.18517351299994</longitude>
-			<latitude>-22.94166143700001</latitude>
-			<altitude>32.26000000295878</altitude>
+			<longitude>-43.18517351299992</longitude>
+			<latitude>-22.94166143700002</latitude>
+			<altitude>107.301116414875</altitude>
 			<heading>172.47555854268</heading>
 			<tilt>84.27019594680114</tilt>
-			<roll>-1.20006237033322e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-1.20006246574986e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1743,23 +1744,23 @@
 			<rightFov>23.93</rightFov>
 			<bottomFov>-13.685</bottomFov>
 			<topFov>13.685</topFov>
-			<near>2.65058</near>
+			<near>11.1781</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18517351299994,-22.94166143700001,32.26000000295878</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18517351299992,-22.94166143700001,107.301116414875</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx001-05</name>
 		<Camera>
-			<longitude>-43.18509372269779</longitude>
+			<longitude>-43.18509372269778</longitude>
 			<latitude>-22.94253172836682</latitude>
-			<altitude>19.77756886046799</altitude>
+			<altitude>61.13738668562029</altitude>
 			<heading>119.2356268390502</heading>
 			<tilt>87.25394664715738</tilt>
-			<roll>-1.195439847575821e-007</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-1.195440102020196e-007</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1785,23 +1786,23 @@
 			<rightFov>26.295</rightFov>
 			<bottomFov>-15.1</bottomFov>
 			<topFov>15.1</topFov>
-			<near>2.8148</near>
+			<near>6.85293</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18509372269779,-22.94253172836682,19.77756886046799</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18509372269778,-22.94253172836682,61.13738668562029</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001RJ001001</name>
 		<Camera>
-			<longitude>-43.21001937899997</longitude>
-			<latitude>-22.951855701</latitude>
-			<altitude>236.8400000009125</altitude>
+			<longitude>-43.21001937899994</longitude>
+			<latitude>-22.95185570099999</latitude>
+			<altitude>731.0948200248865</altitude>
 			<heading>89.31377943779076</heading>
-			<tilt>80.00338062849814</tilt>
-			<roll>4.548193194492832e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>80.00338062849812</tilt>
+			<roll>4.818540342417228e-013</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1830,20 +1831,20 @@
 			<near>82.0651</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21001937899997,-22.951855701,236.8400000009125</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21001937899994,-22.95185570099999,731.0948200248865</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002014RJRJ004</name>
 		<Camera>
-			<longitude>-43.15664010699544</longitude>
-			<latitude>-22.94960085335948</latitude>
-			<altitude>52.22657644174373</altitude>
+			<longitude>-43.15664010699543</longitude>
+			<latitude>-22.94960085335949</latitude>
+			<altitude>390.2713532871995</altitude>
 			<heading>-108.1443662912414</heading>
 			<tilt>76.59654597040762</tilt>
-			<roll>-3.743278373688668e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-3.743278492959469e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1870,23 +1871,23 @@
 			<rightFov>30.155</rightFov>
 			<bottomFov>-20.275</bottomFov>
 			<topFov>20.275</topFov>
-			<near>4.62224</near>
+			<near>18.0965</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.15664010699544,-22.94960085335948,52.22657644174373</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.15664010699543,-22.94960085335949,390.2713532871995</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002016BI003</name>
 		<Camera>
 			<longitude>-43.19642952099046</longitude>
-			<latitude>-22.94502808698409</latitude>
-			<altitude>96.62998728519857</altitude>
-			<heading>95.23411220540054</heading>
+			<latitude>-22.9450280869841</latitude>
+			<altitude>369.6580620724812</altitude>
+			<heading>95.23411220540051</heading>
 			<tilt>81.21504314513382</tilt>
-			<roll>-3.684670054031738e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-3.684671644309079e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1912,23 +1913,23 @@
 			<rightFov>23.66</rightFov>
 			<bottomFov>-17.855</bottomFov>
 			<topFov>17.855</topFov>
-			<near>3.01273</near>
+			<near>33.4823</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19642952099046,-22.94502808698409,96.62998728519857</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19642952099046,-22.9450280869841,369.6580620724812</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002016BI005</name>
 		<Camera>
-			<longitude>-43.21002749499997</longitude>
-			<latitude>-22.951853366</latitude>
-			<altitude>235.109999997733</altitude>
+			<longitude>-43.21002749499995</longitude>
+			<latitude>-22.95185336600001</latitude>
+			<altitude>705.6621786019987</altitude>
 			<heading>85.88690794609092</heading>
 			<tilt>79.20185656829713</tilt>
-			<roll>-3.707105845782517e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-3.70710520967158e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1955,23 +1956,23 @@
 			<rightFov>19.76</rightFov>
 			<bottomFov>-14.86</bottomFov>
 			<topFov>14.86</topFov>
-			<near>3.41441</near>
+			<near>81.4656</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21002749499997,-22.951853366,235.109999997733</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21002749499995,-22.95185336600001,705.6621786019987</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>002051AM002001</name>
 		<Camera>
-			<longitude>-43.21001018099994</longitude>
+			<longitude>-43.21001018099993</longitude>
 			<latitude>-22.95185068700001</latitude>
-			<altitude>233.7599999977507</altitude>
+			<altitude>704.2722637731774</altitude>
 			<heading>81.21506494494211</heading>
 			<tilt>81.60477091903492</tilt>
-			<roll>-3.680927336310327e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-3.680927495338061e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -1998,11 +1999,11 @@
 			<rightFov>17.89</rightFov>
 			<bottomFov>-13.715</bottomFov>
 			<topFov>13.715</topFov>
-			<near>1.46034</near>
+			<near>8.29323</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21001018099994,-22.95185068700001,233.7599999977507</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21001018099993,-22.95185068700001,704.2722637731774</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -2010,11 +2011,11 @@
 		<Camera>
 			<longitude>-43.21007058400005</longitude>
 			<latitude>-22.95190761100003</latitude>
-			<altitude>232.981847630614</altitude>
+			<altitude>703.26976826674</altitude>
 			<heading>84.30839596590708</heading>
-			<tilt>79.75941558319134</tilt>
-			<roll>-3.700437812892828e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>79.75941558319137</tilt>
+			<roll>-3.700437971920563e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2041,23 +2042,23 @@
 			<rightFov>21.05</rightFov>
 			<bottomFov>-14.11</bottomFov>
 			<topFov>14.11</topFov>
-			<near>1.90361</near>
+			<near>7.82842</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21007058400005,-22.95190761100003,232.981847630614</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21007058400005,-22.95190761100003,703.26976826674</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001ATK012024</name>
 		<Camera>
-			<longitude>-43.19726941599998</longitude>
+			<longitude>-43.19726941600001</longitude>
 			<latitude>-22.945712558</latitude>
-			<altitude>88.69284119483895</altitude>
-			<heading>96.0734575902524</heading>
-			<tilt>82.39873571750539</tilt>
-			<roll>-3.673875251442852e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>371.4806860249741</altitude>
+			<heading>96.07345759025242</heading>
+			<tilt>82.39873571750538</tilt>
+			<roll>-3.67387556949832e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2084,23 +2085,23 @@
 			<rightFov>28.19</rightFov>
 			<bottomFov>-21.365</bottomFov>
 			<topFov>21.365</topFov>
-			<near>7.08927</near>
+			<near>7.65176</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19726941599998,-22.945712558,88.69284119483895</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19726941600001,-22.945712558,371.4806860249741</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001ANV022001</name>
 		<Camera>
-			<longitude>-43.21001400299997</longitude>
+			<longitude>-43.21001400299998</longitude>
 			<latitude>-22.95185657799998</latitude>
-			<altitude>234.2383961450305</altitude>
-			<heading>87.47390025282896</heading>
+			<altitude>710.325998179261</altitude>
+			<heading>87.47390025282894</heading>
 			<tilt>79.64136117615229</tilt>
 			<roll>-3.701820559040595e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2127,23 +2128,23 @@
 			<rightFov>21.245</rightFov>
 			<bottomFov>-15.505</bottomFov>
 			<topFov>15.505</topFov>
-			<near>0.439545</near>
+			<near>81.1636</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21001400299997,-22.95185657799998,234.2383961450305</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21001400299998,-22.95185657799998,710.325998179261</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN31001001</name>
 		<Camera>
-			<longitude>-43.21041598500104</longitude>
-			<latitude>-22.95192988500194</latitude>
-			<altitude>223.7300000205105</altitude>
-			<heading>84.17777622071263</heading>
-			<tilt>81.36879862266268</tilt>
-			<roll>-3.683259955113712e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<longitude>-43.21041598500102</longitude>
+			<latitude>-22.95192988500195</latitude>
+			<altitude>713.3971137687785</altitude>
+			<heading>84.17777622071267</heading>
+			<tilt>81.36879862266271</tilt>
+			<roll>-3.683258841919574e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2169,23 +2170,23 @@
 			<rightFov>16.575</rightFov>
 			<bottomFov>-10.975</bottomFov>
 			<topFov>10.975</topFov>
-			<near>1.22061</near>
+			<near>7.95126</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21041598500104,-22.95192988500194,223.7300000205105</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21041598500102,-22.95192988500195,713.3971137687785</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001AN30001001</name>
 		<Camera>
-			<longitude>-43.18226737300003</longitude>
-			<latitude>-22.94329867600003</latitude>
-			<altitude>24.17497534699324</altitude>
+			<longitude>-43.182267373</longitude>
+			<latitude>-22.94329867600002</latitude>
+			<altitude>30.57182663908622</altitude>
 			<heading>79.69481911377116</heading>
-			<tilt>84.68051990456686</tilt>
-			<roll>-3.657408088607309e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>84.68051990456689</tilt>
+			<roll>-3.657407452496372e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2212,23 +2213,23 @@
 			<rightFov>26.645</rightFov>
 			<bottomFov>-18.365</bottomFov>
 			<topFov>18.365</topFov>
-			<near>7.77783</near>
+			<near>8.37663</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18226737300003,-22.94329867600003,24.17497534699324</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.182267373,-22.94329867600002,30.57182663908622</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>001MC001001</name>
 		<Camera>
 			<longitude>-43.15658253699996</longitude>
-			<latitude>-22.94952547000001</latitude>
-			<altitude>55.27716685882111</altitude>
-			<heading>-90.64250156503701</heading>
+			<latitude>-22.94952547000002</latitude>
+			<altitude>405.9922948475515</altitude>
+			<heading>-90.64250156503704</heading>
 			<tilt>78.46823199290171</tilt>
-			<roll>-3.716411194614074e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-3.716412625863681e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2255,11 +2256,11 @@
 			<rightFov>25</rightFov>
 			<bottomFov>-17.135</bottomFov>
 			<topFov>17.135</topFov>
-			<near>0.536879</near>
+			<near>19.1535</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.15658253699996,-22.94952547000001,55.27716685882111</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.15658253699996,-22.94952547000002,405.9922948475515</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -2267,11 +2268,11 @@
 		<Camera>
 			<longitude>-43.165085666</longitude>
 			<latitude>-22.951692646</latitude>
-			<altitude>19.14677714813358</altitude>
-			<heading>-78.66176377517388</heading>
-			<tilt>90.32042939238477</tilt>
-			<roll>-5.360290582420272e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>226.7920920830116</altitude>
+			<heading>-78.66176377517397</heading>
+			<tilt>90.32042939238488</tilt>
+			<roll>-5.360286447699186e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2297,11 +2298,11 @@
 			<rightFov>21.1942</rightFov>
 			<bottomFov>-20.905</bottomFov>
 			<topFov>20.905</topFov>
-			<near>2.40199</near>
+			<near>6.63436</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.165085666,-22.951692646,19.14677714813358</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.165085666,-22.951692646,226.7920920830116</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -2309,11 +2310,11 @@
 		<Camera>
 			<longitude>-43.21008062977221</longitude>
 			<latitude>-22.95185348709621</latitude>
-			<altitude>235.1390365732591</altitude>
-			<heading>73.42848625514121</heading>
+			<altitude>709.8158701091568</altitude>
+			<heading>73.42848625514124</heading>
 			<tilt>81.76595425413116</tilt>
-			<roll>-5.415993187077149e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-5.415993226834083e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2340,23 +2341,23 @@
 			<rightFov>28.43</rightFov>
 			<bottomFov>-16.49</bottomFov>
 			<topFov>16.49</topFov>
-			<near>3.58255</near>
+			<near>81.4757</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.21008062977221,-22.95185348709621,235.1390365732591</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21008062977221,-22.95185348709621,709.8158701091568</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx018-01</name>
 		<Camera>
-			<longitude>-43.19634415999996</longitude>
+			<longitude>-43.19634415999992</longitude>
 			<latitude>-22.94489823499998</latitude>
-			<altitude>90.37081336849245</altitude>
-			<heading>56.32736758431902</heading>
-			<tilt>84.94241328388071</tilt>
-			<roll>-5.381181181192926e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>363.3890313980143</altitude>
+			<heading>56.32736758431904</heading>
+			<tilt>84.94241328388073</tilt>
+			<roll>-5.381180465568124e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2382,23 +2383,23 @@
 			<rightFov>26.5</rightFov>
 			<bottomFov>-15.045</bottomFov>
 			<topFov>15.045</topFov>
-			<near>2.63894</near>
+			<near>31.3135</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19634415999996,-22.94489823499998,90.37081336849245</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19634415999992,-22.94489823499998,363.3890313980143</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx018-11</name>
 		<Camera>
-			<longitude>-43.18841394052823</longitude>
-			<latitude>-22.94214978143299</latitude>
-			<altitude>9.571659015374186</altitude>
+			<longitude>-43.18841394052819</longitude>
+			<latitude>-22.942149781433</latitude>
+			<altitude>93.80303735350283</altitude>
 			<heading>108.668180012818</heading>
-			<tilt>85.82395918474786</tilt>
-			<roll>-5.374432600755931e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>85.82395918474788</tilt>
+			<roll>-5.374432282700463e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2428,20 +2429,20 @@
 			<near>3.31658</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18841394052823,-22.94214978143299,9.571659015374186</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18841394052819,-22.942149781433,93.80303735350283</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0072137cx019-09</name>
 		<Camera>
-			<longitude>-43.17728868299992</longitude>
-			<latitude>-22.951220809</latitude>
-			<altitude>38.18033589852541</altitude>
+			<longitude>-43.17728868299991</longitude>
+			<latitude>-22.95122080900001</latitude>
+			<altitude>49.72421176029302</altitude>
 			<heading>97.21635727365708</heading>
 			<tilt>89.82953981634131</tilt>
-			<roll>-5.359898420028047e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-5.359900169333122e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2468,23 +2469,23 @@
 			<rightFov>26.57</rightFov>
 			<bottomFov>-15.245</bottomFov>
 			<topFov>15.245</topFov>
-			<near>1.14103</near>
+			<near>13.2295</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17728868299992,-22.951220809,38.18033589852541</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17728868299991,-22.95122080900001,49.72421176029302</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0073040cx004-01</name>
 		<Camera>
-			<longitude>-43.18225299126146</longitude>
+			<longitude>-43.18225299126144</longitude>
 			<latitude>-22.94330178351903</latitude>
-			<altitude>24.79856914834575</altitude>
+			<altitude>30.79813499821263</altitude>
 			<heading>150.3110600414653</heading>
 			<tilt>85.54409895533163</tilt>
-			<roll>-5.376159641947966e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-5.376162186391711e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2513,20 +2514,20 @@
 			<near>8.5927</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18225299126146,-22.94330178351903,24.79856914834575</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18225299126144,-22.94330178351903,30.79813499821263</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0073040cx004-02</name>
 		<Camera>
-			<longitude>-43.18225542416536</longitude>
-			<latitude>-22.94329899642536</latitude>
-			<altitude>32.34916018634873</altitude>
+			<longitude>-43.18225542416538</longitude>
+			<latitude>-22.94329899642537</latitude>
+			<altitude>38.2535188834782</altitude>
 			<heading>91.66437654743122</heading>
-			<tilt>85.42256948246897</tilt>
-			<roll>-5.377055445174e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>85.42256948246899</tilt>
+			<roll>-5.37705624031267e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2555,20 +2556,20 @@
 			<near>11.209</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18225542416536,-22.94329899642536,32.34916018634873</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18225542416538,-22.94329899642537,38.2535188834782</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0073040cx024-07</name>
 		<Camera>
-			<longitude>-43.18225892379906</longitude>
+			<longitude>-43.18225892379903</longitude>
 			<latitude>-22.94330735567853</latitude>
-			<altitude>26.51530662062304</altitude>
-			<heading>86.17077321117441</heading>
+			<altitude>32.41966552441508</altitude>
+			<heading>86.17077321117439</heading>
 			<tilt>85.71633708991872</tilt>
-			<roll>-5.374863724943003e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-5.37486515619261e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2594,23 +2595,23 @@
 			<rightFov>33.14</rightFov>
 			<bottomFov>-26.845</bottomFov>
 			<topFov>26.845</topFov>
-			<near>9.18755</near>
+			<near>8.8299</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18225892379906,-22.94330735567854,26.51530662062304</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18225892379903,-22.94330735567854,32.41966552441508</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>0073040cx026-03</name>
 		<Camera>
-			<longitude>-43.17429489566391</longitude>
+			<longitude>-43.1742948956639</longitude>
 			<latitude>-22.93695608081846</latitude>
-			<altitude>5.635582222478725</altitude>
+			<altitude>14.68410469511829</altitude>
 			<heading>118.9293004199696</heading>
-			<tilt>92.09514349379714</tilt>
-			<roll>-5.363476225989225e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>92.09514349379715</tilt>
+			<roll>-5.363476544044694e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2640,8 +2641,8 @@
 			<near>1.95273</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17429489566391,-22.93695608081847,5.635582222478725</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1742948956639,-22.93695608081846,14.68410469511829</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -2649,11 +2650,11 @@
 		<Camera>
 			<longitude>-43.18227964299999</longitude>
 			<latitude>-22.94328444999998</latitude>
-			<altitude>23.99999999591577</altitude>
+			<altitude>29.87728881354534</altitude>
 			<heading>174.076609068597</heading>
 			<tilt>89.51306220039017</tilt>
-			<roll>-5.360052040819162e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-5.360049496375416e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2679,23 +2680,23 @@
 			<rightFov>32.32</rightFov>
 			<bottomFov>-26.08</bottomFov>
 			<topFov>26.08</topFov>
-			<near>1.31831</near>
+			<near>1.39858</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18227964299999,-22.94328444999998,23.99999999591577</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18227964299999,-22.94328444999998,29.87728881354534</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F13-033</name>
 		<Camera>
-			<longitude>-43.18472561372552</longitude>
-			<latitude>-22.94190234122329</latitude>
-			<altitude>39.16083801324275</altitude>
+			<longitude>-43.1847256137255</longitude>
+			<latitude>-22.94190234122331</latitude>
+			<altitude>86.10724480072301</altitude>
 			<heading>123.4695193622332</heading>
-			<tilt>81.57103253207016</tilt>
-			<roll>-5.418391683119375e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>81.57103253207021</tilt>
+			<roll>-5.41838913867563e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2721,23 +2722,23 @@
 			<rightFov>37.67</rightFov>
 			<bottomFov>-28.92</bottomFov>
 			<topFov>28.92</topFov>
-			<near>1.34623</near>
+			<near>13.5692</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18472561372552,-22.94190234122329,39.16083801324275</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1847256137255,-22.9419023412233,86.10724480072301</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F13-034</name>
 		<Camera>
-			<longitude>-43.1800060543519</longitude>
-			<latitude>-22.95135411166843</latitude>
-			<altitude>26.41752723883439</altitude>
-			<heading>-33.99442184782871</heading>
-			<tilt>84.3755892988076</tilt>
-			<roll>6.01564037592568e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<longitude>-43.18000605435189</longitude>
+			<latitude>-22.95135411166842</latitude>
+			<altitude>34.89285117858517</altitude>
+			<heading>-33.99442184782864</heading>
+			<tilt>84.37558929880746</tilt>
+			<roll>6.015651189811597e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2764,11 +2765,11 @@
 			<rightFov>28.515</rightFov>
 			<bottomFov>-21.685</bottomFov>
 			<topFov>21.685</topFov>
-			<near>3.60928</near>
+			<near>9.15367</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.1800060543519,-22.95135411166844,26.41752723883439</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18000605435189,-22.95135411166842,34.89285117858517</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -2776,11 +2777,11 @@
 		<Camera>
 			<longitude>-43.18223812130734</longitude>
 			<latitude>-22.94329147743827</latitude>
-			<altitude>24.480046657189</altitude>
+			<altitude>30.43517254838562</altitude>
 			<heading>79.06244070739572</heading>
-			<tilt>88.51840455723536</tilt>
-			<roll>5.988736620472249e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>88.51840455723539</tilt>
+			<roll>5.988734076028504e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2806,23 +2807,23 @@
 			<rightFov>29.245</rightFov>
 			<bottomFov>-22.195</bottomFov>
 			<topFov>22.195</topFov>
-			<near>8.48234</near>
+			<near>7.54772</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18223812130734,-22.94329147743827,24.480046657189</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18223812130734,-22.94329147743827,30.43517254838562</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F13-046</name>
 		<Camera>
-			<longitude>-43.15671007600044</longitude>
-			<latitude>-22.94948604700023</latitude>
-			<altitude>70.8400468505529</altitude>
+			<longitude>-43.15671007600042</longitude>
+			<latitude>-22.94948604700024</latitude>
+			<altitude>392.0840381081815</altitude>
 			<heading>-85.71871177659077</heading>
-			<tilt>85.35722332263717</tilt>
-			<roll>5.994937032309894e-008</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>85.35722332263725</tilt>
+			<roll>5.99493528300482e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2848,23 +2849,23 @@
 			<rightFov>25.89</rightFov>
 			<bottomFov>-19.54</bottomFov>
 			<topFov>19.54</topFov>
-			<near>2.16379</near>
+			<near>24.5461</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.15671007600044,-22.94948604700023,70.8400468505529</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.15671007600042,-22.94948604700024,392.0840381081815</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3F13-038</name>
 		<Camera>
-			<longitude>-43.19693686433162</longitude>
+			<longitude>-43.19693686433158</longitude>
 			<latitude>-22.94500306613332</latitude>
-			<altitude>111.1443786620943</altitude>
-			<heading>96.83308298901729</heading>
-			<tilt>80.88959172125368</tilt>
-			<roll>-3.657637883683044e-013</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>393.5692539278535</altitude>
+			<heading>96.83308298901727</heading>
+			<tilt>80.88959172125367</tilt>
+			<roll>-3.88027671138549e-013</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2890,23 +2891,23 @@
 			<rightFov>19.19</rightFov>
 			<bottomFov>-14.18</bottomFov>
 			<topFov>14.18</topFov>
-			<near>30.5447</near>
+			<near>38.5115</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.19693686433162,-22.94500306613332,111.1443786620943</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19693686433158,-22.94500306613332,393.5692539278535</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P3FG03-005</name>
 		<Camera>
-			<longitude>-43.14400735425127</longitude>
+			<longitude>-43.14400735425128</longitude>
 			<latitude>-22.93626041876948</latitude>
-			<altitude>456.0783099080465</altitude>
+			<altitude>457.6920493682016</altitude>
 			<heading>-139.8963929282363</heading>
 			<tilt>80.82096232166184</tilt>
-			<roll>2.064179988269822e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>2.084853593699335e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2936,20 +2937,20 @@
 			<near>158.031</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.14400735425127,-22.93626041876948,456.0783099080465</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.14400735425128,-22.93626041876948,457.6920493682016</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>007A5P4F02-059</name>
 		<Camera>
-			<longitude>-43.17571310434445</longitude>
+			<longitude>-43.17571310434443</longitude>
 			<latitude>-22.94195274304484</latitude>
-			<altitude>18.28134420245823</altitude>
-			<heading>-78.29223800247408</heading>
-			<tilt>89.25426748378247</tilt>
-			<roll>5.604137348738717e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>42.53473583614261</altitude>
+			<heading>-78.29223800247407</heading>
+			<tilt>89.25426748378243</tilt>
+			<roll>5.597776239375789e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -2975,11 +2976,11 @@
 			<rightFov>25.005</rightFov>
 			<bottomFov>-18.72</bottomFov>
 			<topFov>18.72</topFov>
-			<near>1.18496</near>
+			<near>6.33449</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17571310434445,-22.94195274304484,18.28134420245823</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17571310434443,-22.94195274304484,42.53473583614261</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -2987,11 +2988,11 @@
 		<Camera>
 			<longitude>-43.17365186074411</longitude>
 			<latitude>-22.93587148817583</latitude>
-			<altitude>253.0913848196952</altitude>
+			<altitude>261.2873378410991</altitude>
 			<heading>-145.6583692986468</heading>
 			<tilt>78.15605299627573</tilt>
-			<roll>6.272053831846055e-012</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>6.30385937866069e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -3021,8 +3022,8 @@
 			<near>87.6962</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17365186074411,-22.93587148817583,253.0913848196952</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17365186074411,-22.93587148817583,261.2873378410991</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>

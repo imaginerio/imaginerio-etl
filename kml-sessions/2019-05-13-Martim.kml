@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-05-13</name>
-	<visibility>0</visibility>
+	<name>2019-05-13-Martim</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>007Dscn4372.jpg</name>
-		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.17546497299996</longitude>
 			<latitude>-22.90654825799999</latitude>
-			<altitude>64.29999999961929</altitude>
-			<heading>46.94353101493739</heading>
-			<tilt>86.48000000000008</tilt>
-			<roll>-0.0003620511113238166</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>74.01818232309043</altitude>
+			<heading>46.94353101493738</heading>
+			<tilt>86.48000000000012</tilt>
+			<roll>-0.0003620511113095041</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -42,21 +41,20 @@
 			<near>22.2799</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17546497299996,-22.90654825799999,64.29999999961929</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17546497299996,-22.90654825799999,74.01818232309043</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014GL34.jpg</name>
-		<visibility>0</visibility>
 		<Camera>
 			<longitude>-43.18193551072652</longitude>
 			<latitude>-22.90681660089142</latitude>
-			<altitude>11.86462483299055</altitude>
-			<heading>-94.34106776108536</heading>
-			<tilt>80.93236940699627</tilt>
-			<roll>0.0007085324889636391</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<altitude>18.75933587997834</altitude>
+			<heading>-94.34106776108541</heading>
+			<tilt>80.93236940699632</tilt>
+			<roll>0.0007085324890018058</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -85,21 +83,20 @@
 			<near>4.11109</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18193551072652,-22.90681660089142,11.86462483299055</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18193551072652,-22.90681660089142,18.75933587997834</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014GL27.jpg</name>
-		<visibility>0</visibility>
 		<Camera>
-			<longitude>-43.17795940499978</longitude>
+			<longitude>-43.17795940499975</longitude>
 			<latitude>-22.89751230600004</latitude>
-			<altitude>18.53999906988083</altitude>
+			<altitude>36.5758501206455</altitude>
 			<heading>125.9380440884065</heading>
-			<tilt>81.11462381870935</tilt>
-			<roll>0.005663596410438518</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>81.11462381870938</tilt>
+			<roll>0.005663596410467143</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -129,8 +126,8 @@
 			<near>6.42411</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17795940499978,-22.89751230600004,18.53999906988083</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17795940499975,-22.89751230600004,36.5758501206455</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>
