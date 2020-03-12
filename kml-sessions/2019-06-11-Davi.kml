@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-06-11</name>
+	<name>2019-06-11-Davi</name>
+	<open>1</open>
 	<PhotoOverlay>
 		<name>014GL31</name>
 		<Camera>
-			<longitude>-43.17644461624084</longitude>
+			<longitude>-43.17644461624082</longitude>
 			<latitude>-22.94147147480576</latitude>
-			<altitude>19.25951254513802</altitude>
+			<altitude>26.90664095255634</altitude>
 			<heading>-127.9298218953277</heading>
-			<tilt>92.25700692116544</tilt>
-			<roll>-9.975646792200426e-005</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>92.25700692116547</tilt>
+			<roll>-9.975646790292093e-005</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -41,20 +42,20 @@
 			<near>6.67342</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17644461624084,-22.94147147480576,19.25951254513802</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17644461624082,-22.94147147480576,26.90664095255634</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014GL30</name>
 		<Camera>
 			<longitude>-43.17953457919172</longitude>
-			<latitude>-22.92371323264124</latitude>
-			<altitude>15.54927213386316</altitude>
-			<heading>172.4922820938748</heading>
+			<latitude>-22.92371323264125</latitude>
+			<altitude>66.84452433489132</altitude>
+			<heading>172.4922820938747</heading>
 			<tilt>83.16087335619686</tilt>
-			<roll>-0.0149503392394783</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<roll>-0.0149503392394465</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -81,23 +82,23 @@
 			<rightFov>29.01</rightFov>
 			<bottomFov>-23.715</bottomFov>
 			<topFov>23.715</topFov>
-			<near>1.79859</near>
+			<near>5.38782</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.17953457919172,-22.92371323264124,15.54927213386316</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17953457919172,-22.92371323264125,66.84452433489132</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014GL19</name>
 		<Camera>
-			<longitude>-43.16337843825164</longitude>
-			<latitude>-22.88817204021747</latitude>
-			<altitude>0.3237051035944129</altitude>
+			<longitude>-43.16337843825163</longitude>
+			<latitude>-22.88817204021748</latitude>
+			<altitude>0.7283643022432041</altitude>
 			<heading>-170.3169797678241</heading>
-			<tilt>92.33046345809939</tilt>
-			<roll>-0.008335128449952711</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>92.3304634580994</tilt>
+			<roll>-0.008335128449927266</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -126,20 +127,20 @@
 			<near>0.112164</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.16337843825164,-22.88817204021747,0.3237051035944129</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.16337843825163,-22.88817204021748,0.7283643022432041</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
 		<name>014GL03-05</name>
 		<Camera>
-			<longitude>-43.18088535505057</longitude>
+			<longitude>-43.18088535505058</longitude>
 			<latitude>-22.91816406837124</latitude>
-			<altitude>21.83677446307345</altitude>
+			<altitude>97.91145024051657</altitude>
 			<heading>123.7388112176317</heading>
-			<tilt>86.72752779466359</tilt>
-			<roll>-0.01071942817648747</roll>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<tilt>86.72752779466362</tilt>
+			<roll>-0.01071942817646839</roll>
+			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -168,8 +169,8 @@
 			<near>7.56644</near>
 		</ViewVolume>
 		<Point>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-			<coordinates>-43.18088535505057,-22.91816406837124,21.83677446307345</coordinates>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18088535505058,-22.91816406837124,97.91145024051657</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>
