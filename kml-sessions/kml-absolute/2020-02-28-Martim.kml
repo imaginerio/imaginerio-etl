@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
-	<name>2019-07-26-Martim</name>
+	<name>2020-02-28-Martim</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>001AN01002004</name>
+		<name>002037AAK5068</name>
 		<Camera>
-			<longitude>-43.19403701643076</longitude>
-			<latitude>-22.93509963284295</latitude>
-			<altitude>74.49234806176504</altitude>
-			<heading>98.87137109402008</heading>
-			<tilt>91.12099562819221</tilt>
-			<roll>-2.671665932429354e-013</roll>
-			<altitudeMode>absolute</altitudeMode>
+			<longitude>-43.17360165726785</longitude>
+			<latitude>-22.90126053545598</latitude>
+			<altitude>4.077944105091132</altitude>
+			<heading>174.7849008353804</heading>
+			<tilt>87.98380992281864</tilt>
+			<roll>7.794664871729677e-009</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -31,30 +31,29 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/001AN01002004.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/002037AAK5068.JPG</href>
 		</Icon>
-		<rotation>-1.43</rotation>
 		<ViewVolume>
-			<leftFov>-22.42</leftFov>
-			<rightFov>22.42</rightFov>
-			<bottomFov>-17.295</bottomFov>
-			<topFov>17.295</topFov>
-			<near>1.31181</near>
+			<leftFov>-24.995</leftFov>
+			<rightFov>24.995</rightFov>
+			<bottomFov>-16.59</bottomFov>
+			<topFov>16.59</topFov>
+			<near>1.41301</near>
 		</ViewVolume>
 		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.19403701643076,-22.93509963284294,74.49234806176504</coordinates>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17360165726785,-22.90126053545598,4.077944105091132</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002005</name>
+		<name>0071824cx070-11</name>
 		<Camera>
-			<longitude>-43.19411687930465</longitude>
-			<latitude>-22.93492386136082</latitude>
-			<altitude>82.20646944159155</altitude>
-			<heading>116.4056045385347</heading>
-			<tilt>89.64834058074</tilt>
-			<roll>-0.0989018750482303</roll>
+			<longitude>-43.1709523925369</longitude>
+			<latitude>-22.9017379785426</latitude>
+			<altitude>10.76204456443424</altitude>
+			<heading>-132.5289251415877</heading>
+			<tilt>94.02328704805008</tilt>
+			<roll>0.7518319599210349</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -74,30 +73,30 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/001AN01002005.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/0071824cx070-11.JPG</href>
 		</Icon>
-		<rotation>-0.67</rotation>
+		<rotation>-1.8</rotation>
 		<ViewVolume>
-			<leftFov>-22.44</leftFov>
-			<rightFov>22.44</rightFov>
-			<bottomFov>-17.375</bottomFov>
-			<topFov>17.375</topFov>
-			<near>0.105</near>
+			<leftFov>-22.425</leftFov>
+			<rightFov>22.425</rightFov>
+			<bottomFov>-17.225</bottomFov>
+			<topFov>17.225</topFov>
+			<near>2.73073</near>
 		</ViewVolume>
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.19411687930465,-22.93492386136082,82.20646944159155</coordinates>
+			<coordinates>-43.1709523925369,-22.90173797854261,10.76204456443424</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002011</name>
+		<name>0071824cx081-01</name>
 		<Camera>
-			<longitude>-43.18817386645886</longitude>
-			<latitude>-22.92283970937596</latitude>
-			<altitude>119.9985039928151</altitude>
-			<heading>-142.7651871367485</heading>
-			<tilt>94.28784246084074</tilt>
-			<roll>-5.088887490341627e-014</roll>
+			<longitude>-43.17713303182114</longitude>
+			<latitude>-22.90309637422298</latitude>
+			<altitude>8.624586853586953</altitude>
+			<heading>-108.9448066084341</heading>
+			<tilt>95.84582674306026</tilt>
+			<roll>0.7541263163620462</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -117,29 +116,29 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/001AN01002011.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/0071824cx081-01.JPG</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
 			<rightFov>25</rightFov>
-			<bottomFov>-19.455</bottomFov>
-			<topFov>19.455</topFov>
-			<near>3.02068</near>
+			<bottomFov>-31.83</bottomFov>
+			<topFov>31.83</topFov>
+			<near>0.598948</near>
 		</ViewVolume>
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.18817386645886,-22.92283970937595,119.9985039928151</coordinates>
+			<coordinates>-43.17713303182114,-22.90309637422298,8.624586853586953</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002012</name>
+		<name>0071824cx081-01</name>
 		<Camera>
-			<longitude>-43.18817091930145</longitude>
-			<latitude>-22.92284200650087</latitude>
-			<altitude>118.6941334013075</altitude>
-			<heading>-138.8391463256247</heading>
-			<tilt>96.65806249308761</tilt>
-			<roll>-1.90833280887811e-014</roll>
+			<longitude>-43.17594218815162</longitude>
+			<latitude>-22.90246064079846</latitude>
+			<altitude>8.828489138884896</altitude>
+			<heading>-110.6632666972215</heading>
+			<tilt>97.60733121393632</tilt>
+			<roll>-6.977662034803145e-008</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -159,18 +158,18 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/001AN01002012.jpg</href>
+			<href>Y:/USUARIOS/MARTIM/resize/0071824cx081-01.JPG</href>
 		</Icon>
 		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-19.39</bottomFov>
-			<topFov>19.39</topFov>
-			<near>3.05102</near>
+			<leftFov>-23.065</leftFov>
+			<rightFov>23.065</rightFov>
+			<bottomFov>-29.545</bottomFov>
+			<topFov>29.545</topFov>
+			<near>0.815467</near>
 		</ViewVolume>
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.18817091930145,-22.92284200650087,118.6941334013075</coordinates>
+			<coordinates>-43.17594218815162,-22.90246064079846,8.828489138884896</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>
