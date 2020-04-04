@@ -1,9 +1,9 @@
 const fs = require("fs");
 const xml2js = require("xml2js");
 let path = require("path");
-let pathDir = __dirname + "/kml-sessions";
-let distDir = "dist-files/";
-const distfileName = "situated-views";
+let pathDir = __dirname + "/metadata/camera/kml-sessions";
+let distDir = "metadata/camera/";
+const distfileName = "camera";
 const turf = require("@turf/turf");
 
 const parser = new xml2js.Parser();
@@ -23,13 +23,13 @@ const calculateFOVdistance = (height, tilt) => {
   }
 };
 
-const removeStringExtension = str => {
+const removeStringExtension = (str) => {
   if (str.lastIndexOf(".") === -1) return str;
   return str.substring(0, str.lastIndexOf("."));
 };
 
 let kml = [];
-const kmlTokml = photoOverlays => {
+const kmlTokml = (photoOverlays) => {
   return;
   fs.writeFileSync(
     `${distDir}/${distfileName}.json`,
@@ -38,8 +38,8 @@ const kmlTokml = photoOverlays => {
 };
 
 let features = [];
-const kmlToGeojson = photoOverlays => {
-  photoOverlays.forEach(photo => {
+const kmlToGeojson = (photoOverlays) => {
+  photoOverlays.forEach((photo) => {
     const feature = {
       type: "Feature",
       properties: {
@@ -52,15 +52,15 @@ const kmlToGeojson = photoOverlays => {
           parseFloat(photo.Camera[0].altitude[0]),
           parseFloat(photo.Camera[0].tilt[0])
         ),
-        tilt: parseFloat(photo.Camera[0].tilt[0])
+        tilt: parseFloat(photo.Camera[0].tilt[0]),
       },
       geometry: {
         type: "Point",
         coordinates: [
           parseFloat(photo.Camera[0].longitude[0]),
-          parseFloat(photo.Camera[0].latitude[0])
-        ]
-      }
+          parseFloat(photo.Camera[0].latitude[0]),
+        ],
+      },
     };
 
     const point = feature.geometry;
@@ -77,14 +77,14 @@ const kmlToGeojson = photoOverlays => {
 
   const file = {
     type: "FeatureCollection",
-    features: features
+    features: features,
   };
   fs.writeFileSync(`${distDir}/${distfileName}.geojson`, JSON.stringify(file));
 };
 
 let lines = "";
-const kmlToCSV = photoOverlays => {
-  photoOverlays.forEach(photo => {
+const kmlToCSV = (photoOverlays) => {
+  photoOverlays.forEach((photo) => {
     const name = removeStringExtension(photo.name[0]);
     const fov = parseFloat(photo.ViewVolume[0].rightFov[0]).toFixed(1) * 2;
     const camera = photo.Camera[0];
@@ -103,8 +103,8 @@ const kmlToCSV = photoOverlays => {
 };
 
 let linesWikdata = "";
-const kmlToCSVWikidata = photoOverlays => {
-  photoOverlays.forEach(photo => {
+const kmlToCSVWikidata = (photoOverlays) => {
+  photoOverlays.forEach((photo) => {
     const name = removeStringExtension(photo.name[0]);
     const camera = photo.Camera[0];
     const lat = parseFloat(camera.latitude[0]).toFixed(6);
@@ -125,16 +125,16 @@ let extractor = (error, files) => {
     process.exit(1);
   }
 
-  files.forEach(function(file, index) {
+  files.forEach(function (file, index) {
     let fromPath = path.join(pathDir, file);
-    fs.stat(fromPath, function(error2, stat) {
+    fs.stat(fromPath, function (error2, stat) {
       if (error2) {
         console.error("Error stating file.", error2);
         return;
       }
       if (stat.isFile()) {
-        fs.readFile(fromPath, function(err, data) {
-          parser.parseString(data, function(err, result) {
+        fs.readFile(fromPath, function (err, data) {
+          parser.parseString(data, function (err, result) {
             if (err) {
               console.error("Error parsing kml file.", err);
               return;
@@ -144,7 +144,7 @@ let extractor = (error, files) => {
             kmlToCSV(photoOverlays);
             kmlToGeojson(photoOverlays);
             kmlTokml(photoOverlays);
-            kmlToCSVWikidata(photoOverlays);
+            // kmlToCSVWikidata(photoOverlays);
             console.log(file, "done.");
           });
         });

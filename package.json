@@ -11,8 +11,8 @@
     "type": "git",
     "url": "git+https://github.com/imaginerio/situated-views.git"
   },
-  "author": "bruno-davi-martim",
-  "license": "ISC",
+  "author": "Bruno Buccalon, Martim Passos, Cintia Mechler and Davi Teodoro",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/imaginerio/situated-views/issues"
   },
