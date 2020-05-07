@@ -4,11 +4,12 @@
 
 ## Generating files for distribution
 
-``` bash
-# install dependencies, if you didn't already
+```bash
+# install dependencies
 $ npm install
+$ pipenv install
 
-# Generate files
+# kml parser
 $ npm run g
 
 ```
@@ -19,20 +20,15 @@ $ npm run g
 situated-views
 │   index.js
 │   package.json
+│   Pipfile.json
 │   README.md
-│   
-└───dist-files (generated files for distribution)
-│   │   situated-views.csv
-│   │   situated-views.geojson   
-│   
-│     
-└───kml-sessions (all kml files)
-│   │   2019-04-12-Davi.kml
-│   │   .
-│   │   .
-│   │   .
-│   
-└───sparql (sparql queries)
+│
+└───images
+│   │   image samples for analysis
+│
+└───metadata
+│   │   data sources and reports
+│
+└───tools
+│   │   python scripts
 ```
-
-
