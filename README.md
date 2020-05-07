@@ -2,15 +2,23 @@
 
 > Repository for tracking technical issues and generating static files from kmls.
 
-## Generating files for distribution
+## Setup environment
 
 ```bash
 # install dependencies
 $ npm install
 $ pipenv install
+$ pipenv shell
+```
 
+## Commands
+
+```bash
 # kml parser
 $ npm run g
+
+# show map
+bokeh serve --show tools/map.py
 
 ```
 
