@@ -143,10 +143,10 @@ def main():
 
     # path variables
 
-    CAMERA_PATH = "../metadata/camera/camera.csv"
-    CONES_PATH = "../metadata/camera/camera.geojson"
-    CATALOG_PATH = "../metadata/catalog/cumulus.xlsx"
-    IMAGES_PATH = "../images/ "
+    CAMERA_PATH = "./metadata/camera/camera.csv"
+    CONES_PATH = "./metadata/camera/camera.geojson"
+    CATALOG_PATH = "./metadata/catalog/cumulus.xlsx"
+    IMAGES_PATH = "./images/ "
 
     try:
 

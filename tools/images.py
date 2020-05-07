@@ -5,3 +5,6 @@
 # pandas creates a dataframe with all images available for a record_name
 
 # pandas saves all data regarding imagens in images/images.csv
+
+print("images script")
+

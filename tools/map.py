@@ -1,4 +1,5 @@
-# #notebook
+# SCRIPT TO GENERANTE AN INTERACTIVE MAP USING BOKEH
+
 # from bokeh.plotting import figure show
 # from bokeh.tile_providers import get_provider, Vendors
 # from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, CustomJS, CustomJSFilter, TextInput, CDSView
