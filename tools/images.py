@@ -1,3 +1,7 @@
+import ffmpeg
+
+image = ffmpeg.input('./images/jpeg-sd/001AAN005121.jpg')
+
 # user insert all .tif files in images/master
 
 # ffmpeg converts files to .jpg in images/jpeg
@@ -7,5 +11,4 @@
 # pandas saves all data regarding imagens in images/images.csv
 
 print("images script")
-print("newprint")
 
