@@ -1,13 +1,4 @@
 # SCRIPT TO GENERANTE AN INTERACTIVE MAP USING BOKEH
-
-# from bokeh.plotting import figure show
-# from bokeh.tile_providers import get_provider, Vendors
-# from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, CustomJS, CustomJSFilter, TextInput, CDSView
-# from bokeh.layouts import column, layout
-# from pyproj import Proj, transform
-# from shapely import wkt
-
-
 from random import random
 
 from bokeh.layouts import column
