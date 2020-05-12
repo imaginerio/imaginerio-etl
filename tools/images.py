@@ -1,4 +1,6 @@
 import os, shutil, ffmpeg
+import pandas as pd
+
 
 source_folder = input("Source folder:")
 
@@ -21,9 +23,11 @@ def save_jpeg(image, output_folder, size=None, overwrite=False):
 
 
 # user insert all .tif files in images/master
+# ffmpeg converts files to .jpg in images/jpeg
 
 finalizadas = [
-    os.path.join(root, name)
+    [root, name]
+    # os.path.join(root, name)
     for root, dirs, files in os.walk(source_folder)
     for name in files
     if "FINALIZADAS" in root
@@ -31,18 +35,20 @@ finalizadas = [
     and not name.endswith(("v.tif"))
 ]
 
-for image in finalizadas:
-    if not os.path.exists(f"./images/master/{os.path.split(image)[1]}"):
-        shutil.copy2(image, "./images/master")
+
+for root, name in finalizadas:
+    image_path = os.path.join(root, name)
+    if not os.path.exists(f"./images/master/{name}"):
+        shutil.copy2(image_path, "./images/master")
     else:
         print("File already in folder")
-    save_jpeg(image, "./images/jpeg-sd", size=1000)
-    save_jpeg(image, "./images/jpeg-hd")
+    save_jpeg(f"./images/master/{name}", "./images/jpeg-sd", size=1000)
+    save_jpeg(f"./images/master/{name}", "./images/jpeg-hd")
 
-# ffmpeg converts files to .jpg in images/jpeg
 
 # scale=1000:1000:force_original_aspect_ratio=decrease
 
 # pandas creates a dataframe with all images available for a record_name
-
-# pandas saves all data regarding imagens in images/images.csv
+images_df = pd.DataFrame(name.split(".")[0] for root, name in finalizadas)
+print(images_df.head())
+# pandas saves all data regarding images in images/images.csv
