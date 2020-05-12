@@ -6,9 +6,9 @@ source_folder = input("Source folder:")
 def save_jpeg(image, output_folder, size=None, overwrite=False):
     stream = ffmpeg.input(image)
     filename, ext = (os.path.split(image)[1]).split(".")
-
-    if not overwrite and os.path.exists(os.path.join(output_folder, filename)):
-        return print("File already exists")
+    if not overwrite and os.path.exists(os.path.join(output_folder, f"{filename}.jpg")):
+        print("File already exists")
+        return None
 
     if size:
         stream = ffmpeg.filter(
@@ -17,7 +17,7 @@ def save_jpeg(image, output_folder, size=None, overwrite=False):
     stream = ffmpeg.output(
         stream, os.path.join(output_folder, filename) + ".jpg", **{"q": 0}
     )
-    ffmpeg.run(stream)
+    ffmpeg.run(stream, overwrite_output=True)
 
 
 # user insert all .tif files in images/master
@@ -27,8 +27,8 @@ finalizadas = [
     for root, dirs, files in os.walk(source_folder)
     for name in files
     if "FINALIZADAS" in root
-    if name.endswith((".tif"))
-    if not name.endswith(("v.tif"))
+    and name.endswith((".tif"))
+    and not name.endswith(("v.tif"))
 ]
 
 for image in finalizadas:
