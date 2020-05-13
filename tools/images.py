@@ -1,4 +1,6 @@
 import os, shutil, ffmpeg
+import pandas as pd
+
 
 source_folder = input("Source folder:")
 
@@ -21,28 +23,59 @@ def save_jpeg(image, output_folder, size=None, overwrite=False):
 
 
 # user insert all .tif files in images/master
-
-finalizadas = [
-    os.path.join(root, name)
-    for root, dirs, files in os.walk(source_folder)
-    for name in files
-    if "FINALIZADAS" in root
-    and name.endswith((".tif"))
-    and not name.endswith(("v.tif"))
-]
-
-for image in finalizadas:
-    if not os.path.exists(f"./images/master/{os.path.split(image)[1]}"):
-        shutil.copy2(image, "./images/master")
-    else:
-        print("File already in folder")
-    save_jpeg(image, "./images/jpeg-sd", size=1000)
-    save_jpeg(image, "./images/jpeg-hd")
-
 # ffmpeg converts files to .jpg in images/jpeg
 
-# scale=1000:1000:force_original_aspect_ratio=decrease
+def file_handler(source_folder):
+
+    files = [
+        (root, name)
+        for root, dirs, files in os.walk(source_folder)
+        for name in files
+        if "FINALIZADAS" in root
+        and name.endswith((".tif"))
+        and not name.endswith(("v.tif"))
+    ]
+
+    for root, name in files:
+        file_path = os.path.join(root, name)
+
+        if not os.path.exists(f"./images/master/{name}"):
+            shutil.copy2(file_path, "./images/master")
+        else:
+            print("File already in folder")
+        
+        save_jpeg(file_path, "./images/jpeg-hd")
+        save_jpeg(file_path, "./images/jpeg-sd", size=1000)
+
+    return files
+
 
 # pandas creates a dataframe with all images available for a record_name
-
 # pandas saves all data regarding imagens in images/images.csv
+
+def create_images_df(files):
+
+    record_names = sorted([name.split(".")[0] for root, name in files])
+
+    items = []
+
+    for record_name in record_names:    
+        item = {
+            "Record Name":record_name, 
+            "Full jpg":f"./images/jpeg-sd/{record_name}.jpg"
+            }
+        if os.path.isfile(f"./images/jpeg-sd/{record_name}c.jpg"):
+            item["Cropped jpg"] = f"./images/jpeg-sd/{record_name}c.jpg"
+        else:
+            item["Cropped jpg"] = None
+        items.append(item)
+
+    images_df = pd.DataFrame(items)
+    return images_df
+
+
+def main():
+    files = file_handler(source_folder)
+    images_df = create_images_df(files)
+    images_df.to_csv('./images/images.csv', index=False)
+
