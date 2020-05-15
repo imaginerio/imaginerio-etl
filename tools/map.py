@@ -1,52 +1,76 @@
 # SCRIPT TO GENERANTE AN INTERACTIVE MAP USING BOKEH
-from random import random
 
-from bokeh.layouts import column
-from bokeh.models import Button
-from bokeh.palettes import RdYlBu3
-from bokeh.plotting import figure, curdoc
+import pandas as pd
+import geopandas as gpd
+import json
 
+from bokeh.plotting import figure, output_file, show
+from bokeh.tile_providers import get_provider, Vendors
+from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, CustomJS, CustomJSFilter, TextInput, CDSView
+from bokeh.layouts import column, layout
+from pyproj import Proj, transform
+from shapely import wkt
 
-# create a plot and style its properties
-p = figure(x_range=(0, 200), y_range=(0, 200), toolbar_location=None)
-p.border_fill_color = "black"
-p.background_fill_color = "black"
-p.outline_line_color = None
-p.grid.grid_line_color = None
+# Read file and transfom in geodataframe
+df_file = pd.read_csv("./metadata/metadata.csv").head()
+df_file['geometry'] = df_file['geometry'].apply(wkt.loads)
+geo_df = gpd.GeoDataFrame(df_file, geometry = 'geometry', crs ='epsg:4326')
 
-# add a text renderer to our plot (no data yet)
-r = p.text(
-    x=[],
-    y=[],
-    text=[],
-    text_color=[],
-    text_font_size="20pt",
-    text_baseline="middle",
-    text_align="center",
-)
+def LongLat_to_EN(x,y):
+    try:
+      e,n = transform(Proj('epsg:4326'), Proj('epsg:3857'), x,y)
+      return e,n
+    except:
+      return None
 
-i = 0
+geo_df['coordinates'] = geo_df.apply(lambda x: LongLat_to_EN(x['lat'],x['lng']),axis=1)
 
-ds = r.data_source
+geo_df = geo_df.join(pd.DataFrame(geo_df['coordinates'].values.tolist(), columns=['e','n']))
 
-# create a callback that will add a number in a random location
-def callback():
-    global i
+geo_df['geometry'] = geo_df['geometry'].to_crs('epsg:3857')
 
-    # BEST PRACTICE --- update .data in one step with a new dict
-    new_data = dict()
-    new_data["x"] = ds.data["x"] + [random() * 70 + 15]
-    new_data["y"] = ds.data["y"] + [random() * 70 + 15]
-    new_data["text_color"] = ds.data["text_color"] + [RdYlBu3[i % 3]]
-    new_data["text"] = ds.data["text"] + [str(i)]
-    ds.data = new_data
+geo_df = geo_df[['identifier','title', 'author', 'image','geometry','e','n']]
 
-    i = i + 1
+geosource = GeoJSONDataSource(geojson = geo_df.to_json())
 
+#Description from points
+TOOLTIPS = """
+    <div style="margin: 5px; width: 300px;" >
+      <img
+          src="@image" alt="@image" height=200
+          style="margin: 0px;"
+          border="2"
+          ></img>
+        <h3 style='font-size: 10px; font-weight: bold;'>@identifier</h3>
+        <p style='font-size: 10px; font-weight: light;'>@title</p>
+        <p style='font-size: 10px; font-weight: light; font-style: italic;'>@author</p>
+    </div>
+"""
 
-# add a button widget and configure with the call back
-button = Button(label="Press Me")
-button.on_click(callback)
+#Base map
+maps = figure(title='Situated Views',
+              x_axis_type='mercator',
+              y_axis_type='mercator',
+              plot_width=1400,
+              plot_height=900)
+tile_provider = get_provider(Vendors.CARTODBPOSITRON_RETINA)
+maps.add_tile(tile_provider)
 
-# put the button and plot in a layout and add to the document
-curdoc().add_root(column(button, p))
+#construct points and wedges from hover
+
+wedge = maps.patches(xs='xs',ys='ys', source=geosource, 
+                    fill_color='white', fill_alpha=0, line_color= None,
+                    hover_alpha=0.7, hover_fill_color='grey', hover_line_color='grey')
+
+point = maps.circle(x='e',y='n', source=geosource,
+                    size = 7,
+                    fill_color='grey',
+                    fill_alpha=0.5,
+                    line_color='black')
+
+h1 = HoverTool(renderers=[wedge], tooltips=None, mode='mouse')
+h2 = HoverTool(renderers=[point], tooltips=TOOLTIPS, mode='mouse')
+maps.add_tools(h1,h2)
+
+output_file("situated-views-map.html")
+show(maps)
