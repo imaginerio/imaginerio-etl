@@ -1,15 +1,42 @@
 import os, shutil, ffmpeg
 import pandas as pd
 
+"""
+SOURCE_PATH = input("Source folder:")
+GITHUB_PATH = "https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/"
+CLOUD_PATH = "/cloud/"
+MASTER = "./images/master/"
+JPEG_HD = "./images/jpeg-hd/"
+JPEG_SD = "./images/jpeg-sd/"
 
-source_folder = input("Source folder:")
 
+class Image:
+    
+    '''Original image path. Methods return pure filename, with jpg or tif extension.'''
+    
+    def __init__(self, path):
+        self.path = path
+
+    def jpg(self):
+        os.path.split(self.path)[1].split(".")[0] + ".jpg"
+    
+    def tif(self):
+        os.path.split(self.path)[1]
+    
+    def record_name(self):
+        os.path.split(self.path)[1].split(".")[0]
+    
 
 def save_jpeg(image, output_folder, size=None, overwrite=False):
+    '''
+    Saves jpg file using ffmpeg or returns None if file already exists and overwrite=False.
+    'size' is the largest dimension in resulting image.
+    '''
+
     stream = ffmpeg.input(image)
-    filename, ext = (os.path.split(image)[1]).split(".")
+    filename, ext = (os.path.split(image)[1]).split(".")    
     if not overwrite and os.path.exists(os.path.join(output_folder, f"{filename}.jpg")):
-        print("File already exists")
+        print(f"{filename}.jpg already exists")
         return None
 
     if size:
@@ -21,14 +48,16 @@ def save_jpeg(image, output_folder, size=None, overwrite=False):
     )
     ffmpeg.run(stream, overwrite_output=True)
 
-
 # user insert all .tif files in images/master
 # ffmpeg converts files to .jpg in images/jpeg
 
-def file_handler(source_folder):
-
+def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG_SD):
+    '''
+    Returns list of original files in source folder according to internal requirements, 
+    copies them to master and saves jpegs.
+    '''
     files = [
-        (root, name)
+        Image(os.path.join(root, name))
         for root, dirs, files in os.walk(source_folder)
         for name in files
         if "FINALIZADAS" in root
@@ -36,16 +65,14 @@ def file_handler(source_folder):
         and not name.endswith(("v.tif"))
     ]
 
-    for root, name in files:
-        file_path = os.path.join(root, name)
-
-        if not os.path.exists(f"./images/master/{name}"):
-            shutil.copy2(file_path, "./images/master")
+    for image in files:
+        if not os.path.exists(os.path.join(master, image.tif)):
+            shutil.copy2(image.path, master)
         else:
-            print("File already in folder")
+            print(f"{image.tif} already in folder")
         
-        save_jpeg(file_path, "./images/jpeg-hd")
-        save_jpeg(file_path, "./images/jpeg-sd", size=1000)
+        save_jpeg(os.path.join(master, image.tif), hd_folder)
+        save_jpeg(os.path.join(master, image.tif), sd_folder, size=1000)
 
     return files
 
@@ -53,21 +80,23 @@ def file_handler(source_folder):
 # pandas creates a dataframe with all images available for a record_name
 # pandas saves all data regarding imagens in images/images.csv
 
-def create_images_df(files):
+def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
+    '''Creates a dataframe with every image available and its alternate versions.'''
 
-    record_names = sorted([name.split(".")[0] for root, name in files])
+    record_names = sorted([image.record_name for image in files])
 
     items = []
 
-    for record_name in record_names:    
+    for image in record_names:    
         item = {
-            "Record Name":record_name, 
-            "Full jpg":f"./images/jpeg-sd/{record_name}.jpg"
-            }
-        if os.path.isfile(f"./images/jpeg-sd/{record_name}c.jpg"):
-            item["Cropped jpg"] = f"./images/jpeg-sd/{record_name}c.jpg"
+            "record_name":image.record_name, 
+            "img_hd":os.path.join(cloud_path, image.jpg),
+            "img_sd":os.path.join(github_path, image.jpg)
+        }
+        if os.path.isfile(os.path.join(cloud_path, f"{image.record_name}c.jpg")):
+            item["img_hd_crop"] = os.path.join(cloud_path, f"{image.record_name}c.jpg")
         else:
-            item["Cropped jpg"] = None
+            item["img_hd_crop"] = None
         items.append(item)
 
     images_df = pd.DataFrame(items)
@@ -75,7 +104,65 @@ def create_images_df(files):
 
 
 def main():
-    files = file_handler(source_folder)
+    '''Execute all functions.'''
+    files = file_handler(SOURCE_PATH)
+    
+    print("Creating image dataframe...")
+    
     images_df = create_images_df(files)
+    
+    print(images_df.head())
+    
     images_df.to_csv('./images/images.csv', index=False)
+"""
 
+
+
+
+
+ls = [i.split(".")[0] for i in os.listdir("./images/jpeg-sd")]
+groups = []
+
+
+for id in sorted(ls):
+    i = 0
+    matched = []
+    while i < len(ls):
+        if id in ls[i]:
+            matched.append(ls[i])
+        i += 1
+    if len(matched) > 1:    
+        groups.append(sorted(matched))
+    else:
+        groups.append(id)
+
+
+to_remove = []
+for group in groups:
+    if type(group) == list:
+        to_remove += group[1:]
+
+groups = [item for item in groups if item not in to_remove]
+print(groups)
+
+"""
+uniques.append(matched_indexes)
+    for entry in uniques:
+        if len(entry) > 1:
+            item = {"recordname":uniqu[0],"version1":f"./images/{matched_indexes[0]}", "version 2":f"./images/{matched_indexes[1]}"}
+        else:
+            item = {"recordname":uniques[0],"version1":f"./images/{matched_indexes[0]}", "version2":None}
+    print(item)
+    #print(f'{id} is present in ls at indexes {matched_indexes}')
+"""
+
+
+"""
+for id in ls:
+    if id+"c" in ls:
+        ls.remove(id+"c")
+        item = {"recordname":id, "version1":f"./images/{id}.jpg", "version2":f"./images{id+'c'}"}
+    else:
+        item = {"recordname":id, "version1":f"./images/{id}.jpg", "version2":None}
+    print(item)
+"""
