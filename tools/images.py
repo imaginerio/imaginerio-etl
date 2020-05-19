@@ -74,13 +74,13 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
     ]
 
     for image in files:
-        if not os.path.exists(os.path.join(master, str(image.tif))):
+        if not os.path.exists(os.path.join(master, image.tif)):
             shutil.copy2(image.path, master)
         else:
             print(f"{image.tif} already in folder")
 
-        save_jpeg(os.path.join(master, str(image.tif)), hd_folder)
-        save_jpeg(os.path.join(master, str(image.tif)), sd_folder, size=1000)
+        save_jpeg(os.path.join(master, image.tif), hd_folder)
+        save_jpeg(os.path.join(master, image.tif), sd_folder, size=1000)
 
     return files
 
@@ -92,22 +92,46 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
 def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
     """Creates a dataframe with every image available and its alternate versions."""
 
-    record_names = sorted([image.record_name for image in files])
-
+    groups = []
+    to_remove = []
     items = []
 
-    for image in record_names:
-        item = {
-            "record_name": Image(image).record_name,
-            "img_hd": os.path.join(cloud_path, Image(image).jpg),
-            "img_sd": os.path.join(github_path, Image(image).jpg),
-        }
-        if os.path.isfile(os.path.join(cloud_path, f"{Image(image).record_name}c.jpg")):
-            item["img_hd_crop"] = os.path.join(
-                cloud_path, f"{Image(image).record_name}c.jpg"
-            )
+    for id in files:
+        i = 0
+        matched = []
+        while i < len(files):
+            if id.record_name in files[i].record_name:
+                matched.append(files[i])
+            i += 1
+        if len(matched) > 1:
+            groups.append(matched)
+
         else:
+            groups.append(id)
+
+    for group in groups:
+        if type(group) == list:
+            to_remove += group[1:]
+
+    groups = [item for item in groups if item not in to_remove]
+
+    for image in groups:
+        if type(image) == list:
+            item = {
+                "record_name": image[0].record_name,
+                "img_hd": os.path.join(cloud_path, image[0].jpg),
+                "img_sd": os.path.join(github_path, image[0].jpg),
+            }
+            item["img_hd_crop"] = os.path.join(cloud_path, image[1].jpg)
+            # item["img_hd_back"] = os.path.join(cloud_path, image[2])
+        else:
+            item = {
+                "record_name": image.record_name,
+                "img_hd": os.path.join(cloud_path, image.jpg),
+                "img_sd": os.path.join(github_path, image.jpg),
+            }
             item["img_hd_crop"] = None
+            # item["img_hd_back"] = None
         items.append(item)
 
     images_df = pd.DataFrame(items)
