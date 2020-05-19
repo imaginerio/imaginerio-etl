@@ -121,9 +121,10 @@ def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
                 "record_name": image[0].record_name,
                 "img_hd": os.path.join(cloud_path, image[0].jpg),
                 "img_sd": os.path.join(github_path, image[0].jpg),
-                f"{image[1].record_name[-1]}": image[1].jpg,
-                f"{image[2].record_name[-1]}": image[2].jpg,
             }
+            for i in image[1:]:
+                item[f"{i.record_name[-1]}"] = i.jpg
+                # f"{image[2].record_name[-1]}": image[2].jpg,
         else:
             item = {
                 "record_name": image.record_name,
