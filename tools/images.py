@@ -14,7 +14,7 @@ JPEG_SD = "./images/jpeg-sd/"
 
 class Image:
 
-    """Original image path. Methods return pure filename, with jpg or tif extension."""
+    """Original image path. Attributes return pure filename, jpg or tif extension."""
 
     def __init__(self, path):
         self.path = path
