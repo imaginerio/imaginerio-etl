@@ -1,4 +1,4 @@
-record_name,img_hd,img_sd,img_hd_crop
+record_name,img_hd,img_sd,a
 0071824cx001-01,/cloud/0071824cx001-01.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/0071824cx001-01.jpg,
 0071824cx001-02,/cloud/0071824cx001-02.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/0071824cx001-02.jpg,
 0071824cx001-04,/cloud/0071824cx001-04.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/0071824cx001-04.jpg,
@@ -1919,7 +1919,7 @@ record_name,img_hd,img_sd,img_hd_crop
 013RJ001011,/cloud/013RJ001011.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001011.jpg,
 013RJ001012,/cloud/013RJ001012.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001012.jpg,
 013RJ001013,/cloud/013RJ001013.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001013.jpg,
-013RJ001014,/cloud/013RJ001014.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001014.jpg,/cloud/013RJ001014a.jpg
+013RJ001014,/cloud/013RJ001014.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001014.jpg,013RJ001014a.jpg
 013RJ001015,/cloud/013RJ001015.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001015.jpg,
 013RJ001016,/cloud/013RJ001016.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001016.jpg,
 013RJ001017,/cloud/013RJ001017.jpg,https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/013RJ001017.jpg,
