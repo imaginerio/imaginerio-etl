@@ -152,31 +152,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-"""
-ls = [i.split(".")[0] for i in os.listdir("./images/jpeg-sd")]
-groups = []
-
-
-for id in sorted(ls):
-    i = 0
-    matched = []
-    while i < len(ls):
-        if id in ls[i]:
-            matched.append(ls[i])
-        i += 1
-    if len(matched) > 1:    
-        groups.append(sorted(matched))
-    else:
-        groups.append(id)
-
-
-to_remove = []
-for group in groups:
-    if type(group) == list:
-        to_remove += group[1:]
-
-groups = [item for item in groups if item not in to_remove]
-print(groups)
-"""
