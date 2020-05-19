@@ -51,11 +51,38 @@ def save_jpeg(image, output_folder, size=None, overwrite=False):
 # user insert all .tif files in images/master
 # ffmpeg converts files to .jpg in images/jpeg
 
+<<<<<<< HEAD
 def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG_SD):
     '''
     Returns list of original files in source folder according to internal requirements, 
     copies them to master and saves jpegs.
     '''
+=======
+<<<<<<< HEAD
+finalizadas = [
+    [root, name]
+    # os.path.join(root, name)
+    for root, dirs, files in os.walk(source_folder)
+    for name in files
+    if "FINALIZADAS" in root
+    and name.endswith((".tif"))
+    and not name.endswith(("v.tif"))
+]
+
+
+for root, name in finalizadas:
+    image_path = os.path.join(root, name)
+    if not os.path.exists(f"./images/master/{name}"):
+        shutil.copy2(image_path, "./images/master")
+    else:
+        print("File already in folder")
+    save_jpeg(f"./images/master/{name}", "./images/jpeg-sd", size=1000)
+    save_jpeg(f"./images/master/{name}", "./images/jpeg-hd")
+
+=======
+def file_handler(source_folder):
+
+>>>>>>> e32075ba0015ae7b14d5a0e24825ff5d37e147f9
     files = [
         Image(os.path.join(root, name))
         for root, dirs, files in os.walk(source_folder)
@@ -64,10 +91,25 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
         and name.endswith((".tif"))
         and not name.endswith(("v.tif"))
     ]
+>>>>>>> ce5e373554dd6e8bba78408782850ef583b977fa
 
+<<<<<<< HEAD
     for image in files:
         if not os.path.exists(os.path.join(master, image.tif)):
             shutil.copy2(image.path, master)
+=======
+    for root, name in files:
+        file_path = os.path.join(root, name)
+
+<<<<<<< HEAD
+# pandas creates a dataframe with all images available for a record_name
+images_df = pd.DataFrame(name.split(".")[0] for root, name in finalizadas)
+print(images_df.head())
+# pandas saves all data regarding images in images/images.csv
+=======
+        if not os.path.exists(f"./images/master/{name}"):
+            shutil.copy2(file_path, "./images/master")
+>>>>>>> e32075ba0015ae7b14d5a0e24825ff5d37e147f9
         else:
             print(f"{image.tif} already in folder")
         
@@ -119,6 +161,7 @@ def main():
 
 
 
+<<<<<<< HEAD
 
 ls = [i.split(".")[0] for i in os.listdir("./images/jpeg-sd")]
 groups = []
@@ -166,3 +209,6 @@ for id in ls:
         item = {"recordname":id, "version1":f"./images/{id}.jpg", "version2":None}
     print(item)
 """
+=======
+>>>>>>> ce5e373554dd6e8bba78408782850ef583b977fa
+>>>>>>> e32075ba0015ae7b14d5a0e24825ff5d37e147f9
