@@ -7,4 +7,3 @@
 # pandas saves all data regarding imagens in images/images.csv
 
 print("images script")
-
