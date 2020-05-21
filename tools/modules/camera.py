@@ -6,11 +6,11 @@ def load(path):
     try:
         cameras = load_camera(path)
         cones = load_cones(path)
-        df = cameras.merge(cones, on=["identifier"], how="outer")
-        print("Camera loaded")
-        print(80 * "-")
+        df = cameras.merge(cones, on=["identifier"], how="inner", validate="one_to_one")
+
+        print("Camera loaded \n")
         print(df.head())
-        print(80 * "-")
+
         return df
 
     except Exception as e:
