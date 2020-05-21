@@ -159,7 +159,8 @@ dmypy.json
 
 .github/
 
-
+Pipfile.lock
+package-lock.json
 node_modules
 
 # End of https://www.gitignore.io/api/macos,python
