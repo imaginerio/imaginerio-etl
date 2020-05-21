@@ -1,0 +1,117 @@
+# ims catalog metadata from cumulus
+import pandas as pd
+import numpy as np
+
+
+def find_dates(date):
+    """
+    Find dates between 1500 and 2022 and parse to datetime
+    """
+    result = date.str.extract(r"(1[5-9]\d{2}|20[0-2]{2})")
+    result = pd.to_datetime(date, errors="coerce")
+    return result
+
+
+def load(path):
+    try:
+        catalog_df = pd.read_excel(
+            path,
+            dtype={
+                "DATA": str,
+                "DATA LIMITE INFERIOR": str,
+                "DATA LIMITE SUPERIOR": str,
+            },
+        )
+
+        # rename columns
+        catalog_df = catalog_df.rename(
+            columns={
+                "Record Name": "identifier",
+                "TÍTULO": "title",
+                "RESUMO": "description",
+                "AUTORIA": "creator",
+                "DATA": "date",
+                "DATA LIMITE INFERIOR": "start_date",
+                "DATA LIMITE SUPERIOR": "end_date",
+                "DIMENSÃO": "dimensions",
+                "PROCESSO FORMADOR DA IMAGEM": "fabrication_method",
+                "LOCAL": "place",
+                "DESIGNAÇÃO GENÉRICA": "type",
+            },
+        )
+
+        # select columns
+        catalog_df = catalog_df[
+            [
+                "identifier",
+                "title",
+                "description",
+                "creator",
+                "date",
+                "start_date",
+                "end_date",
+                "type",
+                "fabrication_method",
+                "dimensions",
+                "place",
+            ]
+        ]
+
+        # remove file extension
+        catalog_df["identifier"] = catalog_df["identifier"].str.split(
+            ".", n=1, expand=True
+        )
+
+        # remove duplicates
+        catalog_df = catalog_df.drop_duplicates(subset="identifier", keep="last")
+
+        # check dates accuracy
+        catalog_df["accurate_date"] = np.where(
+            catalog_df.date.astype(str).str.contains(r"[a-z]"), False, True
+        )
+        catalog_df["accurate_date"] = np.where(
+            catalog_df.date.isnull(), False, catalog_df["accurate_date"]
+        )
+
+        # dates to datetime
+        catalog_df["date"] = find_dates(catalog_df["date"])
+        catalog_df["start_date"] = find_dates(catalog_df["start_date"])
+        catalog_df["end_date"] = find_dates(catalog_df["end_date"])
+
+        # reverse cretor name
+        catalog_df["creator"] = catalog_df["creator"].str.replace(
+            r"(.+),\s+(.+)", r"\2 \1"
+        )
+
+        # save list of creators for rights assessment
+        creators_df = catalog_df["creator"].unique()
+        pd.DataFrame(creators_df).to_csv("./metadata/rights/creators.csv", index=False)
+
+        # fill empty start/end dates
+        catalog_df.loc[
+            (catalog_df["accurate_date"] == False) & (catalog_df["start_date"].isna()),
+            "start_date",
+        ] = catalog_df["date"] - pd.DateOffset(years=5)
+
+        catalog_df.loc[
+            (catalog_df["accurate_date"] == False) & (catalog_df["end_date"].isna()),
+            "end_date",
+        ] = catalog_df["date"] + pd.DateOffset(years=5)
+
+        # extract dimensions
+        dimensions_df = catalog_df["dimensions"].str.extract(
+            r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
+        )
+        catalog_df["image_width"] = dimensions_df["width"]
+        catalog_df["image_height"] = dimensions_df["height"]
+
+        print("Catalog loaded")
+        print(80 * "-")
+        print(catalog_df.head())
+        print(80 * "-")
+
+        return catalog_df
+
+    except Exception as e:
+
+        print(str(e))
