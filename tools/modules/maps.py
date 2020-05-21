@@ -10,7 +10,6 @@ from bokeh.tile_providers import get_provider, Vendors
 from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, WheelZoomTool
 from bokeh.layouts import column, layout
 
-
 def update(path):
     try:
         # load metadata
@@ -79,9 +78,6 @@ def apply_transform(geodf):
             "identifier",
             "title",
             "creator",
-            "date",
-            "start_date",
-            "end_date",
             "img_sd",
             "geometry",
             "lat2",
@@ -117,7 +113,7 @@ def update_map(map_geodf):
         y_axis_type="mercator",
         plot_width=1400,
         plot_height=900,
-        toolbar_location=None,
+        toolbar_location=None
     )
 
     tile_provider = get_provider(Vendors.CARTODBPOSITRON_RETINA)
@@ -134,7 +130,7 @@ def update_map(map_geodf):
         line_color=None,
         hover_alpha=0.7,
         hover_fill_color="grey",
-        hover_line_color="grey",
+        hover_line_color="grey"
     )
 
     point = maps.circle(
@@ -144,17 +140,16 @@ def update_map(map_geodf):
         size=7,
         fill_color="grey",
         fill_alpha=0.5,
-        line_color="black",
+        line_color="black"
     )
 
-    h1 = HoverTool(renderers=[viewcone], tooltips=None, mode="mouse", show_arrow=False,)
+    h1 = HoverTool(renderers=[viewcone], tooltips=None, mode="mouse", show_arrow=False)
 
     h2 = HoverTool(
         renderers=[point],
         tooltips=TOOLTIPS,
         mode="mouse",
-        show_arrow=False,
-        formatters={"@date": "datetime"},
+        show_arrow=False
     )
 
     maps.add_tools(h1, h2)
