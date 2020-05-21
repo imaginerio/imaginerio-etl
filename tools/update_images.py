@@ -118,7 +118,7 @@ def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
     for image in groups:
         if type(image) == list:
             item = {
-                "record_name": image[0].record_name,
+                "identifier": image[0].record_name,
                 "img_hd": os.path.join(cloud_path, image[0].jpg),
                 "img_sd": os.path.join(github_path, image[0].jpg),
             }

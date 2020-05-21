@@ -105,10 +105,8 @@ def load(path):
         catalog_df["image_width"] = dimensions_df["width"]
         catalog_df["image_height"] = dimensions_df["height"]
 
-        print("Catalog loaded")
-        print(80 * "-")
+        print("Catalog loaded \n")
         print(catalog_df.head())
-        print(80 * "-")
 
         return catalog_df
 

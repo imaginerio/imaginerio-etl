@@ -14,6 +14,7 @@ geopandas = "*"
 bokeh = "*"
 xlrd = "*"
 ffmpeg-python = "*"
+aiohttp = "*"
 
 [requires]
 python_version = "3.8"
