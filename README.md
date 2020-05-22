@@ -15,10 +15,13 @@ $ pipenv shell
 
 ```bash
 # kml parser
-$ npm run g
+$ npm run kml
 
-# show map
-bokeh serve --show tools/map.py
+# update images
+$ python update_images.py
+
+# update metadata
+$ python update_data.py
 
 ```
 
@@ -26,17 +29,18 @@ bokeh serve --show tools/map.py
 
 ```
 situated-views
-│   index.js
+│   index.html
 │   package.json
-│   Pipfile.json
+│   Pipfile
+│   environment.yml
 │   README.md
 │
 └───images
-│   │   image samples for analysis
+│   └─  image samples for analysis
 │
 └───metadata
-│   │   data sources and reports
+│   └─  data sources and reports
 │
 └───tools
-│   │   python scripts
+    └─  scripts
 ```
