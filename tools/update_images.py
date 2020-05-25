@@ -14,23 +14,13 @@ JPEG_SD = "./images/jpeg-sd/"
 
 class Image:
 
-    """Original image path. Attributes return pure filename, jpg or tif extension."""
+    """Original image path. Attributes return id, jpg or tif extension."""
 
     def __init__(self, path):
         self.path = path
         self.jpg = str(os.path.split(self.path)[1].split(".")[0] + ".jpg")
         self.tif = str(os.path.split(self.path)[1])
-        self.record_name = str(os.path.split(self.path)[1].split(".")[0])
-
-    """
-    def jpg(self):
-        str(os.path.split(self.path)[1].split(".")[0] + ".jpg")
-
-    def tif(self):
-        str(os.path.split(self.path)[1])
-
-    def record_name(self):
-        str(os.path.split(self.path)[1].split(".")[0])"""
+        self.id = str(os.path.split(self.path)[1].split(".")[0])
 
 
 def save_jpeg(image, output_folder, size=None, overwrite=False):
@@ -82,32 +72,35 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
         save_jpeg(os.path.join(master, image.tif), hd_folder)
         save_jpeg(os.path.join(master, image.tif), sd_folder, size=1000)
 
+    #files = [Image(os.path.join(master, item) for item in os.listdir(master))]
+
     return files
 
 
-# pandas creates a dataframe with all images available for a record_name
+# pandas creates a dataframe with all images available for a id
 # pandas saves all data regarding imagens in images/images.csv
 
 
 def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
-    """Creates a dataframe with every image available and its alternate versions."""
+    """Creates a dataframe with every image available and its alternate versions.
+    'files' is a list of Image objects."""
 
     groups = []
     to_remove = []
     items = []
 
-    for id in files:
+    for item in files:
         i = 0
         matched = []
         while i < len(files):
-            if id.record_name in files[i].record_name:
+            if item.id in files[i].id:
                 matched.append(files[i])
             i += 1
         if len(matched) > 1:
             groups.append(matched)
 
         else:
-            groups.append(id)
+            groups.append(item)
 
     for group in groups:
         if type(group) == list:
@@ -118,22 +111,23 @@ def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
     for image in groups:
         if type(image) == list:
             item = {
-                "identifier": image[0].record_name,
+                "id": image[0].id,
                 "img_hd": os.path.join(cloud_path, image[0].jpg),
                 "img_sd": os.path.join(github_path, image[0].jpg),
             }
             for i in image[1:]:
-                item[f"{i.record_name[-1]}"] = i.jpg
-                # f"{image[2].record_name[-1]}": image[2].jpg,
+                item[f"{i.id[-1]}"] = i.jpg
         else:
             item = {
-                "record_name": image.record_name,
+                "id": image.id,
                 "img_hd": os.path.join(cloud_path, image.jpg),
                 "img_sd": os.path.join(github_path, image.jpg),
             }
         items.append(item)
 
     images_df = pd.DataFrame(items)
+    images_df.sort_values(by=['id'])
+    
     return images_df
 
 
