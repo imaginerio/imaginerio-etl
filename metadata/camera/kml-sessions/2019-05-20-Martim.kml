@@ -46,7 +46,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS042.jpg</name>
+		<name>014GLAS042</name>
 		<Camera>
 			<longitude>-43.17549658827063</longitude>
 			<latitude>-22.92114451995913</latitude>
@@ -88,7 +88,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS101.jpg</name>
+		<name>014GLAS101</name>
 		<Camera>
 			<longitude>-43.17600874534652</longitude>
 			<latitude>-22.90206656305966</latitude>
@@ -130,7 +130,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014AM003007.jpg</name>
+		<name>014AM003007</name>
 		<Camera>
 			<longitude>-43.17804558921094</longitude>
 			<latitude>-22.90400631794713</latitude>
@@ -173,7 +173,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002054VIAN014.jpg</name>
+		<name>002054VIAN014</name>
 		<Camera>
 			<longitude>-43.19459210827699</longitude>
 			<latitude>-22.98748574640896</latitude>
@@ -215,7 +215,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx036a-06.jpg</name>
+		<name>0071824cx036a-06</name>
 		<Camera>
 			<longitude>-43.17379729126559</longitude>
 			<latitude>-22.89669382881851</latitude>

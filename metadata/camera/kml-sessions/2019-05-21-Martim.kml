@@ -46,7 +46,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001ACL017018.jpg</name>
+		<name>001ACL017018</name>
 		<Camera>
 			<longitude>-43.19318010575777</longitude>
 			<latitude>-22.9597817309962</latitude>
@@ -88,7 +88,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007ALA013.jpg</name>
+		<name>007ALA013</name>
 		<Camera>
 			<longitude>-43.21660265947358</longitude>
 			<latitude>-22.88411396997807</latitude>
@@ -131,7 +131,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001RO002039.jpg</name>
+		<name>001RO002039</name>
 		<Camera>
 			<longitude>-43.1655192923048</longitude>
 			<latitude>-22.89798312033175</latitude>
@@ -216,7 +216,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN02001004.jpg</name>
+		<name>001AN02001004</name>
 		<Camera>
 			<longitude>-43.17615782299997</longitude>
 			<latitude>-22.92065822300002</latitude>
@@ -258,7 +258,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001RO002014.jpg</name>
+		<name>001RO002014</name>
 		<Camera>
 			<longitude>-43.18463296900593</longitude>
 			<latitude>-22.96905487833517</latitude>
@@ -300,7 +300,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002039.jpg</name>
+		<name>001AN01002039</name>
 		<Camera>
 			<longitude>-43.17448370076591</longitude>
 			<latitude>-22.90354419409377</latitude>
@@ -342,7 +342,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002006.jpg</name>
+		<name>001AN01002006</name>
 		<Camera>
 			<longitude>-43.19046443792424</longitude>
 			<latitude>-22.92293444930709</latitude>
@@ -384,7 +384,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002002.jpg</name>
+		<name>001AN01002002</name>
 		<Camera>
 			<longitude>-43.17576192733372</longitude>
 			<latitude>-22.94216738935688</latitude>
@@ -427,7 +427,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002009.jpg</name>
+		<name>001AN01002009</name>
 		<Camera>
 			<longitude>-43.17431265568967</longitude>
 			<latitude>-22.9095331151631</latitude>
@@ -469,7 +469,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002010.jpg</name>
+		<name>001AN01002010</name>
 		<Camera>
 			<longitude>-43.18097741511877</longitude>
 			<latitude>-22.92160461251507</latitude>
@@ -511,7 +511,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001RO002025.jpg</name>
+		<name>001RO002025</name>
 		<Camera>
 			<longitude>-43.18814917819955</longitude>
 			<latitude>-22.90438160013327</latitude>
@@ -553,7 +553,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001RO002011.jpg</name>
+		<name>001RO002011</name>
 		<Camera>
 			<longitude>-43.18617351299994</longitude>
 			<latitude>-22.986051116</latitude>

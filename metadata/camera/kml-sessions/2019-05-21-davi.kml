@@ -88,7 +88,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A5P3FG05-002.jpg</name>
+		<name>007A5P3FG05-002</name>
 		<Camera>
 			<longitude>-43.17346919094266</longitude>
 			<latitude>-22.90279580203707</latitude>
@@ -130,7 +130,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GLAS113frente.jpg</name>
+		<name>014GLAS113frente</name>
 		<Camera>
 			<longitude>-43.17349263381757</longitude>
 			<latitude>-22.90273731374189</latitude>

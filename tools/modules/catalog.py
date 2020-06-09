@@ -26,7 +26,7 @@ def load(path):
         # rename columns
         catalog_df = catalog_df.rename(
             columns={
-                "Record Name": "identifier",
+                "Record Name": "id",
                 "TÍTULO": "title",
                 "RESUMO": "description",
                 "AUTORIA": "creator",
@@ -43,7 +43,7 @@ def load(path):
         # select columns
         catalog_df = catalog_df[
             [
-                "identifier",
+                "id",
                 "title",
                 "description",
                 "creator",
@@ -58,12 +58,10 @@ def load(path):
         ]
 
         # remove file extension
-        catalog_df["identifier"] = catalog_df["identifier"].str.split(
-            ".", n=1, expand=True
-        )
+        catalog_df["id"] = catalog_df["id"].str.split(".", n=1, expand=True)
 
         # remove duplicates
-        catalog_df = catalog_df.drop_duplicates(subset="identifier", keep="last")
+        catalog_df = catalog_df.drop_duplicates(subset="id", keep="last")
 
         # check dates accuracy
         catalog_df["accurate_date"] = np.where(

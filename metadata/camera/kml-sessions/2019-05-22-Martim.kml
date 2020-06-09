@@ -4,7 +4,7 @@
 	<name>2019-05-22-Martim</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>001AN01002034.jpg</name>
+		<name>001AN01002034</name>
 		<Camera>
 			<longitude>-43.24095937653684</longitude>
 			<latitude>-22.99999911021761</latitude>
@@ -46,7 +46,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002075.jpg</name>
+		<name>001AN01002075</name>
 		<Camera>
 			<longitude>-43.16686659404</longitude>
 			<latitude>-22.89615868889282</latitude>

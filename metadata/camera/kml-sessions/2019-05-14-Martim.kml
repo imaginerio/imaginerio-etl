@@ -4,7 +4,7 @@
 	<name>2019-05-14-Martim</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>014GL20.jpg</name>
+		<name>014GL20</name>
 		<Camera>
 			<longitude>-43.17300169895178</longitude>
 			<latitude>-22.89584536713015</latitude>
@@ -46,7 +46,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A6P4FP27-41.jpg</name>
+		<name>007A6P4FP27-41</name>
 		<Camera>
 			<longitude>-43.17372734499988</longitude>
 			<latitude>-22.89599573999991</latitude>
@@ -88,7 +88,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A5P3F05-015.jpg</name>
+		<name>007A5P3F05-015</name>
 		<Camera>
 			<longitude>-43.18206208415951</longitude>
 			<latitude>-22.90719185278013</latitude>
@@ -130,7 +130,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A5P3F05-08.jpg</name>
+		<name>007A5P3F05-08</name>
 		<Camera>
 			<longitude>-43.17628648855899</longitude>
 			<latitude>-22.90198612866319</latitude>
@@ -172,7 +172,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A5P3F05-06.jpg</name>
+		<name>007A5P3F05-06</name>
 		<Camera>
 			<longitude>-43.1750887531277</longitude>
 			<latitude>-22.90590835439318</latitude>
@@ -215,7 +215,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007SN-10.jpg</name>
+		<name>007SN-10</name>
 		<Camera>
 			<longitude>-43.10871806199999</longitude>
 			<latitude>-22.74937230800004</latitude>
@@ -257,7 +257,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007NGBMF4050cx05-01.jpg</name>
+		<name>007NGBMF4050cx05-01</name>
 		<Camera>
 			<longitude>-43.1806242494107</longitude>
 			<latitude>-22.90499861127458</latitude>
@@ -299,7 +299,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx070-10.JPG</name>
+		<name>0071824cx070-10</name>
 		<Camera>
 			<longitude>-43.17933994699956</longitude>
 			<latitude>-22.90427553799998</latitude>
@@ -341,7 +341,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx019-08.JPG</name>
+		<name>0071824cx019-08</name>
 		<Camera>
 			<longitude>-43.17624039799991</longitude>
 			<latitude>-22.90191793899995</latitude>
@@ -384,7 +384,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>0071824cx067-01.jpg</name>
+		<name>0071824cx067-01</name>
 		<Camera>
 			<longitude>-43.17255692783714</longitude>
 			<latitude>-22.90310618599946</latitude>
