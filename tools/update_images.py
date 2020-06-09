@@ -72,7 +72,7 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
         save_jpeg(os.path.join(master, image.tif), hd_folder)
         save_jpeg(os.path.join(master, image.tif), sd_folder, size=1000)
 
-    #files = [Image(os.path.join(master, item) for item in os.listdir(master))]
+    # files = [Image(os.path.join(master, item) for item in os.listdir(master))]
 
     return files
 
@@ -126,8 +126,8 @@ def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
         items.append(item)
 
     images_df = pd.DataFrame(items)
-    images_df.sort_values(by=['id'])
-    
+    images_df.sort_values(by=["id"])
+
     return images_df
 
 

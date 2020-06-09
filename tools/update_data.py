@@ -2,22 +2,24 @@ import os
 
 import pandas as pd
 
-from modules import camera, catalog, images, maps  # rights, export, report
+from modules import camera, catalog, images, wikidata, portals, export
+
 
 LINE = 80 * "-"
-
-CAMERA_PATH = "./metadata/camera/"  # reads camera.csv and camera.geojson
-CATALOG_PATH = "./metadata/catalog/" + "cumulus.xlsx"
-IMAGES_PATH = "./images/images.csv"
-# RIGHTS_PATH = "./metadata/rights/" + "rights.csv"
-# WIKIDATA_PATH = "./metadata/wikidata/" + "wikidata.csv"
-METADATA_PATH = "./metadata/metadata.csv"
 
 
 def main():
     """
     Execute all functions
     """
+
+    CAMERA_PATH = "./metadata/camera/"  # reads camera.csv and camera.geojson
+    CUMULUS_PATH = "./metadata/catalog/" + "cumulus.xlsx"
+    PORTALS_PATH = "./metadata/catalog/" + "portals.csv"
+    IMAGES_PATH = "./images/images.csv"
+    WIKIDATA_PATH = "./metadata/wikidata/" + "wikidata.csv"
+    # RIGHTS_PATH = "./metadata/rights/" + "rights.csv"
+    METADATA_PATH = "./metadata/metadata.csv"
 
     try:
         images_df = images.load(IMAGES_PATH)
@@ -26,15 +28,28 @@ def main():
         camera_df = camera.load(CAMERA_PATH)
         print(LINE)
 
-        catalog_df = catalog.load(CATALOG_PATH)
+        catalog_df = catalog.load(CUMULUS_PATH)
         print(LINE)
 
-        DF1 = pd.merge(
-            catalog_df, camera_df, on="identifier", how="inner", validate="one_to_one"
-        )
-        final_df = pd.merge(
-            DF1, images_df, on="identifier", how="inner", validate="one_to_one"
-        )
+        portals_df = portals.load(PORTALS_PATH)
+        print(LINE)
+
+        wikidata_df = wikidata.load(WIKIDATA_PATH)
+        print(LINE)
+
+        dataframes = [portals_df, images_df, camera_df, wikidata_df]
+
+        final_df = catalog_df
+
+        for dataframe in dataframes:
+            final_df = pd.merge(
+                final_df, dataframe, on=["id"], how="left", validate="one_to_one",
+            )
+            print(
+                f"Total {len(dataframe)} Duplicates {len(dataframe[dataframe['id'].duplicated()])}"
+            )
+
+        print(final_df.head())
 
         # save merged dataset
         final_df.to_csv(METADATA_PATH, index=False)
@@ -42,15 +57,8 @@ def main():
         print(f"Dataset updated ({METADATA_PATH})")
         print(LINE)
 
-        # portals.load()
-        # rights.load()
-        # wikidata.load()
-        # export.render()
-
-        maps.update(METADATA_PATH)
+        export.dashboard(METADATA_PATH)
         print(LINE)
-
-        # report.render()
 
     except Exception as e:
 

@@ -5,26 +5,27 @@ import json
 from pyproj import Proj, transform
 from shapely import wkt
 
-from bokeh.plotting import figure, output_file, show
+from bokeh.plotting import figure
 from bokeh.tile_providers import get_provider, Vendors
 from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, WheelZoomTool
-from bokeh.layouts import column, layout
 
-def update(path):
+
+def update(PATH):
     try:
         # load metadata
-        df = pd.read_csv(path)
+        DF = pd.read_csv(PATH)
 
-        # create geodataframe
-        geodf = to_geodf(df)
+        # create geodataframe for points with images
+        geodf = to_geodf(DF)
 
         # transform map projection
         map_geodf = apply_transform(geodf)
 
         # update map
-        update_map(map_geodf)
+        export_map = update_map(map_geodf)
 
         print("Map updated")
+        return export_map
 
     except Exception as e:
         print(str(e))
@@ -35,7 +36,7 @@ def to_geodf(df):
     Return geodf
     """
 
-    df["geometry"].dropna(inplace=True)
+    df = df.dropna(subset=["geometry"])
 
     df["geometry"] = df["geometry"].astype(str).apply(wkt.loads)
 
@@ -54,7 +55,7 @@ def transform_proj(row):
         proj_out = Proj("epsg:3857")
         x1, y1 = row["lat"], row["lng"]
         x2, y2 = transform(proj_in, proj_out, x1, y1)
-        # print(f"({x1}, {y1}) to ({x2}, {y2})")
+        print(f"({x1}, {y1}) to ({x2}, {y2})")
         return pd.Series([x2, y2])
 
     except Exception as e:
@@ -73,37 +74,34 @@ def apply_transform(geodf):
     geodf["geometry"] = geodf["geometry"].to_crs("epsg:3857")
 
     # reduce columns and return final geodataframe
-    map_geodf = geodf[
-        [
-            "identifier",
-            "title",
-            "creator",
-            "img_sd",
-            "geometry",
-            "lat2",
-            "lng2",
-        ]
-    ]
+
+    map_geodf = geodf[["id", "title", "creator", "img_sd", "geometry", "lat2", "lng2"]]
 
     return map_geodf
 
 
 def update_map(map_geodf):
 
+    # TO-DO filter map_geodf
+
     geosource = GeoJSONDataSource(geojson=map_geodf.to_json())
 
     # Description from points
-    TOOLTIPS = """
+    TOOLTIPS1 = """
         <div style="margin: 5px; width: 300px" >
         <img
             src="@img_sd" alt="@img_sd" height=200
             style="margin: 0px;"
             border="2"
             ></img>
-            <h3 style='font-size: 10px; font-weight: bold;'>@identifier</h3>
-            <p style='font-size: 10px; font-weight: light;'>@title (@date{%Y})</p>
+            <h3 style='font-size: 10px; font-weight: bold;'>@id</h3>
             <p style='font-size: 10px; font-weight: light; font-style: italic;'>@creator</p>
         
+        </div>
+    """
+    TOOLTIPS2 = """
+        <div style="margin: 5px; width: 300px" >
+            <h3 style='font-size: 10px; font-weight: bold;'>@id</h3>
         </div>
     """
 
@@ -113,7 +111,7 @@ def update_map(map_geodf):
         y_axis_type="mercator",
         plot_width=1400,
         plot_height=900,
-        toolbar_location=None
+        toolbar_location=None,
     )
 
     tile_provider = get_provider(Vendors.CARTODBPOSITRON_RETINA)
@@ -130,29 +128,40 @@ def update_map(map_geodf):
         line_color=None,
         hover_alpha=0.7,
         hover_fill_color="grey",
-        hover_line_color="grey"
+        hover_line_color="grey",
     )
 
-    point = maps.circle(
+    point_noimg = maps.circle(
         x="lat2",
         y="lng2",
         source=geosource,
         size=7,
-        fill_color="grey",
+        fill_color="gainsboro",
         fill_alpha=0.5,
-        line_color="black"
+        line_color="gray",
+    )
+
+    point_img = maps.circle(
+        x="lat2",
+        y="lng2",
+        source=geosource,
+        size=7,
+        fill_color="orange",
+        fill_alpha=0.5,
+        line_color="dimgray",
     )
 
     h1 = HoverTool(renderers=[viewcone], tooltips=None, mode="mouse", show_arrow=False)
 
     h2 = HoverTool(
-        renderers=[point],
-        tooltips=TOOLTIPS,
-        mode="mouse",
-        show_arrow=False
+        renderers=[point_img], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False
     )
 
-    maps.add_tools(h1, h2)
+    h3 = HoverTool(
+        renderers=[point_noimg], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False
+    )
+
+    maps.add_tools(h1, h2, h3)
     maps.toolbar.active_scroll = maps.select_one(WheelZoomTool)
     maps.xaxis.major_tick_line_color = None
     maps.xaxis.minor_tick_line_color = None
@@ -161,6 +170,4 @@ def update_map(map_geodf):
     maps.xaxis.major_label_text_font_size = "0pt"
     maps.yaxis.major_label_text_font_size = "0pt"
 
-    output_file("./index.html", title="Situated Views")
-
-    show(column(maps, sizing_mode="stretch_both"))
+    return maps

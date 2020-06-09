@@ -1,68 +1,91 @@
-import aiohttp
-import asyncio
 import os
 import json
+import time
+import urllib
 
-from aiohttp import ClientSession
-
-
-PORTALS_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access/situatedviews?table=AssetRecords&quicksearchstring="
-CREATORS = [
-    "Marc Ferrez",
-    "Augusto Malta",
-]
+import pandas as pd
+import requests
 
 
-def extract_fields_from_response(response):
-    """Extract fields from API's response"""
-    item = response.get("items", [{}])[0]
-    # identifier = item.get("volumeInfo", {})
-    record_name = item.get("RecordName", None)
-    portals_id = item.get("id", None)
-    # description = volume_info.get("description", None)
-    # published_date = volume_info.get("publishedDate", None)
-    return (
-        record_name,
-        portals_id,
-    )
+API_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access/situatedviews"
+
+PREFIX = "https://acervos.ims.com.br/portals/#/detailpage/"
 
 
-async def get_items_async(creator, session):
-    """Search published items using Cumulus Portals API (asynchronously)"""
-    url = PORTALS_URL + creator
+def load(PATH):
+
     try:
-        response = await session.request(method="POST", url=url)
-        response.raise_for_status()
-        print(f"Response status ({url}): {response.status}")
-    except HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
-    except Exception as err:
-        print(f"An error ocurred: {err}")
-    response_json = await response.json()
-    return response_json
 
+        dataframe = pd.DataFrame()
 
-async def run_program(creator, session):
-    """Wrapper for running program in an asynchronous manner"""
-    try:
-        response = await get_items_async(creator, session)
-        parsed_response = extract_fields_from_response(response)
-        print(f"Response: {json.dumps(parsed_response, indent=2)}")
-    except Exception as err:
-        print(f"Exception occured: {err}")
-        pass
+        print("[ ... trying to update portals.csv ... ]")
 
+        API_STEPS = ["0", "55000"]
 
-async def do_it():
-    async with ClientSession() as session:
-        await asyncio.gather(*[run_program(creator, session) for creator in CREATORS])
+        for i in API_STEPS:
+            print(f"[ ... step {API_STEPS.index(i) + 1} of {len(API_STEPS)} ... ]")
 
+            payload = {
+                "table": "AssetRecords",
+                "quicksearchstring": "jpg",
+                "maxreturned": "55000",
+                "startindex": i,
+            }
 
-def main():
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(do_it())
-    loop.close()
+            params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
+
+            response = requests.post(API_URL, params=params)
+
+            data = response.json()
+
+            result = pd.json_normalize(data["items"])
+
+            dataframe = dataframe.append(result, ignore_index=True)
+
+        print("[ ... formating dataframe ... ]")
+
+        dataframe = dataframe.rename(
+            columns={
+                "id": "portals_id",
+                "RecordName": "id",
+                "Author.displaystring": "creator",
+                "Title": "title",
+                "Date": "date",
+            }
+        )
+
+        dataframe["id"] = dataframe["id"].str.split(".", n=1, expand=True)
+
+        dataframe["portals_url"] = PREFIX + dataframe["portals_id"].astype(str)
+
+        dataframe = dataframe[
+            [
+                "id",
+                # "title", "creator", "date",
+                "portals_id",
+                "portals_url",
+            ]
+        ]
+
+        dataframe = dataframe.drop_duplicates(subset="id")
+
+        dataframe.to_csv(PATH, index=False)
+
+        print("[ ... updated portals.csv  ... ]")
+
+        return dataframe
+
+    except Exception as e:
+
+        print("ERRO", str(e))
+
+        dataframe = pd.read_csv(PATH)
+
+        print("Portals loaded from .csv \n")
+        print(dataframe.head())
+
+        return dataframe
 
 
 if __name__ == "__main__":
-    main()
+    load()
