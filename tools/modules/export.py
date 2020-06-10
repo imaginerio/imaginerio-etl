@@ -1,7 +1,7 @@
 from bokeh.plotting import output_file, show
-from bokeh.layouts import column
+from bokeh.layouts import layout
 
-from modules import report, maps
+import report, maps
 
 
 def dashboard(METADATA_PATH):
@@ -13,14 +13,14 @@ def dashboard(METADATA_PATH):
 
         # load dashboard
         hbar = report.update_hbar(METADATA_PATH)
-        # pie = report.update_pie(METADATA_PATH)
+        pie = report.update_pie()
 
         # load map
         map_plot = maps.update(METADATA_PATH)
 
         # export
         output_file("./index.html", title="Situated Views")
-        show(column(hbar, map_plot), sizing_mode="stretch_both")
+        show(layout([[hbar,pie],[map_plot]], sizing_mode="stretch_both"))
 
         print("Dashboard updated")
 
@@ -30,3 +30,5 @@ def dashboard(METADATA_PATH):
 
 def omeka_csv():
     pass
+
+dashboard('./metadata/metadata.csv')

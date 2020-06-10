@@ -1,5 +1,5 @@
 import pandas as pd
-from bokeh.plotting import figure, output_file, show
+from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, HoverTool, WheelZoomTool
 
 
@@ -51,7 +51,7 @@ def update_hbar(METADATA_PATH):
         TOOLTIPS = [("OK", "@x1"), ("Not OK", "@x2")]
 
         # base dashboard
-        plot = figure(
+        plot_hbar = figure(
             y_range=["Omeka-S", "Wikimedia", "Cumulus", "Images", "KML"],
             x_range=(0, 5500),
             plot_height=300,
@@ -60,12 +60,12 @@ def update_hbar(METADATA_PATH):
             tooltips=TOOLTIPS,
         )
 
-        plot.ygrid.grid_line_color = None
-        plot.toolbar.active_drag = None
-        plot.background_fill_color = "ghostwhite"
+        plot_hbar.ygrid.grid_line_color = None
+        plot_hbar.toolbar.active_drag = None
+        plot_hbar.background_fill_color = "ghostwhite"
 
         # construct bars with two differents datas
-        bars1 = plot.hbar_stack(
+        bars1 = plot_hbar.hbar_stack(
             ["x1", "x2"],
             y="y",
             height=0.8,
@@ -74,19 +74,38 @@ def update_hbar(METADATA_PATH):
         )
 
         # data goal line
-        line = plot.line(
+        line = plot_hbar.line(
             x=[4000, 4000], y=[0, 5], line_width=3, line_dash="dashed", color="grey",
         )
 
-        return plot
+        return plot_hbar
 
     except Exception as e:
 
         print(str(e))
 
 
-def update_pie(METADATA_PATH):
+def update_pie():
     """ 
     Render pie chart report
     """
-    pass
+    plot_pie = figure(
+        plot_height=100,
+        toolbar_location=None
+        )
+
+    plot_pie.wedge(
+        x=0, y=1,radius=0.5,
+        start_angle=0,
+        end_angle=360,
+        start_angle_units='deg',
+        end_angle_units='deg',
+        line_color=None,
+        fill_color="lightgrey",
+        )
+
+    plot_pie.axis.axis_label=None
+    plot_pie.axis.visible=False
+    plot_pie.grid.grid_line_color = None
+
+    return plot_pie
