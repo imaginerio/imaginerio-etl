@@ -5,6 +5,7 @@ import urllib
 
 import pandas as pd
 import requests
+from tqdm import tqdm
 
 
 API_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access/situatedviews"
@@ -12,18 +13,15 @@ API_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access
 PREFIX = "https://acervos.ims.com.br/portals/#/detailpage/"
 
 
-def load(PATH):
+def load(PATH, PBAR):
 
     try:
 
         dataframe = pd.DataFrame()
 
-        print("[ ... trying to update portals.csv ... ]")
-
         API_STEPS = ["0", "55000"]
 
         for i in API_STEPS:
-            print(f"[ ... step {API_STEPS.index(i) + 1} of {len(API_STEPS)} ... ]")
 
             payload = {
                 "table": "AssetRecords",
@@ -42,7 +40,7 @@ def load(PATH):
 
             dataframe = dataframe.append(result, ignore_index=True)
 
-        print("[ ... formating dataframe ... ]")
+            PBAR.update(5)
 
         dataframe = dataframe.rename(
             columns={
@@ -71,7 +69,7 @@ def load(PATH):
 
         dataframe.to_csv(PATH, index=False)
 
-        print("[ ... updated portals.csv  ... ]")
+        PBAR.update(5)
 
         return dataframe
 

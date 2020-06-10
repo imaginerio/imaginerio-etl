@@ -4,13 +4,14 @@ import json
 
 from pyproj import Proj, transform
 from shapely import wkt
+from tqdm import tqdm
 
 from bokeh.plotting import figure
 from bokeh.tile_providers import get_provider, Vendors
 from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, WheelZoomTool
 
 
-def update(PATH):
+def update(PATH, PBAR):
     try:
         # load metadata
         DF = pd.read_csv(PATH)
@@ -19,12 +20,12 @@ def update(PATH):
         geodf = to_geodf(DF)
 
         # transform map projection
+        PBAR.set_description("Transforming projections")
         map_geodf = apply_transform(geodf)
 
         # update map
         export_map = update_map(map_geodf)
 
-        print("Map updated")
         return export_map
 
     except Exception as e:
@@ -55,7 +56,7 @@ def transform_proj(row):
         proj_out = Proj("epsg:3857")
         x1, y1 = row["lat"], row["lng"]
         x2, y2 = transform(proj_in, proj_out, x1, y1)
-        print(f"({x1}, {y1}) to ({x2}, {y2})")
+        # print(f"({x1}, {y1}) to ({x2}, {y2})")
         return pd.Series([x2, y2])
 
     except Exception as e:
@@ -67,9 +68,9 @@ def apply_transform(geodf):
     Convert WGS84(epsg:4326) to WEBMERCATOR(epsg:3857) coordinates
     """
 
-    print("Transforming projections...")
+    # print("Transforming projections...")
     geodf[["lat2", "lng2"]] = geodf.apply(transform_proj, axis=1)
-    print("Done.")
+    # print("Done.")
 
     geodf["geometry"] = geodf["geometry"].to_crs("epsg:3857")
 
