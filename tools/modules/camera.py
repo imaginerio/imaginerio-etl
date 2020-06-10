@@ -5,12 +5,10 @@ import geopandas as gpd
 def load(path):
     try:
         cameras = load_camera(path)
+
         cones = load_cones(path)
 
         df = pd.merge(cameras, cones, on=["id"], how="left", validate="one_to_one")
-
-        print("Camera loaded \n")
-        print(df.head())
 
         return df
 
