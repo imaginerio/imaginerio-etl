@@ -75,16 +75,21 @@ def apply_transform(geodf):
 
     # reduce columns and return final geodataframe
 
-    map_geodf = geodf[["id", "title", "creator", "img_sd", "geometry", "lat2", "lng2"]]
+    map_geodf = geodf[["id", "title", "creator", "img_hd", "geometry", "lat2", "lng2"]]
 
     return map_geodf
 
 
 def update_map(map_geodf):
 
-    # TO-DO filter map_geodf
+    # filter map_geodf
+    map_geodf_img = map_geodf.copy()
+    map_geodf_img = map_geodf_img.dropna(subset=["img_hd"])
+    map_geodf_noimg = map_geodf.copy()
+    map_geodf_noimg = map_geodf_noimg[map_geodf_noimg["img_hd"].isna()]
 
-    geosource = GeoJSONDataSource(geojson=map_geodf.to_json())
+    geosource_img = GeoJSONDataSource(geojson=map_geodf_img.to_json())
+    geosource_noimg = GeoJSONDataSource(geojson=map_geodf_noimg.to_json())
 
     # Description from points
     TOOLTIPS1 = """
@@ -122,7 +127,7 @@ def update_map(map_geodf):
     viewcone = maps.patches(
         xs="xs",
         ys="ys",
-        source=geosource,
+        source=geosource_img,
         fill_color="white",
         fill_alpha=0,
         line_color=None,
@@ -130,31 +135,33 @@ def update_map(map_geodf):
         hover_fill_color="grey",
         hover_line_color="grey",
     )
-
+    
     point_noimg = maps.circle(
         x="lat2",
         y="lng2",
-        source=geosource,
+        source=geosource_noimg,
         size=7,
         fill_color="gainsboro",
         fill_alpha=0.5,
-        line_color="gray",
+        line_color="dimgray",
+        legend_label="No HD Images"
     )
 
     point_img = maps.circle(
         x="lat2",
         y="lng2",
-        source=geosource,
+        source=geosource_img,
         size=7,
         fill_color="orange",
         fill_alpha=0.5,
         line_color="dimgray",
+        legend_label="HD Images"
     )
 
     h1 = HoverTool(renderers=[viewcone], tooltips=None, mode="mouse", show_arrow=False)
 
     h2 = HoverTool(
-        renderers=[point_img], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False
+        renderers=[point_img], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False
     )
 
     h3 = HoverTool(
