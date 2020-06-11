@@ -1,7 +1,7 @@
 from bokeh.plotting import output_file, show
 from bokeh.layouts import layout
 
-import report, maps
+from modules import report, maps
 
 
 def dashboard(METADATA_PATH):
@@ -30,5 +30,3 @@ def dashboard(METADATA_PATH):
 
 def omeka_csv():
     pass
-
-dashboard('./metadata/metadata.csv')
