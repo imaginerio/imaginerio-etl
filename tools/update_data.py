@@ -36,8 +36,8 @@ def main():
             pbar.update(10)
 
             pbar.set_description("Checking Cumulus Portals")
-            portals_df = portals.load(PORTALS_PATH, PBAR=pbar)
-            # pbar.update(15)
+            portals_df = portals.load(PORTALS_PATH)
+            pbar.update(15)
 
             pbar.set_description("Checking Wikidata")
             wikidata_df = wikidata.load(WIKIDATA_PATH)

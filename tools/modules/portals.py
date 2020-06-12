@@ -5,7 +5,6 @@ import urllib
 
 import pandas as pd
 import requests
-from tqdm import tqdm
 
 
 API_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access/situatedviews"
@@ -13,7 +12,7 @@ API_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access
 PREFIX = "https://acervos.ims.com.br/portals/#/detailpage/"
 
 
-def load(PATH, PBAR):
+def load(PATH):
 
     try:
 
@@ -39,8 +38,6 @@ def load(PATH, PBAR):
             result = pd.json_normalize(data["items"])
 
             dataframe = dataframe.append(result, ignore_index=True)
-
-            PBAR.update(5)
 
         dataframe = dataframe.rename(
             columns={
@@ -69,8 +66,6 @@ def load(PATH, PBAR):
 
         dataframe.to_csv(PATH, index=False)
 
-        PBAR.update(5)
-
         return dataframe
 
     except Exception as e:
@@ -80,7 +75,6 @@ def load(PATH, PBAR):
         dataframe = pd.read_csv(PATH)
 
         print("Portals loaded from .csv \n")
-        print(dataframe.head())
 
         return dataframe
 
