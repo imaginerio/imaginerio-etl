@@ -7,13 +7,14 @@ from shapely import wkt
 
 from bokeh.plotting import figure
 from bokeh.tile_providers import get_provider, Vendors
-from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, WheelZoomTool
+from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, WheelZoomTool, Legend
 
 
 def update(PATH):
     try:
         # load metadata
         DF = pd.read_csv(PATH)
+        DF = DF.dropna(subset=["geometry"])
 
         # create geodataframe for points with images
         geodf = to_geodf(DF)
@@ -35,8 +36,6 @@ def to_geodf(df):
     """
     Return geodf
     """
-
-    df = df.dropna(subset=["geometry"])
 
     df["geometry"] = df["geometry"].astype(str).apply(wkt.loads)
 
@@ -161,8 +160,27 @@ def update_map(map_geodf):
     h2 = HoverTool(renderers=[point_img], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False)
     h3 = HoverTool(renderers=[point_noimg], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False)
 
+    # create a legend
+    dic = {"HD Images":len(map_geodf_img),
+           "No HD Images":len(map_geodf_noimg)}
+
+    datas = pd.Series(dic).reset_index(name="value").rename(columns={"index":"data"})
+
+    sep = []
+
+    for i in range(len(datas.index)):
+        sep.append(': ')
+
+    datas['legend'] = datas['data'] + sep + datas['value'].astype(str)
+
+    legend = Legend(
+        items=[(datas.iloc[0,2], [point_img]), (datas.iloc[1,2], [point_noimg])],
+        location="top_right",
+        orientation="vertical")
+
 
     maps.add_tools(h1, h2, h3)
+    maps.add_layout(legend)
     maps.toolbar.active_scroll = maps.select_one(WheelZoomTool)
     maps.xaxis.major_tick_line_color = None
     maps.xaxis.minor_tick_line_color = None
