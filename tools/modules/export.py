@@ -12,15 +12,14 @@ def dashboard(METADATA_PATH):
     try:
 
         # load dashboard
-        hbar = report.update_hbar(METADATA_PATH)
-        pie = report.update_pie()
+        dashboard_plot = report.update(METADATA_PATH)
 
         # load map
         map_plot = maps.update(METADATA_PATH)
 
         # export
         output_file("./index.html", title="Situated Views")
-        show(layout([[hbar,pie],[map_plot]], sizing_mode="stretch_both"))
+        show(layout([[dashboard_plot["hbar"],dashboard_plot["pie"]],[map_plot]], sizing_mode="stretch_both"))
 
         print("Dashboard updated")
 

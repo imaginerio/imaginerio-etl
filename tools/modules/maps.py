@@ -55,7 +55,7 @@ def transform_proj(row):
         proj_out = Proj("epsg:3857")
         x1, y1 = row["lat"], row["lng"]
         x2, y2 = transform(proj_in, proj_out, x1, y1)
-        print(f"({x1}, {y1}) to ({x2}, {y2})")
+        #print(f"({x1}, {y1}) to ({x2}, {y2})")
         return pd.Series([x2, y2])
 
     except Exception as e:
@@ -83,14 +83,13 @@ def apply_transform(geodf):
 def update_map(map_geodf):
 
     # filter map_geodf
-    map_geodf_img = map_geodf.copy()
-    map_geodf_img = map_geodf_img.dropna(subset=["img_hd"])
-    map_geodf_noimg = map_geodf.copy()
-    map_geodf_noimg = map_geodf_noimg[map_geodf_noimg["img_hd"].isna()]
+    map_geodf_img = map_geodf.copy().dropna(subset=["img_hd"])
+    map_geodf_noimg = map_geodf.copy()[map_geodf["img_hd"].isna()]
 
+    # create a geodatasource
     geosource_img = GeoJSONDataSource(geojson=map_geodf_img.to_json())
     geosource_noimg = GeoJSONDataSource(geojson=map_geodf_noimg.to_json())
-
+    
     # Description from points
     TOOLTIPS1 = """
         <div style="margin: 5px; width: 300px" >
@@ -123,7 +122,6 @@ def update_map(map_geodf):
     maps.add_tile(tile_provider)
 
     # construct points and wedges from hover
-
     viewcone = maps.patches(
         xs="xs",
         ys="ys",
@@ -158,15 +156,11 @@ def update_map(map_geodf):
         legend_label="HD Images"
     )
 
+    # create a hovertool
     h1 = HoverTool(renderers=[viewcone], tooltips=None, mode="mouse", show_arrow=False)
+    h2 = HoverTool(renderers=[point_img], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False)
+    h3 = HoverTool(renderers=[point_noimg], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False)
 
-    h2 = HoverTool(
-        renderers=[point_img], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False
-    )
-
-    h3 = HoverTool(
-        renderers=[point_noimg], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False
-    )
 
     maps.add_tools(h1, h2, h3)
     maps.toolbar.active_scroll = maps.select_one(WheelZoomTool)
