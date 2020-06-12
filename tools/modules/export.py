@@ -20,7 +20,7 @@ def dashboard(METADATA_PATH, PBAR):
         PBAR.update(5)
 
         PBAR.set_description("Updating Map")
-        map_plot = maps.update(METADATA_PATH, PBAR)
+        map_plot = maps.update(METADATA_PATH)
         PBAR.update(25)
 
         # export

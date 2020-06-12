@@ -4,14 +4,13 @@ import json
 
 from pyproj import Proj, transform
 from shapely import wkt
-from tqdm import tqdm
 
 from bokeh.plotting import figure
 from bokeh.tile_providers import get_provider, Vendors
 from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, WheelZoomTool
 
 
-def update(PATH, PBAR):
+def update(PATH):
     try:
         # load metadata
         DF = pd.read_csv(PATH)
@@ -20,7 +19,6 @@ def update(PATH, PBAR):
         geodf = to_geodf(DF)
 
         # transform map projection
-        PBAR.set_description("Transforming projections")
         map_geodf = apply_transform(geodf)
 
         # update map
