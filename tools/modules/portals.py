@@ -18,12 +18,9 @@ def load(PATH):
 
         dataframe = pd.DataFrame()
 
-        print("[ ... trying to update portals.csv ... ]")
-
         API_STEPS = ["0", "55000"]
 
         for i in API_STEPS:
-            print(f"[ ... step {API_STEPS.index(i) + 1} of {len(API_STEPS)} ... ]")
 
             payload = {
                 "table": "AssetRecords",
@@ -41,8 +38,6 @@ def load(PATH):
             result = pd.json_normalize(data["items"])
 
             dataframe = dataframe.append(result, ignore_index=True)
-
-        print("[ ... formating dataframe ... ]")
 
         dataframe = dataframe.rename(
             columns={
@@ -71,8 +66,6 @@ def load(PATH):
 
         dataframe.to_csv(PATH, index=False)
 
-        print("[ ... updated portals.csv  ... ]")
-
         return dataframe
 
     except Exception as e:
@@ -82,7 +75,6 @@ def load(PATH):
         dataframe = pd.read_csv(PATH)
 
         print("Portals loaded from .csv \n")
-        print(dataframe.head())
 
         return dataframe
 
