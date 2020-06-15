@@ -6,7 +6,7 @@ SOURCE_PATH = input("Source folder:")
 GITHUB_PATH = (
     "https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/"
 )
-CLOUD_PATH = "/cloud/"
+CLOUD_PATH = "https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/"
 MASTER = "./images/master/"
 JPEG_HD = "./images/jpeg-hd/"
 JPEG_SD = "./images/jpeg-sd/"
