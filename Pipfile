@@ -15,6 +15,7 @@ bokeh = "*"
 xlrd = "*"
 ffmpeg-python = "*"
 requests = "*"
+tqdm = "*"
 
 [requires]
 python_version = "3.8"

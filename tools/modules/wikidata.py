@@ -60,6 +60,4 @@ def load(path, query=None):
 
     wikidata_df.to_csv(path, index=False)
 
-    print("Wikidata Done")
-
     return wikidata_df

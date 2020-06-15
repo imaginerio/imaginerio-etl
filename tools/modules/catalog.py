@@ -103,9 +103,6 @@ def load(path):
         catalog_df["image_width"] = dimensions_df["width"]
         catalog_df["image_height"] = dimensions_df["height"]
 
-        print("Catalog loaded \n")
-        print(catalog_df.head())
-
         return catalog_df
 
     except Exception as e:
