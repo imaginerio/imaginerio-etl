@@ -73,7 +73,7 @@ def apply_transform(geodf):
 
     # reduce columns and return final geodataframe
 
-    map_geodf = geodf[["id", "title", "creator", "img_hd", "geometry", "lat2", "lng2"]]
+    map_geodf = geodf[["id", "title", "creator", "img_hd", "img_sd", "geometry", "lat2", "lng2"]]
 
     return map_geodf
 
