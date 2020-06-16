@@ -63,7 +63,6 @@ def update(PATH):
         # export figures
         export_figures = {"hbar":plot_hbar,"pie":plot_pie}
 
-        print("Graphs updated")
         return export_figures
 
     except Exception as e:

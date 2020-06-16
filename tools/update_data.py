@@ -55,7 +55,7 @@ def main():
 
             pbar.set_description("Updating Dashboard")
             export.dashboard(METADATA_PATH, PBAR=pbar)
-            pbar.update(25)
+            pbar.update(25) 
 
             pbar.set_description("Done")
             pbar.close()
