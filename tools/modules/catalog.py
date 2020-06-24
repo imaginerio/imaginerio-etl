@@ -7,9 +7,9 @@ from pprint import pprint
 
 
 
-def xml_to_df(cumulus_xml):
+def xml_to_df(path):
 
-    with open(xml) as f:
+    with open(path) as f:
         tree = ElementTree.parse(f)
     root = tree.getroot()
 
@@ -30,15 +30,12 @@ def xml_to_df(cumulus_xml):
     for thing in root[1]:
         added = set()
         for field_value in thing.findall('cumulus:FieldValue', ns):
-            #pprint(field_value.text)
             try:
                 if len(field_value) == 0:
                     value = field_value.text.strip()
-                    #print(value)
                 else:
                     value = field_value[0].text.strip().split(':')
                     value = str(value).strip("['']")
-                    #print(value)
                     
                 table[uids[field_value.attrib['uid']]].append(value)
                 added.add(field_value.attrib['uid'])
@@ -57,7 +54,6 @@ def xml_to_df(cumulus_xml):
 
     return cumulus_df
     
-    
 
 
 def find_dates(date):
@@ -71,15 +67,10 @@ def find_dates(date):
 
 def load(path):
     try:
-        catalog_df = pd.read_excel(
-            path,
-            dtype={
-                "DATA": str,
-                "DATA LIMITE INFERIOR": str,
-                "DATA LIMITE SUPERIOR": str,
-            },
-        )
-
+        catalog_df = xml_to_df(path)
+        catalog_df = catalog_df.astype(
+            {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str})
+        
         # rename columns
         catalog_df = catalog_df.rename(
             columns={
