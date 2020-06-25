@@ -24,8 +24,6 @@ def xml_to_df(path):
     for field in uids.values():
         table[field] = []
 
-    print("Building the pandas DataFrame")
-
     # Fill the records
     for thing in root[1]:
         added = set()
