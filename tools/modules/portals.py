@@ -9,7 +9,7 @@ import requests
 
 API_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access/situatedviews"
 
-PREFIX = "https://acervos.ims.com.br/portals/#/detailpage/"
+PREFIX = "http://acervos.ims.com.br/portals/#/detailpage/"
 
 
 def load(PATH):
