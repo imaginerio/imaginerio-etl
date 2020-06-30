@@ -89,6 +89,7 @@ def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
     to_remove = []
     items = []
 
+    # Find ids that contain other ids (secondary versions) and group them together
     for item in files:
         i = 0
         matched = []
@@ -102,12 +103,14 @@ def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
         else:
             groups.append(item)
 
+    # Remove secondary versions from main list
     for group in groups:
         if type(group) == list:
             to_remove += group[1:]
 
     groups = [item for item in groups if item not in to_remove]
 
+    # Create list of dicts with all files available for each item
     for image in groups:
         if type(image) == list:
             item = {

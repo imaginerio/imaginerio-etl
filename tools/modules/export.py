@@ -1,3 +1,5 @@
+from pathlib import Path
+from datetime import datetime
 import shutil
 
 import pandas as pd
@@ -37,11 +39,29 @@ def dashboard(METADATA_PATH, PBAR):
 #dashboard("./metadata/metadata.csv")
 
 
-def omeka_csv():
-    pass
+def omeka_csv(METADATA_PATH):
+
+    # read final dataframe
+    omeka_df = pd.read_csv(METADATA_PATH)
+
+    # datetime to year strings
+    omeka_df['date'] = omeka_df['date'].dt.strftime('%Y')
+    omeka_df['start_date'] = omeka_df['start_date'].dt.strftime('%Y')
+    omeka_df['end_date'] = omeka_df['end_date'].dt.strftime('%Y')
+
+    # join years into interval
+    omeka_df['interval'] = omeka_df['start_date'] + '/' + omeka_df['end_date']
+    omeka_df = omeka_df.drop(columns=['start_date', 'end_date'])
+
+    # save csv
+    omeka_df.to_csv('omeka-import.csv', index=False)
+
+    # print dataframe
+    print(omeka_df.head())
 
 
-def commons_csv(METADATA_PATH, copy_to):
+def img_to_commons(METADATA_PATH, IMAGES_PATH):
+    # Get unplubished geolocated images
     final_df = pd.read_csv(METADATA_PATH)
     commons_df = pd.DataFrame(
         final_df[
@@ -51,9 +71,12 @@ def commons_csv(METADATA_PATH, copy_to):
         ]
     )
 
+    # Create folder with images to be sent
+    today = datetime.now()
+
+    new_folder = IMAGES_PATH + "commons_" + today.strftime("%Y%m%d")
+
+    Path(new_folder).mkdir(parents=True, exist_ok=True)
+
     for id in commons_df["id"]:
-        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", copy_to)
-
-
-#commons_csv("./metadata/metadata.csv", copy_to)
-
+        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
