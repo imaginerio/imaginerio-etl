@@ -1,6 +1,57 @@
 # ims catalog metadata from cumulus
 import pandas as pd
 import numpy as np
+from xml.etree import ElementTree
+from pprint import pprint
+
+
+
+
+def xml_to_df(path):
+
+    with open(path) as f:
+        tree = ElementTree.parse(f)
+    root = tree.getroot()
+
+    ns = {'cumulus': 'http://www.canto.com/ns/Export/1.0'}
+    
+    # Find the uids
+    uids = {}
+    for thing in root[0][0]:
+        uids[thing.attrib['uid']] = thing[0].text
+
+    table = {}
+    for field in uids.values():
+        table[field] = []
+
+    # Fill the records
+    for thing in root[1]:
+        added = set()
+        for field_value in thing.findall('cumulus:FieldValue', ns):
+            try:
+                if len(field_value) == 0:
+                    value = field_value.text.strip()
+                else:
+                    value = field_value[0].text.strip().split(':')
+                    value = str(value).strip("['']")
+                    
+                table[uids[field_value.attrib['uid']]].append(value)
+                added.add(field_value.attrib['uid'])
+            except KeyError:
+                continue
+        for missing in uids.keys() - added:
+            try:
+                table[uids[missing]].append(None)
+            except KeyError:
+                continue
+
+    # Create the actual DataFrame
+    cumulus_df = pd.DataFrame(table)
+
+    cumulus_df.to_csv("./metadata/catalog/cumulus.csv")
+
+    return cumulus_df
+    
 
 
 def find_dates(date):
@@ -14,15 +65,10 @@ def find_dates(date):
 
 def load(path):
     try:
-        catalog_df = pd.read_excel(
-            path,
-            dtype={
-                "DATA": str,
-                "DATA LIMITE INFERIOR": str,
-                "DATA LIMITE SUPERIOR": str,
-            },
-        )
-
+        catalog_df = xml_to_df(path)
+        catalog_df = catalog_df.astype(
+            {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str})
+        
         # rename columns
         catalog_df = catalog_df.rename(
             columns={

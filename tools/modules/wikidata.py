@@ -41,6 +41,7 @@ def load(path, query=None):
 
     except Exception as e:
         if os.path.isfile(path):
+            print(e)
             print("Couldn't update. Returning existing file")
             return pd.read_csv(path)
         print(str(e))

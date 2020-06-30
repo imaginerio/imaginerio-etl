@@ -12,7 +12,7 @@ def main():
     """
 
     CAMERA_PATH = "./metadata/camera/"  # reads camera.csv and camera.geojson
-    CUMULUS_PATH = "./metadata/catalog/" + "cumulus.xlsx"
+    CUMULUS_PATH = "./metadata/catalog/" + "cumulus.xml"
     PORTALS_PATH = "./metadata/catalog/" + "portals.csv"
     IMAGES_PATH = "./images/images.csv"
     WIKIDATA_PATH = "./metadata/wikidata/" + "wikidata.csv"
