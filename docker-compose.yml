@@ -3,3 +3,11 @@ version: "3"
 services:
   app:
     build: .
+    volumes:
+      - $PWD/src/:/home/user/
+    tty: true
+    environment:
+      ENV_EXAMPLE: blabla
+
+volumes:
+  app:
