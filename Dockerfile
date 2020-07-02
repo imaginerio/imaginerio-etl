@@ -1,11 +1,8 @@
 FROM python:3.8-slim-buster
 
-RUN pip install pipenv
+COPY requirements.txt /tmp/
 
-COPY Pipfile* /tmp/
-
-RUN cd /tmp/ && pipenv lock --requirements > requirements.txt \
-    && pip install -r /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 RUN useradd --create-home user
 
