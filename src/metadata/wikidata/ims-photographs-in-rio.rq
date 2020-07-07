@@ -1,0 +1,27 @@
+#Photographs within 200km of Rio de Janeiro
+#defaultView:Map
+
+SELECT ?item ?itemLabel ?location ?depicts ?depictsLabel ?creator ?creatorLabel ?image
+WHERE
+{
+  # Rio coordinates
+  wd:Q8678 wdt:P625 ?rioLoc .
+  SERVICE wikibase:around {
+    ?item wdt:P625 ?location .
+    bd:serviceParam wikibase:center ?rioLoc .
+    bd:serviceParam wikibase:radius "200" .
+  } .
+  # Is an photograph
+  FILTER EXISTS { ?item wdt:P31/wdt:P279* wd:Q125191 } .
+  
+  # In Instituto Moreira Salles collection
+  FILTER EXISTS { ?item wdt:P195 wd:Q6041378 } .
+  
+  OPTIONAL { ?item wdt:P180 ?depicts  }
+  # OPTIONAL { ?item wdt:P170 ?creator }
+  # OPTIONAL { ?item wdt:P18 ?image  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" .
+  } 
+}
