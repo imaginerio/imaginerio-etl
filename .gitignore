@@ -163,4 +163,7 @@ Pipfile.lock
 package-lock.json
 node_modules
 
+./src/images/jpeg-hd
+./src/images/master
+
 # End of https://www.gitignore.io/api/macos,python

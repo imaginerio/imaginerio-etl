@@ -2,7 +2,7 @@ import os, shutil, ffmpeg
 import pandas as pd
 
 
-SOURCE_PATH = input("Source folder:")
+SOURCE_PATH = os.environ["IMAGES_SOURCE"]
 GITHUB_PATH = (
     "https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/"
 )
@@ -10,6 +10,10 @@ CLOUD_PATH = "https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/"
 MASTER = "./images/master/"
 JPEG_HD = "./images/jpeg-hd/"
 JPEG_SD = "./images/jpeg-sd/"
+CAMERA = "./metadata/camera/camera.csv"
+
+camera = pd.read_excel(CAMERA)
+geolocated = list(camera["name"])
 
 
 class Image:
@@ -64,15 +68,16 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
     ]
 
     for image in files:
-        if not os.path.exists(os.path.join(master, image.tif)):
-            shutil.copy2(image.path, master)
-        else:
-            print(f"{image.tif} already in folder")
+        if image.id in geolocated:
+            if not os.path.exists(os.path.join(master, image.tif)):
+                shutil.copy2(image.path, master)
+            else:
+                print(f"{image.tif} already in folder")
 
-        save_jpeg(os.path.join(master, image.tif), hd_folder)
-        save_jpeg(os.path.join(master, image.tif), sd_folder, size=1000)
+            save_jpeg(os.path.join(master, image.tif), hd_folder)
+            save_jpeg(os.path.join(master, image.tif), sd_folder, size=1000)
 
-    # files = [Image(os.path.join(master, item) for item in os.listdir(master))]
+        # files = [Image(os.path.join(master, item) for item in os.listdir(master))]
 
     return files
 
