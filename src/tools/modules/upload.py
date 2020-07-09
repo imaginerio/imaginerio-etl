@@ -1,6 +1,7 @@
 import os
 import boto3
 
+
 session = boto3.session.Session()
 client = session.client(
     "s3",
@@ -10,12 +11,14 @@ client = session.client(
     aws_secret_access_key=os.environ["SECRET_KEY"],
 )
 
-
-for filename in os.listdir(target):
+target = os.environ["TO_UPLOAD"]
+contents = os.listdir(target)
+total = len(contents)
+for index, filename in enumerate(contents):
     client.upload_file(
         f"{os.path.join(target, filename)}",
         "rioiconography",
         f"situatedviews/{filename}",
         ExtraArgs={"ACL": "public-read", "ContentType": "image/jpeg"},
     )
-
+    print(f"{filename} uploaded successfully ({index+1}/{total})")
