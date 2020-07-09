@@ -2,7 +2,7 @@ import os, shutil, ffmpeg
 import pandas as pd
 
 
-SOURCE_PATH = os.environ["IMAGES_SOURCE"]
+SOURCE_PATH = input("Source folder:")
 GITHUB_PATH = (
     "https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/"
 )
@@ -12,7 +12,7 @@ JPEG_HD = "./images/jpeg-hd/"
 JPEG_SD = "./images/jpeg-sd/"
 CAMERA = "./metadata/camera/camera.csv"
 
-camera = pd.read_excel(CAMERA)
+camera = pd.read_csv(CAMERA)
 geolocated = list(camera["name"])
 
 
