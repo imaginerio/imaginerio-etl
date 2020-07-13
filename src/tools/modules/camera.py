@@ -1,12 +1,13 @@
+import os
 import pandas as pd
 import geopandas as gpd
 
 
 def load(path):
     try:
-        cameras = load_camera(path)
+        cameras = load_camera(os.path.join(path, "camera.csv"))
 
-        cones = load_cones(path)
+        cones = load_cones(os.path.join(path, "camera.geojson"))
 
         df = pd.merge(cameras, cones, on=["id"], how="left", validate="one_to_one")
 
@@ -22,7 +23,7 @@ def load_camera(path):
     """
 
     # read csv
-    camera = pd.read_csv(path + "camera.csv")
+    camera = pd.read_csv(path)
 
     # rename columns
     camera = camera.rename(columns={"name": "id", "long": "lng",})
@@ -39,7 +40,7 @@ def load_cones(path):
     """
 
     # read geojson
-    viewcone = gpd.read_file(path + "camera.geojson")
+    viewcone = gpd.read_file(path)
 
     # rename columns
     viewcone = viewcone.rename(columns={"name": "id",})

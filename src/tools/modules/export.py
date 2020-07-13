@@ -1,6 +1,6 @@
 from pathlib import Path
 from datetime import datetime
-import shutil
+import os, shutil
 
 import pandas as pd
 from bokeh.plotting import output_file, show
@@ -30,7 +30,7 @@ def dashboard(METADATA_PATH, PBAR):
         PBAR.update(25)
 
         # export
-        output_file("./index.html", title="Situated Views")
+        output_file(os.environ['INDEX_PATH'], title="Situated Views")
         show(
             layout(
                 [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot]],
