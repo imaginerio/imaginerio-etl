@@ -1,15 +1,16 @@
-import requests
+import os, requests
 
-def request_omeka ():
+def list_items(endpoint):
     results = []
 
-    response = requests.get(os.environ['OMEKA_API_URL'], params={'page': page, 'per_page': 200, 'sort_by': 'id', 'sort_order': 'asc'} )
+    response = requests.get(endpoint, verify= False)
     headers = response.headers
-    last_page = int(headers['Link'].split(',')[2].split(";")[0].split('=')[-1].strip('>'))
+    print(response.headers['Link'])
+    last_page = int(headers['Link'].split('&page')[-1][:3].strip("=>"))
+    print(last_page)
 
-
-    for page in range(2, last_page+1):
-        response = requests.get(os.environ['OMEKA_API_URL'], params={'page': page, 'per_page': 200, 'sort_by': 'id', 'sort_order': 'asc'}).json()
+    for page in range(1, last_page+1):
+        response = requests.get(endpoint,verify=False, params={'page': page}).json()
         for item in response:
             code = item['dcterms:identifier'][0]['@value']
             results.append(code)
