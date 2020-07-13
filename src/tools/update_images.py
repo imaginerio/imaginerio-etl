@@ -3,16 +3,8 @@ import pandas as pd
 
 
 SOURCE_PATH = input("Source folder:")
-GITHUB_PATH = (
-    "https://raw.githubusercontent.com/imaginerio/situated-views/master/images/jpeg-sd/"
-)
-CLOUD_PATH = "https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/"
-MASTER = "./images/master/"
-JPEG_HD = "./images/jpeg-hd/"
-JPEG_SD = "./images/jpeg-sd/"
-CAMERA = "./metadata/camera/camera.csv"
 
-camera = pd.read_csv(CAMERA)
+camera = pd.read_csv(os.path.join(os.environ['CAMERA_PATH'], "camera.csv")
 geolocated = list(camera["name"])
 
 
@@ -53,7 +45,7 @@ def save_jpeg(image, output_folder, size=None, overwrite=False):
 # ffmpeg converts files to .jpg in images/jpeg
 
 
-def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG_SD):
+def file_handler(source_folder):
     """
     Returns list of original files in source folder according to internal requirements, 
     copies them to master and saves jpegs.
@@ -69,15 +61,13 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
 
     for image in files:
         if image.id in geolocated:
-            if not os.path.exists(os.path.join(master, image.tif)):
-                shutil.copy2(image.path, master)
+            if not os.path.exists(os.path.join(os.environ['MASTER'], image.tif)):
+                shutil.copy2(image.path, os.environ['MASTER'])
             else:
                 print(f"{image.tif} already in folder")
 
-            save_jpeg(os.path.join(master, image.tif), hd_folder)
-            save_jpeg(os.path.join(master, image.tif), sd_folder, size=1000)
-
-        # files = [Image(os.path.join(master, item) for item in os.listdir(master))]
+            save_jpeg(os.path.join(os.environ['MASTER'], image.tif), os.environ['JPEG_HD'])
+            save_jpeg(os.path.join(os.environ['MASTER'], image.tif), os.environ['JPEG_SD'], size=1000)
 
     return files
 
@@ -86,7 +76,7 @@ def file_handler(source_folder, master=MASTER, hd_folder=JPEG_HD, sd_folder=JPEG
 # pandas saves all data regarding imagens in images/images.csv
 
 
-def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
+def create_images_df(files):
     """Creates a dataframe with every image available and its alternate versions.
     'files' is a list of Image objects."""
 
@@ -120,16 +110,16 @@ def create_images_df(files, github_path=GITHUB_PATH, cloud_path=CLOUD_PATH):
         if type(image) == list:
             item = {
                 "id": image[0].id,
-                "img_hd": os.path.join(cloud_path, image[0].jpg),
-                "img_sd": os.path.join(github_path, image[0].jpg),
+                "img_hd": os.path.join(os.environ['CLOUD_PATH'], image[0].jpg),
+                "img_sd": os.path.join(os.environ['GITHUB_PATH'], image[0].jpg),
             }
             for i in image[1:]:
                 item[f"{i.id[-1]}"] = i.jpg
         else:
             item = {
                 "id": image.id,
-                "img_hd": os.path.join(cloud_path, image.jpg),
-                "img_sd": os.path.join(github_path, image.jpg),
+                "img_hd": os.path.join(os.environ['CLOUD_PATH'], image.jpg),
+                "img_sd": os.path.join(os.environ['GITHUB_PATH'], image.jpg),
             }
         items.append(item)
 
@@ -148,7 +138,7 @@ def main():
     images_df = create_images_df(files)
 
     print(images_df.head())
-    images_df.to_csv("./images/images.csv", index=False)
+    images_df.to_csv(os.environ['IMAGES_PATH'], index=False)
 
 
 if __name__ == "__main__":

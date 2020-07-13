@@ -42,7 +42,6 @@ def dashboard(METADATA_PATH, PBAR):
         print(str(e))
 
 
-# dashboard("./metadata/metadata.csv")
 
 
 def omeka_csv(METADATA_PATH):
@@ -115,12 +114,10 @@ def omeka_csv(METADATA_PATH):
         ]
 
     # save csv
-    omeka_df.to_csv("./metadata/omeka/omeka-import.csv", index=False)
+    omeka_df.to_csv(os.environ['OMEKA_CSV'], index=False)
 
     # print dataframe
     print(omeka_df.head())
-
-# omeka_csv("./metadata/metadata.csv")
 
 
 def img_to_commons(METADATA_PATH, IMAGES_PATH):

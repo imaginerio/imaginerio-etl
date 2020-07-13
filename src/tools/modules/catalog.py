@@ -1,10 +1,7 @@
-# ims catalog metadata from cumulus
 import pandas as pd
 import numpy as np
 from xml.etree import ElementTree
 from pprint import pprint
-
-
 
 
 def xml_to_df(path):
@@ -47,8 +44,6 @@ def xml_to_df(path):
 
     # Create the actual DataFrame
     cumulus_df = pd.DataFrame(table)
-
-    cumulus_df.to_csv("./metadata/catalog/cumulus.csv")
 
     return cumulus_df
     

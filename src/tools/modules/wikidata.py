@@ -10,8 +10,7 @@ import numpy as np
 
 
 def load(path, query=None):
-
-    url = "https://query.wikidata.org/sparql"
+    
     if query == None:
         query = """SELECT DISTINCT (?inventoryNumber as ?id) (?item as ?wikidata_id) (?imsid as ?wikidata_ims_id) (?image as ?wikidata_image) ?depict ?depictLabel
     WHERE {
@@ -28,7 +27,7 @@ def load(path, query=None):
     }"""
 
     try:
-        r = requests.get(url, params={"format": "json", "query": query})
+        r = requests.get(os.environ['WIKIDATA_API_URL'], params={"format": "json", "query": query})
         data = r.json()
         
     except Exception as e:
@@ -53,7 +52,7 @@ def load(path, query=None):
     wikidata_df.drop(columns=['depict', 'depictLabel'], inplace=True)
 
     wikidata_df = wikidata_df.groupby("id", as_index=False).agg(lambda x: set(x))
-
+    
     def concat(a_set):
         list_of_strings = [str(s) for s in a_set]
         joined_string = "||".join(list_of_strings)   
