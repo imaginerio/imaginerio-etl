@@ -31,7 +31,7 @@ def update(PATH):
         val_wiki_total = len(DF[DF["wikidata_id"].notna()])
 
         # omeka published
-        val_omeka = 0
+        val_omeka = len(omeka.request_omeka())
         # omeka total
         val_omeka_total = 0
 
