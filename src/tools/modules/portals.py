@@ -7,11 +7,6 @@ import pandas as pd
 import requests
 
 
-API_URL = "http://201.73.128.131:8080/CIP/metadata/search/portals-general-access/situatedviews"
-
-PREFIX = "http://acervos.ims.com.br/portals/#/detailpage/"
-
-
 def load(PATH):
 
     try:
@@ -51,7 +46,7 @@ def load(PATH):
 
         dataframe["id"] = dataframe["id"].str.split(".", n=1, expand=True)
 
-        dataframe["portals_url"] = os.envrion['PREFIX'] + dataframe["portals_id"].astype(str)
+        dataframe["portals_url"] = os.environ['PREFIX'] + dataframe["portals_id"].astype(str)
 
         dataframe = dataframe[
             [

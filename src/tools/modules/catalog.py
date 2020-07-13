@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 from xml.etree import ElementTree
@@ -124,7 +125,7 @@ def load(path):
 
         # save list of creators for rights assessment
         creators_df = catalog_df["creator"].unique()
-        pd.DataFrame(creators_df).to_csv("./metadata/rights/creators.csv", index=False)
+        pd.DataFrame(creators_df).to_csv(os.environ['CREATORS_PATH'], index=False)
 
         # fill empty start/end dates
         catalog_df.loc[
