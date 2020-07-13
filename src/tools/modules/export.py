@@ -48,7 +48,7 @@ def dashboard(METADATA_PATH, PBAR):
 def omeka_csv(METADATA_PATH):
 
     # read final dataframe
-    omeka_df = pd.read_csv(METADATA_PATH)
+    omeka_df = pd.read_csv(METADATA_PATH,parse_dates=["date","start_date","end_date"])
 
     # datetime to year strings
     omeka_df["date"] = omeka_df["date"].dt.strftime("%Y")
@@ -59,11 +59,68 @@ def omeka_csv(METADATA_PATH):
     omeka_df["interval"] = omeka_df["start_date"] + "/" + omeka_df["end_date"]
     omeka_df = omeka_df.drop(columns=["start_date", "end_date"])
 
+    # format data
+    omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
+    omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
+
+    # create columns
+    omeka_df["rights"]=""
+    omeka_df["citation"]=""
+
+    # filter items
+    omeka_df = omeka_df.copy().dropna(subset=["geometry"])
+    omeka_df = omeka_df.copy().dropna(subset=["img_hd"])
+
+    # rename columns
+    omeka_df = omeka_df.rename(
+        columns={
+            "id": "dcterms:identifier",
+            "title": "dcterms:title",
+            "description": "dcterms:description",
+            "creator": "dcterms:creator",
+            "date": "dcterms:date",
+            "interval": "dcterms:temporal",
+            "type": "dcterms:type",
+            "dimensions": "dcterms:format",
+            "rights": "dcterms:rights",
+            "citation":"dcterms:bibliographicCitation",
+            "portals_url": "dcterms:source",
+            "wikidata_id": "dcterms:hasVersion",
+            "lat":"latitude",
+            "lng":"longitude",
+            "geometry": "dcterms:spatial",
+            "wikidata_depicts": "foaf:depicts"
+            }
+        )
+
+    # select columns
+    omeka_df = omeka_df[[
+            "dcterms:identifier",
+            "dcterms:title",
+            "dcterms:description",
+            "dcterms:creator",
+            "dcterms:date",
+            "dcterms:temporal",
+            "dcterms:type",
+            "dcterms:format",
+            "dcterms:rights",
+            "dcterms:bibliographicCitation",
+            "dcterms:source",
+            "dcterms:hasVersion",
+            "latitude",
+            "longitude",
+            "dcterms:spatial",
+            "foaf:depicts"
+            ]
+        ]
+
     # save csv
-    omeka_df.to_csv("omeka-import.csv", index=False)
+    omeka_df.to_csv("./metadata/omeka/omeka-import.csv", index=False)
 
     # print dataframe
     print(omeka_df.head())
+
+# omeka_csv("./metadata/metadata.csv")
 
 
 def img_to_commons(METADATA_PATH, IMAGES_PATH):
