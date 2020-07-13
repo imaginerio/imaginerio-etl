@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    volumes:
+      - $PWD/src/:/home/user/
+      - D:/imagineRio-images/jpeg-hd/:/home/user/images
+
+    tty: true
+    env_file:
+      - .env
