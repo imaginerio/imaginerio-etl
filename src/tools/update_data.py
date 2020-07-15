@@ -34,9 +34,13 @@ def main():
             pbar.set_description("Checking Wikidata")
             wikidata_df = wikidata.load(os.environ['WIKIDATA_PATH'])
             pbar.update(15)
+            
+            pbar.set_description("Checking Omeka")
+            omeka_df = omeka.load(os.environ['OMEKA_API_URL'])
+            pbar.update(15)
 
             pbar.set_description("Updating Metadata File")
-            dataframes = [portals_df, images_df, camera_df, wikidata_df]
+            dataframes = [portals_df, images_df, camera_df, wikidata_df, omeka_df]
             final_df = catalog_df
             for dataframe in dataframes:
                 final_df = pd.merge(
