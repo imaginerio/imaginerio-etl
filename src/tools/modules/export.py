@@ -8,7 +8,7 @@ from bokeh.plotting import output_file, show
 from bokeh.layouts import column, layout
 from tqdm import tqdm
 
-import report, maps
+from modules import report, maps
 
 
 def dashboard(METADATA_PATH, PBAR):
