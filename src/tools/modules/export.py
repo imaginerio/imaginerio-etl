@@ -62,7 +62,7 @@ def omeka_csv(METADATA_PATH):
 
         # join years into interval
         omeka_df["interval"] = omeka_df["start_date"] + "/" + omeka_df["end_date"]
-        omeka_df = omeka_df.drop(columns=["start_date", "end_date"])
+        # omeka_df = omeka_df.drop(columns=["start_date", "end_date"])
 
         # pick date to be displayed (precise or range)
         omeka_df.loc[(omeka_df["accurate_date"] == False), "date"] = np.nan
@@ -79,9 +79,9 @@ def omeka_csv(METADATA_PATH):
         omeka_df["citation"] = ""
 
         # filter items
-        omeka_df = omeka_df.copy().dropna(subset=["geometry"])
-        omeka_df = omeka_df.copy().dropna(subset=["img_hd"])
-        omeka_df = omeka_df.copy().dropna(subset=["portals_url"])
+        omeka_df = omeka_df.copy().dropna(
+            subset=["geometry", "start_date", "end_date", "portals_url", "img_hd"]
+        )
 
         # rename columns
         omeka_df = omeka_df.rename(
@@ -103,6 +103,7 @@ def omeka_csv(METADATA_PATH):
                 "lng": "longitude",
                 "geometry": "dcterms:spatial",
                 "wikidata_depict": "foaf:depicts",
+                "img_hd": "media",
             }
         )
 
@@ -125,6 +126,7 @@ def omeka_csv(METADATA_PATH):
                 "foaf:depicts",
                 "schema:width",
                 "schema:height",
+                "media",
             ]
         ]
 
@@ -152,9 +154,13 @@ def gis_csv(METADATA_PATH):
         gis_df["end_date"] = gis_df["end_date"].dt.strftime("%Y")
 
         # drop items
-        gis_df = gis_df.copy().dropna(subset=["geometry"])
-        gis_df = gis_df.copy().dropna(subset=["start_date"])
-        gis_df = gis_df.copy().dropna(subset=["end_date"])
+        gis_df = gis_df.copy().dropna(
+            subset=["geometry", "start_date", "end_date", "portals_url", "img_hd"]
+        )
+        # gis_df = gis_df.copy().dropna(subset=["start_date"])
+        # gis_df = gis_df.copy().dropna(subset=["end_date"])
+        # gis_df = gis_df.copy().dropna(subset=["portals_url"])
+        # gis_df = gis_df.copy().dropna(subset=["img_hd"])
 
         # rename columns
         gis_df = gis_df.rename(
