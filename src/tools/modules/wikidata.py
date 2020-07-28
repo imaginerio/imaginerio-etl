@@ -10,7 +10,7 @@ import numpy as np
 
 
 def load(path, query=None):
-    
+
     if query == None:
         query = """SELECT DISTINCT (?inventoryNumber as ?id) (?item as ?wikidata_id) (?imsid as ?wikidata_ims_id) (?image as ?wikidata_image) ?depict ?depictLabel
     WHERE {
@@ -27,16 +27,17 @@ def load(path, query=None):
     }"""
 
     try:
-        r = requests.get(os.environ['WIKIDATA_API_URL'], params={"format": "json", "query": query})
+        r = requests.get(
+            os.environ["WIKIDATA_API_URL"], params={"format": "json", "query": query}
+        )
         data = r.json()
-        
+
     except Exception as e:
         if os.path.isfile(path):
             print(e)
             print("Couldn't update. Returning existing file")
             return pd.read_csv(path)
         print(str(e))
-
 
     ls = []
     for result in data["results"]["bindings"]:
@@ -47,22 +48,26 @@ def load(path, query=None):
 
     wikidata_df = pd.DataFrame(ls)
 
-    wikidata_df['wikidata_depict'] = wikidata_df['depict'] + " " + wikidata_df['depictLabel']
+    wikidata_df["wikidata_depict"] = (
+        wikidata_df["depict"] + " " + wikidata_df["depictLabel"]
+    )
 
-    wikidata_df.drop(columns=['depict', 'depictLabel'], inplace=True)
+    wikidata_df.drop(columns=["depict", "depictLabel"], inplace=True)
 
     wikidata_df = wikidata_df.groupby("id", as_index=False).agg(lambda x: set(x))
-    
+
     def concat(a_set):
         list_of_strings = [str(s) for s in a_set]
-        joined_string = "||".join(list_of_strings)   
+        joined_string = "||".join(list_of_strings)
         return joined_string
 
-    wikidata_df['wikidata_depict'] = wikidata_df['wikidata_depict'].apply(concat)
+    wikidata_df["wikidata_depict"] = wikidata_df["wikidata_depict"].apply(concat)
 
-    wikidata_df = wikidata_df.applymap(lambda x: str(x).strip("{''}"))
-    
-    wikidata_df = wikidata_df.drop_duplicates(subset="id")  
+    wikidata_df = wikidata_df.applymap(lambda x: str(x).strip("{'}"))
+
+    wikidata_df = wikidata_df.applymap(lambda x: x.replace("nan", ""))
+
+    wikidata_df = wikidata_df.drop_duplicates(subset="id")
 
     wikidata_df.to_csv(path, index=False)
 
