@@ -48,87 +48,6 @@ def omeka_csv(METADATA_PATH):
     Export omeka.csv
     """
 
-    # read final dataframe
-    omeka_df = pd.read_csv(
-        METADATA_PATH, parse_dates=["date", "start_date", "end_date"]
-    )
-
-    # datetime to year strings
-    omeka_df["date"] = omeka_df["date"].dt.strftime("%Y")
-    omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
-    omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
-
-    # join years into interval
-    omeka_df["interval"] = omeka_df["start_date"] + "/" + omeka_df["end_date"]
-    omeka_df = omeka_df.drop(columns=["start_date", "end_date"])
-
-    # pick date to be displayed (precise or range)
-    omeka_df.loc[(omeka_df["accurate_date"] == False), "date"] = np.nan
-    omeka_df.loc[(omeka_df["accurate_date"] == True), "interval"] = np.nan
-
-    # format data
-    omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
-    omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
-    omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
-    omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
-
-    # create columns
-    omeka_df["rights"] = ""
-    omeka_df["citation"] = ""
-
-    # filter items
-    omeka_df = omeka_df.copy().dropna(subset=["geometry"])
-    omeka_df = omeka_df.copy().dropna(subset=["img_hd"])
-
-    # rename columns
-    omeka_df = omeka_df.rename(
-        columns={
-            "id": "dcterms:identifier",
-            "title": "dcterms:title",
-            "description": "dcterms:description",
-            "creator": "dcterms:creator",
-            "date": "dcterms:date",
-            "interval": "dcterms:temporal",
-            "type": "dcterms:type",
-            "image_width": "schema:width",
-            "image_height": "schema:height",
-            "rights": "dcterms:rights",
-            "citation": "dcterms:bibliographicCitation",
-            "portals_url": "dcterms:source",
-            "wikidata_id": "dcterms:hasVersion",
-            "lat": "latitude",
-            "lng": "longitude",
-            "geometry": "dcterms:spatial",
-            "wikidata_depict": "foaf:depicts",
-        }
-    )
-
-    # select columns
-    omeka_df = omeka_df[
-        [
-            "dcterms:identifier",
-            "dcterms:title",
-            "dcterms:description",
-            "dcterms:creator",
-            "dcterms:date",
-            "dcterms:temporal",
-            "dcterms:type",
-            "dcterms:rights",
-            "dcterms:bibliographicCitation",
-            "dcterms:source",
-            "dcterms:hasVersion",
-            "latitude",
-            "longitude",
-            "dcterms:spatial",
-            "foaf:depicts",
-            "schema:width",
-            "schema:height",
-        ]
-    ]
-
-    # save csv
-    omeka_df.to_csv(os.environ["OMEKA_PATH"], index=False)
-
     try:
 
         # read final dataframe
@@ -145,9 +64,15 @@ def omeka_csv(METADATA_PATH):
         omeka_df["interval"] = omeka_df["start_date"] + "/" + omeka_df["end_date"]
         omeka_df = omeka_df.drop(columns=["start_date", "end_date"])
 
+        # pick date to be displayed (precise or range)
+        omeka_df.loc[(omeka_df["accurate_date"] == False), "date"] = np.nan
+        omeka_df.loc[(omeka_df["accurate_date"] == True), "interval"] = np.nan
+
         # format data
         omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
         omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
+        omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
+        omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
 
         # create columns
         omeka_df["rights"] = ""
@@ -156,6 +81,7 @@ def omeka_csv(METADATA_PATH):
         # filter items
         omeka_df = omeka_df.copy().dropna(subset=["geometry"])
         omeka_df = omeka_df.copy().dropna(subset=["img_hd"])
+        omeka_df = omeka_df.copy().dropna(subset=["portals_url"])
 
         # rename columns
         omeka_df = omeka_df.rename(
@@ -167,7 +93,8 @@ def omeka_csv(METADATA_PATH):
                 "date": "dcterms:date",
                 "interval": "dcterms:temporal",
                 "type": "dcterms:type",
-                "dimensions": "dcterms:format",
+                "image_width": "schema:width",
+                "image_height": "schema:height",
                 "rights": "dcterms:rights",
                 "citation": "dcterms:bibliographicCitation",
                 "portals_url": "dcterms:source",
@@ -175,7 +102,7 @@ def omeka_csv(METADATA_PATH):
                 "lat": "latitude",
                 "lng": "longitude",
                 "geometry": "dcterms:spatial",
-                "wikidata_depicts": "foaf:depicts",
+                "wikidata_depict": "foaf:depicts",
             }
         )
 
@@ -189,15 +116,15 @@ def omeka_csv(METADATA_PATH):
                 "dcterms:date",
                 "dcterms:temporal",
                 "dcterms:type",
-                "dcterms:format",
                 "dcterms:rights",
                 "dcterms:bibliographicCitation",
                 "dcterms:source",
                 "dcterms:hasVersion",
                 "latitude",
                 "longitude",
-                "dcterms:spatial",
                 "foaf:depicts",
+                "schema:width",
+                "schema:height",
             ]
         ]
 
