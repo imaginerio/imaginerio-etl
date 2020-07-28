@@ -38,11 +38,11 @@ def update(PATH):
         values = {
             "Finished": [val_omeka, val_wiki, val_meta, val_img, val_kml],
             "To do": [
-                val_omeka_total - val_omeka,
+                val_omeka_total,
                 val_wiki_total - val_wiki,
                 val_meta_total - val_meta,
                 val_img_total - val_img,
-                val_kml_total - val_kml,
+                val_kml_total,
             ],
             "y": ["Omeka-S", "Wikimedia", "Cumulus", "Images", "KML"],
         }
