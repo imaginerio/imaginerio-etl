@@ -49,16 +49,12 @@ def main():
                 pbar.update(5)
             final_df.to_csv(os.environ["METADATA_PATH"], index=False)
 
-            pbar.set_description("Updating Dashboard")
-            export.dashboard(os.environ["METADATA_PATH"], PBAR=pbar)
-            pbar.update(25)
-
             pbar.set_description("Exporting omeka.csv")
             export.omeka_csv(os.environ["METADATA_PATH"])
             pbar.update(15)
 
             pbar.set_description("Exporting gis.csv")
-            export.gis_csv(os.environ["METADATA_PATH"])
+            export.load(os.environ["METADATA_PATH"])
             pbar.update(15)
 
             pbar.set_description("Done")
