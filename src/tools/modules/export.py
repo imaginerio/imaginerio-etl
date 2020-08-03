@@ -137,6 +137,10 @@ def gis_csv(df):
 def load (METADATA_PATH):
 
     try:
+        # load items for dashboard
+        dashboard_plot = report.update(METADATA_PATH)
+        map_plot = maps.update(METADATA_PATH)
+
         # read metadata.csv
         export_df = pd.read_csv(METADATA_PATH, parse_dates=["date", "start_date", "end_date"])
 
@@ -155,26 +159,10 @@ def load (METADATA_PATH):
         # export omeka-import.csv
         omeka_csv(export_df)
 
-        #export gis-import.csv
+        # export gis-import.csv
         gis_csv(export_df)
-    
-    except Exception as e:
-        print (str(e))
-
-
-def dashboard (METADATA_PATH):
-    """
-    Generates an HTML file with dashboard and map using bokeh
-    """
-
-    try:
-        # load hbar and pie chart
-        dashboard_plot = report.update(METADATA_PATH)
-
-        # load map
-        map_plot = maps.update(METADATA_PATH)
         
-        # export
+        # export index.html
         output_file(os.environ["INDEX_PATH"], title="Situated Views")
         show(
             layout(
@@ -183,8 +171,9 @@ def dashboard (METADATA_PATH):
             )
         )
 
+    
     except Exception as e:
-        print(str(e))
+        print (str(e))
 
 
 def img_to_commons(METADATA_PATH, IMAGES_PATH):
