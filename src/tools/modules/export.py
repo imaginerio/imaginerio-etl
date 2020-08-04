@@ -56,7 +56,7 @@ def omeka_csv(METADATA_PATH):
         )
 
         # datetime to year strings
-        omeka_df["date"] = omeka_df["date"].dt.strftime("%Y")
+        omeka_df["date"] = omeka_df["date"].dt.strftime("%d/%m/%Y")
         omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
         omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
 
