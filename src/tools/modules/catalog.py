@@ -11,12 +11,12 @@ def xml_to_df(path):
         tree = ElementTree.parse(f)
     root = tree.getroot()
 
-    ns = {'cumulus': 'http://www.canto.com/ns/Export/1.0'}
-    
+    ns = {"cumulus": "http://www.canto.com/ns/Export/1.0"}
+
     # Find the uids
     uids = {}
     for thing in root[0][0]:
-        uids[thing.attrib['uid']] = thing[0].text
+        uids[thing.attrib["uid"]] = thing[0].text
 
     table = {}
     for field in uids.values():
@@ -25,16 +25,16 @@ def xml_to_df(path):
     # Fill the records
     for thing in root[1]:
         added = set()
-        for field_value in thing.findall('cumulus:FieldValue', ns):
+        for field_value in thing.findall("cumulus:FieldValue", ns):
             try:
                 if len(field_value) == 0:
                     value = field_value.text.strip()
                 else:
-                    value = field_value[0].text.strip().split(':')
+                    value = field_value[0].text.strip().split(":")
                     value = str(value).strip("['']")
-                    
-                table[uids[field_value.attrib['uid']]].append(value)
-                added.add(field_value.attrib['uid'])
+
+                table[uids[field_value.attrib["uid"]]].append(value)
+                added.add(field_value.attrib["uid"])
             except KeyError:
                 continue
         for missing in uids.keys() - added:
@@ -47,15 +47,14 @@ def xml_to_df(path):
     cumulus_df = pd.DataFrame(table)
 
     return cumulus_df
-    
 
 
 def find_dates(date):
     """
     Find dates between 1500 and 2022 and parse to datetime
     """
-    result = date.str.extract(r"(1[5-9]\d{2}|20[0-2]{2})")
-    result = pd.to_datetime(date, errors="coerce")
+    result = date.str.findall(r"(\d+[/-])*(1[5-9]\d{2}|20[0-2]{2})([/-]\d+)*")
+    result = pd.to_datetime(date, errors="coerce", yearfirst=True)
     return result
 
 
@@ -63,8 +62,9 @@ def load(path):
     try:
         catalog_df = xml_to_df(path)
         catalog_df = catalog_df.astype(
-            {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str})
-        
+            {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str}
+        )
+
         # rename columns
         catalog_df = catalog_df.rename(
             columns={
@@ -125,7 +125,7 @@ def load(path):
 
         # save list of creators for rights assessment
         creators_df = catalog_df["creator"].unique()
-        pd.DataFrame(creators_df).to_csv(os.environ['CREATORS_PATH'], index=False)
+        pd.DataFrame(creators_df).to_csv(os.environ["CREATORS_PATH"], index=False)
 
         # fill empty start/end dates
         catalog_df.loc[
@@ -144,6 +144,8 @@ def load(path):
         )
         catalog_df["image_width"] = dimensions_df["width"]
         catalog_df["image_height"] = dimensions_df["height"]
+
+        catalog_df.to_csv(os.environ["CUMULUS_CSV"])
 
         return catalog_df
 
