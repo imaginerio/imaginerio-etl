@@ -24,7 +24,7 @@ def main():
             pbar.update(5)
 
             pbar.set_description("Loading Cumulus Metadata")
-            catalog_df = catalog.load(os.environ["CUMULUS_PATH"])
+            catalog_df = catalog.load(os.environ["CUMULUS_XML"])
             pbar.update(10)
 
             pbar.set_description("Checking Cumulus Portals")
@@ -49,7 +49,9 @@ def main():
                 pbar.update(5)
             final_df.to_csv(os.environ["METADATA_PATH"], index=False)
 
-            pbar.set_description("Exporting omeka-import.csv, gis-import.csv and dashboard...")
+            pbar.set_description(
+                "Exporting omeka-import.csv, gis-import.csv and dashboard..."
+            )
             export.load(os.environ["METADATA_PATH"])
             pbar.update(30)
 
