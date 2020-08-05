@@ -6,59 +6,18 @@ import pandas as pd
 import numpy as np
 from bokeh.plotting import output_file, show
 from bokeh.layouts import column, layout
-from tqdm import tqdm
 
 from modules import report, maps
 
 
-def dashboard(METADATA_PATH, PBAR):
-    """
-    Generates an HTML file with dashboard and map using bokeh
-    """
-
-    try:
-
-        PBAR.set_description("Updating Report")
-        # hbar = report.update_hbar(METADATA_PATH)
-        # pie = report.update_pie(METADATA_PATH)
-        PBAR.update(5)
-
-        # load dashboard
-        dashboard_plot = report.update(METADATA_PATH)
-
-        PBAR.set_description("Updating Map")
-        map_plot = maps.update(METADATA_PATH)
-        PBAR.update(25)
-
-        # export
-        output_file(os.environ["INDEX_PATH"], title="Situated Views")
-        show(
-            layout(
-                [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot]],
-                sizing_mode="stretch_both",
-            )
-        )
-
-    except Exception as e:
-        print(str(e))
-
-
-def omeka_csv(METADATA_PATH):
+def omeka_csv(df):
     """
     Export omeka.csv
     """
 
     try:
 
-        # read final dataframe
-        omeka_df = pd.read_csv(
-            METADATA_PATH, parse_dates=["date", "start_date", "end_date"]
-        )
-
-        # datetime to year strings
-        omeka_df["date"] = omeka_df["date"].dt.strftime("%Y")
-        omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
-        omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
+        omeka_df = df
 
         # join years into interval
         omeka_df["interval"] = omeka_df["start_date"] + "/" + omeka_df["end_date"]
@@ -140,18 +99,13 @@ def omeka_csv(METADATA_PATH):
         print(str(e))
 
 
-def gis_csv(METADATA_PATH):
+def gis_csv(df):
     """
     Export gis.csv
     """
 
     try:
-        # read final dataframe
-        gis_df = pd.read_csv(METADATA_PATH, parse_dates=["start_date", "end_date"])
-
-        # datetime to year strings
-        gis_df["start_date"] = gis_df["start_date"].dt.strftime("%Y")
-        gis_df["end_date"] = gis_df["end_date"].dt.strftime("%Y")
+        gis_df = df
 
         # drop items
         gis_df = gis_df.copy().dropna(
@@ -178,6 +132,48 @@ def gis_csv(METADATA_PATH):
 
     except Exception as e:
         print(str(e))
+
+
+def load (METADATA_PATH):
+
+    try:
+        # load items for dashboard
+        dashboard_plot = report.update(METADATA_PATH)
+        map_plot = maps.update(METADATA_PATH)
+
+        # read metadata.csv
+        export_df = pd.read_csv(METADATA_PATH, parse_dates=["date", "start_date", "end_date"])
+
+        # checking dates
+        l=[]
+        for i in range(len(export_df)):
+            if export_df["start_date"][i] > export_df["end_date"][i]:
+                l.append(export_df["id"][i])
+        print (l)
+
+        # datetime to year strings
+        export_df["date"] = export_df["date"].dt.strftime("%Y")
+        export_df["start_date"] = export_df["start_date"].dt.strftime("%Y")
+        export_df["end_date"] = export_df["end_date"].dt.strftime("%Y")
+            
+        # export omeka-import.csv
+        omeka_csv(export_df)
+
+        # export gis-import.csv
+        gis_csv(export_df)
+        
+        # export index.html
+        output_file(os.environ["INDEX_PATH"], title="Situated Views")
+        show(
+            layout(
+                [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot]],
+                sizing_mode="stretch_both",
+            )
+        )
+
+    
+    except Exception as e:
+        print (str(e))
 
 
 def img_to_commons(METADATA_PATH, IMAGES_PATH):
