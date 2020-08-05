@@ -15,6 +15,7 @@ def omeka_csv(df):
     Export omeka.csv
     """
 
+<<<<<<< HEAD
     # read final dataframe
     omeka_df = df
 
@@ -22,6 +23,11 @@ def omeka_csv(df):
     omeka_df["date"] = omeka_df["date"].dt.strftime("%d/%m/%Y")
     omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
     omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
+=======
+    try:
+
+        omeka_df = df
+>>>>>>> origin/feature/dashboard-tooltips
 
     # join years into interval
     omeka_df["interval"] = omeka_df["start_date"] + "/" + omeka_df["end_date"]
@@ -105,12 +111,17 @@ def gis_csv(df):
     Export gis.csv
     """
 
+<<<<<<< HEAD
     gis_df = df
 
     # drop items
     gis_df = gis_df.copy().dropna(
         subset=["geometry", "start_date", "end_date", "portals_url", "img_hd"]
     )
+=======
+    try:
+        gis_df = df
+>>>>>>> origin/feature/dashboard-tooltips
 
     # rename columns
     gis_df = gis_df.rename(
@@ -161,6 +172,48 @@ def load(METADATA_PATH):
     )
 
 
+def load (METADATA_PATH):
+
+    try:
+        # load items for dashboard
+        dashboard_plot = report.update(METADATA_PATH)
+        map_plot = maps.update(METADATA_PATH)
+
+        # read metadata.csv
+        export_df = pd.read_csv(METADATA_PATH, parse_dates=["date", "start_date", "end_date"])
+
+        # checking dates
+        l=[]
+        for i in range(len(export_df)):
+            if export_df["start_date"][i] > export_df["end_date"][i]:
+                l.append(export_df["id"][i])
+        print (l)
+
+        # datetime to year strings
+        export_df["date"] = export_df["date"].dt.strftime("%Y")
+        export_df["start_date"] = export_df["start_date"].dt.strftime("%Y")
+        export_df["end_date"] = export_df["end_date"].dt.strftime("%Y")
+            
+        # export omeka-import.csv
+        omeka_csv(export_df)
+
+        # export gis-import.csv
+        gis_csv(export_df)
+        
+        # export index.html
+        output_file(os.environ["INDEX_PATH"], title="Situated Views")
+        show(
+            layout(
+                [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot]],
+                sizing_mode="stretch_both",
+            )
+        )
+
+    
+    except Exception as e:
+        print (str(e))
+
+
 def img_to_commons(METADATA_PATH, IMAGES_PATH):
 
     # Get unplubished geolocated images
@@ -181,8 +234,12 @@ def img_to_commons(METADATA_PATH, IMAGES_PATH):
     Path(new_folder).mkdir(parents=True, exist_ok=True)
 
     for id in commons_df["id"]:
+<<<<<<< HEAD
         shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
 
 
 if __name__ == "__main__":
     load(os.environ["METADATA_PATH"])
+=======
+        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
+>>>>>>> origin/feature/dashboard-tooltips
