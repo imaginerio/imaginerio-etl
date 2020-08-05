@@ -2,6 +2,7 @@ import pandas as pd
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, HoverTool, WheelZoomTool, Span
 from bokeh.transform import cumsum
+from copy import deepcopy
 
 
 def update(PATH):
@@ -36,7 +37,12 @@ def update(PATH):
         val_omeka_total = 0
 
         values = {
-            "Finished": [val_omeka, val_wiki, val_meta, val_img, val_kml],
+            "Done": [
+                val_omeka, 
+                val_wiki, 
+                val_meta, 
+                val_img, 
+                val_kml],
             "To do": [
                 val_omeka_total,
                 val_wiki_total - val_wiki,
@@ -44,7 +50,7 @@ def update(PATH):
                 val_img_total - val_img,
                 val_kml_total,
             ],
-            "y": ["Omeka-S", "Wikimedia", "Cumulus", "Images", "KML"],
+            "y": ["Omeka-S", "Wikimedia", "Cumulus", "High Images", "KML"],
         }
 
         # update color bar
@@ -67,26 +73,55 @@ def update_hbar(values):
     """
 
     # construct a data source
-    source = ColumnDataSource(data=values)
+    list1 = ["Done","To do"]
+    data = values
+    #deepcopy the data for later use
+    data1 =deepcopy(data)
+
+    data1.update({
+            "tooltip_orange":[
+                "Published on Omeka", 
+                "Imagens published on Wikimedia Commons", 
+                "Published on Cumulus Portals", 
+                "Geolocated", 
+                "Total geolocated items"
+                ],
+            "tooltip_grey":[
+                "Not published",
+                "Items metadata published on Wikidata",
+                "Potential items",
+                "To geolocate",
+                "Not geolocated"
+                ],})
 
     # base dashboard
+    for i in range(1,len(list1)):
+        data[list1[i]] = [sum(x) for x in zip(data[list1[i]], data[list1[i-1]])]
+
     plot_hbar = figure(
-        y_range=["Omeka-S", "Wikimedia", "Cumulus", "Images", "KML"],
+        y_range=data["y"],
         x_range=(0, 5500),
         plot_height=300,
         plot_width=900,
         toolbar_location=None,
-        tooltips="$name @y: @$name",
     )
 
     # construct bars with two differents datas
-    bars = plot_hbar.hbar_stack(
-        ["Finished", "To do"],
-        y="y",
-        height=0.8,
-        color=("orange", "lightgrey"),
-        source=source,
-    )
+    hbar_1 = plot_hbar.hbar(y=data["y"], right=data["Done"], left=0, height=0.8, color="orange")
+    hbar_1.data_source.add(data1["tooltip_orange"], "data")
+    hbar_1.data_source.add(data1["Done"], "value")
+
+    hbar_2 = plot_hbar.hbar(y=data["y"], right=data["To do"], left=data["Done"], height=0.8, color= "lightgrey")
+    hbar_2.data_source.add(data1["tooltip_grey"], "data")
+    hbar_2.data_source.add(data1["To do"], "value")
+
+    #add hover tool for each bar chart
+    TOOLTIPS1 = "@data: @value"
+    TOOLTIPS2 = "@data: @value"
+    h1 = HoverTool(renderers=[hbar_1], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False)
+    h2 = HoverTool(renderers=[hbar_2], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False)
+
+    plot_hbar.add_tools(h1,h2)
 
     # data goal line
     hline = Span(
@@ -112,10 +147,10 @@ def update_pie(values):
 
     # construct a data source
     total = 20000
-    s = sum(values["Finished"])
+    s = sum(values["Done"])
     x = round((100 * s) / total, 1)
 
-    a = {"To do": 100 - x, "Finished": x}
+    a = {"To do": 100 - x, "Done": x}
 
     datas = pd.Series(a).reset_index(name="value").rename(columns={"index": "data"})
     datas["angle"] = (360 * datas["value"]) / 100
