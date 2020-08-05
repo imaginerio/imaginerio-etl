@@ -3,14 +3,23 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-from modules import camera, catalog, images, wikidata, portals, export, omeka
+from modules import (
+    camera,
+    catalog,
+    export,
+    images,
+    maps,
+    omeka,
+    portals,
+    report,
+    wikidata,
+)
 
 
 def update_metadata(catalog, dataframes):
     final_df = catalog
-    review_df = pd.DataFrame(columns=["id", "_merge"])
+    review_df = pd.DataFrame(columns=["id", "Not in"])
     for dataframe in dataframes:
-        final_df = catalog
         final_df = pd.merge(
             final_df, dataframe, on=["id"], how="left", validate="one_to_one",
         )
@@ -29,7 +38,7 @@ def update_metadata(catalog, dataframes):
     review_df = review_df.groupby("id", as_index=False).agg(list)
     review_df.to_csv(os.environ["REVIEW_PATH"], index=False)
     final_df.to_csv(os.environ["METADATA_PATH"], index=False)
-    return final_df, review_df
+    return None
 
 
 def main():
