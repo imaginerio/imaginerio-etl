@@ -53,22 +53,22 @@ def main():
             pbar.set_description("Loading Image Paths")
             images_df = images.load(os.environ["IMAGES_PATH"])
             images_df.name = "Images"
-            pbar.update(10)
+            pbar.update(5)
 
             pbar.set_description("Loading Camera Positions")
             camera_df = camera.load(os.environ["CAMERA_PATH"])
             camera_df.name = "Camera"
-            pbar.update(10)
+            pbar.update(5)
 
             pbar.set_description("Loading Cumulus Metadata")
             catalog_df = catalog.load(os.environ["CUMULUS_XML"])
             catalog_df.name = "Catalog"
-            pbar.update(10)
+            pbar.update(5)
 
             pbar.set_description("Checking Cumulus Portals")
             portals_df = portals.load(os.environ["PORTALS_PATH"])
             portals_df.name = "Portals"
-            pbar.update(10)
+            pbar.update(20)
 
             pbar.set_description("Checking Wikidata")
             wikidata_df = wikidata.load(os.environ["WIKIDATA_PATH"])
@@ -78,7 +78,7 @@ def main():
             pbar.set_description("Checking Omeka")
             omeka_df = omeka.load(os.environ["OMEKA_API_URL"])
             omeka_df.name = "Omeka"
-            pbar.update(10)
+            pbar.update(20)
 
             pbar.set_description("Updating Metadata Files")
             dataframes = [images_df, camera_df, portals_df, wikidata_df, omeka_df]
@@ -89,7 +89,7 @@ def main():
                 "Exporting omeka-import.csv, gis-import.csv and dashboard..."
             )
             export.load(os.environ["METADATA_PATH"])
-            pbar.update(30)
+            pbar.update(25)
 
             pbar.set_description("Done")
             pbar.close()
