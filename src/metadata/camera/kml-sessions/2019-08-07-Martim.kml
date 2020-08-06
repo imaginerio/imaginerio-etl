@@ -766,48 +766,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002010TM032</name>
-		<Camera>
-			<longitude>-43.16471440058794</longitude>
-			<latitude>-22.95168821042398</latitude>
-			<altitude>222.8889187290517</altitude>
-			<heading>-101.1055973017712</heading>
-			<tilt>101.0175768471509</tilt>
-			<roll>-3.325886947078311e-009</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/002010TM032.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-27.5</leftFov>
-			<rightFov>27.5</rightFov>
-			<bottomFov>-19.065</bottomFov>
-			<topFov>19.065</topFov>
-			<near>1.41031</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.16471440058794,-22.95168821042398,222.8889187290517</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>002080BR0202</name>
 		<Camera>
 			<longitude>-43.18591782275835</longitude>

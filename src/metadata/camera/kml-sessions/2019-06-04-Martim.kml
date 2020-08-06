@@ -345,48 +345,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001ACL019030</name>
-		<Camera>
-			<longitude>-43.1968035840633</longitude>
-			<latitude>-22.90071795890603</latitude>
-			<altitude>119.3682566683205</altitude>
-			<heading>-32.14944695699224</heading>
-			<tilt>83.04776929124904</tilt>
-			<roll>5.470554052117249e-013</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001ACL019030.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-21.1208</leftFov>
-			<rightFov>21.1208</rightFov>
-			<bottomFov>-16.965</bottomFov>
-			<topFov>16.965</topFov>
-			<near>13.569</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.1968035840633,-22.90071795890604,119.3682566683205</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>014GLAS028</name>
 		<Camera>
 			<longitude>-43.19317921800697</longitude>

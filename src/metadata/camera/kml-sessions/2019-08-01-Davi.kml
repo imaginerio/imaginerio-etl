@@ -172,47 +172,5 @@
 			<coordinates>-43.17099007769214,-22.908815224213,11.95118086025324</coordinates>
 		</Point>
 	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>001ATK012007</name>
-		<Camera>
-			<longitude>-43.17049712879842</longitude>
-			<latitude>-22.90838014605551</latitude>
-			<altitude>12.22731005050727</altitude>
-			<heading>4.317900200844369</heading>
-			<tilt>95.49344014953599</tilt>
-			<roll>-0.0006316009648734703</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/001ATK012007.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-18.86</bottomFov>
-			<topFov>18.86</topFov>
-			<near>1.37022</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17049712879842,-22.90838014605551,12.22731005050727</coordinates>
-		</Point>
-	</PhotoOverlay>
 </Folder>
 </kml>

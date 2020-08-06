@@ -4,48 +4,6 @@
 	<name>2019-07-25-Davi</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>007A5P3FG05-008</name>
-		<Camera>
-			<longitude>-43.17476400736418</longitude>
-			<latitude>-22.92403978169252</latitude>
-			<altitude>67.54759351871809</altitude>
-			<heading>-101.7822369280477</heading>
-			<tilt>85.32562377030881</tilt>
-			<roll>-2.569717315989357e-005</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a516764/Desktop/resize/007A5P3FG05-008.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-20.255</bottomFov>
-			<topFov>20.255</topFov>
-			<near>15.8283</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17476400736418,-22.92403978169251,67.54759351871809</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>007_IMG_1981</name>
 		<Camera>
 			<longitude>-43.18285792543983</longitude>
@@ -552,48 +510,6 @@
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
 			<coordinates>-43.17239674957428,-22.92949437546905,452.8783280138709</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>007A5P3FG2-065-066</name>
-		<Camera>
-			<longitude>-43.1844010247602</longitude>
-			<latitude>-22.92738524979563</latitude>
-			<altitude>182.5802618945661</altitude>
-			<heading>158.567693352318</heading>
-			<tilt>87.18426077485663</tilt>
-			<roll>-0.000895853702717093</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize - Copy/007A5P3FG2-065-066.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-26.985</leftFov>
-			<rightFov>26.985</rightFov>
-			<bottomFov>-21.24</bottomFov>
-			<topFov>21.24</topFov>
-			<near>21.0571</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.1844010247602,-22.92738524979563,182.5802618945661</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>

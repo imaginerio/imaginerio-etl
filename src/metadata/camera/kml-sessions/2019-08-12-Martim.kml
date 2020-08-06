@@ -2469,48 +2469,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080Vol01Cx0709</name>
-		<Camera>
-			<longitude>-43.1766167672842</longitude>
-			<latitude>-22.91119693166257</latitude>
-			<altitude>65.41672498384526</altitude>
-			<heading>-120.5174585062703</heading>
-			<tilt>85.4316012695642</tilt>
-			<roll>9.112289162392978e-013</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080Vol01Cx0709.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>19.9448</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.1766167672842,-22.91119693166257,65.41672498384526</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>002080Vol01Cx0708</name>
 		<Camera>
 			<longitude>-43.17207027043907</longitude>

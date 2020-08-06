@@ -132,48 +132,6 @@
 	<PhotoOverlay>
 		<name>IMG_0226</name>
 		<Camera>
-			<longitude>-43.17733494934744</longitude>
-			<latitude>-22.90756691397234</latitude>
-			<altitude>89.2680084456612</altitude>
-			<heading>103.2668007317257</heading>
-			<tilt>81.91269178898003</tilt>
-			<roll>4.826809784589033e-011</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0226.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25.005</leftFov>
-			<rightFov>25.005</rightFov>
-			<bottomFov>-18.46</bottomFov>
-			<topFov>18.46</topFov>
-			<near>10.395</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17733494934744,-22.90756691397234,89.2680084456612</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>IMG_0226</name>
-		<Camera>
 			<longitude>-43.17290147465864</longitude>
 			<latitude>-22.90879711777015</latitude>
 			<altitude>50.98491929145474</altitude>
