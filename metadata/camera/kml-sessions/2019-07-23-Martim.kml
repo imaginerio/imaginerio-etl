@@ -213,48 +213,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01001030</name>
-		<Camera>
-			<longitude>-43.18266997227273</longitude>
-			<latitude>-22.89965133465278</latitude>
-			<altitude>49.91835008060589</altitude>
-			<heading>121.0796457133537</heading>
-			<tilt>82.25663644133589</tilt>
-			<roll>6.705786073757235e-010</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize - Copy/001AN010010301.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-20</leftFov>
-			<rightFov>20</rightFov>
-			<bottomFov>-15.99</bottomFov>
-			<topFov>15.99</topFov>
-			<near>12.6358</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.18266997227273,-22.89965133465278,49.91835008060589</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>001AN01002008</name>
 		<Camera>
 			<longitude>-43.17417962510261</longitude>

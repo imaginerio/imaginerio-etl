@@ -2217,49 +2217,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>002080RJ1218</name>
-		<Camera>
-			<longitude>-43.17563150294711</longitude>
-			<latitude>-22.911392450773</latitude>
-			<altitude>10.55973610970319</altitude>
-			<heading>175.99047984664</heading>
-			<tilt>92.85385599425153</tilt>
-			<roll>1.151030017002921e-008</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ1218.jpg</href>
-		</Icon>
-		<rotation>2.45</rotation>
-		<ViewVolume>
-			<leftFov>-22.65</leftFov>
-			<rightFov>22.65</rightFov>
-			<bottomFov>-22.65</bottomFov>
-			<topFov>22.65</topFov>
-			<near>1.05061</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17563150294711,-22.911392450773,10.55973610970319</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>002080RJ1512</name>
 		<Camera>
 			<longitude>-43.17632947000168</longitude>
@@ -4807,48 +4764,6 @@
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
 			<coordinates>-43.18090787193756,-22.91113201037399,33.51147285038437</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>001ANV022013</name>
-		<Camera>
-			<longitude>-43.17627007910999</longitude>
-			<latitude>-22.91476037471868</latitude>
-			<altitude>8.358222868936325</altitude>
-			<heading>177.351310080879</heading>
-			<tilt>93.07785934584821</tilt>
-			<roll>-0.1612376234752249</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/001ANV022013.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-20.055</leftFov>
-			<rightFov>20.055</rightFov>
-			<bottomFov>-15.04</bottomFov>
-			<topFov>15.04</topFov>
-			<near>0.610648</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17627007910999,-22.91476037471868,8.358222868936325</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>

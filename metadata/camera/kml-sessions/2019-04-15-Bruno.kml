@@ -88,48 +88,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007NGBMF4050cx05-01</name>
-		<Camera>
-			<longitude>-43.1802415430007</longitude>
-			<latitude>-22.9051076586164</latitude>
-			<altitude>56.43258673358744</altitude>
-			<heading>-103.8549815983993</heading>
-			<tilt>72.57289510624179</tilt>
-			<roll>0.03282366849218842</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>/Users/a295805/code/liquid-galaxy/_demo-1-content/marc-ferrez/ferrez-lg/007NGBMF4050cx05-01.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-20.595</bottomFov>
-			<topFov>20.595</topFov>
-			<near>16.6172</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.1802415430007,-22.9051076586164,56.43258673358744</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>0072430cx098-08</name>
 		<Camera>
 			<longitude>-43.17583331522513</longitude>
@@ -381,47 +339,5 @@
 			<coordinates>-43.18130016706864,-22.91328501667845,35.74889375889829</coordinates>
 		</Point>
 	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>001AAN014011</name>
-		<Camera>
-			<longitude>-43.16806836599999</longitude>
-			<latitude>-22.95606298299999</latitude>
-			<altitude>64.91479928015966</altitude>
-			<heading>65.68895007784819</heading>
-			<tilt>91.15000000000001</tilt>
-			<roll>0.09319313360059987</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>/Users/a295805/code/liquid-galaxy/_demo-1-content/marc-ferrez/ferrez-lg/001AAN014011.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-24.975</leftFov>
-			<rightFov>24.975</rightFov>
-			<bottomFov>-19.065</bottomFov>
-			<topFov>19.065</topFov>
-			<near>1.16771</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.16806836599999,-22.95606298299999,64.91479928015966</coordinates>
-		</Point>
-	</PhotoOverlay>
-</Folder>
+	</Folder>
 </kml>

@@ -130,49 +130,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014AM003007</name>
-		<Camera>
-			<longitude>-43.17804558921094</longitude>
-			<latitude>-22.90400631794713</latitude>
-			<altitude>9.309493750630091</altitude>
-			<heading>-19.70635528170381</heading>
-			<tilt>92.26293136785198</tilt>
-			<roll>0.0001015648345391499</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Pictures/Saved Pictures/014AM003007.jpg</href>
-		</Icon>
-		<rotation>-1.44</rotation>
-		<ViewVolume>
-			<leftFov>-22.7353</leftFov>
-			<rightFov>22.7353</rightFov>
-			<bottomFov>-17.9</bottomFov>
-			<topFov>17.9</topFov>
-			<near>0.932448</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17804558921094,-22.90400631794714,9.309493750630091</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>002054VIAN014</name>
 		<Camera>
 			<longitude>-43.19459210827699</longitude>
