@@ -427,48 +427,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007_IMG_1972</name>
-		<Camera>
-			<longitude>-43.17662991918258</longitude>
-			<latitude>-22.91795542888247</latitude>
-			<altitude>17.7620723357355</altitude>
-			<heading>154.0692405443666</heading>
-			<tilt>90.56885844481772</tilt>
-			<roll>0.03397943809423627</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize - Copy/007_IMG_1972.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-25</leftFov>
-			<rightFov>25</rightFov>
-			<bottomFov>-18.735</bottomFov>
-			<topFov>18.735</topFov>
-			<near>3.78067</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17662991918258,-22.91795542888247,17.7620723357355</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>007_IMG_1973</name>
 		<Camera>
 			<longitude>-43.1785969381213</longitude>

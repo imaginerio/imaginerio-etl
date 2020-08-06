@@ -4,48 +4,6 @@
 	<name>2019-08-01-Martim</name>
 	<open>1</open>
 	<PhotoOverlay>
-		<name>002080RJ1514</name>
-		<Camera>
-			<longitude>-43.17638156421977</longitude>
-			<latitude>-22.90898155444523</latitude>
-			<altitude>18.31840685978139</altitude>
-			<heading>8.656041565686993</heading>
-			<tilt>90.64881730362663</tilt>
-			<roll>-2.18001992448981e-008</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ1514.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-22.5</leftFov>
-			<rightFov>22.5</rightFov>
-			<bottomFov>-22.5</bottomFov>
-			<topFov>22.5</topFov>
-			<near>3.52459</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17638156421977,-22.90898155444523,18.31840685978139</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>002080RJ3501</name>
 		<Camera>
 			<longitude>-43.17830378129384</longitude>
