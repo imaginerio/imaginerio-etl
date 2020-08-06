@@ -17,7 +17,7 @@ def load(endpoint):
     http.mount("https://", adapter)
     http.mount("http://", adapter)
 
-    response = http.get(endpoint, verify=False)
+    response = http.get(endpoint)
     headers = response.headers
     # print(response.headers["Link"])
     last_page = re.findall(r'\d+(?=>; rel="last)', headers["Link"])[0]
@@ -28,7 +28,7 @@ def load(endpoint):
     for page in range(1, last_page + 1):
         l1 = []
         l2 = []
-        response = http.get(endpoint, verify=False, params={"page": page}).json()
+        response = http.get(endpoint, params={"page": page}).json()
         for item in response:
             l1.append(item["dcterms:identifier"][0]["@value"])
             l2.append(item["@id"])
