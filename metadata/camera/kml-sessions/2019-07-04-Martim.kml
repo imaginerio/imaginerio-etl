@@ -851,49 +851,6 @@
 	<PhotoOverlay>
 		<name>0071824cx045-11</name>
 		<Camera>
-			<longitude>-43.20517607199999</longitude>
-			<latitude>-22.94618165600001</latitude>
-			<altitude>208.8886509217534</altitude>
-			<heading>77.83627188685334</heading>
-			<tilt>86.16000000000001</tilt>
-			<roll>3.650800327228835e-008</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0071824cx045-11.JPG</href>
-		</Icon>
-		<rotation>-1.52</rotation>
-		<ViewVolume>
-			<leftFov>-26.715</leftFov>
-			<rightFov>26.715</rightFov>
-			<bottomFov>-20.71</bottomFov>
-			<topFov>20.71</topFov>
-			<near>3.0596</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.20517607199999,-22.94618165600002,208.8886509217534</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
-		<name>0071824cx045-11</name>
-		<Camera>
 			<longitude>-43.20517635196988</longitude>
 			<latitude>-22.94618103245007</latitude>
 			<altitude>213.2057932195597</altitude>
