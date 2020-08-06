@@ -28,7 +28,10 @@ def load_camera(path):
     # rename columns
     camera = camera.rename(columns={"name": "id", "long": "lng",})
 
-    # drop duplicates
+    # list and drop duplicates
+    duplicated_kmls = camera.duplicated(subset="id")
+    if len(duplicated_kmls) > 0:
+        duplicated_kmls.to_csv("metadata/camera/duplicated_kmls.csv")
     camera = camera.drop_duplicates(subset="id", keep="last")
 
     return camera
