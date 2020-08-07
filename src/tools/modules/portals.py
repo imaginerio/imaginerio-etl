@@ -26,7 +26,7 @@ def load(PATH):
 
             params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
 
-            response = requests.post(os.environ['PORTALS_API_URL'], params=params)
+            response = requests.post(os.environ["PORTALS_API_URL"], params=params)
 
             data = response.json()
 
@@ -46,7 +46,9 @@ def load(PATH):
 
         dataframe["id"] = dataframe["id"].str.split(".", n=1, expand=True)
 
-        dataframe["portals_url"] = os.environ['PREFIX'] + dataframe["portals_id"].astype(str)
+        dataframe["portals_url"] = os.environ["PREFIX"] + dataframe[
+            "portals_id"
+        ].astype(str)
 
         dataframe = dataframe[
             [
@@ -73,6 +75,3 @@ def load(PATH):
 
         return dataframe
 
-
-if __name__ == "__main__":
-    load()

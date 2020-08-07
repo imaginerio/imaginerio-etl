@@ -93,18 +93,18 @@ id,Not in
 001AMF015022,"['Images', 'Omeka']"
 001AMF015024,"['Images', 'Omeka']"
 001AMF015025,"['Images', 'Omeka']"
-001AMF016001,"['Images', 'Omeka']"
-001AMF016002,"['Images', 'Omeka']"
-001AMF016005,"['Images', 'Omeka']"
-001AMF016006,"['Images', 'Omeka']"
+001AMF016001,['Omeka']
+001AMF016002,['Omeka']
+001AMF016005,['Omeka']
+001AMF016006,['Omeka']
 001AMF016007,"['Images', 'Camera', 'Omeka']"
-001AMF016008,"['Images', 'Omeka']"
+001AMF016008,['Omeka']
 001AMF016009,"['Images', 'Camera', 'Omeka']"
-001AMF016016,"['Images', 'Omeka']"
-001AMF016025,"['Images', 'Omeka']"
+001AMF016016,['Omeka']
+001AMF016025,['Omeka']
 001AMF016026,"['Images', 'Camera', 'Omeka']"
 001AMF016037,"['Images', 'Camera', 'Omeka']"
-001AMF016042,"['Images', 'Omeka']"
+001AMF016042,['Omeka']
 001AN01001007,['Omeka']
 001AN01001008,['Omeka']
 001AN01001009,"['Wikidata', 'Omeka']"
@@ -665,11 +665,11 @@ id,Not in
 002002AMF002002,"['Images', 'Omeka']"
 002002AMF002004,"['Images', 'Portals', 'Wikidata', 'Omeka']"
 002002AMF002008,"['Images', 'Portals', 'Wikidata', 'Omeka']"
-002003AM001,"['Images', 'Portals', 'Wikidata', 'Omeka']"
-002003AM002,"['Images', 'Portals', 'Wikidata', 'Omeka']"
+002003AM001,"['Portals', 'Wikidata', 'Omeka']"
+002003AM002,"['Portals', 'Wikidata', 'Omeka']"
 002003AM002t,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-002003AM003,"['Images', 'Portals', 'Wikidata', 'Omeka']"
-002003AM004,"['Images', 'Portals', 'Wikidata', 'Omeka']"
+002003AM003,"['Portals', 'Wikidata', 'Omeka']"
+002003AM004,"['Portals', 'Wikidata', 'Omeka']"
 002008AV001,"['Images', 'Portals', 'Wikidata', 'Omeka']"
 002008AV002,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 002008AV003,"['Images', 'Portals', 'Wikidata', 'Omeka']"
@@ -1017,13 +1017,13 @@ id,Not in
 002080RJ1503,"['Portals', 'Wikidata', 'Omeka']"
 002080RJ1504,"['Portals', 'Wikidata', 'Omeka']"
 002080RJ1505,"['Portals', 'Wikidata', 'Omeka']"
-002080RJ1506,"['Images', 'Portals', 'Wikidata', 'Omeka']"
+002080RJ1506,"['Portals', 'Wikidata', 'Omeka']"
 002080RJ1507,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 002080RJ1510,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 002080RJ1511,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 002080RJ1512,"['Portals', 'Wikidata', 'Omeka']"
 002080RJ1514,"['Portals', 'Wikidata', 'Omeka']"
-002080RJ1516,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
+002080RJ1516,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 002080RJ1702,"['Portals', 'Wikidata', 'Omeka']"
 002080RJ1708,"['Portals', 'Wikidata', 'Omeka']"
 002080RJ1709,"['Portals', 'Wikidata', 'Omeka']"
@@ -3563,23 +3563,23 @@ id,Not in
 014AM002011t,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 014AM002014,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
 014AM002018,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
-014AM003001,"['Images', 'Omeka']"
+014AM003001,['Omeka']
 014AM003002,"['Images', 'Omeka']"
-014AM003004,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-014AM003005,"['Images', 'Omeka']"
-014AM003006,"['Images', 'Omeka']"
-014AM003007,"['Images', 'Omeka']"
-014AM003008,"['Images', 'Omeka']"
-014AM003009,"['Images', 'Omeka']"
-014AM003010,"['Images', 'Omeka']"
-014AM003012,"['Images', 'Omeka']"
-014AM003013,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
+014AM003004,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
+014AM003005,['Omeka']
+014AM003006,['Omeka']
+014AM003007,['Omeka']
+014AM003008,['Omeka']
+014AM003009,['Omeka']
+014AM003010,['Omeka']
+014AM003012,['Omeka']
+014AM003013,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
 014AM003014,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
 014AM003015,"['Camera', 'Omeka']"
 014AM003016,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
-014AM003018,"['Images', 'Omeka']"
-014AM003019,"['Images', 'Omeka']"
-014AM003020,"['Images', 'Omeka']"
+014AM003018,['Omeka']
+014AM003019,['Omeka']
+014AM003020,['Omeka']
 014AM004001,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 014AM004002,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
 014AM005002,['Omeka']
@@ -3630,7 +3630,7 @@ id,Not in
 014AM012026,"['Portals', 'Omeka']"
 014AM012028,"['Portals', 'Omeka']"
 014AM012032t,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-014AM012035,"['Images', 'Omeka']"
+014AM012035,['Omeka']
 014AM012039,"['Portals', 'Wikidata', 'Omeka']"
 014AM012046,"['Portals', 'Wikidata', 'Omeka']"
 014AM012049,"['Portals', 'Omeka']"

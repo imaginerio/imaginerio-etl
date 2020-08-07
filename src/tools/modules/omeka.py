@@ -2,7 +2,8 @@ import pandas as pd
 import os, re, requests
 from time import sleep
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util import Retry
+from tqdm import tqdm
 
 
 def load(endpoint):
@@ -26,12 +27,12 @@ def load(endpoint):
     l1 = []
     l2 = []
 
-    for page in range(1, last_page + 1):
+    for page in tqdm(range(1, last_page + 1)):
         response = http.get(endpoint, params={"page": page}).json()
         for item in response:
             l1.append(item["dcterms:identifier"][0]["@value"])
             l2.append(item["@id"])
-        sleep(1)
+        sleep(0.5)
 
     results.update({"id": l1, "omeka_url": l2})
 
