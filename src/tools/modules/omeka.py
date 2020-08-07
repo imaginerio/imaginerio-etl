@@ -6,7 +6,6 @@ from requests.packages.urllib3.util.retry import Retry
 
 
 def load(endpoint):
-    results = {}
     retry_strategy = Retry(
         total=3,
         status_forcelist=[429, 500, 502, 503, 504],
@@ -22,12 +21,12 @@ def load(endpoint):
     # print(response.headers["Link"])
     last_page = re.findall(r'\d+(?=>; rel="last)', headers["Link"])[0]
     last_page = int(last_page)
-    # last_page = int(headers["Link"].split("&page")[-1][:3].strip("=>"))
-    # print(last_page)
+
+    results = {}
+    l1 = []
+    l2 = []
 
     for page in range(1, last_page + 1):
-        l1 = []
-        l2 = []
         response = http.get(endpoint, params={"page": page}).json()
         for item in response:
             l1.append(item["dcterms:identifier"][0]["@value"])
@@ -37,7 +36,10 @@ def load(endpoint):
     results.update({"id": l1, "omeka_url": l2})
 
     omeka_df = pd.DataFrame(results)
-
+    omeka_duplicated = omeka_df[omeka_df.duplicated(subset="id")]
+    if len(omeka_duplicated) > 0:
+        omeka_duplicated.to_csv("metadata/omeka/omeka_duplicated.csv")
+    omeka_df.drop_duplicates(subset="id", inplace=True)
     return omeka_df
 
 
