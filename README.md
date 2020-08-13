@@ -2,7 +2,12 @@
 
 ## Commands
 
+
+
 ```bash
+# set PWD variable (Windows users only):
+$ $env:PWD=$PWD
+
 # up!
 $ docker-compose up -d --build
 
