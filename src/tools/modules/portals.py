@@ -46,9 +46,9 @@ def load(PATH):
 
         dataframe["id"] = dataframe["id"].str.split(".", n=1, expand=True)
 
-        dataframe["portals_url"] = os.environ["PREFIX"] + dataframe[
-            "portals_id"
-        ].astype(str)
+        dataframe["portals_id"] = dataframe["portals_id"].astype(str)
+
+        dataframe["portals_url"] = os.environ["PREFIX"] + dataframe["portals_id"]
 
         dataframe = dataframe[
             [
