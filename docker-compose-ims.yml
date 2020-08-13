@@ -5,8 +5,8 @@ services:
     build: .
     volumes:
       - $PWD/src/:/home/user/
-      - D:/imagineRio-images/jpeg-hd/:/home/user/images
-
+      - D:/imagineRio-images/jpeg-hd/:/home/jpeg-hd
+      - D:/imagineRio-images/tiff/:/home/tiff
     tty: true
     env_file:
       - .env
