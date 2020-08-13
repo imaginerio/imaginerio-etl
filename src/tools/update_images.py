@@ -1,10 +1,13 @@
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 import os, shutil, ffmpeg
 import pandas as pd
 
 
 SOURCE_PATH = input("Source folder:")
 
-camera = pd.read_csv(os.path.join(os.environ['CAMERA_PATH'], "camera.csv")
+camera = pd.read_csv("./src/metadata/camera/camera.csv")
 geolocated = list(camera["name"])
 
 
@@ -22,7 +25,7 @@ class Image:
 def save_jpeg(image, output_folder, size=None, overwrite=False):
     """
     Saves jpg file using ffmpeg or returns None if file already exists and overwrite=False.
-    'size' is the largest dimension in resulting image.
+    "size" is the largest dimension in resulting image.
     """
 
     stream = ffmpeg.input(image)
@@ -60,15 +63,25 @@ def file_handler(source_folder):
     ]
 
     for image in files:
+        if not os.path.exists(os.path.join(os.environ["TIFF"], image.tif)):
+            shutil.copy2(image.path, os.environ["TIFF"])
+        else:
+            print(f"{image.tif} already in folder")
         if image.id in geolocated:
-            if not os.path.exists(os.path.join(os.environ['MASTER'], image.tif)):
-                shutil.copy2(image.path, os.environ['MASTER'])
-            else:
-                print(f"{image.tif} already in folder")
-
-            save_jpeg(os.path.join(os.environ['MASTER'], image.tif), os.environ['JPEG_HD'])
-            save_jpeg(os.path.join(os.environ['MASTER'], image.tif), os.environ['JPEG_SD'], size=1000)
-
+            save_jpeg(
+                os.path.join(os.environ["TIFF"], image.tif), os.environ["JPEG_HD"]
+            )
+            save_jpeg(
+                os.path.join(os.environ["TIFF"], image.tif),
+                os.environ["JPEG_SD"].replace(".", "src"),
+                size=1000,
+            )
+        else:
+            save_jpeg(
+                os.path.join(os.environ["TIFF"], image.tif),
+                os.environ["IMG_BACKLOG"],
+                size=1000,
+            )
     return files
 
 
@@ -78,7 +91,7 @@ def file_handler(source_folder):
 
 def create_images_df(files):
     """Creates a dataframe with every image available and its alternate versions.
-    'files' is a list of Image objects."""
+    "files" is a list of Image objects."""
 
     groups = []
     to_remove = []
@@ -108,23 +121,29 @@ def create_images_df(files):
     # Create list of dicts with all files available for each item
     for image in groups:
         if type(image) == list:
-            item = {
-                "id": image[0].id,
-                "img_hd": os.path.join(os.environ['CLOUD_PATH'], image[0].jpg),
-                "img_sd": os.path.join(os.environ['GITHUB_PATH'], image[0].jpg),
-            }
-            for i in image[1:]:
-                item[f"{i.id[-1]}"] = i.jpg
+            if image[0].id in geolocated:
+                item = {
+                    "id": image[0].id,
+                    "img_hd": os.path.join(os.environ["CLOUD_PATH"], image[0].jpg),
+                    "img_sd": os.path.join(os.environ["GITHUB_PATH"], image[0].jpg),
+                }
+                for i in image[1:]:
+                    item[f"{i.id[-1]}"] = i.jpg
+            else:
+                item = {"id": image[0].id}
         else:
-            item = {
-                "id": image.id,
-                "img_hd": os.path.join(os.environ['CLOUD_PATH'], image.jpg),
-                "img_sd": os.path.join(os.environ['GITHUB_PATH'], image.jpg),
-            }
+            if image.id in geolocated:
+                item = {
+                    "id": image.id,
+                    "img_hd": os.path.join(os.environ["CLOUD_PATH"], image.jpg),
+                    "img_sd": os.path.join(os.environ["GITHUB_PATH"], image.jpg),
+                }
+            else:
+                item = {"id": image.id}
         items.append(item)
 
     images_df = pd.DataFrame(items)
-    images_df.sort_values(by=["id"])
+    # images_df.sort_values(by=["id"])
 
     return images_df
 
@@ -138,7 +157,8 @@ def main():
     images_df = create_images_df(files)
 
     print(images_df.head())
-    images_df.to_csv(os.environ['IMAGES_PATH'], index=False)
+
+    images_df.to_csv("src/images/images.csv", index=False)
 
 
 if __name__ == "__main__":
