@@ -8,8 +8,9 @@ from copy import deepcopy
 def update(PATH):
 
     try:
-        # load metadata.csv
+        # load metadata.csv and images.csv
         DF = pd.read_csv(PATH)
+        IMG = pd.read_csv(os.environ["IMAGES_PATH"])
 
         # kml finished
         val_kml = len(DF[DF["geometry"].notna()])
@@ -19,7 +20,7 @@ def update(PATH):
         # image finished
         val_img = len(DF[DF["img_hd"].notna() & DF["geometry"].notna()])
         # image total
-        val_img_total = len(DF[DF["img_hd"].notna()])
+        val_img_total = len(IMG)
 
         # cumulus published
         val_meta = len(DF[DF["portals_id"].notna()])
