@@ -7,7 +7,8 @@ import numpy as np
 from bokeh.plotting import output_file, show
 from bokeh.layouts import column, layout
 
-from . import report, maps
+from report import update as report_update
+from maps import update as maps_update
 
 
 def omeka_csv(df):
@@ -117,11 +118,141 @@ def gis_csv(df):
     print(gis_df.head())
 
 
+def quickstate_csv(df):
+    """
+    Export CSV file for QuickStatements import on Wikidata
+    """
+
+    quickstate = pd.DataFrame(
+        columns=[
+            "qid",
+            "P31",
+            "Lpt-br",
+            "Dpt-br",
+            "P571",
+            "P17",
+            "P1259",
+            "P170",
+            "P186",
+            "P195",
+            "P217",
+            "P2079",
+            "P4036",
+            "P2049",
+            "P2048",
+            "P7835",
+        ]
+    )
+
+    # instance of Q125191
+    quickstate["P31"] = "teste"
+    # pt-br label
+    quickstate["Lpt-br"] = df["title"]
+    # pt-br description
+    quickstate["Dpt-br"] = "Fotografia de " + df["creator"]
+    # inception
+    quickstate["P571"] = df["date"]
+    # country
+    quickstate["P17"] = "Q155"
+    # coordinate of POV
+    quickstate["P1259"] = df["lat"].astype(str) + "/" + df["lng"].astype(str)
+    # creator
+    quickstate["P170"] = df["creator"]
+    # material used
+    quickstate["P186"] = df["type"]
+    # collection
+    quickstate["P195"] = "Q71989864"
+    # inventory number
+    quickstate["P217"] = df["id"]
+    # fabrication method
+    quickstate["P2079"] = df["fabrication_method"]
+    # field of view
+    quickstate["P4036"] = df["fov"].astype(str) + " degree"
+    # width
+    quickstate["P2049"] = df["image_width"].str.replace(",", ".") + " centimetre"
+    # height
+    quickstate["P2048"] = df["image_height"].str.replace(",", ".") + " centimetre"
+    # IMS ID
+    quickstate["P7835"] = df["portals_id"].astype(int)
+    # Copyright status
+    # quickstate["P6216"]
+
+    # material
+    paper = quickstate["P186"].str.contains("Papel", na=False)
+    glass = quickstate["P186"].str.contains("Vidro", na=False)
+    quickstate.loc[paper, "P186"] = "Q11472"
+    quickstate.loc[glass, "P186"] = "Q11469"
+
+    # fabrication method
+    gelatin = quickstate["P2079"].str.contains("GELATINA", na=False)
+    albumin = quickstate["P2079"].str.contains("ALBUMINA", na=False)
+    quickstate.loc[gelatin, "P2079"] = "Q172984"
+    quickstate.loc[albumin, "P2079"] = "Q580807"
+
+    # creator
+    creators = {
+        "Augusto Malta": "Q16495239",
+        "Anônimo": "Q4233718",
+        "Marc Ferrez": "Q3180571",
+        "Georges Leuzinger": "Q5877879",
+        "José dos Santos Affonso": "Q63993961",
+        "N. Viggiani": "Q65619909",
+        "Archanjo Sobrinho": "Q64009665",
+        "F. Basto": "Q55089601",
+        "J. Faria de Azevedo": "Q97570600",
+        "S. H. Holland": "Q65619918",
+        "Augusto Monteiro": "Q65619921",
+        "Jorge Kfuri": "Q63166336",
+        "Camillo Vedani": "Q63109123",
+        "Fritz Büsch": "Q63109492",
+        "Armando Pittigliani": "Q19607834",
+        "Braz": "Q97487621",
+        "Stahl & Wahnschaffe": "Q63109157",
+        "Gomes Junior": "Q86942676",
+        "A. Ruelle": "Q97570551",
+        "Guilherme Santos": "Q55088608",
+        "Albert Frisch": "Q21288396",
+        "José Baptista Barreira Vianna": "Q63166517",
+        "Alfredo Krausz": "Q63166405",
+        "Therezio Mascarenhas": "Q97570728",
+        "Torres": "Q65619905",
+        "Theodor Preising": "Q63109140",
+        "Augusto Stahl": "Q4821327",
+        "Luiz Musso": "Q89538832",
+        "Carlos Bippus": "Q63109147",
+        "Thiele": "Q64825643",
+        "Revert Henrique Klumb": "Q3791061",
+        "Juan Gutierrez": "Q10312614",
+        "F. Manzière": "Q65619915",
+        "Antonio Luiz Ferreira": "Q97570558",
+        "Etienne Farnier": "Q97570575",
+        "José Francisco Corrêa": "Q10309433",
+        "Chapelin": "Q97570376",
+        "J. Teixeira": "Q89642578",
+        "F. Garcia": "Q97570588",
+        "A. de Barros Lobo": "Q97570363",
+        "Bloch": "Q61041099",
+    }
+
+    def name2qid(name):
+        try:
+            qid = creators[f"{name}"]
+        except KeyError:
+            qid = ""
+        return qid
+
+    quickstate["P170"] = quickstate["P170"].apply(name2qid)
+
+    quickstate.to_csv((os.environ["QUICKSTATE_PATH"]), index=False)
+
+    print(quickstate.head())
+
+
 def load(METADATA_PATH):
 
     # load items for dashboard
-    dashboard_plot = report.update(METADATA_PATH)
-    map_plot = maps.update(METADATA_PATH)
+    dashboard_plot = report_update(METADATA_PATH)
+    map_plot = maps_update(METADATA_PATH)
 
     # read metadata.csv
     export_df = pd.read_csv(
@@ -145,6 +276,9 @@ def load(METADATA_PATH):
 
     # export gis-import.csv
     gis_csv(export_df)
+
+    # export quickstate.csv
+    quickstate_csv(export_df)
 
     # export index.html
     output_file(os.environ["INDEX_PATH"], title="Situated Views")
