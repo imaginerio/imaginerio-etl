@@ -53,9 +53,11 @@ def update(PATH):
         plot_hbar = update_hbar(values)
         # update pie chart
         plot_pie = update_pie(values)
+        # update tiles chart
+        plot_tiles = update_tiles(DF)
 
         # export figures
-        export_figures = {"hbar": plot_hbar, "pie": plot_pie}
+        export_figures = {"hbar": plot_hbar, "pie": plot_pie, "tiles": plot_tiles}
 
         return export_figures
 
@@ -198,3 +200,57 @@ def update_pie(values):
     plot_pie.background_fill_color = "ghostwhite"
 
     return plot_pie
+
+def update_tiles (df):
+    """
+    Render tiles chart report
+    """
+
+    df_tiles = pd.DataFrame(columns=[
+        "id",
+        "Geolocated",
+        "HiRes Images",
+        "Published on Cumulus Portals",
+        "Published on Wikimedia (Commons and Wikidata)",
+        "Published on Omeka-S",
+        "booleans"
+        ]
+    )
+
+    #add items
+    df_tiles["id"] = df["id"]
+    df_tiles["Geolocated"] = df["geometry"].notna()
+    df_tiles["HiRes Images"] = df["img_hd"].notna() & df["geometry"].notna()
+    df_tiles["Published on Cumulus Portals"] = df["portals_id"].notna()
+    df_tiles["Published on Wikimedia Commons"] = df["wikidata_image"].notna()
+    df_tiles["Published on Wikidata"] = df["wikidata_id"].notna()
+    df_tiles["Published on Omeka-S"] = df["omeka_url"].notna()
+
+    # transform a column in index
+    df_tiles = df_tiles.set_index('id')
+    df_tiles.columns.name = 'tiles'
+    
+    # add a two lists of index and columns
+    axis_x = list(df_tiles.index)
+    axis_y = list(df_tiles.columns)
+
+    # reshape to 1D array
+    df_tiles_final = pd.DataFrame(df_tiles.stack(), columns=['booleans']).reset_index()
+
+    # construct a data source and filter 
+    source = ColumnDataSource(data=df_tiles_final)
+    booleans = [True if booleana_val == True else False for booleana_val in source.data['booleans']]
+    view = CDSView(source=source, filters=[BooleanFilter(booleans)])
+
+    # base chart
+    tiles = figure(x_range=axis_x,y_range=list(reversed(axis_y)),
+               x_axis_location="above", plot_width=2800, plot_height=1400)
+
+    # construct tiles
+    rec = tiles.rect(x='id', y='tiles', width=1,height=1,
+                    color="orange",
+                    line_color="white",
+                    source=source,
+                    view=view)
+
+    return (tiles)
