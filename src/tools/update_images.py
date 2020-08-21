@@ -4,9 +4,10 @@ load_dotenv(override=True)
 import os, shutil, ffmpeg
 import pandas as pd
 
-
+# path to images source on remote drive
 SOURCE_PATH = input("Source folder:")
 
+# list geolocated items
 camera = pd.read_csv("./src/metadata/camera/camera.csv")
 geolocated = list(camera["name"])
 
@@ -25,27 +26,28 @@ class Image:
 def save_jpeg(image, output_folder, size=None, overwrite=False):
     """
     Saves jpg file using ffmpeg or returns None if file already exists and overwrite=False.
-    "size" is the largest dimension in resulting image.
+    If rescaling, "size" is the largest dimension in resulting image. 
     """
 
+    # initialize ffmpeg
     stream = ffmpeg.input(image)
+    # get filename for full path
     filename = (os.path.split(image)[1]).split(".")[0]
+    # skip existing files when overwrite is False
     if not overwrite and os.path.exists(os.path.join(output_folder, f"{filename}.jpg")):
         print(f"{filename}.jpg already exists")
         return None
-
+    # fit image within a square of size 'size'
     if size:
         stream = ffmpeg.filter(
             stream, "scale", size, size, force_original_aspect_ratio="decrease"
         )
+    # destination folder
     stream = ffmpeg.output(
         stream, os.path.join(output_folder, filename) + ".jpg", **{"q": 0}
     )
+    # run ffmpeg
     ffmpeg.run(stream, overwrite_output=True)
-
-
-# user insert all .tif files in images/master
-# ffmpeg converts files to .jpg in images/jpeg
 
 
 def file_handler(source_folder):
@@ -53,6 +55,8 @@ def file_handler(source_folder):
     Returns list of original files in source folder according to internal requirements, 
     copies them to master and saves jpegs.
     """
+
+    # create list of Image objects from source
     files = [
         Image(os.path.join(root, name))
         for root, dirs, files in os.walk(source_folder)
@@ -62,11 +66,14 @@ def file_handler(source_folder):
         and not name.endswith(("v.tif"))
     ]
 
+    # iterate over files at source
     for image in files:
+        # copy original tiffs to /tiff/ or skip if already there
         if not os.path.exists(os.path.join(os.environ["TIFF"], image.tif)):
             shutil.copy2(image.path, os.environ["TIFF"])
         else:
             print(f"{image.tif} already in folder")
+        # create hd and sd jpegs for geolocated items
         if image.id in geolocated:
             save_jpeg(
                 os.path.join(os.environ["TIFF"], image.tif), os.environ["JPEG_HD"]
@@ -77,16 +84,13 @@ def file_handler(source_folder):
                 size=1000,
             )
         else:
+            # create backlog with sd jpegs to be geolocated
             save_jpeg(
                 os.path.join(os.environ["TIFF"], image.tif),
                 os.environ["IMG_BACKLOG"],
                 size=1000,
             )
     return files
-
-
-# pandas creates a dataframe with all images available for a id
-# pandas saves all data regarding imagens in images/images.csv
 
 
 def create_images_df(files):
@@ -98,16 +102,15 @@ def create_images_df(files):
     items = []
 
     # Find ids that contain other ids (secondary versions) and group them together
-    for item in files:
-        i = 0
+    for i, item in enumerate(files):
+        # i = 0
         matched = []
         while i < len(files):
             if item.id in files[i].id:
                 matched.append(files[i])
-            i += 1
+            # i += 1
         if len(matched) > 1:
             groups.append(matched)
-
         else:
             groups.append(item)
 
@@ -121,6 +124,7 @@ def create_images_df(files):
     # Create list of dicts with all files available for each item
     for image in groups:
         if type(image) == list:
+            # include just the 'master' version when others are available
             if image[0].id in geolocated:
                 item = {
                     "id": image[0].id,
@@ -130,6 +134,7 @@ def create_images_df(files):
                 for i in image[1:]:
                     item[f"{i.id[-1]}"] = i.jpg
             else:
+                # if item isn't geolocated, don't send to github or cloud
                 item = {"id": image[0].id}
         else:
             if image.id in geolocated:
@@ -139,11 +144,12 @@ def create_images_df(files):
                     "img_sd": os.path.join(os.environ["GITHUB_PATH"], image.jpg),
                 }
             else:
+                # if item isn't geolocated, don't send to github or cloud
                 item = {"id": image.id}
         items.append(item)
 
     images_df = pd.DataFrame(items)
-    # images_df.sort_values(by=["id"])
+    images_df.sort_values(by=["id"])
 
     return images_df
 
