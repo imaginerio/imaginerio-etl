@@ -1,6 +1,6 @@
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime as dt
 from pathlib import Path
 
 import numpy as np
@@ -12,6 +12,29 @@ from maps import update as maps_update
 from report import update as report_update
 
 
+def img_to_commons(METADATA_PATH, IMAGES_PATH):
+
+    # Get unplubished geolocated images
+    final_df = pd.read_csv(METADATA_PATH)
+    commons_df = pd.DataFrame(
+        final_df[
+            final_df["geometry"].notna()
+            & final_df["img_hd"].notna()
+            & final_df["wikidata_image"].isna()
+        ]
+    )
+
+    # Create folder with images to be sent
+    today = dt.now()
+
+    new_folder = IMAGES_PATH + "commons_" + today.strftime("%Y%m%d")
+
+    Path(new_folder).mkdir(parents=True, exist_ok=True)
+
+    for id in commons_df["id"]:
+        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
+
+
 def omeka_csv(df):
     """
     Export omeka.csv
@@ -20,18 +43,22 @@ def omeka_csv(df):
     # read final dataframe
     omeka_df = df
 
-    # datetime to year strings
-    omeka_df["date"] = omeka_df["date"].dt.strftime("%Y-%m-%d")
+    # datetime to string according to date accuracy
+    omeka_df.loc[omeka_df["date_accuracy"] == "day", "dcterms:date"] = omeka_df[
+        "date"
+    ].dt.strftime("%Y-%m-%d")
+    omeka_df.loc[omeka_df["date_accuracy"] == "month", "dcterms:date"] = omeka_df[
+        "date"
+    ].dt.strftime("%Y-%m")
+    omeka_df.loc[omeka_df["date_accuracy"] == "year", "dcterms:date"] = omeka_df[
+        "date"
+    ].dt.strftime("%Y")
+    omeka_df.loc[omeka_df["date_accuracy"] == "circa", "dcterms:date"] = np.nan
     omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
     omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
-
-    # join years into interval
-    omeka_df["interval"] = omeka_df["start_date"] + "/" + omeka_df["end_date"]
-    # omeka_df = omeka_df.drop(columns=["start_date", "end_date"])
-
-    # pick date to be displayed (precise or range)
-    omeka_df.loc[(omeka_df["accurate_date"] == False), "date"] = np.nan
-    omeka_df.loc[(omeka_df["accurate_date"] == True), "interval"] = np.nan
+    omeka_df.loc[omeka_df["date_accuracy"] == "circa", "interval"] = (
+        omeka_df["start_date"] + "/" + omeka_df["end_date"]
+    )
 
     # format data
     omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
@@ -50,7 +77,6 @@ def omeka_csv(df):
             "title": "dcterms:title",
             "description": "dcterms:description",
             "creator": "dcterms:creator",
-            "date": "dcterms:date",
             "interval": "dcterms:temporal",
             "type": "dcterms:type",
             "image_width": "schema:width",
@@ -130,9 +156,15 @@ def quickstate_csv(df):
             "P31",
             "Lpt-br",
             "Dpt-br",
+            "Den",
             "P571",
+            "qal1319",
+            "qal1326",
             "P17",
             "P1259",
+            "qal2044",
+            "qal7787",
+            "qal8208",
             "P170",
             "P186",
             "P195",
@@ -145,18 +177,51 @@ def quickstate_csv(df):
         ]
     )
 
-    # instance of Q125191
-    quickstate["P31"] = "teste"
+    # date_accuracy
+    quickstate["date_accuracy"] = df["date_accuracy"]
+    circa = quickstate["date_accuracy"] == "circa"
+    year = quickstate["date_accuracy"] == "year"
+    month = quickstate["date_accuracy"] == "month"
+    day = quickstate["date_accuracy"] == "day"
+
     # pt-br label
     quickstate["Lpt-br"] = df["title"]
+
     # pt-br description
     quickstate["Dpt-br"] = "Fotografia de " + df["creator"]
+    titles = quickstate.groupby(by=["Lpt-br", "P170"]).cumcount() + 1
+    quickstate["Dpt-br"] = quickstate["Dpt-br"] + " - " + titles.astype(str)
+    quickstate.loc[~quickstate["Lpt-br"].duplicated(keep=False), "Dpt-br"] = quickstate[
+        "Dpt-br"
+    ].str.strip("- 1")
+
+    # en description
+    quickstate["Den"] = quickstate["Dpt-br"].str.replace(
+        "Fotografia de ", "Photograph by "
+    )
+
+    # Instance of
+    quickstate["P31"] = "Q125191"
     # inception
-    quickstate["P571"] = df["date"]
+    quickstate["P571"] = df["date"].apply(dt.isoformat)
+    quickstate.loc[circa, "P571"] = quickstate["P571"] + "Z/8"
+    quickstate.loc[year, "P571"] = quickstate["P571"] + "Z/9"
+    quickstate.loc[month, "P571"] = quickstate["P571"] + "Z/10"
+    quickstate.loc[day, "P571"] = quickstate["P571"] + "Z/11"
+    # earliest date
+    quickstate.loc[circa, "qal1319"] = df["start_date"].apply(dt.isoformat) + "Z/9"
+    # latest date
+    quickstate.loc[circa, "qal1326"] = df["end_date"].apply(dt.isoformat) + "Z/9"
     # country
     quickstate["P17"] = "Q155"
     # coordinate of POV
-    quickstate["P1259"] = df["lat"].astype(str) + "/" + df["lng"].astype(str)
+    quickstate["P1259"] = "@" + df["lat"].astype(str) + "/" + df["lng"].astype(str)
+    # altitude
+    quickstate["qal2044"] = df["height"].astype(str) + "U11573"
+    # heading
+    quickstate["qal7787"] = df["heading"].astype(str) + "U28390"
+    # tilt
+    quickstate["qal8208"] = df["tilt"].astype(str) + "U28390"
     # creator
     quickstate["P170"] = df["creator"]
     # material used
@@ -168,13 +233,15 @@ def quickstate_csv(df):
     # fabrication method
     quickstate["P2079"] = df["fabrication_method"]
     # field of view
-    quickstate["P4036"] = df["fov"].astype(str) + " degree"
+    quickstate["P4036"] = df["fov"].astype(str) + "U28390"
     # width
-    quickstate["P2049"] = df["image_width"].str.replace(",", ".") + " centimetre"
+    quickstate["P2049"] = df["image_width"].str.replace(",", ".") + "U174728"
     # height
-    quickstate["P2048"] = df["image_height"].str.replace(",", ".") + " centimetre"
+    quickstate["P2048"] = df["image_height"].str.replace(",", ".") + "U174728"
     # IMS ID
     quickstate["P7835"] = df["portals_id"].astype(int)
+    # qid
+    quickstate["qid"] = df["wikidata_id"].str.split("/").str[-1]
     # Copyright status
     # quickstate["P6216"]
 
@@ -251,10 +318,6 @@ def quickstate_csv(df):
 
 def load(METADATA_PATH):
 
-    # load items for dashboard
-    dashboard_plot = report_update(METADATA_PATH)
-    map_plot = maps_update(METADATA_PATH)
-
     # read metadata.csv
     export_df = pd.read_csv(
         METADATA_PATH, parse_dates=["date", "start_date", "end_date"]
@@ -281,6 +344,10 @@ def load(METADATA_PATH):
     # export quickstate.csv
     quickstate_csv(export_df)
 
+    # load items for dashboard
+    dashboard_plot = report_update(METADATA_PATH)
+    map_plot = maps_update(METADATA_PATH)
+
     # export index.html
     output_file(os.environ["INDEX_PATH"], title="Situated Views")
     show(
@@ -289,29 +356,6 @@ def load(METADATA_PATH):
             sizing_mode="stretch_both",
         )
     )
-
-
-def img_to_commons(METADATA_PATH, IMAGES_PATH):
-
-    # Get unplubished geolocated images
-    final_df = pd.read_csv(METADATA_PATH)
-    commons_df = pd.DataFrame(
-        final_df[
-            final_df["geometry"].notna()
-            & final_df["img_hd"].notna()
-            & final_df["wikidata_image"].isna()
-        ]
-    )
-
-    # Create folder with images to be sent
-    today = datetime.now()
-
-    new_folder = IMAGES_PATH + "commons_" + today.strftime("%Y%m%d")
-
-    Path(new_folder).mkdir(parents=True, exist_ok=True)
-
-    for id in commons_df["id"]:
-        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
 
 
 if __name__ == "__main__":
