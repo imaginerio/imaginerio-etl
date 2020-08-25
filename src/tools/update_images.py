@@ -1,8 +1,11 @@
+import os
+import shutil
+
+import ffmpeg
+import pandas as pd
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-import os, shutil, ffmpeg
-import pandas as pd
 
 
 SOURCE_PATH = input("Source folder:")

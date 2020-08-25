@@ -1,8 +1,9 @@
 import os
-import pandas as pd
-import numpy as np
-from xml.etree import ElementTree
 from pprint import pprint
+from xml.etree import ElementTree
+
+import numpy as np
+import pandas as pd
 
 
 def xml_to_df(path):
