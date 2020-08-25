@@ -32,8 +32,10 @@ def update_metadata(catalog, dataframes):
             validate="one_to_one",
             copy=True,
         )
+        # filter and label items that are on catalog only
         missing = missing[missing["Not in"] == "left_only"]
         missing["Not in"] = f"{dataframe.name}"
+        # add those items to review_df
         review_df = review_df.append(missing[["id", "Not in"]], ignore_index=True)
     review_df = review_df.groupby("id", as_index=False).agg(list)
     review_df.to_csv(os.environ["REVIEW_PATH"], index=False)
@@ -50,44 +52,50 @@ def main():
 
         with tqdm(total=100) as pbar:
 
+            # Available images
             pbar.set_description("Loading Image Paths")
             images_df = images.load(os.environ["IMAGES_PATH"])
             images_df.name = "Images"
             pbar.update(5)
 
+            # Coordinates and polygons
             pbar.set_description("Loading Camera Positions")
             camera_df = camera.load(os.environ["CAMERA_PATH"])
             camera_df.name = "Camera"
             pbar.update(5)
 
+            # Items metadata
             pbar.set_description("Loading Cumulus Metadata")
             catalog_df = catalog.load(os.environ["CUMULUS_XML"])
             catalog_df.name = "Catalog"
             pbar.update(5)
 
+            # List items on Portals
             pbar.set_description("Checking Cumulus Portals")
             portals_df = portals.load(os.environ["PORTALS_PATH"])
             portals_df.name = "Portals"
             pbar.update(20)
 
+            # List items on Wikidata
             pbar.set_description("Checking Wikidata")
             wikidata_df = wikidata.load(os.environ["WIKIDATA_PATH"])
             wikidata_df.name = "Wikidata"
             pbar.update(10)
 
+            # List items on Omeka
             pbar.set_description("Checking Omeka")
             omeka_df = omeka.load(os.environ["OMEKA_API_URL"])
             omeka_df.name = "Omeka"
             pbar.update(20)
 
+            # Merge all dataframes
             pbar.set_description("Updating Metadata Files")
             dataframes = [images_df, camera_df, portals_df, wikidata_df, omeka_df]
             update_metadata(catalog_df, dataframes)
             pbar.update(10)
 
-            pbar.set_description(
-                "Exporting omeka-import.csv, gis-import.csv and dashboard..."
-            )
+            # Create dashboard
+            pbar.set_description("Generating import files and dashboard...")
             export.load(os.environ["METADATA_PATH"])
             pbar.update(25)
 
