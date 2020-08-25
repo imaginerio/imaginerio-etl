@@ -1,5 +1,5 @@
-import os
 import json
+import os
 import time
 import urllib
 
@@ -74,4 +74,3 @@ def load(PATH):
         print("Portals loaded from .csv \n")
 
         return dataframe
-

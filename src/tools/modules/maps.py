@@ -1,13 +1,19 @@
-import pandas as pd
-import geopandas as gpd
 import json
 
+import geopandas as gpd
+import pandas as pd
+from bokeh.models import (
+    Circle,
+    GeoJSONDataSource,
+    HoverTool,
+    Legend,
+    Patches,
+    WheelZoomTool,
+)
+from bokeh.plotting import figure
+from bokeh.tile_providers import Vendors, get_provider
 from pyproj import Proj, transform
 from shapely import wkt
-
-from bokeh.plotting import figure
-from bokeh.tile_providers import get_provider, Vendors
-from bokeh.models import GeoJSONDataSource, HoverTool, Circle, Patches, WheelZoomTool, Legend
 
 
 def update(PATH):
@@ -73,7 +79,9 @@ def apply_transform(geodf):
 
     # reduce columns and return final geodataframe
 
-    map_geodf = geodf[["id", "title", "creator", "img_hd", "img_sd", "geometry", "lat2", "lng2"]]
+    map_geodf = geodf[
+        ["id", "title", "creator", "img_hd", "img_sd", "geometry", "lat2", "lng2"]
+    ]
 
     return map_geodf
 
@@ -87,7 +95,7 @@ def update_map(map_geodf):
     # create a geodatasource
     geosource_img = GeoJSONDataSource(geojson=map_geodf_img.to_json())
     geosource_noimg = GeoJSONDataSource(geojson=map_geodf_noimg.to_json())
-    
+
     # Description from points
     TOOLTIPS1 = """
         <div style="margin: 5px; width: 300px" >
@@ -131,7 +139,7 @@ def update_map(map_geodf):
         hover_fill_color="grey",
         hover_line_color="grey",
     )
-    
+
     point_noimg = maps.circle(
         x="lat2",
         y="lng2",
@@ -140,7 +148,7 @@ def update_map(map_geodf):
         fill_color="gainsboro",
         fill_alpha=0.5,
         line_color="dimgray",
-        legend_label="No HD Images"
+        legend_label="No HD Images",
     )
 
     point_img = maps.circle(
@@ -151,32 +159,35 @@ def update_map(map_geodf):
         fill_color="orange",
         fill_alpha=0.5,
         line_color="dimgray",
-        legend_label="HD Images"
+        legend_label="HD Images",
     )
 
     # create a hovertool
     h1 = HoverTool(renderers=[viewcone], tooltips=None, mode="mouse", show_arrow=False)
-    h2 = HoverTool(renderers=[point_img], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False)
-    h3 = HoverTool(renderers=[point_noimg], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False)
+    h2 = HoverTool(
+        renderers=[point_img], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False
+    )
+    h3 = HoverTool(
+        renderers=[point_noimg], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False
+    )
 
     # create a legend
-    dic = {"HD Images":len(map_geodf_img),
-           "No HD Images":len(map_geodf_noimg)}
+    dic = {"HD Images": len(map_geodf_img), "No HD Images": len(map_geodf_noimg)}
 
-    datas = pd.Series(dic).reset_index(name="value").rename(columns={"index":"data"})
+    datas = pd.Series(dic).reset_index(name="value").rename(columns={"index": "data"})
 
     sep = []
 
     for i in range(len(datas.index)):
-        sep.append(': ')
+        sep.append(": ")
 
-    datas['legend'] = datas['data'] + sep + datas['value'].astype(str)
+    datas["legend"] = datas["data"] + sep + datas["value"].astype(str)
 
     legend = Legend(
-        items=[(datas.iloc[0,2], [point_img]), (datas.iloc[1,2], [point_noimg])],
+        items=[(datas.iloc[0, 2], [point_img]), (datas.iloc[1, 2], [point_noimg])],
         location="top_right",
-        orientation="vertical")
-
+        orientation="vertical",
+    )
 
     maps.add_tools(h1, h2, h3)
     maps.add_layout(legend)

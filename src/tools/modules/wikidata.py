@@ -1,7 +1,9 @@
-import os, requests, json
-import pandas as pd
-import numpy as np
+import json
+import os
 
+import numpy as np
+import pandas as pd
+import requests
 
 # Search for anything related to IMS Collection (Q71989864)
 # Search for ids on property inventory number (P217)

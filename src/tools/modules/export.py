@@ -1,14 +1,15 @@
-from pathlib import Path
+import os
+import shutil
 from datetime import datetime
-import os, shutil
+from pathlib import Path
 
-import pandas as pd
 import numpy as np
-from bokeh.plotting import output_file, show
+import pandas as pd
 from bokeh.layouts import column, layout
+from bokeh.plotting import output_file, show
 
-from report import update as report_update
 from maps import update as maps_update
+from report import update as report_update
 
 
 def omeka_csv(df):

@@ -1,8 +1,11 @@
-import pandas as pd
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, HoverTool, WheelZoomTool, Span
-from bokeh.transform import cumsum
+import os
+
 from copy import deepcopy
+
+import pandas as pd
+from bokeh.models import ColumnDataSource, HoverTool, Span, WheelZoomTool
+from bokeh.plotting import figure
+from bokeh.transform import cumsum
 
 
 def update(PATH):

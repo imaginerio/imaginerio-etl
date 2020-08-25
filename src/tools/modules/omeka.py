@@ -1,9 +1,12 @@
-import pandas as pd
-import os, re, requests
+import os
+import re
 from time import sleep
+
+import pandas as pd
+import requests
 from requests.adapters import HTTPAdapter
-from urllib3.util import Retry
 from tqdm import tqdm
+from urllib3.util import Retry
 
 
 def load(endpoint):
