@@ -14,6 +14,13 @@ SOURCE_PATH = input("Source folder:")
 camera = pd.read_csv("./src/metadata/camera/camera.csv")
 geolocated = list(camera["name"])
 
+# write rclone filter file
+f = open(os.environ["RCLONE"], "w+")
+for id in geolocated:
+    f.write(f"+ {id}.jpg\n")
+f.write("- *")
+f.close()
+
 
 class Image:
 
@@ -105,13 +112,13 @@ def create_images_df(files):
     items = []
 
     # Find ids that contain other ids (secondary versions) and group them together
-    for i, item in enumerate(files):
-        # i = 0
+    for item in files:
+        i = 0
         matched = []
         while i < len(files):
             if item.id in files[i].id:
                 matched.append(files[i])
-            # i += 1
+            i += 1
         if len(matched) > 1:
             groups.append(matched)
         else:
@@ -138,7 +145,10 @@ def create_images_df(files):
                     item[f"{i.id[-1]}"] = i.jpg
             else:
                 # if item isn't geolocated, don't send to github or cloud
-                item = {"id": image[0].id}
+                item = {
+                    "id": image[0].id,
+                    "img_sd": os.path.join(os.environ["GITHUB_PATH"], image[0].jpg),
+                }
         else:
             if image.id in geolocated:
                 item = {
@@ -148,7 +158,10 @@ def create_images_df(files):
                 }
             else:
                 # if item isn't geolocated, don't send to github or cloud
-                item = {"id": image.id}
+                item = {
+                    "id": image.id,
+                    "img_sd": os.path.join(os.environ["GITHUB_PATH"], image.jpg),
+                }
         items.append(item)
 
     images_df = pd.DataFrame(items)

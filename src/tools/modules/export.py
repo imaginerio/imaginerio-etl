@@ -8,8 +8,8 @@ import pandas as pd
 from bokeh.layouts import column, layout
 from bokeh.plotting import output_file, show
 
-from maps import update as maps_update
-from report import update as report_update
+from .maps import update as maps_update
+from .report import update as report_update
 
 
 def img_to_commons(METADATA_PATH, IMAGES_PATH):
@@ -41,7 +41,7 @@ def omeka_csv(df):
     """
 
     # read final dataframe
-    omeka_df = df
+    omeka_df = df.copy()
 
     # datetime to string according to date accuracy
     omeka_df.loc[omeka_df["date_accuracy"] == "day", "dcterms:date"] = omeka_df[
@@ -128,7 +128,7 @@ def gis_csv(df):
     Export gis.csv
     """
 
-    gis_df = df
+    gis_df = df.copy()
 
     # rename columns
     gis_df = gis_df.rename(
@@ -186,20 +186,10 @@ def quickstate_csv(df):
 
     # pt-br label
     quickstate["Lpt-br"] = df["title"]
-
     # pt-br description
     quickstate["Dpt-br"] = "Fotografia de " + df["creator"]
-    titles = quickstate.groupby(by=["Lpt-br", "P170"]).cumcount() + 1
-    quickstate["Dpt-br"] = quickstate["Dpt-br"] + " - " + titles.astype(str)
-    quickstate.loc[~quickstate["Lpt-br"].duplicated(keep=False), "Dpt-br"] = quickstate[
-        "Dpt-br"
-    ].str.strip("- 1")
-
     # en description
-    quickstate["Den"] = quickstate["Dpt-br"].str.replace(
-        "Fotografia de ", "Photograph by "
-    )
-
+    quickstate["Den"] = "Photograph by " + df["creator"]
     # Instance of
     quickstate["P31"] = "Q125191"
     # inception
@@ -310,6 +300,8 @@ def quickstate_csv(df):
         return qid
 
     quickstate["P170"] = quickstate["P170"].apply(name2qid)
+
+    quickstate = quickstate.drop(columns="date_accuracy")
 
     quickstate.to_csv((os.environ["QUICKSTATE_PATH"]), index=False)
 
