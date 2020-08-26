@@ -1,29 +1,38 @@
 import pandas as pd
+import numpy as np
+
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, HoverTool, WheelZoomTool, Span
+from bokeh.models import ColumnDataSource, HoverTool, WheelZoomTool, Span, LinearColorMapper
 from bokeh.transform import cumsum
+
 from copy import deepcopy
 
 
 def update(PATH):
 
     try:
-        # load metadata.csv and images.csv
+        # load metadata.csv
         DF = pd.read_csv(PATH)
-        IMG = pd.read_csv(os.environ["IMAGES_PATH"])
+        # create a new df
+        DF_AUX = pd.DataFrame(columns=["A","B","C","D","E"])
 
+
+        # add items in global variables and new dataframe
         # kml finished
         val_kml = len(DF[DF["geometry"].notna()])
+        DF_AUX["A"] = DF["geometry"].notna().astype(int)
         # kml total
         val_kml_total = 0
 
         # image finished
         val_img = len(DF[DF["img_hd"].notna() & DF["geometry"].notna()])
+        DF_AUX["B"] = DF["img_hd"].notna().astype(int) & DF["geometry"].notna().astype(int)
         # image total
-        val_img_total = len(IMG)
+        val_img_total = len(DF[DF["img_hd"].notna()])
 
         # cumulus published
         val_meta = len(DF[DF["portals_id"].notna()])
+        DF_AUX["C"] = DF["portals_id"].notna().astype(int)
         # cumulus total
         val_meta_total = len(DF)
 
@@ -31,11 +40,14 @@ def update(PATH):
         val_wiki = len(DF[DF["wikidata_image"].notna()])
         # wiki total
         val_wiki_total = len(DF[DF["wikidata_id"].notna()])
+        DF_AUX["D"] = DF["wikidata_id"].notna().astype(int)
 
         # omeka published
         val_omeka = len(DF[DF["omeka_url"].notna()])
+        DF_AUX["E"] = DF["omeka_url"].notna().astype(int)
         # omeka total
         val_omeka_total = 0
+
 
         values = {
             "Done": [val_omeka, val_wiki, val_meta, val_img, val_kml],
@@ -48,6 +60,10 @@ def update(PATH):
             ],
             "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
         }
+
+        # count fields for each item and add result as column 
+        DF_AUX = DF_AUX.replace(0, np.nan)
+        DF["rate"] = DF_AUX.count(axis=1)
 
         # update color bar
         plot_hbar = update_hbar(values)
@@ -201,56 +217,90 @@ def update_pie(values):
 
     return plot_pie
 
-def update_tiles (df):
+def update_tiles(DF):
     """
     Render tiles chart report
     """
 
-    df_tiles = pd.DataFrame(columns=[
-        "id",
-        "Geolocated",
-        "HiRes Images",
-        "Published on Cumulus Portals",
-        "Published on Wikimedia (Commons and Wikidata)",
-        "Published on Omeka-S",
-        "booleans"
-        ]
-    )
+    df = DF
 
-    #add items
-    df_tiles["id"] = df["id"]
-    df_tiles["Geolocated"] = df["geometry"].notna()
-    df_tiles["HiRes Images"] = df["img_hd"].notna() & df["geometry"].notna()
-    df_tiles["Published on Cumulus Portals"] = df["portals_id"].notna()
-    df_tiles["Published on Wikimedia Commons"] = df["wikidata_image"].notna()
-    df_tiles["Published on Wikidata"] = df["wikidata_id"].notna()
-    df_tiles["Published on Omeka-S"] = df["omeka_url"].notna()
+    # construct coordinates
+    coord =[]
+    for y in range(0,52):
+        for x in range(0,100):
+            if len(coord)!=len(df):
+                coord.append([(x,y)])
+            else:
+                break
 
-    # transform a column in index
-    df_tiles = df_tiles.set_index('id')
-    df_tiles.columns.name = 'tiles'
-    
-    # add a two lists of index and columns
-    axis_x = list(df_tiles.index)
-    axis_y = list(df_tiles.columns)
+    df_coord = pd.DataFrame(coord,columns=["coordinate"])
+    df_coord[["x","y"]] = pd.DataFrame(df_coord["coordinate"].tolist(), index=df_coord.index)
+    df_coord = df_coord.drop(columns="coordinate")
+ 
+    df_tiles = pd.merge(df, df_coord, left_index=True, right_index=True, validate="one_to_one")
 
-    # reshape to 1D array
-    df_tiles_final = pd.DataFrame(df_tiles.stack(), columns=['booleans']).reset_index()
+    # setting colors 
+    colors = ['#edf8e9','#c7e9c0','#a1d99b','#74c476','#31a354','#006d2c']
+    mapper = LinearColorMapper(palette=colors, low=df.rate.min(), high=df.rate.max())
 
-    # construct a data source and filter 
-    source = ColumnDataSource(data=df_tiles_final)
-    booleans = [True if booleana_val == True else False for booleana_val in source.data['booleans']]
-    view = CDSView(source=source, filters=[BooleanFilter(booleans)])
+    # config tooltip
+    TOOLTIPS = """
+        <div style="margin: 5px; width: 400px" >
+        <h3 
+            style='font-size: 12px; font-weight: bold;'>
+            @id
+        </h3>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Geolocated: (@lat,@lng)
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Image: @img_hd
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Portals: @portals_url
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Wikimedia: @wikidata_id
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Omeka-S: @omeka_url
+        </p>
 
-    # base chart
-    tiles = figure(x_range=axis_x,y_range=list(reversed(axis_y)),
-               x_axis_location="above", plot_width=2800, plot_height=1400)
+        <img
+            src="@img_hd" alt="@img_hd" height=200
+            style="margin: 0px;"
+            border="2"
+            ></img>        
+        </div>
+        """
 
-    # construct tiles
-    rec = tiles.rect(x='id', y='tiles', width=1,height=1,
-                    color="orange",
-                    line_color="white",
-                    source=source,
-                    view=view)
+    # construct base chart
+    plot_tiles = figure(
+        x_axis_type=None,y_axis_type=None,
+        plot_width=1500, plot_height=1000, 
+        min_border=150
+        )
 
-    return (tiles)
+    # create tiles
+    rect = plot_tiles.rect(x='x', y='y', width=0.8,height=0.8,
+                    fill_color={'field':'rate','transform':mapper},
+                    line_color="black", line_join="round", line_width = 1,
+                    source=df_tiles)
+
+    # add tooltip in hover
+    h1 = HoverTool(renderers=[rect], tooltips=TOOLTIPS, mode='mouse', show_arrow=False)
+
+    plot_tiles.add_tools(h1)
+    plot_tiles.axis.axis_label = None
+    plot_tiles.axis.visible = False
+    plot_tiles.grid.grid_line_color = None
+    plot_tiles.background_fill_color = "ghostwhite"
+    plot_tiles.y_range.flipped = True
+    plot_tiles.toolbar.active_drag = None
+
+    return plot_tiles
