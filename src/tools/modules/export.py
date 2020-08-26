@@ -7,9 +7,8 @@ import numpy as np
 from bokeh.plotting import output_file, show
 from bokeh.layouts import column, layout
 
-from report import update as report_update
-from report_detailed import update as tiles_update
-from maps import update as maps_update
+from modules.report import update as report_update
+from modules.maps import update as maps_update
 
 
 def omeka_csv(df):
