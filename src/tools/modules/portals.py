@@ -5,11 +5,23 @@ import urllib
 
 import pandas as pd
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 
 def load(PATH):
 
     try:
+
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "OPTIONS"],
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        http = requests.Session()
+        http.mount("https://", adapter)
+        http.mount("http://", adapter)
 
         dataframe = pd.DataFrame()
 
@@ -26,7 +38,7 @@ def load(PATH):
 
             params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
 
-            response = requests.post(os.environ["PORTALS_API_URL"], params=params)
+            response = http.post(os.environ["PORTALS_API_URL"], params=params)
 
             data = response.json()
 
@@ -63,7 +75,7 @@ def load(PATH):
 
         dataframe.to_csv(PATH, index=False)
 
-        return dataframe
+        return dataframe.astype(str)
 
     except Exception as e:
 
@@ -74,3 +86,7 @@ def load(PATH):
         print("Portals loaded from .csv \n")
 
         return dataframe
+
+
+if __name__ == "__main__":
+    load(os.environ["PORTALS_PATH"])
