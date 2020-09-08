@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, HoverTool, WheelZoomTool, Span, LinearColorMapper
+from bokeh.models import ColumnDataSource, HoverTool, WheelZoomTool, Span, LinearColorMapper, CheckboxButtonGroup, CustomJS, Row
 from bokeh.transform import cumsum
 
 from copy import deepcopy
@@ -222,7 +222,7 @@ def update_tiles(DF):
     Render tiles chart report
     """
 
-    df = DF
+    df = DF.loc[:,["id","img_sd","img_hd","lat","lng","geometry","portals_id","portals_url","wikidata_id","omeka_url","rate"]]
 
     # construct coordinates
     coord =[]
@@ -238,6 +238,8 @@ def update_tiles(DF):
     df_coord = df_coord.drop(columns="coordinate")
  
     df_tiles = pd.merge(df, df_coord, left_index=True, right_index=True, validate="one_to_one")
+    df_tiles_s = df_tiles.iloc[:,[0,1,2,3,4,4,5,6,7,8,9,10]].sort_values(by=["rate"], ascending= False, ignore_index=True)
+    df_tiles_sort = df_tiles_s.join(df_tiles[["x","y"]])
 
     # setting colors 
     colors = ['#edf8e9','#c7e9c0','#a1d99b','#74c476','#31a354','#006d2c']
@@ -272,7 +274,7 @@ def update_tiles(DF):
         </p>
 
         <img
-            src="@img_hd" alt="@img_hd" height=200
+            src="@img_sd" alt="@img_sd" height=200
             style="margin: 0px;"
             border="2"
             ></img>        
@@ -280,27 +282,46 @@ def update_tiles(DF):
         """
 
     # construct base chart
-    plot_tiles = figure(
+    tiles = figure(
         x_axis_type=None,y_axis_type=None,
-        plot_width=1500, plot_height=1000, 
-        min_border=150
+        plot_width=1500, plot_height=1000, min_border=150,
+        toolbar_location=None
         )
 
     # create tiles
-    rect = plot_tiles.rect(x='x', y='y', width=0.8,height=0.8,
+    rect_sort = tiles.rect(x='x', y='y', width=0.8,height=0.8,
+                  fill_color={'field':'rate','transform':mapper},
+                  line_color="black", line_join="round", line_width = 1,
+                  source=df_tiles_sort)
+
+    rect = tiles.rect(x='x', y='y', width=0.8,height=0.8,
                     fill_color={'field':'rate','transform':mapper},
                     line_color="black", line_join="round", line_width = 1,
                     source=df_tiles)
 
     # add tooltip in hover
     h1 = HoverTool(renderers=[rect], tooltips=TOOLTIPS, mode='mouse', show_arrow=False)
+    h2 = HoverTool(renderers=[rect_sort], tooltips=TOOLTIPS, mode='mouse', show_arrow=False)
 
-    plot_tiles.add_tools(h1)
-    plot_tiles.axis.axis_label = None
-    plot_tiles.axis.visible = False
-    plot_tiles.grid.grid_line_color = None
-    plot_tiles.background_fill_color = "ghostwhite"
-    plot_tiles.y_range.flipped = True
-    plot_tiles.toolbar.active_drag = None
+    callback = CustomJS(args = {'rect': rect, 'rect_sort': rect_sort},
+    code = """
+    rect.visible = false;
+    rect_sort.visible = false;
+    if (cb_obj.active.includes(0)){rect_sort.visible = true;}
+    else{rect.visible = true;}
+    """)
+
+    button = CheckboxButtonGroup(labels = ['Sort by rate'])
+    button.js_on_click(callback)
+
+    tiles.add_tools(h1,h2)
+    tiles.grid.grid_line_color = None
+    tiles.axis.axis_line_color = None
+    tiles.axis.major_tick_line_color = None
+    tiles.toolbar.active_drag = None
+    tiles.axis.major_label_standoff = 0
+    tiles.y_range.flipped = True
+
+    plot_tiles = Row(tiles,button)
 
     return plot_tiles
