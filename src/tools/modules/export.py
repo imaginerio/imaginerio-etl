@@ -8,8 +8,8 @@ import pandas as pd
 from bokeh.layouts import column, layout
 from bokeh.plotting import output_file, show
 
-from .maps import update as maps_update
-from .report import update as report_update
+from modules.report import update as report_update
+from modules.maps import update as maps_update
 
 
 def img_to_commons(METADATA_PATH, IMAGES_PATH):
@@ -308,6 +308,29 @@ def quickstate_csv(df):
     print(quickstate.head())
 
 
+def img_to_commons(METADATA_PATH, IMAGES_PATH):
+
+    # Get unplubished geolocated images
+    final_df = pd.read_csv(METADATA_PATH)
+    commons_df = pd.DataFrame(
+        final_df[
+            final_df["geometry"].notna()
+            & final_df["img_hd"].notna()
+            & final_df["wikidata_image"].isna()
+        ]
+    )
+
+    # Create folder with images to be sent
+    today = datetime.now()
+
+    new_folder = IMAGES_PATH + "commons_" + today.strftime("%Y%m%d")
+
+    Path(new_folder).mkdir(parents=True, exist_ok=True)
+
+    for id in commons_df["id"]:
+        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
+
+
 def load(METADATA_PATH):
 
     # read metadata.csv
@@ -349,6 +372,11 @@ def load(METADATA_PATH):
         )
     )
 
+    # export tiles.html
+    output_file(os.environ["TILES_PATH"], title="Situated Views")
+    show(dashboard_plot["tiles"])
+
 
 if __name__ == "__main__":
     load(os.environ["METADATA_PATH"])
+
