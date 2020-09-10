@@ -270,6 +270,8 @@ def update_tiles(DF):
     )
     df_tiles_sort = df_tiles_s.join(df_tiles[["x", "y"]])
 
+
+
     # setting colors
     colors = ["#edf8e9", "#c7e9c0", "#a1d99b", "#74c476", "#31a354", "#006d2c"]
     mapper = LinearColorMapper(palette=colors, low=df.rate.min(), high=df.rate.max())
@@ -287,7 +289,7 @@ def update_tiles(DF):
         </p>
         <p 
             style='font-size: 10px; font-weight: bold;'>
-            Image: @img_hd
+            Image: @img_sd @img_hd
         </p>
         <p 
             style='font-size: 10px; font-weight: bold;'>
@@ -316,7 +318,8 @@ def update_tiles(DF):
         y_axis_type=None,
         plot_width=1500,
         plot_height=1000,
-        min_border=150,
+        min_border_bottom=150,
+        min_border_top=150,
         toolbar_location=None,
     )
 
