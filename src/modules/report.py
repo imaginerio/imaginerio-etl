@@ -33,12 +33,10 @@ def update(PATH):
         val_kml_total = 0
 
         # image finished
-        val_img = len(DF[DF["img_hd"].notna() & DF["geometry"].notna()])
-        DF_AUX["B"] = DF["img_hd"].notna().astype(int) & DF["geometry"].notna().astype(
-            int
-        )
+        val_img = len(DF[DF["img_hd"].notna()])
+        DF_AUX["B"] = DF["img_sd"].notna().astype(int)
         # image total
-        val_img_total = len(DF[DF["img_hd"].notna()])
+        val_img_total = len(DF[DF["img_sd"].notna()])
 
         # cumulus published
         val_meta = len(DF[DF["portals_id"].notna()])
