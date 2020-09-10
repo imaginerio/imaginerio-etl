@@ -147,7 +147,7 @@ def create_images_df(files):
                 # if item isn't geolocated, don't send to github or cloud
                 item = {
                     "id": image[0].id,
-                    "img_sd": os.path.join(os.environ["GITHUB"], image[0].jpg),
+                    "img_sd": os.path.join(os.environ["GITHUB"], backlog, image[0].jpg),
                 }
         else:
             if image.id in geolocated:
@@ -160,7 +160,7 @@ def create_images_df(files):
                 # if item isn't geolocated, don't send to github or cloud
                 item = {
                     "id": image.id,
-                    "img_sd": os.path.join(os.environ["GITHUB"], image.jpg),
+                    "img_sd": os.path.join(os.environ["GITHUB"], backlog, image.jpg),
                 }
         items.append(item)
 
@@ -180,7 +180,7 @@ def main():
 
     print(images_df.head())
 
-    images_df.to_csv("src/data-out/images.csv", index=False)
+    images_df.to_csv(os.environ["IMAGES"], index=False)
 
 
 if __name__ == "__main__":
