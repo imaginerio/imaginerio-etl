@@ -85,21 +85,26 @@ def file_handler(source_folder):
             print(f"{image.tif} already in folder")
         # create hd and sd jpegs for geolocated items
         if image.id in geolocated:
-            save_jpeg(
-                os.path.join(os.environ["TIFF"], image.tif), os.environ["JPEG_HD"]
-            )
-            save_jpeg(
-                os.path.join(os.environ["TIFF"], image.tif),
-                os.environ["JPEG_SD"].replace(".", "src"),
-                size=1000,
-            )
+            if not os.path.exists("D:\imagineRio-images\jpeg-hd\{image.jpg}"):
+                os.system(f"magick D:\imagineRio-images\tiff\{image.tif} -delete 1 -quality 100 -format jpg D:\imagineRio-images\jpeg-hd\{image.jpg}")
+                #save_jpeg(
+                #    os.path.join(os.environ["TIFF"], image.tif), os.environ["JPEG_HD"]
+                #)
+                os.system(f"magick D:\imagineRio-images\tiff\{image.tif}[1000x1000] -delete 1 -quality 100 -format jpg D:\imagineRio-images\jpeg-sd\{image.jpg}")
+                #save_jpeg(
+                #    os.path.join(os.environ["TIFF"], image.tif),
+                #    os.environ["JPEG_SD"].replace(".", "src"),
+                #    size=1000,
+                #)
         else:
-            # create backlog with sd jpegs to be geolocated
-            save_jpeg(
-                os.path.join(os.environ["TIFF"], image.tif),
-                os.environ["IMG_BACKLOG"],
-                size=1000,
-            )
+            if not os.path.exists("D:\imagineRio-images\jpeg-sd\backlog\{image.jpg}"):
+                # create backlog with sd jpegs to be geolocated
+                os.system(f"magick D:\imagineRio-images\tiff\{image.tif}[1000x1000] -quality 100 -format jpg D:\imagineRio-images-2\jpeg-sd\backlog\{image.jpg}")
+                #save_jpeg(
+                #    os.path.join(os.environ["TIFF"], image.tif),
+                #    os.environ["IMG_BACKLOG"],
+                #    size=1000,
+            #)
     return files
 
 
