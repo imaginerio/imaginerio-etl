@@ -31,7 +31,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001ACL017022.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001ACL017022.jpg</href>
 		</Icon>
 		<rotation>1.62</rotation>
 		<ViewVolume>
@@ -74,7 +74,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001ACL019004.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001ACL019004.jpg</href>
 		</Icon>
 		<rotation>-1.71</rotation>
 		<ViewVolume>
@@ -117,7 +117,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001ACL019009.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001ACL019009.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-33.0877</leftFov>

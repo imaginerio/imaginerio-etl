@@ -73,7 +73,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/001MF014005.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001MF014005.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
@@ -283,7 +283,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/001MF014001.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001MF014001.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-23.505</leftFov>
@@ -325,7 +325,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/001MF014003.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001MF014003.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-23.4</leftFov>
@@ -367,7 +367,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>X:/USUARIOS/MARTIM/resize/001MF029014.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001MF029014.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>

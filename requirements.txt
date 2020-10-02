@@ -12,6 +12,7 @@ fiona==1.8.13.post1
 future==0.18.2
 geopandas==0.8.0
 idna==2.10
+IPTCInfo3==2.1.4
 jinja2==3.0.0a1
 markupsafe==2.0.0a1
 munch==2.5.1.dev12
