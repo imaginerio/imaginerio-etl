@@ -53,7 +53,7 @@ def omeka_csv(df):
     omeka_df.loc[omeka_df["date_accuracy"] == "year", "dcterms:date"] = omeka_df[
         "date"
     ].dt.strftime("%Y")
-    omeka_df.loc[omeka_df["date_accuracy"] == "circa", "dcterms:date"] = np.nan
+    # omeka_df.loc[omeka_df["date_accuracy"] == "circa", "dcterms:date"] = np.nan
     omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
     omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
     omeka_df.loc[omeka_df["date_accuracy"] == "circa", "interval"] = (
@@ -308,6 +308,72 @@ def quickstate_csv(df):
     print(quickstate.head())
 
 
+def vikus_csv(df):
+    """
+    Export csv for Vikus Viewer
+    """
+
+    vikus_df = df.copy()
+
+    vikus_df["portals_url"] = (
+        '<a href="' + vikus_df["portals_url"] + ">Instituto Moreira Salles</a>"
+    )
+    vikus_df.loc[vikus_df["date_accuracy"] == "circa", "_date"] = (
+        vikus_df["start_date"].dt.strftime("%Y")
+        + "/"
+        + vikus_df["end_date"].dt.strftime("%Y")
+    )
+    vikus_df.loc[~(vikus_df["date_accuracy"] == "circa"), "_date"] = vikus_df[
+        "date"
+    ].dt.strftime("%d-%m-%Y")
+    vikus_df["date"] = vikus_df["date"].dt.strftime("%Y")
+    vikus_df["creator"] = vikus_df["creator"] + "," + vikus_df["type"]
+    vikus_df["wikidata_depict"] = vikus_df["wikidata_depict"].str.split(r"\|\|")
+    vikus_df = vikus_df.explode(column="wikidata_depict")
+    vikus_df["wikidata_depict"] = vikus_df["wikidata_depict"].str.split(" ", 1)
+    has_depicts = vikus_df["wikidata_depict"].notna()
+
+    def href(valuelist):
+        return '<a href="' + valuelist[0] + ">" + valuelist[1] + "</a>"
+
+    vikus_df.loc[has_depicts, "wikidata_depict"] = vikus_df.loc[
+        has_depicts, "wikidata_depict"
+    ].apply(href)
+    vikus_df = vikus_df.groupby("id", as_index=False).agg(lambda x: set(x))
+    vikus_df = vikus_df.applymap(lambda x: str(x).strip("{'}"))
+
+    vikus_df = vikus_df[
+        [
+            "id",
+            "title",
+            "description",
+            "creator",
+            "date",
+            "_date",
+            "portals_url",
+            "wikidata_depict",
+            "image_width",
+            "image_height",
+        ]
+    ]
+
+    vikus_df = vikus_df.rename(
+        columns={
+            "date": "year",
+            "creator": "keywords",
+            "title": "_title",
+            "description": "_description",
+            "portals_url": "_source",
+            "wikidata_depict": "_depicts",
+            "image_width": "_width",
+            "image_height": "_height",
+        }
+    )
+
+    vikus_df.to_csv(os.environ["IMPORT_VIKUS"])
+    print(vikus_df.head())
+
+
 def img_to_commons(METADATA, IMAGES):
 
     # Get unplubished geolocated images
@@ -348,14 +414,17 @@ def load(METADATA):
         subset=["geometry", "start_date", "end_date", "portals_url", "img_hd"]
     )
 
-    # export omeka-import.csv
+    # export import-omeka.csv
     omeka_csv(export_df)
 
-    # export gis-import.csv
+    # export import-gis.csv
     gis_csv(export_df)
 
-    # export quickstate.csv
+    # export import-wiki.csv
     quickstate_csv(export_df)
+
+    # export import-vikus.csv
+    vikus_csv(export_df)
 
     # load items for dashboard
     dashboard_plot = report_update(METADATA)

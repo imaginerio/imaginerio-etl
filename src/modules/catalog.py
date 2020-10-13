@@ -50,20 +50,14 @@ def xml_to_df(path):
     return cumulus_df
 
 
-def find_dates(date):
-    """
-    Find dates between 1500 and 2022 and parse to datetime
-    """
-    result = date.str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    result = pd.to_datetime(date, errors="coerce", yearfirst=True)
-    return result
-
-
 def load(path):
     catalog_df = xml_to_df(path)
     catalog_df = catalog_df.astype(
         {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str}
     )
+    catalog_df[["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]] = catalog_df[
+        ["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]
+    ].applymap(lambda x: x.split(".")[0])
 
     # rename columns
     catalog_df = catalog_df.rename(
@@ -110,6 +104,8 @@ def load(path):
     year = catalog_df["date"].str.count(r"[\/-]") == 0
     month = catalog_df["date"].str.count(r"[\/-]") == 1
     day = catalog_df["date"].str.count(r"[\/-]") == 2
+    startna = catalog_df["start_date"].isna()
+    endna = catalog_df["end_date"].isna()
 
     catalog_df.loc[year, "date_accuracy"] = "year"
     catalog_df.loc[month, "date_accuracy"] = "month"
@@ -117,9 +113,16 @@ def load(path):
     catalog_df.loc[circa, "date_accuracy"] = "circa"
 
     # dates to datetime
-    catalog_df["date"] = find_dates(catalog_df["date"])
-    catalog_df["start_date"] = find_dates(catalog_df["start_date"])
-    catalog_df["end_date"] = find_dates(catalog_df["end_date"])
+    catalog_df["date"] = catalog_df["date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    catalog_df["start_date"] = catalog_df["start_date"].str.extract(
+        r"([\d\/-]*\d{4}[-\/\d]*)"
+    )
+    catalog_df["end_date"] = catalog_df["end_date"].str.extract(
+        r"([\d\/-]*\d{4}[-\/\d]*)"
+    )
+    catalog_df[["date", "start_date", "end_date"]] = catalog_df[
+        ["date", "start_date", "end_date"]
+    ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
     # reverse cretor name
     catalog_df["creator"] = catalog_df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
@@ -129,15 +132,14 @@ def load(path):
     pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
 
     # fill empty start/end dates
-    catalog_df.loc[
-        (catalog_df["date_accuracy"] == "circa") & (catalog_df["start_date"].isna()),
-        "start_date",
-    ] = catalog_df["date"] - pd.DateOffset(years=5)
-
-    catalog_df.loc[
-        (catalog_df["date_accuracy"] == "circa") & (catalog_df["end_date"].isna()),
-        "end_date",
-    ] = catalog_df["date"] + pd.DateOffset(years=5)
+    catalog_df.loc[circa & startna, "start_date"] = catalog_df["date"] - pd.DateOffset(
+        years=5
+    )
+    catalog_df.loc[circa & endna, "end_date"] = catalog_df["date"] + pd.DateOffset(
+        years=5
+    )
+    catalog_df.loc[startna, "start_date"] = catalog_df["date"]
+    catalog_df.loc[endna, "end_date"] = catalog_df["date"]
 
     # extract dimensions
     dimensions_df = catalog_df["dimensions"].str.extract(
