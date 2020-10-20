@@ -31,7 +31,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS021.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014GLAS021.jpg</href>
 		</Icon>
 		<rotation>1.52</rotation>
 		<ViewVolume>
@@ -74,7 +74,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/001ACL017002.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001ACL017002.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-24.9991</leftFov>
@@ -116,7 +116,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS034.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014GLAS034.jpg</href>
 		</Icon>
 		<rotation>1.13</rotation>
 		<ViewVolume>
@@ -159,7 +159,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS033.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014GLAS033.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-27.0485</leftFov>
@@ -201,7 +201,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/014GLAS036.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014GLAS036.jpg</href>
 		</Icon>
 		<rotation>-1.48</rotation>
 		<ViewVolume>

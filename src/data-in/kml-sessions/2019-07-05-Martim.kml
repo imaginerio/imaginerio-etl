@@ -30,7 +30,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/0072430cx010-03.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/0072430cx010-03.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-32.5</leftFov>
@@ -72,7 +72,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>C:/Users/a295805/Documents/Georef-Getty/resize/IMG_0210.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/IMG_0210.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-32.46</leftFov>
