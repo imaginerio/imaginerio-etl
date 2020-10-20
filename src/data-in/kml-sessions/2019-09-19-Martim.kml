@@ -30,7 +30,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/014AM010001.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014AM010001.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
@@ -72,7 +72,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/014AM010018.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014AM010018.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-30</leftFov>
@@ -114,7 +114,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/014AM012007.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014AM012007.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
@@ -156,7 +156,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0422.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Sebastiao-Lacerda/Horizontais/crop/IMG_0422.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-34</leftFov>
@@ -198,7 +198,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0454.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Sebastiao-Lacerda/Horizontais/crop/IMG_0454.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25.005</leftFov>
@@ -240,7 +240,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Verticais/crop/IMG_0474.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Sebastiao-Lacerda/Verticais/crop/IMG_0474.jpg</href>
 		</Icon>
 		<rotation>-2.27</rotation>
 		<ViewVolume>
@@ -283,7 +283,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0473.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Sebastiao-Lacerda/Horizontais/crop/IMG_0473.jpg</href>
 		</Icon>
 		<rotation>1.06</rotation>
 		<ViewVolume>
@@ -326,7 +326,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0404.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Sebastiao-Lacerda/Horizontais/crop/IMG_0404.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25.16</leftFov>
@@ -368,7 +368,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0453.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Sebastiao-Lacerda/Horizontais/crop/IMG_0453.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-26.5</leftFov>
@@ -410,7 +410,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Sebastiao-Lacerda/Horizontais/crop/IMG_0432.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Sebastiao-Lacerda/Horizontais/crop/IMG_0432.jpg</href>
 		</Icon>
 		<rotation>-1.22</rotation>
 		<ViewVolume>
@@ -453,7 +453,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ7315.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Estereoscopias-Guilherme-Santos/crop/002080RJ7315.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-22.5</leftFov>
@@ -495,7 +495,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJ9110.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Estereoscopias-Guilherme-Santos/crop/002080RJ9110.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-22.5</leftFov>
@@ -537,7 +537,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080RJSN14.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Estereoscopias-Guilherme-Santos/crop/002080RJSN14.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-22.5</leftFov>
@@ -579,7 +579,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/Estereoscopias-Guilherme-Santos/crop/002080Vol05Cx0205.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Estereoscopias-Guilherme-Santos/crop/002080Vol05Cx0205.jpg</href>
 		</Icon>
 		<rotation>1.75</rotation>
 		<ViewVolume>
@@ -622,7 +622,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0071824cx068-01.JPG</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/0071824cx068-01.JPG</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
@@ -664,7 +664,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0071824cx068-16.JPG</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/0071824cx068-16.JPG</href>
 		</Icon>
 		<rotation>0.98</rotation>
 		<ViewVolume>
@@ -707,7 +707,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>Y:/USUARIOS/MARTIM/resize/0071824cx112-05.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/0071824cx112-05.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>
