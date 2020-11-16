@@ -99,13 +99,14 @@ def create_images_df(files):
     # thumb = [os.environ["THUMB"].replace("identifier", f"{image.id}") for image in files]
     df = {
         "id": [image.id for image in files],
-        "hd": [os.path.join(os.environ["CLOUD"] + image.id) for image in files],
-        "thumb": [
+        "img_hd": [os.path.join(os.environ["CLOUD"] + image.id) for image in files],
+        "img_sd": [
             os.environ["THUMB"].replace("identifier", f"{image.id}") for image in files
         ],
     }
 
     images_df = pd.DataFrame(data=df)
+    images_df.drop_duplicates(inplace=True)
     return images_df
 
 
