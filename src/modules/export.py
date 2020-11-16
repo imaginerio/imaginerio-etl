@@ -44,21 +44,25 @@ def omeka_csv(df):
     omeka_df = df.copy()
 
     # datetime to string according to date accuracy
-    omeka_df.loc[omeka_df["date_accuracy"] == "day", "dcterms:date"] = omeka_df[
+    omeka_df.loc[omeka_df["date_accuracy"] == "day", "dcterms:created"] = omeka_df[
         "date"
     ].dt.strftime("%Y-%m-%d")
-    omeka_df.loc[omeka_df["date_accuracy"] == "month", "dcterms:date"] = omeka_df[
+    omeka_df.loc[omeka_df["date_accuracy"] == "month", "dcterms:created"] = omeka_df[
         "date"
     ].dt.strftime("%Y-%m")
-    omeka_df.loc[omeka_df["date_accuracy"] == "year", "dcterms:date"] = omeka_df[
+    omeka_df.loc[omeka_df["date_accuracy"] == "year", "dcterms:created"] = omeka_df[
         "date"
     ].dt.strftime("%Y")
-    # omeka_df.loc[omeka_df["date_accuracy"] == "circa", "dcterms:date"] = np.nan
+    # omeka_df.loc[omeka_df["date_accuracy"] == "circa", "dcterms:created"] = np.nan
     omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
     omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
     omeka_df.loc[omeka_df["date_accuracy"] == "circa", "interval"] = (
         omeka_df["start_date"] + "/" + omeka_df["end_date"]
     )
+
+    # 
+    omeka_df["dcterms:available"] = omeka_df["interval"]
+    omeka_df.loc[~(omeka_df["date_accuracy"] == "circa"), "dcterms:available"] = (omeka_df["start_date"] + "/" + omeka_df["end_date"])
 
     # format data
     omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
@@ -100,8 +104,9 @@ def omeka_csv(df):
             "dcterms:title",
             "dcterms:description",
             "dcterms:creator",
-            "dcterms:date",
+            "dcterms:created",
             "dcterms:temporal",
+            "dcterms:available",
             "dcterms:type",
             "dcterms:rights",
             "dcterms:bibliographicCitation",
