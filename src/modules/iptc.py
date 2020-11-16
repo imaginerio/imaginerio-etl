@@ -2,9 +2,11 @@ import os
 from iptcinfo3 import IPTCInfo
 import exiftool
 import pandas as pd
+from dotenv import load_dotenv
 
-# JPEG_HD = os.environ["JPEG_HD"]
-JPEG_HD = input("Source folder:")
+load_dotenv(override=True)
+
+JPEG_HD = os.environ["JPEG_HD"]
 
 df = pd.read_csv(
     "src/data-out/metadata.csv",
@@ -15,47 +17,11 @@ df = pd.read_csv(
 df.fillna(value="", inplace=True)
 df.set_index("id", inplace=True)
 
-files = [os.path.join(JPEG_HD, file) for file in os.listdir(JPEG_HD)]
-
-"""
-for i, file in enumerate(files):
-    if file.endswith(".jpg"):
-        basename = os.path.split(file)[1]
-        name = basename.split(".")[0]
-        info = IPTCInfo(file, force=True, inp_charset="utf_8", out_charset="utf_8")
-        info["reference number"] = name
-        info["credit"] = df.loc[name, "creator"]
-        info["object name"] = df.loc[name, "title"]
-        info["caption/abstract"] = df.loc[name, "description"]
-        info["image type"] = df.loc[name, "type"]
-        info[
-            "image orientation"
-        ] = f'{df.loc[name, "image_width"]}cm x {df.loc[name, "image_height"]}cm'
-        info["keywords"] = df.loc[name, "wikidata_depict"].split("||")
-        if df.loc[name, "date_accuracy"] == "circa":
-            info["release time"] = (
-                df.loc[name, "start_date"].strftime("%Y")
-                + "/"
-                + df.loc[name, "end_date"].strftime("%Y")
-            )
-        elif df.loc[name, "date_accuracy"] == "year":
-            info["release date"] = df.loc[name, "date"].strftime("%Y")
-        elif df.loc[name, "date_accuracy"] == "month":
-            info["release date"] = df.loc[name, "date"].strftime("%Y-%m")
-        elif df.loc[name, "date_accuracy"] == "day":
-            info["release date"] = df.loc[name, "date"].strftime("%Y-%m-%d")
-        info["country/primary location name"] = "Brazil"
-        info["province/state"] = "RJ"
-        info["city"] = "Rio de Janeiro"
-        info["custom1"] = [str(df.loc[name, "lat"]) + "S"]
-        info["custom2"] = [str(df.loc[name, "lng"]) + "W"]
-        info["source"] = "Instituto Moreira Salles/IMS"
-        info["copyright notice"] = "This image is in the Public Domain."
-        info.save(f"/data-out/jpeg_out/{basename}")
-        print(f"Tagged image {i+1} of {len(files)}")
-    else:
-        continue
-"""
+files = [
+    os.path.join(JPEG_HD, file)
+    for file in os.listdir(JPEG_HD)
+    if not os.path.exists(os.path.join(JPEG_HD, f"{file}_original"))
+]
 
 for i, item in enumerate(files):
     if item.endswith(".jpg"):
