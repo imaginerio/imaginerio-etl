@@ -1,7 +1,7 @@
 import os
 import shutil
 
-import ffmpeg
+# import ffmpeg
 import pandas as pd
 from PIL import Image as PILImage
 from dotenv import load_dotenv
@@ -92,71 +92,20 @@ def file_handler(source_folder):
 
 
 def create_images_df(files):
-    """Creates a dataframe with every image available and its alternate versions.
-    "files" is a list of Image objects."""
+    """Creates a dataframe with every image available and links to full size and thumbnail"""
 
-    groups = []
-    to_remove = []
-    items = []
+    # ids = [image.id for image in files]
+    # hd = os.listdir(os.environ["JPEG_HD"]).sort()
+    # thumb = [os.environ["THUMB"].replace("identifier", f"{image.id}") for image in files]
+    df = {
+        "id": [image.id for image in files],
+        "hd": [os.path.join(os.environ["CLOUD"] + image.id) for image in files],
+        "thumb": [
+            os.environ["THUMB"].replace("identifier", f"{image.id}") for image in files
+        ],
+    }
 
-    # Find ids that contain other ids (secondary versions) and group them together
-    for item in files:
-        i = 0
-        matched = []
-        while i < len(files):
-            if item.id in files[i].id:
-                matched.append(files[i])
-            i += 1
-        if len(matched) > 1:
-            groups.append(matched)
-        else:
-            groups.append(item)
-
-    # Remove secondary versions from main list
-    for group in groups:
-        if type(group) == list:
-            to_remove += group[1:]
-
-    groups = [item for item in groups if item not in to_remove]
-
-    # Create list of dicts with all files available for each item
-    for image in groups:
-        if type(image) == list:
-            # include just the 'master' version when others are available
-            if image[0].id in geolocated:
-                item = {
-                    "id": image[0].id,
-                    "img_hd": os.path.join(os.environ["CLOUD"], image[0].jpg),
-                    "img_sd": os.path.join(os.environ["GITHUB"], image[0].jpg),
-                }
-                for i in image[1:]:
-                    item[f" {i.id[-1]}"] = i.jpg
-            else:
-                # if item isn't geolocated, send to github backlog
-                item = {
-                    "id": image[0].id,
-                    "img_sd": os.path.join(
-                        os.environ["GITHUB"], "backlog", image[0].jpg
-                    ),
-                }
-        else:
-            if image.id in geolocated:
-                item = {
-                    "id": image.id,
-                    "img_hd": os.path.join(os.environ["CLOUD"], image.jpg),
-                    "img_sd": os.path.join(os.environ["GITHUB"], image.jpg),
-                }
-            else:
-                # if item isn't geolocated, send to github backlog
-                item = {
-                    "id": image.id,
-                    "img_sd": os.path.join(os.environ["GITHUB"], "backlog", image.jpg),
-                }
-        items.append(item)
-
-    images_df = pd.DataFrame(items)
-    images_df.sort_values(by=["id"])
-
+    images_df = pd.DataFrame(data=df)
     return images_df
 
 

@@ -14,11 +14,11 @@ $ docker-compose up -d --build
 # update images
 $ docker-compose run app modules/update_images.py
 
-# update metadata
+# update metadata (requires moving tiles and index.html after running)
 $ docker-compose run app modules/update_data.py
 
 # kml parser
-# npm run kml (TO-DO: REWRITE KML PARSER IN PYTHON)
+# npm run kml (TO-DO: CHANGE TO CONES.PY FROM CONES BRANCH)
 
 # down!
 $ docker-compose down
