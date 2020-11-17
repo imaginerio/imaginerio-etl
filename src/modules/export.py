@@ -60,9 +60,11 @@ def omeka_csv(df):
         omeka_df["start_date"] + "/" + omeka_df["end_date"]
     )
 
-    # 
+    #
     omeka_df["dcterms:available"] = omeka_df["interval"]
-    omeka_df.loc[~(omeka_df["date_accuracy"] == "circa"), "dcterms:available"] = (omeka_df["start_date"] + "/" + omeka_df["end_date"])
+    omeka_df.loc[~(omeka_df["date_accuracy"] == "circa"), "dcterms:available"] = (
+        omeka_df["start_date"] + "/" + omeka_df["end_date"]
+    )
 
     # format data
     omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
@@ -70,9 +72,27 @@ def omeka_csv(df):
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
     omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
 
+    # smapshot item set
+    smapshot_items = [
+        "014AM005013",
+        "014AM005015",
+        "014AM005016",
+        "0071824cx001-05",
+        "0071824cx040-07",
+        "0071824cx021-05",
+        "0071824cx037-11",
+        "0071824cx037-12",
+        "0071824cx038-12",
+        "0072430cx003b-04",
+        "002051AM002002",
+    ]
+
     # create columns
     omeka_df["rights"] = ""
     omeka_df["citation"] = ""
+    omeka_df["item_sets"] = "all||views"
+    smapshot = omeka_df["id"].isin(smapshot_items)
+    omeka_df.loc[smapshot, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
 
     # rename columns
     omeka_df = omeka_df.rename(
@@ -118,6 +138,7 @@ def omeka_csv(df):
             "schema:width",
             "schema:height",
             "media",
+            "item_sets",
         ]
     ]
 
