@@ -11,11 +11,9 @@ id,Not in
 001AAN014015,"['Images', 'Omeka']"
 001AAN014016,"['Images', 'Omeka']"
 001ACL017001,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-001ACL017002,['Omeka']
 001ACL017003,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017004,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017005,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-001ACL017006,['Omeka']
 001ACL017007,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017008,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017009,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
@@ -25,11 +23,9 @@ id,Not in
 001ACL017013,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017014,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017015,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-001ACL017018,['Omeka']
 001ACL017019,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017020,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017021,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-001ACL017022,['Omeka']
 001ACL017023,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017025,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
 001ACL017028,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
@@ -1682,7 +1678,7 @@ id,Not in
 0071824cx065-04,"['Camera', 'Omeka']"
 0071824cx066-02,"['Camera', 'Omeka']"
 0071824cx068-14,"['Camera', 'Omeka']"
-0071824cx070-11,"['Wikidata', 'Omeka']"
+0071824cx070-11,['Wikidata']
 0071824cx071-01,"['Camera', 'Omeka']"
 0071824cx071-02,"['Camera', 'Omeka']"
 0071824cx071-04,['Omeka']
@@ -3561,7 +3557,6 @@ id,Not in
 013RJ007022,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
 013RJ007028,"['Camera', 'Omeka']"
 013RJ007035,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
-013RJ009013,['Omeka']
 013RJ011003,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
 013RJ011004,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
 013RJ011008,"['Camera', 'Portals', 'Wikidata', 'Omeka']"
@@ -3771,26 +3766,17 @@ id,Not in
 014GL42,"['Images', 'Portals', 'Omeka']"
 014GL43,"['Images', 'Portals', 'Omeka']"
 014GLAS-catete1,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-014GLAS001,['Omeka']
-014GLAS002,['Omeka']
-014GLAS003,['Omeka']
-014GLAS004,['Omeka']
-014GLAS005,['Omeka']
-014GLAS006,['Omeka']
 014GLAS007,"['Camera', 'Portals', 'Omeka']"
 014GLAS008,"['Portals', 'Omeka']"
 014GLAS009,"['Portals', 'Omeka']"
 014GLAS010,"['Portals', 'Omeka']"
 014GLAS011,"['Portals', 'Omeka']"
-014GLAS012,['Omeka']
-014GLAS013,['Omeka']
 014GLAS014,"['Portals', 'Omeka']"
 014GLAS015,"['Portals', 'Omeka']"
 014GLAS016,"['Camera', 'Portals', 'Omeka']"
 014GLAS017,"['Camera', 'Portals', 'Omeka']"
 014GLAS018,"['Portals', 'Omeka']"
 014GLAS019,"['Portals', 'Omeka']"
-014GLAS020,['Omeka']
 014GLAS021,"['Portals', 'Omeka']"
 014GLAS022,"['Camera', 'Portals', 'Omeka']"
 014GLAS023,"['Portals', 'Omeka']"
@@ -3801,7 +3787,6 @@ id,Not in
 014GLAS028,"['Portals', 'Omeka']"
 014GLAS029,"['Portals', 'Omeka']"
 014GLAS030,"['Portals', 'Omeka']"
-014GLAS031,['Omeka']
 014GLAS032,"['Portals', 'Omeka']"
 014GLAS033,"['Portals', 'Omeka']"
 014GLAS034,"['Portals', 'Omeka']"
@@ -3812,7 +3797,6 @@ id,Not in
 014GLAS039,"['Portals', 'Omeka']"
 014GLAS040,"['Portals', 'Omeka']"
 014GLAS041,"['Portals', 'Omeka']"
-014GLAS042,['Omeka']
 014GLAS043,"['Portals', 'Omeka']"
 014GLAS044,"['Portals', 'Omeka']"
 014GLAS045,"['Portals', 'Omeka']"
@@ -3844,7 +3828,6 @@ id,Not in
 014GLAS070,"['Portals', 'Omeka']"
 014GLAS071,"['Portals', 'Omeka']"
 014GLAS071a,"['Images', 'Camera', 'Portals', 'Wikidata', 'Omeka']"
-014GLAS072,['Omeka']
 014GLAS073,"['Portals', 'Omeka']"
 014GLAS074,"['Portals', 'Omeka']"
 014GLAS074a,"['Images', 'Camera', 'Portals', 'Omeka']"
