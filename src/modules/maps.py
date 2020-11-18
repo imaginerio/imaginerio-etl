@@ -9,7 +9,7 @@ from bokeh.models import (
     Legend,
     Patches,
     WheelZoomTool,
-    CustomJS
+    CustomJS,
 )
 from bokeh.plotting import figure
 from bokeh.tile_providers import Vendors, get_provider
@@ -22,6 +22,7 @@ def update(PATH):
         # load metadata
         DF = pd.read_csv(PATH)
         DF = DF.dropna(subset=["geometry"])
+        DF["img_sd"] = DF["img_sd"].str.strip('"')
 
         # create geodataframe for points with images
         geodf = to_geodf(DF)
@@ -80,9 +81,7 @@ def apply_transform(geodf):
 
     # reduce columns and return final geodataframe
 
-    map_geodf = geodf[
-        ["id", "title", "creator", "img_sd", "geometry", "lat2", "lng2"]
-    ]
+    map_geodf = geodf[["id", "title", "creator", "img_sd", "geometry", "lat2", "lng2"]]
 
     return map_geodf
 
@@ -116,7 +115,8 @@ def update_map(map_geodf):
                 <p style='font-size: 10px; font-weight: light; font-style: italic;'>@creator</p>
             </div>
         """
-    callback_tp = CustomJS(code="""
+    callback_tp = CustomJS(
+        code="""
                                 var tooltips = document.getElementsByClassName("bk-tooltip");
                                 for (var i = 0, len = tooltips.length; i < len; i ++) {
                                     tooltips[i].style.top = ""; 
@@ -124,7 +124,8 @@ def update_map(map_geodf):
                                     tooltips[i].style.bottom = "0px";
                                     tooltips[i].style.left = "0px";
                                 }
-                                """)
+                                """
+    )
 
     # Base map
     maps = figure(
@@ -140,48 +141,64 @@ def update_map(map_geodf):
 
     # construct points and wedges from hover
     viewcone1 = maps.patches(
-            xs="xs",
-            ys="ys",
-            source=geosource_img,
-            fill_color="white",
-            fill_alpha=0,
-            line_color=None,
-            hover_alpha=0.7,
-            hover_fill_color="grey",
-            hover_line_color="grey")
+        xs="xs",
+        ys="ys",
+        source=geosource_img,
+        fill_color="white",
+        fill_alpha=0,
+        line_color=None,
+        hover_alpha=0.7,
+        hover_fill_color="grey",
+        hover_line_color="grey",
+    )
 
     viewcone2 = maps.patches(
-            xs="xs",
-            ys="ys",
-            source=geosource_noimg,
-            fill_color="white",
-            fill_alpha=0,
-            line_color=None,
-            hover_alpha=0.7,
-            hover_fill_color="grey",
-            hover_line_color="grey")
+        xs="xs",
+        ys="ys",
+        source=geosource_noimg,
+        fill_color="white",
+        fill_alpha=0,
+        line_color=None,
+        hover_alpha=0.7,
+        hover_fill_color="grey",
+        hover_line_color="grey",
+    )
 
     point_noimg = maps.circle(
-            x="lat2",
-            y="lng2",
-            source=geosource_noimg,
-            size=7,
-            fill_color="orange",
-            fill_alpha=0.5,
-            line_color="dimgray")
+        x="lat2",
+        y="lng2",
+        source=geosource_noimg,
+        size=7,
+        fill_color="orange",
+        fill_alpha=0.5,
+        line_color="dimgray",
+    )
 
     point_img = maps.circle(
-            x="lat2",
-            y="lng2",
-            source=geosource_img,
-            size=7,
-            fill_color="orange",
-            fill_alpha=0.5,
-            line_color="dimgray")
+        x="lat2",
+        y="lng2",
+        source=geosource_img,
+        size=7,
+        fill_color="orange",
+        fill_alpha=0.5,
+        line_color="dimgray",
+    )
 
     # create a hovertool
-    h1 = HoverTool(renderers=[point_img], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False, callback=callback_tp)
-    h2 = HoverTool(renderers=[point_noimg], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False, callback=callback_tp)
+    h1 = HoverTool(
+        renderers=[point_img],
+        tooltips=TOOLTIPS1,
+        mode="mouse",
+        show_arrow=False,
+        callback=callback_tp,
+    )
+    h2 = HoverTool(
+        renderers=[point_noimg],
+        tooltips=TOOLTIPS2,
+        mode="mouse",
+        show_arrow=False,
+        callback=callback_tp,
+    )
 
     maps.add_tools(h1, h2)
     maps.toolbar.active_scroll = maps.select_one(WheelZoomTool)

@@ -22,6 +22,7 @@ def update(PATH):
     try:
         # load metadata.csv
         DF = pd.read_csv(PATH)
+        DF["img_sd"] = DF["img_sd"].str.strip('"')
         # create a new df
         DF_AUX = pd.DataFrame(columns=["A", "B", "C", "D", "E"])
 
@@ -269,8 +270,6 @@ def update_tiles(DF):
         by=["rate"], ascending=False, ignore_index=True
     )
     df_tiles_sort = df_tiles_s.join(df_tiles[["x", "y"]])
-
-
 
     # setting colors
     colors = ["#edf8e9", "#c7e9c0", "#a1d99b", "#74c476", "#31a354", "#006d2c"]

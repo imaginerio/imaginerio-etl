@@ -99,9 +99,9 @@ def create_images_df(files):
     # thumb = [os.environ["THUMB"].replace("identifier", f"{image.id}") for image in files]
     df = {
         "id": [image.id for image in files],
-        "img_hd": [os.path.join(os.environ["CLOUD"] + image.id) for image in files],
+        "img_hd": [os.path.join(os.environ["CLOUD"] + image.jpg) for image in files],
         "img_sd": [
-            os.environ["THUMB"].replace("identifier", f"{image.id}") for image in files
+            os.environ["THUMB"].replace("identifier", image.id) for image in files
         ],
     }
 
