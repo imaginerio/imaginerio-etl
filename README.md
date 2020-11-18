@@ -1,46 +1,26 @@
 # Situated Views of Rio de Janeiro
 
-> Repository for tracking technical issues and generating static files from kmls.
-
-## Setup environment
-
-```bash
-# install dependencies
-$ npm install
-$ pipenv install
-$ pipenv shell
-```
-
 ## Commands
 
+
+
 ```bash
-# kml parser
-$ npm run kml
+# set PWD variable (Windows users only):
+$ $env:PWD=$PWD
+
+# up!
+$ docker-compose up -d --build
 
 # update images
-$ python update_images.py
+$ docker-compose run app modules/update_images.py
 
-# update metadata
-$ python update_data.py
+# update metadata (requires moving tiles and index.html after running)
+$ docker-compose run app modules/update_data.py
 
-```
+# kml parser
+# npm run kml (TO-DO: CHANGE TO CONES.PY FROM CONES BRANCH)
 
-## Folder structure
+# down!
+$ docker-compose down
 
-```
-situated-views
-│   index.html
-│   package.json
-│   Pipfile
-│   environment.yml
-│   README.md
-│
-└───images
-│   └─  image samples for analysis
-│
-└───metadata
-│   └─  data sources and reports
-│
-└───tools
-    └─  scripts
 ```
