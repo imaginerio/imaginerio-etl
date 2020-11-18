@@ -10,13 +10,12 @@ pylint = "*"
 [packages]
 pandas = "*"
 numpy = "*"
+geopandas = "*"
 bokeh = "*"
 xlrd = "*"
 ffmpeg-python = "*"
 requests = "*"
 tqdm = "*"
-python-dotenv = "*"
-iptcinfo3 = "*"
 
 [requires]
 python_version = "3.8"
