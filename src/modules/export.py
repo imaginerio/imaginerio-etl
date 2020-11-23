@@ -460,7 +460,7 @@ def load(METADATA):
     output_file(os.environ["INDEX"], title="Situated Views")
     show(
         layout(
-            [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot]],
+            [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot["index"]]],
             sizing_mode="stretch_both",
         )
     )
@@ -468,6 +468,10 @@ def load(METADATA):
     # export tiles.html
     output_file(os.environ["TILES"], title="Situated Views")
     show(dashboard_plot["tiles"])
+
+    # export search.html
+    output_file(os.environ["SEARCH_MAP"], title="Search items for catalog")
+    show(map_plot["search"])
 
 
 if __name__ == "__main__":
