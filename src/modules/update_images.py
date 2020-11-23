@@ -94,15 +94,10 @@ def file_handler(source_folder):
 def create_images_df(files):
     """Creates a dataframe with every image available and links to full size and thumbnail"""
 
-    # ids = [image.id for image in files]
-    # hd = os.listdir(os.environ["JPEG_HD"]).sort()
-    # thumb = [os.environ["THUMB"].replace("identifier", f"{image.id}") for image in files]
     df = {
         "id": [image.id for image in files],
         "img_hd": [os.path.join(os.environ["CLOUD"] + image.jpg) for image in files],
-        "img_sd": [
-            os.environ["THUMB"].replace("identifier", image.id) for image in files
-        ],
+        "img_sd": [os.path.join(os.environ["THUMB"] + image.jpg) for image in files],
     }
 
     images_df = pd.DataFrame(data=df)
