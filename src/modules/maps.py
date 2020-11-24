@@ -230,31 +230,6 @@ def search_map(map_geodf):
 
     # create a geodatasource
     geosource = GeoJSONDataSource(geojson=map_geodf.to_json())
-
-    # description from points
-    TOOLTIPS = """
-            <div style="margin: 5px; width: 300px" >
-            <img
-                src="@img_sd" alt="@img_sd" height=200
-                style="margin: 0px;"
-                border="2"
-                ></img>
-                <h3 style='font-size: 10px; font-weight: bold;'>@id</h3>
-                <p style='font-size: 10px; font-weight: light; font-style: italic;'>@creator</p>
-            
-            </div>
-        """
-    callback_tp2 = CustomJS(
-        code="""
-                                var tooltips = document.getElementsByClassName("bk-tooltip");
-                                for (var i = 0, len = tooltips.length; i < len; i ++) {
-                                    tooltips[i].style.top = ""; 
-                                    tooltips[i].style.right = "";
-                                    tooltips[i].style.bottom = "0px";
-                                    tooltips[i].style.left = "0px";
-                                }
-                                """
-    )
     
     # base map
     fig2 = figure(
@@ -330,7 +305,7 @@ def search_map(map_geodf):
         line_color=None,
         hover_alpha=0.7,
         hover_fill_color="grey",
-        hover_line_color="grey",
+        hover_line_color="grey"
     )
 
     point = fig2.circle(
@@ -344,16 +319,7 @@ def search_map(map_geodf):
         view=view
     )
 
-    # create a hovertool
-    ht = HoverTool(
-        renderers=[point],
-        tooltips=TOOLTIPS,
-        mode="mouse",
-        show_arrow=False,
-        callback=callback_tp2,
-    )
 
-    fig2.add_tools(ht)
     fig2.toolbar.active_scroll = fig2.select_one(WheelZoomTool)
     fig2.xaxis.major_tick_line_color = None
     fig2.xaxis.minor_tick_line_color = None
