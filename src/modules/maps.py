@@ -6,16 +6,20 @@ import numpy as np
 from bokeh.models import (
     Circle,
     GeoJSONDataSource,
+    ColumnDataSource,
     HoverTool,
     Patches,
     WheelZoomTool,
     CustomJS,
     CustomJSFilter,
     TextInput,
+    DataTable,
+    TableColumn,
+    DateFormatter,
     CDSView
 )
 from bokeh.plotting import figure
-from bokeh.layouts import column, layout
+from bokeh.layouts import column, row
 from bokeh.tile_providers import Vendors, get_provider
 from pyproj import Proj, transform
 from shapely import wkt
@@ -38,7 +42,7 @@ def update(PATH):
         map1 = index_map(map_geodf)
         map2 = search_map(map_geodf)
 
-        export_map = {"index":map1,"search":map2}
+        export_map = {"map":map1,"search":map2}
 
         return export_map
 
@@ -88,7 +92,7 @@ def apply_transform(geodf):
 
     # reduce columns and return final geodataframe
 
-    map_geodf = geodf[["id", "title", "creator", "img_sd", "geometry", "lat2", "lng2"]]
+    map_geodf = geodf[["id", "title", "description", "creator", "date", "img_sd", "geometry", "lat2", "lng2"]]
 
     return map_geodf
 
@@ -221,12 +225,11 @@ def index_map(map_geodf):
 def search_map(map_geodf):
 
     # replace NAN values for string
-    #map_geodf["img_sd"].fillna(value="No img", inplace=True)
+    map_geodf["img_sd"].copy().fillna(value="No img", inplace=True)
     #print(map_geodf["img_sd"])
-    map_geodf2 = map_geodf.copy().dropna(subset=["img_sd"])
 
     # create a geodatasource
-    geosource = GeoJSONDataSource(geojson=map_geodf2.to_json())
+    geosource = GeoJSONDataSource(geojson=map_geodf.to_json())
 
     # description from points
     TOOLTIPS = """
@@ -258,7 +261,7 @@ def search_map(map_geodf):
         x_axis_type="mercator",
         y_axis_type="mercator",
         plot_width=1400,
-        plot_height=900,
+        plot_height=800,
         toolbar_location=None)
 
     tile_provider2 = get_provider(Vendors.CARTODBPOSITRON_RETINA)
@@ -271,15 +274,22 @@ def search_map(map_geodf):
     custom_filter = CustomJSFilter(args=dict(search=search), code="""
     var indices = [];
     if(search.value == ''){
-        for (var i = 0; i < source.get_length(); i++){
-            indices.push(true);
-            }
-    }else{
+    for (var i = 0; i < source.get_length(); i++){
+        indices.push(false);
+        }
+    }
+    else if(search.value == 'all'){
+    for (var i = 0; i <source.get_length(); i++){
+        indices.push(true);
+        }
+    }
+    else{
         indices = [];
         for (var i = 0; i < source.get_length(); i++){
             if (source.data['id'][i] == search.value){
                 indices.push(true);
-            } else {
+            }
+            else {
                 indices.push(false);
                 }
         }
@@ -295,6 +305,20 @@ def search_map(map_geodf):
             args=dict(source=geosource),
             code="""source.change.emit()""")
             )
+
+    # config table
+    datat = map_geodf[["id","title","description", "creator", "date"]]
+    source = ColumnDataSource(datat)
+
+    columns = [
+            TableColumn(field="id", title="Record Name"),
+            TableColumn(field="title", title="Título"),
+            TableColumn(field="description", title="Resumo"),
+            TableColumn(field="creator", title="Autoria"),
+            TableColumn(field="date", title="Data")
+        ]
+    datatable1 = DataTable(source=source, columns=columns, width=600, height=280)
+    datatable2 = DataTable(source=geosource, columns=columns, width=600, height=280, view=view)
 
     # construct points and wedges from hover
     viewcone = fig2.patches(
@@ -338,6 +362,8 @@ def search_map(map_geodf):
     fig2.xaxis.major_label_text_font_size = "0pt"
     fig2.yaxis.major_label_text_font_size = "0pt"
 
-    layout = column(search, fig2)
+    col1 = column(search, fig2, sizing_mode="stretch_width")
+    col2 = column(datatable2,datatable1,sizing_mode="stretch_both")
+    layout = row(col1,col2, sizing_mode="scale_both")
 
     return layout

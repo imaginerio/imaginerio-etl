@@ -456,11 +456,11 @@ def load(METADATA):
     dashboard_plot = report_update(METADATA)
     map_plot = maps_update(METADATA)
 
-    # export index.html
-    output_file(os.environ["INDEX"], title="Situated Views")
+    # export graphs.html
+    output_file(os.environ["GRAPHS"], title="Situated Views")
     show(
         layout(
-            [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot["index"]]],
+            [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot["map"]]],
             sizing_mode="stretch_both",
         )
     )
@@ -469,8 +469,8 @@ def load(METADATA):
     output_file(os.environ["TILES"], title="Situated Views")
     show(dashboard_plot["tiles"])
 
-    # export search.html
-    output_file(os.environ["SEARCH_MAP"], title="Search items for catalog")
+    # export index.html
+    output_file(os.environ["INDEX"], title="Search items for catalog")
     show(map_plot["search"])
 
 
