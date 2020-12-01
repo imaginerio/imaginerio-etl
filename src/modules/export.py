@@ -72,27 +72,13 @@ def omeka_csv(df):
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
     omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
 
-    # smapshot item set
-    smapshot_items = [
-        "014AM005013",
-        "014AM005015",
-        "014AM005016",
-        "0071824cx001-05",
-        "0071824cx040-07",
-        "0071824cx021-05",
-        "0071824cx037-11",
-        "0071824cx037-12",
-        "0071824cx038-12",
-        "0072430cx003b-04",
-        "002051AM002002",
-    ]
-
     # create columns
     omeka_df["rights"] = ""
     omeka_df["citation"] = ""
     omeka_df["item_sets"] = "all||views"
-    smapshot = omeka_df["id"].isin(smapshot_items)
-    omeka_df.loc[smapshot, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
+    smapshot = pd.read_csv("data-out/smapshot.csv")
+    include = omeka_df["id"].isin(smapshot["id"])
+    omeka_df.loc[include, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
 
     # rename columns
     omeka_df = omeka_df.rename(
