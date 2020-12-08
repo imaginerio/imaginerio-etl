@@ -57,8 +57,39 @@ def update(PATH):
         # omeka total
         val_omeka_total = 0
 
+        values_hbar = {
+            "Done_orange": [ 
+                0,
+                val_wiki, 
+                val_meta,
+                0,
+                0
+                ],
+            "Done_blue": [
+                val_omeka,
+                0,
+                0, 
+                val_img, 
+                val_kml
+                ],
+            "To do": [
+                val_omeka_total,
+                val_wiki_total - val_wiki,
+                val_meta_total - val_meta,
+                val_img_total - val_img,
+                val_kml_total,
+            ],
+            "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
+        }
+
         values = {
-            "Done": [val_omeka, val_wiki, val_meta, val_img, val_kml],
+            "Done": [
+                val_omeka,
+                val_wiki, 
+                val_meta, 
+                val_img, 
+                val_kml
+                ],
             "To do": [
                 val_omeka_total,
                 val_wiki_total - val_wiki,
@@ -74,7 +105,7 @@ def update(PATH):
         DF["rate"] = DF_AUX.count(axis=1)
 
         # update color bar
-        plot_hbar = update_hbar(values)
+        plot_hbar = update_hbar(values_hbar)
         # update pie chart
         plot_pie = update_pie(values)
         # update tiles chart
@@ -89,32 +120,32 @@ def update(PATH):
         print(str(e))
 
 
-def update_hbar(values):
+def update_hbar(values_hbar):
     """ 
     Render hbar report
     """
 
     # construct a data source
-    list1 = ["Done", "To do"]
-    data = values
+    list1 = ["Done_orange","Done_blue", "To do"]
+    data = values_hbar
     # deepcopy the data for later use
     data1 = deepcopy(data)
 
     data1.update(
         {
-            "tooltip_orange": [
-                "Published",
-                "Commons and Wikidata",
-                "On IMS' Cumulus Portals",
-                "Geolocated",
-                "Total geolocated items",
-            ],
             "tooltip_grey": [
                 "Not on Omeka",
                 "Wikidata only",
                 "Potential items",
                 "To geolocate",
                 "Not geolocated",
+            ],
+            "tooltip_b-o": [
+                "Published",
+                "Commons and Wikidata",
+                "On IMS' Cumulus Portals",
+                "Geolocated",
+                "Total geolocated items",
             ],
         }
     )
@@ -125,40 +156,56 @@ def update_hbar(values):
 
     plot_hbar = figure(
         y_range=data["y"],
-        x_range=(0, 5500),
+        x_range=(0, 6000),
         plot_height=300,
         plot_width=900,
         toolbar_location=None,
     )
 
-    # construct bars with two differents datas
+    # construct bars with differents colors
     hbar_1 = plot_hbar.hbar(
-        y=data["y"], right=data["Done"], left=0, height=0.8, color="orange"
+        y=data["y"],
+        right=data["Done_orange"],
+        left=0,
+        height=0.8,
+        color="orange"
     )
-    hbar_1.data_source.add(data1["tooltip_orange"], "data")
-    hbar_1.data_source.add(data1["Done"], "value")
+    hbar_1.data_source.add(data1["tooltip_b-o"], "data")
+    hbar_1.data_source.add(data1["Done_orange"], "value")
 
     hbar_2 = plot_hbar.hbar(
         y=data["y"],
+        right=data["Done_blue"],
+        left=data["Done_orange"],
+        height=0.8,
+        color="royalblue"
+    )
+    hbar_2.data_source.add(data1["tooltip_b-o"], "data")
+    hbar_2.data_source.add(data1["Done_blue"], "value")
+
+    hbar_3 = plot_hbar.hbar(
+        y=data["y"],
         right=data["To do"],
-        left=data["Done"],
+        left=data["Done_blue"],
         height=0.8,
         color="lightgrey",
     )
-    hbar_2.data_source.add(data1["tooltip_grey"], "data")
-    hbar_2.data_source.add(data1["To do"], "value")
+    hbar_3.data_source.add(data1["tooltip_grey"], "data")
+    hbar_3.data_source.add(data1["To do"], "value")
 
     # add hover tool for each bar chart
-    TOOLTIPS1 = "@data: @value"
-    TOOLTIPS2 = "@data: @value"
+    TOOLTIPS = "@data: @value"
     h1 = HoverTool(
-        renderers=[hbar_1], tooltips=TOOLTIPS1, mode="mouse", show_arrow=False
+        renderers=[hbar_1], tooltips=TOOLTIPS, mode="mouse", show_arrow=False
     )
     h2 = HoverTool(
-        renderers=[hbar_2], tooltips=TOOLTIPS2, mode="mouse", show_arrow=False
+        renderers=[hbar_2], tooltips=TOOLTIPS, mode="mouse", show_arrow=False
+    )
+    h3 = HoverTool(
+        renderers=[hbar_3], tooltips=TOOLTIPS, mode="mouse", show_arrow=False
     )
 
-    plot_hbar.add_tools(h1, h2)
+    plot_hbar.add_tools(h1, h2, h3)
 
     # data goal line
     hline = Span(
