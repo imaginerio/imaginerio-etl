@@ -3,13 +3,15 @@ import shutil
 from datetime import datetime as dt
 from pathlib import Path
 
+import geojson
 import numpy as np
 import pandas as pd
 from bokeh.layouts import column, layout
 from bokeh.plotting import output_file, show
+from geomet import wkt
 
-from report import update as report_update
 from maps import update as maps_update
+from report import update as report_update
 
 
 def img_to_commons(METADATA, IMAGES):
@@ -150,8 +152,28 @@ def gis_csv(df):
     # select columns
     gis_df = gis_df[["id", "first_year", "last_year", "geometry"]]
 
-    # save csv
-    gis_df.to_csv(os.environ["IMPORT_GIS"], index=False)
+    # date formatting
+    gis_df["first_year"] = gis_df["first_year"].dt.strftime("%Y")
+    gis_df["last_year"] = gis_df["last_year"].dt.strftime("%Y")
+
+    # to geojson
+    feature_list = []
+
+    for _, row in gis_df.iterrows():
+        wkt_string = row["geometry"]
+        geojson_string = wkt.loads(wkt_string)
+        feature = geojson.Feature(
+            id=row["id"],
+            geometry=geojson_string,
+            properties={"first_year": row["first_year"], "last_year": row["last_year"]},
+        )
+        feature_list.append(feature)
+
+    feature_collection = geojson.FeatureCollection(feature_list)
+
+    # save geojson
+    with open("data-out/import-gis.geojson", "w", encoding="utf-8") as f:
+        geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)
 
     # print dataframe
     print(gis_df.head())

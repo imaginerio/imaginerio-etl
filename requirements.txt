@@ -10,6 +10,8 @@ cligj==0.5.0
 ffmpeg-python==0.2.0
 fiona==1.8.13.post1
 future==0.18.2
+geojson==2.5.0
+geomet==0.2.1.post1
 geopandas==0.8.0
 idna==2.10
 IPTCInfo3==2.1.4
