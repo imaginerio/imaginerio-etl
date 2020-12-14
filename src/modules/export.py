@@ -165,7 +165,11 @@ def gis_csv(df):
         feature = geojson.Feature(
             id=row["id"],
             geometry=geojson_string,
-            properties={"first_year": row["first_year"], "last_year": row["last_year"]},
+            properties={
+                "id": row["id"],
+                "first_year": row["first_year"],
+                "last_year": row["last_year"],
+            },
         )
         feature_list.append(feature)
 
