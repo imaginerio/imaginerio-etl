@@ -1,8 +1,8 @@
 const fs = require("fs");
 const xml2js = require("xml2js");
 let path = require("path");
-let pathDir = path.resolve("./") + "/metadata/camera/kml-sessions";
-let distDir = "metadata/camera/";
+let pathDir = path.resolve("./") + "/src/data-in/kml-sessions";
+let distDir = "src/data-out/";
 const distfileName = "camera";
 const turf = require("@turf/turf");
 
