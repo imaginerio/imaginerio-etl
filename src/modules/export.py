@@ -99,7 +99,7 @@ def omeka_csv(df):
             "wikidata_id": "dcterms:hasVersion",
             "lat": "latitude",
             "lng": "longitude",
-            "geometry": "dcterms:spatial",
+            "geometry": "schema:polygon",
             "wikidata_depict": "foaf:depicts",
             "img_hd": "media",
         }
@@ -122,6 +122,7 @@ def omeka_csv(df):
             "dcterms:hasVersion",
             "latitude",
             "longitude",
+            "schema:poylgon",
             "foaf:depicts",
             "schema:width",
             "schema:height",
