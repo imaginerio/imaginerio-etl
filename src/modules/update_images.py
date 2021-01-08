@@ -8,8 +8,12 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-# path to images source on remote drive
+# environment variables
 SOURCE = os.environ["SOURCE"]
+BACKLOG = os.environ["IMG_BACKLOG"]
+TIFF = os.environ["TIFF"]
+JPEG_HD = os.environ["JPEG_HD"]
+JPEG_SD = os.environ["JPEG_SD"]
 
 # list geolocated items
 camera = pd.read_csv("src/" + os.environ["CAMERA_CSV"])
@@ -35,7 +39,7 @@ def file_handler(source_folder):
 
     files = [
         Image(os.path.join(root, name))
-        for root, dirs, files in os.walk(os.environ["SOURCE"])
+        for root, dirs, files in os.walk(SOURCE)
         for name in files
         if "FINALIZADAS" in root
         and name.endswith((".tif"))
@@ -44,19 +48,19 @@ def file_handler(source_folder):
 
     for infile in files:
 
-        if not os.path.exists(os.path.join(os.environ["TIFF"], infile.tif)):
-            shutil.copy2(infile.path, os.environ["TIFF"])
+        if not os.path.exists(os.path.join(TIFF, infile.tif)):
+            shutil.copy2(infile.path, TIFF)
         else:
             print(f"{infile.tif} already copied")
 
         if infile.id in geolocated:
-            hdout = os.path.join("src", os.environ["JPEG_HD"], infile.jpg)
-            sdout = os.path.join("src", os.environ["JPEG_SD"], infile.jpg)
+            hdout = os.path.join("src", JPEG_HD, infile.jpg)
+            sdout = os.path.join("src", JPEG_SD, infile.jpg)
             size = (1000, 1000)
             if not os.path.exists(hdout):
                 try:
                     with PILImage.open(
-                        os.path.join(os.environ["TIFF"], infile.tif)
+                        os.path.join(TIFF, infile.tif)
                     ) as im:
                         im.save(hdout)
                 except OSError:
@@ -66,7 +70,7 @@ def file_handler(source_folder):
             if not os.path.exists(sdout):
                 try:
                     with PILImage.open(
-                        os.path.join(os.environ["TIFF"], infile.tif)
+                        os.path.join(TIFF, infile.tif)
                     ) as im:
                         im.thumbnail(size)
                         im.save(sdout)
@@ -75,12 +79,12 @@ def file_handler(source_folder):
             else:
                 print("SD version already exists")
         else:
-            backlog = os.path.join("src", os.environ["IMG_BACKLOG"], infile.jpg)
+            backlog = os.path.join("src", IMG_BACKLOG, infile.jpg)
             size = (1000, 1000)
             if not os.path.exists(backlog):
                 try:
                     with PILImage.open(
-                        os.path.join(os.environ["TIFF"], infile.tif)
+                        os.path.join(TIFF, infile.tif)
                     ) as im:
                         im.thumbnail(size)
                         im.save(backlog)
@@ -90,6 +94,13 @@ def file_handler(source_folder):
                 print("Backlog version already exists")
     return files
 
+def backlog_handler(path):
+    backlog = os.listdir(path)
+    for image in backlog:
+        if image.split(".")[0] in geolocated:
+            os.rename(os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image))
+        else:
+            continue
 
 def create_images_df(files):
     """Creates a dataframe with every image available and links to full size and thumbnail"""
@@ -107,7 +118,9 @@ def create_images_df(files):
 
 def main():
     """Execute all functions."""
+
     files = file_handler(SOURCE)
+    backlog_handler(IMG_BACKLOG)
 
     print("Creating image dataframe...")
 
