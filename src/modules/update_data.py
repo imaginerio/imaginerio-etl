@@ -23,15 +23,15 @@ def update_metadata(catalog, dataframes):
             copy=True,
         )
         # filter and label items according to missing dfs
-        left = missing[missing["Not in"] == "left_only"]
-        right = missing[missing["Not in"] == "right_only"]
-        left["Not in"] = f"{dataframe.name}"
-        right["Not in"] = "Catalog"
+        missing["Not in"] = missing["Not in"].astype(str)
+        left = missing["Not in"] == "left_only"
+        right = missing["Not in"] == "right_only"
+        missing.loc[left, "Not in"] = f"{dataframe.name}"
+        missing.loc[right, "Not in"] = "Catalog"
 
         # add items of interest to review_df
         if dataframe.name == "Images" or dataframe.name == "Camera":
-            review_df = review_df.append(left[["id", "Not in"]], ignore_index=True)
-            review_df = review_df.append(right[["id", "Not in"]], ignore_index=True)
+            review_df = review_df.append(missing[["id", "Not in"]], ignore_index=True)
     review_df = review_df.groupby("id", as_index=False).agg(list)
     review_df.to_csv(os.environ["REVIEW"], index=False)
     final_df.to_csv(os.environ["METADATA"], index=False)
