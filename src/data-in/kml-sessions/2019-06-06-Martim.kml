@@ -725,7 +725,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>014GL040</name>
+		<name>014GL40</name>
 		<Camera>
 			<longitude>-43.27749575854222</longitude>
 			<latitude>-22.95899361163436</latitude>
@@ -752,7 +752,7 @@
 			</ListStyle>
 		</Style>
 		<Icon>
-			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014GL040.jpg</href>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/014GL40.jpg</href>
 		</Icon>
 		<ViewVolume>
 			<leftFov>-25</leftFov>

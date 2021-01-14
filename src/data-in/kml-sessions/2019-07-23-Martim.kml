@@ -2415,49 +2415,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A5P3F05-006</name>
-		<Camera>
-			<longitude>-43.17508589899995</longitude>
-			<latitude>-22.90780433199999</latitude>
-			<altitude>58.20787558670524</altitude>
-			<heading>-179.2556672404415</heading>
-			<tilt>86.48954906757577</tilt>
-			<roll>1.405805169206874e-012</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/007A5P3F05-006.jpg</href>
-		</Icon>
-		<rotation>1.07</rotation>
-		<ViewVolume>
-			<leftFov>-12.39</leftFov>
-			<rightFov>12.39</rightFov>
-			<bottomFov>-9.61</bottomFov>
-			<topFov>9.61</topFov>
-			<near>8.9321</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17508589899995,-22.90780433199999,58.20787558670524</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>007A5P3F10-022</name>
 		<Camera>
 			<longitude>-43.17566615013084</longitude>
