@@ -130,48 +130,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A5P3F05-008</name>
-		<Camera>
-			<longitude>-43.17628648855899</longitude>
-			<latitude>-22.90198612866319</latitude>
-			<altitude>11.97489581189904</altitude>
-			<heading>15.51108259034214</heading>
-			<tilt>89.49948616684978</tilt>
-			<roll>-0.0006435017906339663</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>C:/Users/a295805/Pictures/Saved Pictures/007A5P3F05-08.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-36.802</leftFov>
-			<rightFov>36.802</rightFov>
-			<bottomFov>-41.1</bottomFov>
-			<topFov>41.1</topFov>
-			<near>1.89994</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17628648855899,-22.90198612866319,11.97489581189904</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>007A5P3F05-006</name>
 		<Camera>
 			<longitude>-43.1750887531277</longitude>
