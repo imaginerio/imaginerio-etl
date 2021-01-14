@@ -122,7 +122,7 @@ def omeka_csv(df):
             "dcterms:hasVersion",
             "latitude",
             "longitude",
-            "schema:poylgon",
+            "schema:polygon",
             "foaf:depicts",
             "schema:width",
             "schema:height",
