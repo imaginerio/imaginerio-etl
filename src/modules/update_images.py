@@ -10,7 +10,7 @@ load_dotenv(override=True)
 
 # environment variables
 SOURCE = os.environ["SOURCE"]
-BACKLOG = os.environ["IMG_BACKLOG"]
+IMG_BACKLOG = os.environ["IMG_BACKLOG"]
 TIFF = os.environ["TIFF"]
 JPEG_HD = os.environ["JPEG_HD"]
 JPEG_SD = os.environ["JPEG_SD"]
@@ -59,9 +59,7 @@ def file_handler(source_folder):
             size = (1000, 1000)
             if not os.path.exists(hdout):
                 try:
-                    with PILImage.open(
-                        os.path.join(TIFF, infile.tif)
-                    ) as im:
+                    with PILImage.open(os.path.join(TIFF, infile.tif)) as im:
                         im.save(hdout)
                 except OSError:
                     print("cannot convert", infile.tif)
@@ -69,9 +67,7 @@ def file_handler(source_folder):
                 print("HD version already exists")
             if not os.path.exists(sdout):
                 try:
-                    with PILImage.open(
-                        os.path.join(TIFF, infile.tif)
-                    ) as im:
+                    with PILImage.open(os.path.join(TIFF, infile.tif)) as im:
                         im.thumbnail(size)
                         im.save(sdout)
                 except OSError:
@@ -83,9 +79,7 @@ def file_handler(source_folder):
             size = (1000, 1000)
             if not os.path.exists(backlog):
                 try:
-                    with PILImage.open(
-                        os.path.join(TIFF, infile.tif)
-                    ) as im:
+                    with PILImage.open(os.path.join(TIFF, infile.tif)) as im:
                         im.thumbnail(size)
                         im.save(backlog)
                 except OSError:
@@ -94,13 +88,18 @@ def file_handler(source_folder):
                 print("Backlog version already exists")
     return files
 
+
 def backlog_handler(path):
     backlog = os.listdir(path)
     for image in backlog:
         if image.split(".")[0] in geolocated:
-            os.rename(os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image))
+            if not os.path.exists(os.path.join(JPEG_SD, image)):
+                os.rename(os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image))
+            else:
+                os.remove(os.path.join(IMG_BACKLOG, image))
         else:
             continue
+
 
 def create_images_df(files):
     """Creates a dataframe with every image available and links to full size and thumbnail"""

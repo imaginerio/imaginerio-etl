@@ -32,7 +32,7 @@ def load_camera(path):
     # list and drop duplicates
     # duplicated_kmls = camera.duplicated(subset="id")
     # if duplicated_kmls["id"].any == True:
-    #    duplicated_kmls.to_csv("data-out/duplicated-kmls.csv")
+    #     duplicated_kmls.to_csv("data-out/duplicated-kmls.csv")
     # camera = camera.drop_duplicates(subset="id", keep="last")
 
     return camera
@@ -56,3 +56,8 @@ def load_cones(path):
     viewcone = viewcone.drop_duplicates(subset="id", keep="last")
 
     return viewcone
+
+if __name__ == "__main__":
+    load(
+                os.environ["CAMERA_CSV"], os.environ["CAMERA_GEOJSON"]
+            )
