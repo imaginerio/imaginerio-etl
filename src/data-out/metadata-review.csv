@@ -3221,12 +3221,16 @@ id,Not in
 007A6P4FP15-037,"['Images', 'Camera']"
 007A6P4FP15-040,"['Images', 'Camera']"
 007A6P4FP15-041,"['Images', 'Camera']"
+007A6P4FP27-010,['Catalog']
 007A6P4FP27-02,"['Images', 'both']"
-007A6P4FP27-10,"['Images', 'both']"
+007A6P4FP27-033,['Catalog']
+007A6P4FP27-041,['Catalog']
+007A6P4FP27-046,['Catalog']
+007A6P4FP27-10,"['Images', 'Camera']"
 007A6P4FP27-25,"['Images', 'Camera']"
-007A6P4FP27-33,"['Images', 'both']"
-007A6P4FP27-41,"['Images', 'both']"
-007A6P4FP27-46,"['Images', 'both']"
+007A6P4FP27-33,"['Images', 'Camera']"
+007A6P4FP27-41,"['Images', 'Camera']"
+007A6P4FP27-46,"['Images', 'Camera']"
 007A6P5FP02-010,"['Images', 'Camera']"
 007A6P5FP02-011,"['Images', 'Camera']"
 007AFA01,"['Images', 'both']"
@@ -5395,11 +5399,11 @@ id,Not in
 014panorama2,"['Images', 'both']"
 014panorama3,"['Images', 'both']"
 015-Estereoscopia,"['Images', 'Camera']"
-037SL01001,"['Images', 'Camera']"
-037SL01002,"['Images', 'Camera']"
+037SL01001,"['Images', 'both']"
+037SL01002,"['Images', 'both']"
 037SL01002p,"['Images', 'Camera']"
-037SL01003,"['Images', 'Camera']"
-037SL01004,"['Images', 'Camera']"
+037SL01003,"['Images', 'both']"
+037SL01004,"['Images', 'both']"
 037SL01004p,"['Images', 'Camera']"
 037SL01005,"['Images', 'Camera']"
 037SL01006p,"['Images', 'Camera']"
@@ -5417,92 +5421,92 @@ id,Not in
 037SL01020,"['Images', 'Camera']"
 037SL01021,"['Images', 'Camera']"
 037SL01022,"['Images', 'Camera']"
-037SL01023,"['Images', 'Camera']"
+037SL01023,"['Images', 'both']"
 037SL01024,"['Images', 'Camera']"
 037SL01026,"['Images', 'Camera']"
 037SL01030p,"['Images', 'Camera']"
 037SL01031p,"['Images', 'Camera']"
 037SL01034,"['Images', 'Camera']"
-037SL01035,"['Images', 'Camera']"
+037SL01035,"['Images', 'both']"
 037SL01036,"['Images', 'Camera']"
-037SL01039,"['Images', 'Camera']"
+037SL01039,"['Images', 'both']"
 037SL01040,"['Images', 'Camera']"
-037SL01041,"['Images', 'Camera']"
-037SL01042,"['Images', 'Camera']"
+037SL01041,"['Images', 'both']"
+037SL01042,"['Images', 'both']"
 037SL01043,"['Images', 'Camera']"
-037SL01044,"['Images', 'Camera']"
-037SL01045,"['Images', 'Camera']"
-037SL01046,"['Images', 'Camera']"
-037SL01047,"['Images', 'Camera']"
+037SL01044,"['Images', 'both']"
+037SL01045,"['Images', 'both']"
+037SL01046,"['Images', 'both']"
+037SL01047,"['Images', 'both']"
 037SL01048,"['Images', 'Camera']"
-037SL01049,"['Images', 'Camera']"
+037SL01049,"['Images', 'both']"
 037SL01050,"['Images', 'Camera']"
-037SL01051,"['Images', 'Camera']"
+037SL01051,"['Images', 'both']"
 037SL01052,"['Images', 'Camera']"
-037SL01053,"['Images', 'Camera']"
+037SL01053,"['Images', 'both']"
 037SL01054,"['Images', 'Camera']"
-037SL01055,"['Images', 'Camera']"
+037SL01055,"['Images', 'both']"
 037SL01056,"['Images', 'Camera']"
 037SL01057,"['Images', 'Camera']"
 037SL01058,"['Images', 'Camera']"
-037SL01059,"['Images', 'Camera']"
+037SL01059,"['Images', 'both']"
 037SL01061,"['Images', 'Camera']"
 037SL01062,"['Images', 'Camera']"
-037SL01063,"['Images', 'Camera']"
+037SL01063,"['Images', 'both']"
 037SL01063p,"['Images', 'Camera']"
-037SL01064,"['Images', 'Camera']"
+037SL01064,"['Images', 'both']"
 037SL01065,"['Images', 'Camera']"
-037SL01066,"['Images', 'Camera']"
+037SL01066,"['Images', 'both']"
 037SL01067,"['Images', 'Camera']"
-037SL01068,"['Images', 'Camera']"
-037SL01069,"['Images', 'Camera']"
-037SL01070,"['Images', 'Camera']"
-037SL01071,"['Images', 'Camera']"
-037SL01072,"['Images', 'Camera']"
-037SL01073,"['Images', 'Camera']"
-037SL01074,"['Images', 'Camera']"
-037SL01075,"['Images', 'Camera']"
+037SL01068,"['Images', 'both']"
+037SL01069,"['Images', 'both']"
+037SL01070,"['Images', 'both']"
+037SL01071,"['Images', 'both']"
+037SL01072,"['Images', 'both']"
+037SL01073,"['Images', 'both']"
+037SL01074,"['Images', 'both']"
+037SL01075,"['Images', 'both']"
 037SL01075p,"['Images', 'Camera']"
-037SL01076,"['Images', 'Camera']"
-037SL01077,"['Images', 'Camera']"
-037SL01078,"['Images', 'Camera']"
-037SL01079,"['Images', 'Camera']"
+037SL01076,"['Images', 'both']"
+037SL01077,"['Images', 'both']"
+037SL01078,"['Images', 'both']"
+037SL01079,"['Images', 'both']"
 037SL01080,"['Images', 'Camera']"
-037SL01081,"['Images', 'Camera']"
-037SL01082,"['Images', 'Camera']"
+037SL01081,"['Images', 'both']"
+037SL01082,"['Images', 'both']"
 037SL01083,"['Images', 'Camera']"
-037SL01084,"['Images', 'Camera']"
-037SL01085,"['Images', 'Camera']"
-037SL01086,"['Images', 'Camera']"
-037SL01087,"['Images', 'Camera']"
-037SL01088,"['Images', 'Camera']"
-037SL01089,"['Images', 'Camera']"
-037SL01090,"['Images', 'Camera']"
-037SL01091,"['Images', 'Camera']"
-037SL01092,"['Images', 'Camera']"
-037SL01094,"['Images', 'Camera']"
-037SL01095,"['Images', 'Camera']"
-037SL01096,"['Images', 'Camera']"
+037SL01084,"['Images', 'both']"
+037SL01085,"['Images', 'both']"
+037SL01086,"['Images', 'both']"
+037SL01087,"['Images', 'both']"
+037SL01088,"['Images', 'both']"
+037SL01089,"['Images', 'both']"
+037SL01090,"['Images', 'both']"
+037SL01091,"['Images', 'both']"
+037SL01092,"['Images', 'both']"
+037SL01094,"['Images', 'both']"
+037SL01095,"['Images', 'both']"
+037SL01096,"['Images', 'both']"
 037SL01097,"['Images', 'Camera']"
-037SL01098,"['Images', 'Camera']"
+037SL01098,"['Images', 'both']"
 037SL01099,"['Images', 'Camera']"
 037SL01100,"['Images', 'Camera']"
 037SL01101,"['Images', 'Camera']"
 037SL01102,"['Images', 'Camera']"
 037SL01103,"['Images', 'Camera']"
 037SL01104,"['Images', 'Camera']"
-037SL01105,"['Images', 'Camera']"
-037SL01106,"['Images', 'Camera']"
-037SL01107,"['Images', 'Camera']"
+037SL01105,"['Images', 'both']"
+037SL01106,"['Images', 'both']"
+037SL01107,"['Images', 'both']"
 037SL01108,"['Images', 'Camera']"
-037SL01109,"['Images', 'Camera']"
+037SL01109,"['Images', 'both']"
 037SL01109p,"['Images', 'Camera']"
 037SL01110,"['Images', 'Camera']"
 037SL01110p,"['Images', 'Camera']"
 037SL01111,"['Images', 'Camera']"
 037SL01112,"['Images', 'Camera']"
-037SL01113,"['Images', 'Camera']"
-037SL01114,"['Images', 'Camera']"
+037SL01113,"['Images', 'both']"
+037SL01114,"['Images', 'both']"
 037SL01115,"['Images', 'Camera']"
 037SL01116,"['Images', 'Camera']"
 037SL01117a,"['Images', 'Camera']"
@@ -5511,188 +5515,188 @@ id,Not in
 037SL01119,"['Images', 'Camera']"
 037SL01120,"['Images', 'Camera']"
 037SL01121,"['Images', 'Camera']"
-037SL01122,"['Images', 'Camera']"
-037SL01123,"['Images', 'Camera']"
-037SL01124,"['Images', 'Camera']"
-037SL01125,"['Images', 'Camera']"
+037SL01122,"['Images', 'both']"
+037SL01123,"['Images', 'both']"
+037SL01124,"['Images', 'both']"
+037SL01125,"['Images', 'both']"
 037SL01127,"['Images', 'Camera']"
-037SL01129,"['Images', 'Camera']"
-037SL01130,"['Images', 'Camera']"
+037SL01129,"['Images', 'both']"
+037SL01130,"['Images', 'both']"
 037SL01131,"['Images', 'Camera']"
-037SL01132,"['Images', 'Camera']"
+037SL01132,"['Images', 'both']"
 037SL01133,"['Images', 'Camera']"
-037SL01134,"['Images', 'Camera']"
-037SL01135,"['Images', 'Camera']"
+037SL01134,"['Images', 'both']"
+037SL01135,"['Images', 'both']"
 037SL01136,"['Images', 'Camera']"
-037SL01137,"['Images', 'Camera']"
-037SL01138,"['Images', 'Camera']"
-037SL01139,"['Images', 'Camera']"
+037SL01137,"['Images', 'both']"
+037SL01138,"['Images', 'both']"
+037SL01139,"['Images', 'both']"
 037SL01140,"['Images', 'Camera']"
-037SL01141,"['Images', 'Camera']"
+037SL01141,"['Images', 'both']"
 037SL01142,"['Images', 'Camera']"
-037SL01143,"['Images', 'Camera']"
-037SL01145,"['Images', 'Camera']"
-037SL01146,"['Images', 'Camera']"
+037SL01143,"['Images', 'both']"
+037SL01145,"['Images', 'both']"
+037SL01146,"['Images', 'both']"
 037SL01146p,"['Images', 'Camera']"
-037SL01147,"['Images', 'Camera']"
-037SL01148,"['Images', 'Camera']"
+037SL01147,"['Images', 'both']"
+037SL01148,"['Images', 'both']"
 037SL01150,"['Images', 'Camera']"
 037SL01151,"['Images', 'Camera']"
-037SL01151p,"['Images', 'Camera']"
-037SL01152,"['Images', 'Camera']"
+037SL01151p,"['Images', 'both']"
+037SL01152,"['Images', 'both']"
 037SL02001,"['Images', 'Camera']"
 037SL02001p,"['Images', 'Camera']"
-037SL02002,"['Images', 'Camera']"
+037SL02002,"['Images', 'both']"
 037SL02002p,"['Images', 'Camera']"
 037SL02003p,"['Images', 'Camera']"
-037SL02004,"['Images', 'Camera']"
-037SL02006,"['Images', 'Camera']"
+037SL02004,"['Images', 'both']"
+037SL02006,"['Images', 'both']"
 037SL02006p,"['Images', 'Camera']"
 037SL02007p,"['Images', 'Camera']"
-037SL02008,"['Images', 'Camera']"
-037SL02009,"['Images', 'Camera']"
-037SL02010,"['Images', 'Camera']"
-037SL02011,"['Images', 'Camera']"
-037SL02012,"['Images', 'Camera']"
+037SL02008,"['Images', 'both']"
+037SL02009,"['Images', 'both']"
+037SL02010,"['Images', 'both']"
+037SL02011,"['Images', 'both']"
+037SL02012,"['Images', 'both']"
 037SL02012p,"['Images', 'Camera']"
-037SL02013,"['Images', 'Camera']"
+037SL02013,"['Images', 'both']"
 037SL02013p,"['Images', 'Camera']"
-037SL02014,"['Images', 'Camera']"
-037SL02015,"['Images', 'Camera']"
+037SL02014,"['Images', 'both']"
+037SL02015,"['Images', 'both']"
 037SL02015p,"['Images', 'Camera']"
-037SL02016,"['Images', 'Camera']"
+037SL02016,"['Images', 'both']"
 037SL02016p,"['Images', 'Camera']"
-037SL02017,"['Images', 'Camera']"
+037SL02017,"['Images', 'both']"
 037SL02017p,"['Images', 'Camera']"
 037SL02018,"['Images', 'Camera']"
-037SL03001,"['Images', 'Camera']"
-037SL03002,"['Images', 'Camera']"
-037SL03003,"['Images', 'Camera']"
-037SL03004,"['Images', 'Camera']"
-037SL03005,"['Images', 'Camera']"
-037SL03006,"['Images', 'Camera']"
-037SL03007,"['Images', 'Camera']"
-037SL03008,"['Images', 'Camera']"
-037SL03009,"['Images', 'Camera']"
-037SL03010,"['Images', 'Camera']"
-037SL03011,"['Images', 'Camera']"
-037SL03013,"['Images', 'Camera']"
-037SL03014,"['Images', 'Camera']"
+037SL03001,"['Images', 'both']"
+037SL03002,"['Images', 'both']"
+037SL03003,"['Images', 'both']"
+037SL03004,"['Images', 'both']"
+037SL03005,"['Images', 'both']"
+037SL03006,"['Images', 'both']"
+037SL03007,"['Images', 'both']"
+037SL03008,"['Images', 'both']"
+037SL03009,"['Images', 'both']"
+037SL03010,"['Images', 'both']"
+037SL03011,"['Images', 'both']"
+037SL03013,"['Images', 'both']"
+037SL03014,"['Images', 'both']"
 037SL03014p,"['Images', 'Camera']"
-037SL03015,"['Images', 'Camera']"
-037SL03016,"['Images', 'Camera']"
-037SL03017,"['Images', 'Camera']"
+037SL03015,"['Images', 'both']"
+037SL03016,"['Images', 'both']"
+037SL03017,"['Images', 'both']"
 037SL03017p,"['Images', 'Camera']"
-037SL03018,"['Images', 'Camera']"
-037SL03019,"['Images', 'Camera']"
+037SL03018,"['Images', 'both']"
+037SL03019,"['Images', 'both']"
 037SL03019p,"['Images', 'Camera']"
-037SL03020,"['Images', 'Camera']"
+037SL03020,"['Images', 'both']"
 037SL03020p,"['Images', 'Camera']"
-037SL03021,"['Images', 'Camera']"
-037SL03022,"['Images', 'Camera']"
-037SL03023,"['Images', 'Camera']"
+037SL03021,"['Images', 'both']"
+037SL03022,"['Images', 'both']"
+037SL03023,"['Images', 'both']"
 037SL03023p,"['Images', 'Camera']"
-037SL03026,"['Images', 'Camera']"
-037SL03027,"['Images', 'Camera']"
+037SL03026,"['Images', 'both']"
+037SL03027,"['Images', 'both']"
 037SL03029p,"['Images', 'Camera']"
-037SL03032,"['Images', 'Camera']"
+037SL03032,"['Images', 'both']"
 037SL03032p,"['Images', 'Camera']"
-037SL03033,"['Images', 'Camera']"
+037SL03033,"['Images', 'both']"
 037SL03033p,"['Images', 'Camera']"
-037SL03034,"['Images', 'Camera']"
-037SL03035,"['Images', 'Camera']"
-037SL03036,"['Images', 'Camera']"
-037SL03037,"['Images', 'Camera']"
-037SL03038,"['Images', 'Camera']"
-037SL03039,"['Images', 'Camera']"
-037SL03040,"['Images', 'Camera']"
+037SL03034,"['Images', 'both']"
+037SL03035,"['Images', 'both']"
+037SL03036,"['Images', 'both']"
+037SL03037,"['Images', 'both']"
+037SL03038,"['Images', 'both']"
+037SL03039,"['Images', 'both']"
+037SL03040,"['Images', 'both']"
 037SL03040p,"['Images', 'Camera']"
-037SL03041,"['Images', 'Camera']"
-037SL03042,"['Images', 'Camera']"
+037SL03041,"['Images', 'both']"
+037SL03042,"['Images', 'both']"
 037SL03043,"['Images', 'Camera']"
-037SL03044,"['Images', 'Camera']"
+037SL03044,"['Images', 'both']"
 037SL03044p,"['Images', 'Camera']"
-037SL03045,"['Images', 'Camera']"
-037SL03046,"['Images', 'Camera']"
-037SL03047,"['Images', 'Camera']"
-037SL03048,"['Images', 'Camera']"
-037SL03049,"['Images', 'Camera']"
-037SL03050,"['Images', 'Camera']"
-037SL03052,"['Images', 'Camera']"
-037SL03053,"['Images', 'Camera']"
+037SL03045,"['Images', 'both']"
+037SL03046,"['Images', 'both']"
+037SL03047,"['Images', 'both']"
+037SL03048,"['Images', 'both']"
+037SL03049,"['Images', 'both']"
+037SL03050,"['Images', 'both']"
+037SL03052,"['Images', 'both']"
+037SL03053,"['Images', 'both']"
 037SL03053p,"['Images', 'Camera']"
-037SL03054,"['Images', 'Camera']"
-037SL03055,"['Images', 'Camera']"
-037SL03056,"['Images', 'Camera']"
-037SL03057,"['Images', 'Camera']"
+037SL03054,"['Images', 'both']"
+037SL03055,"['Images', 'both']"
+037SL03056,"['Images', 'both']"
+037SL03057,"['Images', 'both']"
 037SL03057p,"['Images', 'Camera']"
-037SL03058,"['Images', 'Camera']"
-037SL03059,"['Images', 'Camera']"
+037SL03058,"['Images', 'both']"
+037SL03059,"['Images', 'both']"
 037SL03059p,"['Images', 'Camera']"
-037SL03060,"['Images', 'Camera']"
-037SL03061,"['Images', 'Camera']"
-037SL03062,"['Images', 'Camera']"
+037SL03060,"['Images', 'both']"
+037SL03061,"['Images', 'both']"
+037SL03062,"['Images', 'both']"
 037SL03062p,"['Images', 'Camera']"
 037SL03063a,"['Images', 'Camera']"
-037SL03064,"['Images', 'Camera']"
-037SL03065,"['Images', 'Camera']"
+037SL03064,"['Images', 'both']"
+037SL03065,"['Images', 'both']"
 037SL03065p,"['Images', 'Camera']"
-037SL03066,"['Images', 'Camera']"
+037SL03066,"['Images', 'both']"
 037SL03066p,"['Images', 'Camera']"
-037SL03067,"['Images', 'Camera']"
-037SL03068,"['Images', 'Camera']"
-037SL03069,"['Images', 'Camera']"
-037SL03070,"['Images', 'Camera']"
+037SL03067,"['Images', 'both']"
+037SL03068,"['Images', 'both']"
+037SL03069,"['Images', 'both']"
+037SL03070,"['Images', 'both']"
 037SL03070p,"['Images', 'Camera']"
-037SL03071,"['Images', 'Camera']"
-037SL03072,"['Images', 'Camera']"
+037SL03071,"['Images', 'both']"
+037SL03072,"['Images', 'both']"
 037SL03072p,"['Images', 'Camera']"
-037SL03073,"['Images', 'Camera']"
-037SL03074,"['Images', 'Camera']"
+037SL03073,"['Images', 'both']"
+037SL03074,"['Images', 'both']"
 037SL03074p,"['Images', 'Camera']"
-037SL03075,"['Images', 'Camera']"
-037SL03076,"['Images', 'Camera']"
+037SL03075,"['Images', 'both']"
+037SL03076,"['Images', 'both']"
 037SL03076p,"['Images', 'Camera']"
-037SL03077,"['Images', 'Camera']"
+037SL03077,"['Images', 'both']"
 037SL03077p,"['Images', 'Camera']"
-037SL03078,"['Images', 'Camera']"
-037SL03079,"['Images', 'Camera']"
+037SL03078,"['Images', 'both']"
+037SL03079,"['Images', 'both']"
 037SL03079p,"['Images', 'Camera']"
-037SL03080,"['Images', 'Camera']"
+037SL03080,"['Images', 'both']"
 037SL03080p,"['Images', 'Camera']"
-037SL03081,"['Images', 'Camera']"
-037SL03082,"['Images', 'Camera']"
-037SL03083,"['Images', 'Camera']"
+037SL03081,"['Images', 'both']"
+037SL03082,"['Images', 'both']"
+037SL03083,"['Images', 'both']"
 037SL03084,"['Images', 'Camera']"
-037SL03085,"['Images', 'Camera']"
-037SL03086,"['Images', 'Camera']"
-037SL03087,"['Images', 'Camera']"
-037SL03088,"['Images', 'Camera']"
-037SL03089,"['Images', 'Camera']"
-037SL03090,"['Images', 'Camera']"
-037SL03091,"['Images', 'Camera']"
+037SL03085,"['Images', 'both']"
+037SL03086,"['Images', 'both']"
+037SL03087,"['Images', 'both']"
+037SL03088,"['Images', 'both']"
+037SL03089,"['Images', 'both']"
+037SL03090,"['Images', 'both']"
+037SL03091,"['Images', 'both']"
 037SL03092,"['Images', 'Camera']"
-037SL03093,"['Images', 'Camera']"
-037SL03094,"['Images', 'Camera']"
+037SL03093,"['Images', 'both']"
+037SL03094,"['Images', 'both']"
 037SL03095,"['Images', 'Camera']"
 037SL03095p,"['Images', 'Camera']"
-037SL03096,"['Images', 'Camera']"
-037SL03097,"['Images', 'Camera']"
-037SL03098,"['Images', 'Camera']"
+037SL03096,"['Images', 'both']"
+037SL03097,"['Images', 'both']"
+037SL03098,"['Images', 'both']"
 037SL03098p,"['Images', 'Camera']"
-037SL03099,"['Images', 'Camera']"
-037SL03100,"['Images', 'Camera']"
-037SL03101,"['Images', 'Camera']"
-037SL03102,"['Images', 'Camera']"
-037SL03103,"['Images', 'Camera']"
-037SL03104,"['Images', 'Camera']"
+037SL03099,"['Images', 'both']"
+037SL03100,"['Images', 'both']"
+037SL03101,"['Images', 'both']"
+037SL03102,"['Images', 'both']"
+037SL03103,"['Images', 'both']"
+037SL03104,"['Images', 'both']"
 037SL03106,"['Images', 'Camera']"
 037SL03107,"['Images', 'Camera']"
 037SL03108,"['Images', 'Camera']"
 037SL03108p,"['Images', 'Camera']"
-037SL03109,"['Images', 'Camera']"
-037SL03110,"['Images', 'Camera']"
-037SL03111,"['Images', 'Camera']"
+037SL03109,"['Images', 'both']"
+037SL03110,"['Images', 'both']"
+037SL03111,"['Images', 'both']"
 037SL03113,"['Images', 'Camera']"
 037SL03114,"['Images', 'Camera']"
 037SL03116,"['Images', 'Camera']"
@@ -5707,51 +5711,51 @@ id,Not in
 037SL03125,"['Images', 'Camera']"
 037SL03125p,"['Images', 'Camera']"
 037SL03126,"['Images', 'Camera']"
-037SL03127,"['Images', 'Camera']"
-037SL03128,"['Images', 'Camera']"
-037SL03129,"['Images', 'Camera']"
-037SL03130,"['Images', 'Camera']"
-037SL03131,"['Images', 'Camera']"
+037SL03127,"['Images', 'both']"
+037SL03128,"['Images', 'both']"
+037SL03129,"['Images', 'both']"
+037SL03130,"['Images', 'both']"
+037SL03131,"['Images', 'both']"
 037SL03132,"['Images', 'Camera']"
-037SL03133,"['Images', 'Camera']"
+037SL03133,"['Images', 'both']"
 037SL03134,"['Images', 'Camera']"
 037SL03135,"['Images', 'Camera']"
 037SL03137,"['Images', 'Camera']"
-037SL04001,"['Images', 'Camera']"
+037SL04001,"['Images', 'both']"
 037SL04001p,"['Images', 'Camera']"
-037SL04002,"['Images', 'Camera']"
-037SL04003,"['Images', 'Camera']"
+037SL04002,"['Images', 'both']"
+037SL04003,"['Images', 'both']"
 037SL04005,"['Images', 'Camera']"
 037SL04007,"['Images', 'Camera']"
-037SL05003,"['Images', 'Camera']"
+037SL05003,"['Images', 'both']"
 037SL05019,"['Images', 'Camera']"
 037SL05019p,"['Images', 'Camera']"
 037SL05020,"['Images', 'Camera']"
-037SL05021,"['Images', 'Camera']"
+037SL05021,"['Images', 'both']"
 037SL05026,"['Images', 'Camera']"
 037SL05028,"['Images', 'Camera']"
-037SL05032,"['Images', 'Camera']"
+037SL05032,"['Images', 'both']"
 037SL05035,"['Images', 'Camera']"
 037SL05037p,"['Images', 'Camera']"
-037SL05040,"['Images', 'Camera']"
+037SL05040,"['Images', 'both']"
 037SL05042,"['Images', 'Camera']"
 037SL05044,"['Images', 'Camera']"
 037SL05045,"['Images', 'Camera']"
 037SL05046,"['Images', 'Camera']"
-037SL05054,"['Images', 'Camera']"
-037SL05062,"['Images', 'Camera']"
+037SL05054,"['Images', 'both']"
+037SL05062,"['Images', 'both']"
 037SL05066,"['Images', 'Camera']"
-037SL05067,"['Images', 'Camera']"
+037SL05067,"['Images', 'both']"
 037SL05067p,"['Images', 'Camera']"
 037SL05068,"['Images', 'Camera']"
-037SL05072,"['Images', 'Camera']"
-037SL05073,"['Images', 'Camera']"
+037SL05072,"['Images', 'both']"
+037SL05073,"['Images', 'both']"
 037SL05074,"['Images', 'Camera']"
-037SL05075,"['Images', 'Camera']"
-037SL05076,"['Images', 'Camera']"
-037SL05077,"['Images', 'Camera']"
-037SL05078,"['Images', 'Camera']"
-037SL05079,"['Images', 'Camera']"
+037SL05075,"['Images', 'both']"
+037SL05076,"['Images', 'both']"
+037SL05077,"['Images', 'both']"
+037SL05078,"['Images', 'both']"
+037SL05079,"['Images', 'both']"
 037SL05084,"['Images', 'Camera']"
 037SL05085,"['Images', 'Camera']"
 037SL05087,"['Images', 'Camera']"
@@ -5766,13 +5770,13 @@ id,Not in
 037SL05101,"['Images', 'Camera']"
 037SL05103,"['Images', 'Camera']"
 037SL06032p2,"['Images', 'Camera']"
-037SL06033,"['Images', 'Camera']"
-037SL07001,"['Images', 'Camera']"
+037SL06033,"['Images', 'both']"
+037SL07001,"['Images', 'both']"
 037SL07002,"['Images', 'Camera']"
 037SL07003,"['Images', 'Camera']"
 037SL07004,"['Images', 'Camera']"
 037SL07005,"['Images', 'Camera']"
-037SL08001,"['Images', 'Camera']"
+037SL08001,"['Images', 'both']"
 037SL08002,"['Images', 'Camera']"
 037SL09001,"['Images', 'Camera']"
 037SL09002,"['Images', 'Camera']"
@@ -5785,213 +5789,6 @@ id,Not in
 14AAN00505,['Catalog']
 CJHF4004,"['Images', 'both']"
 CJHF9003,"['Images', 'both']"
-IMG_0173,['Catalog']
-IMG_0174,['Catalog']
-IMG_0178,['Catalog']
-IMG_0179,['Catalog']
-IMG_0182,['Catalog']
-IMG_0184,['Catalog']
-IMG_0185,['Catalog']
-IMG_0188,['Catalog']
-IMG_0189,['Catalog']
-IMG_0190,['Catalog']
-IMG_0191,['Catalog']
-IMG_0192,['Catalog']
-IMG_0196,['Catalog']
-IMG_0197,['Catalog']
-IMG_0198,['Catalog']
-IMG_0200,['Catalog']
-IMG_0203,['Catalog']
-IMG_0205,['Catalog']
-IMG_0210,['Catalog']
-IMG_0212,['Catalog']
-IMG_0213,['Catalog']
-IMG_0219,['Catalog']
-IMG_0220,['Catalog']
-IMG_0221,['Catalog']
-IMG_0223,['Catalog']
-IMG_0226,['Catalog']
-IMG_0228,['Catalog']
-IMG_0231,['Catalog']
-IMG_0234,['Catalog']
-IMG_0235,['Catalog']
-IMG_0243,['Catalog']
-IMG_0245,['Catalog']
-IMG_0246,['Catalog']
-IMG_0247,['Catalog']
-IMG_0249,['Catalog']
-IMG_0250,['Catalog']
-IMG_0251,['Catalog']
-IMG_0253,['Catalog']
-IMG_0255,['Catalog']
-IMG_0256,['Catalog']
-IMG_0258,['Catalog']
-IMG_0260,['Catalog']
-IMG_0261,['Catalog']
-IMG_0265,['Catalog']
-IMG_0266,['Catalog']
-IMG_0269,['Catalog']
-IMG_0272,['Catalog']
-IMG_0276,['Catalog']
-IMG_0277,['Catalog']
-IMG_0278,['Catalog']
-IMG_0282,['Catalog']
-IMG_0284,['Catalog']
-IMG_0285,['Catalog']
-IMG_0288,['Catalog']
-IMG_0289,['Catalog']
-IMG_0293,['Catalog']
-IMG_0296,['Catalog']
-IMG_0297,['Catalog']
-IMG_0302,['Catalog']
-IMG_0303,['Catalog']
-IMG_0304,['Catalog']
-IMG_0305,['Catalog']
-IMG_0306,['Catalog']
-IMG_0307,['Catalog']
-IMG_0308,['Catalog']
-IMG_0309,['Catalog']
-IMG_0313,['Catalog']
-IMG_0316,['Catalog']
-IMG_0317,['Catalog']
-IMG_0318,['Catalog']
-IMG_0320,['Catalog']
-IMG_0321,['Catalog']
-IMG_0322,['Catalog']
-IMG_0323,['Catalog']
-IMG_0325,['Catalog']
-IMG_0327,['Catalog']
-IMG_0330,['Catalog']
-IMG_0333,['Catalog']
-IMG_0334,['Catalog']
-IMG_0335,['Catalog']
-IMG_0336,['Catalog']
-IMG_0339,['Catalog']
-IMG_0340,['Catalog']
-IMG_0341,['Catalog']
-IMG_0342,['Catalog']
-IMG_0344,['Catalog']
-IMG_0346,['Catalog']
-IMG_0348,['Catalog']
-IMG_0351,['Catalog']
-IMG_0352,['Catalog']
-IMG_0353,['Catalog']
-IMG_0355,['Catalog']
-IMG_0356,['Catalog']
-IMG_0357,['Catalog']
-IMG_0358,['Catalog']
-IMG_0359,['Catalog']
-IMG_0371,['Catalog']
-IMG_0372,['Catalog']
-IMG_0373,['Catalog']
-IMG_0374,['Catalog']
-IMG_0377,['Catalog']
-IMG_0378,['Catalog']
-IMG_0379,['Catalog']
-IMG_0382,['Catalog']
-IMG_0383,['Catalog']
-IMG_0385,['Catalog']
-IMG_0386,['Catalog']
-IMG_0387,['Catalog']
-IMG_0388,['Catalog']
-IMG_0392,['Catalog']
-IMG_0394,['Catalog']
-IMG_0395,['Catalog']
-IMG_0397,['Catalog']
-IMG_0398,['Catalog']
-IMG_0400,['Catalog']
-IMG_0401,['Catalog']
-IMG_0402,['Catalog']
-IMG_0403,['Catalog']
-IMG_0404,['Catalog']
-IMG_0407,['Catalog']
-IMG_0412,['Catalog']
-IMG_0413,['Catalog']
-IMG_0414,['Catalog']
-IMG_0416,['Catalog']
-IMG_0417,['Catalog']
-IMG_0419,['Catalog']
-IMG_0421,['Catalog']
-IMG_0422,['Catalog']
-IMG_0423,['Catalog']
-IMG_0424,['Catalog']
-IMG_0427,['Catalog']
-IMG_0429,['Catalog']
-IMG_0432,['Catalog']
-IMG_0434,['Catalog']
-IMG_0435,['Catalog']
-IMG_0438,['Catalog']
-IMG_0441,['Catalog']
-IMG_0443,['Catalog']
-IMG_0446,['Catalog']
-IMG_0449,['Catalog']
-IMG_0453,['Catalog']
-IMG_0454,['Catalog']
-IMG_0457,['Catalog']
-IMG_0461,['Catalog']
-IMG_0467,['Catalog']
-IMG_0470,['Catalog']
-IMG_0471,['Catalog']
-IMG_0472,['Catalog']
-IMG_0473,['Catalog']
-IMG_0474,['Catalog']
-IMG_0475,['Catalog']
-IMG_0478,['Catalog']
-IMG_0480,['Catalog']
-IMG_0482,['Catalog']
-IMG_0483,['Catalog']
-IMG_0484,['Catalog']
-IMG_0487,['Catalog']
-IMG_0490,['Catalog']
-IMG_0491,['Catalog']
-IMG_0492,['Catalog']
-IMG_0493,['Catalog']
-IMG_0494,['Catalog']
-IMG_0496,['Catalog']
-IMG_0497,['Catalog']
-IMG_0500,['Catalog']
-IMG_0504,['Catalog']
-IMG_0506,['Catalog']
-IMG_0507,['Catalog']
-IMG_0510,['Catalog']
-IMG_0511,['Catalog']
-IMG_0513,['Catalog']
-IMG_0518,['Catalog']
-IMG_0519,['Catalog']
-IMG_0528,['Catalog']
-IMG_0530,['Catalog']
-IMG_0531,['Catalog']
-IMG_0533,['Catalog']
-IMG_0536,['Catalog']
-IMG_0538,['Catalog']
-IMG_0542,['Catalog']
-IMG_0543,['Catalog']
-IMG_0544,['Catalog']
-IMG_0545,['Catalog']
-IMG_0547,['Catalog']
-IMG_0549,['Catalog']
-IMG_0551,['Catalog']
-IMG_0552,['Catalog']
-IMG_0555,['Catalog']
-IMG_0556,['Catalog']
-IMG_0557,['Catalog']
-IMG_0561,['Catalog']
-IMG_0565,['Catalog']
-IMG_0566,['Catalog']
-IMG_0569,['Catalog']
-IMG_0571,['Catalog']
-IMG_0572,['Catalog']
-IMG_0586,['Catalog']
-IMG_0606,['Catalog']
-IMG_0610,['Catalog']
-IMG_0614,['Catalog']
-IMG_0620,['Catalog']
-IMG_0622,['Catalog']
-IMG_0627,['Catalog']
-IMG_0628,['Catalog']
-IMG_0630,['Catalog']
-IMG_0631,['Catalog']
-IMG_0654,['Catalog']
 P002SAm52-0047,"['Images', 'both']"
 P009MF005,"['Images', 'Camera']"
 P009MF047,"['Images', 'Camera']"

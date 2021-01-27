@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<kml xmlns="http://www.opengis.net/kml/2.2">
 <Folder>
 	<name>2019-09-25-Martim</name>
 	<PhotoOverlay>
@@ -46,7 +45,7 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>007A6P4FP27-46</name>
+		<name>007A6P4FP27-046</name>
 		<Camera>
 			<longitude>-43.19663092062922</longitude>
 			<latitude>-22.90060308970229</latitude>
