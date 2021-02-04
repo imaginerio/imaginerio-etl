@@ -21,22 +21,19 @@ def load(endpoint):
     http.mount("https://", adapter)
     http.mount("http://", adapter)
 
-    response = http.get(endpoint)
-    headers = response.headers
+    response = http.get(endpoint, params={"per_page": 1})
 
-    # find out number of pages
-    last_page = re.findall(r'\d+(?=>; rel="last)', headers["Link"])[0]
-    last_page = int(last_page)
-
-    # loop over pages
+    # loop over pages until response is blank
     results = {}
     l1 = []
     l2 = []
-    for page in tqdm(range(1, last_page + 1)):
-        response = http.get(endpoint, params={"page": page}).json()
+    page = 1
+    while response != []:
+        response = http.get(endpoint, params={"page": page, "per_page": 250}).json()
         for item in response:
             l1.append(item["dcterms:identifier"][0]["@value"])
             l2.append(item["@id"])
+        page += 1
         sleep(0.5)
 
     results.update({"id": l1, "omeka_url": l2})
