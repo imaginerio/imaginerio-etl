@@ -470,7 +470,7 @@ def load(METADATA):
     map_plot = maps_update(METADATA)
 
     # export graphs.html
-    output_file(os.environ["GRAPHS"], title="Situated Views")
+    output_file(os.environ["INDEX"], title="Situated Views - Progress Dashboard")
     show(
         layout(
             [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot["map"]]],
@@ -479,11 +479,11 @@ def load(METADATA):
     )
 
     # export tiles.html
-    output_file(os.environ["TILES"], title="Situated Views")
+    output_file(os.environ["TILES"], title="Situated Views - Item heatmap")
     show(dashboard_plot["tiles"])
 
     # export index.html
-    output_file(os.environ["INDEX"], title="Search items for catalog")
+    output_file(os.environ["SEARCH"], title="Situated Views - Search by ID")
     show(map_plot["search"])
 
 
