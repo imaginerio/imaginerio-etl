@@ -50,7 +50,7 @@
 			<longitude>-43.21553127778491</longitude>
 			<latitude>-22.95535959862101</latitude>
 			<altitude>374.0658659924626</altitude>
-			<heading>86.15372800587952</heading>
+			<heading>86.15372800587951</heading>
 			<tilt>89.35043461218639</tilt>
 			<roll>-0.3162577533987628</roll>
 			<altitudeMode>absolute</altitudeMode>
@@ -94,7 +94,7 @@
 			<altitude>9.409729179043605</altitude>
 			<heading>-88.19115544401217</heading>
 			<tilt>101.2869405741837</tilt>
-			<roll>-1.273176038989846e-010</roll>
+			<roll>-1.273176038989846e-10</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -136,7 +136,7 @@
 			<altitude>8.392909725771828</altitude>
 			<heading>-178.7984968541546</heading>
 			<tilt>93.14192809808512</tilt>
-			<roll>7.601525688697804e-013</roll>
+			<roll>7.601525688697804e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -220,7 +220,7 @@
 			<altitude>10.29411755255148</altitude>
 			<heading>-83.09446457689789</heading>
 			<tilt>86.1108420835816</tilt>
-			<roll>-6.154373308631904e-013</roll>
+			<roll>-6.154373308631904e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -262,7 +262,7 @@
 			<altitude>8.984061188882787</altitude>
 			<heading>31.31334731449634</heading>
 			<tilt>86.26407123037889</tilt>
-			<roll>-1.913586194656577e-006</roll>
+			<roll>-1.913586194656577e-06</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -304,7 +304,7 @@
 			<altitude>9.190555185328121</altitude>
 			<heading>17.68821966819953</heading>
 			<tilt>93.11538168130711</tilt>
-			<roll>6.092034436875221e-011</roll>
+			<roll>6.092034436875221e-11</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -470,10 +470,10 @@
 		<Camera>
 			<longitude>-43.17738835735178</longitude>
 			<latitude>-22.9058084981075</latitude>
-			<altitude>9.304701324210186</altitude>
+			<altitude>9.304701324210185</altitude>
 			<heading>20.29969569983401</heading>
 			<tilt>102.4971554013645</tilt>
-			<roll>1.348299563760782e-007</roll>
+			<roll>1.348299563760782e-07</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -504,7 +504,7 @@
 		</ViewVolume>
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17738835735178,-22.9058084981075,9.304701324210186</coordinates>
+			<coordinates>-43.17738835735178,-22.9058084981075,9.304701324210185</coordinates>
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
@@ -515,7 +515,7 @@
 			<altitude>9.087380124556878</altitude>
 			<heading>176.1053148980905</heading>
 			<tilt>89.71289461102586</tilt>
-			<roll>3.466804602795233e-013</roll>
+			<roll>3.466804602795233e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -557,7 +557,7 @@
 			<altitude>8.12509647941032</altitude>
 			<heading>-2.018376888476201</heading>
 			<tilt>94.42856126830776</tilt>
-			<roll>6.933609205590466e-013</roll>
+			<roll>6.933609205590466e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -599,7 +599,7 @@
 			<altitude>71.53104227339171</altitude>
 			<heading>-106.9632010759786</heading>
 			<tilt>89.10055299335542</tilt>
-			<roll>8.559667786488689e-013</roll>
+			<roll>8.559667786488689e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -642,7 +642,7 @@
 			<altitude>66.34261638932568</altitude>
 			<heading>128.710969228448</heading>
 			<tilt>89.29900157205114</tilt>
-			<roll>2.121921813512107e-007</roll>
+			<roll>2.121921813512107e-07</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -677,49 +677,6 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002067</name>
-		<Camera>
-			<longitude>-43.17402819709955</longitude>
-			<latitude>-22.92877155777249</latitude>
-			<altitude>8.502220161048427</altitude>
-			<heading>165.6980405354978</heading>
-			<tilt>92.67591752093918</tilt>
-			<roll>1.081388591697596e-013</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001AN01002067.jpg</href>
-		</Icon>
-		<rotation>-2.69</rotation>
-		<ViewVolume>
-			<leftFov>-17.5</leftFov>
-			<rightFov>17.5</rightFov>
-			<bottomFov>-13.385</bottomFov>
-			<topFov>13.385</topFov>
-			<near>0.657276</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17402819709955,-22.92877155777248,8.502220161048427</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>001FE001</name>
 		<Camera>
 			<longitude>-43.17725578463287</longitude>
@@ -727,7 +684,7 @@
 			<altitude>9.583687116033435</altitude>
 			<heading>73.672600390932</heading>
 			<tilt>90.15781208048024</tilt>
-			<roll>-1.594253034083588e-013</roll>
+			<roll>-1.594253034083588e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -769,7 +726,7 @@
 			<altitude>31.25315892104384</altitude>
 			<heading>69.20793442275333</heading>
 			<tilt>91.77</tilt>
-			<roll>-7.553817368475853e-013</roll>
+			<roll>-7.553817368475853e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -812,7 +769,7 @@
 			<altitude>9.93352951872378</altitude>
 			<heading>174.1895039886397</heading>
 			<tilt>93.76694482960977</tilt>
-			<roll>-4.134721085902571e-013</roll>
+			<roll>-4.134721085902571e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -853,8 +810,8 @@
 			<latitude>-22.97103560444393</latitude>
 			<altitude>9.398040628416711</altitude>
 			<heading>-107.2973292414459</heading>
-			<tilt>88.17918424589306</tilt>
-			<roll>3.741127444071461e-013</roll>
+			<tilt>88.17918424589305</tilt>
+			<roll>3.741127444071461e-13</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>

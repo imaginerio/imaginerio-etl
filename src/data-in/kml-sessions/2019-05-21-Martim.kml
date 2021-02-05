@@ -2,7 +2,6 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-05-21-Martim</name>
-	<open>1</open>
 	<PhotoOverlay>
 		<name>001ACL017006</name>
 		<Camera>
@@ -51,7 +50,7 @@
 			<longitude>-43.19318010575777</longitude>
 			<latitude>-22.9597817309962</latitude>
 			<altitude>93.35486299911838</altitude>
-			<heading>71.13587114839334</heading>
+			<heading>71.13587114839333</heading>
 			<tilt>87.12763772163773</tilt>
 			<roll>0.002680251041296126</roll>
 			<altitudeMode>absolute</altitudeMode>
@@ -95,7 +94,7 @@
 			<altitude>356.9004694459188</altitude>
 			<heading>-68.41060069876949</heading>
 			<tilt>41.12999999999988</tilt>
-			<roll>-4.469344236327332e-006</roll>
+			<roll>-4.469344236327332e-06</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -263,9 +262,9 @@
 			<longitude>-43.18463296900593</longitude>
 			<latitude>-22.96905487833517</latitude>
 			<altitude>9.433289471187823</altitude>
-			<heading>74.97966796474987</heading>
+			<heading>74.97966796474986</heading>
 			<tilt>91.69735006899433</tilt>
-			<roll>7.914313045097513e-008</roll>
+			<roll>7.914313045097513e-08</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -349,7 +348,7 @@
 			<altitude>177.8516044699014</altitude>
 			<heading>92.72545944786329</heading>
 			<tilt>88.45834318540776</tilt>
-			<roll>-8.920873521942987e-008</roll>
+			<roll>-8.920873521942987e-08</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -390,8 +389,8 @@
 			<latitude>-22.94216738935688</latitude>
 			<altitude>55.67936410971181</altitude>
 			<heading>-94.68540654334535</heading>
-			<tilt>90.49091545592295</tilt>
-			<roll>-3.859876474630849e-008</roll>
+			<tilt>90.49091545592294</tilt>
+			<roll>-3.859876474630849e-08</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -427,56 +426,14 @@
 		</Point>
 	</PhotoOverlay>
 	<PhotoOverlay>
-		<name>001AN01002009</name>
-		<Camera>
-			<longitude>-43.17431265568967</longitude>
-			<latitude>-22.9095331151631</latitude>
-			<altitude>58.06016353778956</altitude>
-			<heading>-104.8844572891691</heading>
-			<tilt>89.20526392359487</tilt>
-			<roll>-7.221312719925478e-008</roll>
-			<altitudeMode>absolute</altitudeMode>
-		</Camera>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>:/camera_mode.png</href>
-				</Icon>
-			</IconStyle>
-			<ListStyle>
-				<listItemType>check</listItemType>
-				<ItemIcon>
-					<state>open closed error fetching0 fetching1 fetching2</state>
-					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
-				</ItemIcon>
-				<bgColor>00ffffff</bgColor>
-				<maxSnippetLines>2</maxSnippetLines>
-			</ListStyle>
-		</Style>
-		<Icon>
-			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001AN01002009.jpg</href>
-		</Icon>
-		<ViewVolume>
-			<leftFov>-20.11</leftFov>
-			<rightFov>20.11</rightFov>
-			<bottomFov>-15.575</bottomFov>
-			<topFov>15.575</topFov>
-			<near>16.9499</near>
-		</ViewVolume>
-		<Point>
-			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.17431265568967,-22.9095331151631,58.06016353778956</coordinates>
-		</Point>
-	</PhotoOverlay>
-	<PhotoOverlay>
 		<name>001AN01002010</name>
 		<Camera>
 			<longitude>-43.18097741511877</longitude>
 			<latitude>-22.92160461251507</latitude>
 			<altitude>94.25025006724073</altitude>
 			<heading>95.17823332327546</heading>
-			<tilt>88.22770504027884</tilt>
-			<roll>2.420402112593736e-012</roll>
+			<tilt>88.22770504027883</tilt>
+			<roll>2.420402112593736e-12</roll>
 			<altitudeMode>absolute</altitudeMode>
 		</Camera>
 		<Style>
@@ -591,7 +548,7 @@
 		</ViewVolume>
 		<Point>
 			<altitudeMode>absolute</altitudeMode>
-			<coordinates>-43.18617351299994,-22.986051116,26.50524773031111</coordinates>
+			<coordinates>-43.18617351299994,-22.986051116,26.5052477303111</coordinates>
 		</Point>
 	</PhotoOverlay>
 </Folder>
