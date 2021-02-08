@@ -94,20 +94,25 @@ def backlog_handler(path):
     for image in backlog:
         if image.split(".")[0] in geolocated:
             if not os.path.exists(os.path.join(JPEG_SD, image)):
-                os.rename(os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image))
+                os.rename(
+                    os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image)
+                )
             else:
                 os.remove(os.path.join(IMG_BACKLOG, image))
         else:
             continue
 
 
-def create_images_df(files):
+def create_images_df(folder):
     """Creates a dataframe with every image available and links to full size and thumbnail"""
 
+    imgs = os.listdir(folder)
+    imgs.remove("backlog")
+
     df = {
-        "id": [image.id for image in files],
-        "img_hd": [os.path.join(os.environ["CLOUD"] + image.jpg) for image in files],
-        "img_sd": [os.path.join(os.environ["THUMB"] + image.jpg) for image in files],
+        "id": [img.split(".")[0] for img in imgs],
+        "img_hd": [os.path.join(os.environ["CLOUD"] + image) for image in imgs],
+        "img_sd": [os.path.join(os.environ["THUMB"] + image) for image in imgs],
     }
 
     images_df = pd.DataFrame(data=df)
@@ -123,7 +128,7 @@ def main():
 
     print("Creating image dataframe...")
 
-    images_df = create_images_df(files)
+    images_df = create_images_df(JPEG_SD)
 
     print(images_df.head())
 
