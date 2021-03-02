@@ -14,27 +14,12 @@ from maps import update as maps_update
 from report import update as report_update
 
 
-def img_to_commons(METADATA, IMAGES):
-
-    # Get unplubished geolocated images
-    final_df = pd.read_csv(METADATA)
-    commons_df = pd.DataFrame(
-        final_df[
-            final_df["geometry"].notna()
-            & final_df["img_hd"].notna()
-            & final_df["wikidata_image"].isna()
-        ]
-    )
-
-    # Create folder with images to be sent
-    today = dt.now()
-
-    new_folder = IMAGES + "commons_" + today.strftime("%Y%m%d")
-
-    Path(new_folder).mkdir(parents=True, exist_ok=True)
-
-    for id in commons_df["id"]:
-        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
+# environment variables
+IMPORT_OMEKA = os.environ["IMPORT_OMEKA"]
+IMPORT_GIS = os.environ["IMPORT_GIS"]
+IMPORT_WIKI = os.environ["IMPORT_WIKI"]
+IMPORT_VIKUS = os.environ["IMPORT_VIKUS"]
+JSTOR = os.environ["JSTOR"]
 
 
 def omeka_csv(df):
@@ -131,8 +116,12 @@ def omeka_csv(df):
         ]
     ]
 
+    # append JSTOR migration
+    jstor = pd.read_csv(JSTOR)
+    omeka_df = omeka_df.append(jstor)
+
     # save csv
-    omeka_df.to_csv(os.environ["IMPORT_OMEKA"], index=False)
+    omeka_df.to_csv(IMPORT_OMEKA, index=False)
 
     # print dataframe
     print(omeka_df.head())
@@ -177,7 +166,7 @@ def gis_csv(df):
     feature_collection = geojson.FeatureCollection(feature_list)
 
     # save geojson
-    with open("data-out/import-gis.geojson", "w", encoding="utf-8") as f:
+    with open(IMPORT_GIS, "w", encoding="utf-8") as f:
         geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)
 
     # print dataframe
@@ -342,7 +331,7 @@ def quickstate_csv(df):
 
     quickstate = quickstate.drop(columns="date_accuracy")
 
-    quickstate.to_csv((os.environ["IMPORT_WIKI"]), index=False)
+    quickstate.to_csv((IMPORT_WIKI), index=False)
 
     print(quickstate.head())
 
@@ -409,7 +398,7 @@ def vikus_csv(df):
         }
     )
 
-    vikus_df.to_csv(os.environ["IMPORT_VIKUS"])
+    vikus_df.to_csv(IMPORT_VIKUS)
     print(vikus_df.head())
 
 
