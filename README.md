@@ -23,4 +23,6 @@ $ docker-compose run app modules/update_data.py
 # down!
 $ docker-compose down
 
+# introduces the dagster to the project
+
 ```
