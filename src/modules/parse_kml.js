@@ -5,9 +5,13 @@ let pathDir = path.resolve("./") + "/src/data-in/kml-sessions";
 let distDir = "src/data-out/";
 const distfileName = "camera";
 const turf = require("@turf/turf");
+const d3 = require("d3");
 
 const parser = new xml2js.Parser();
 const builder = new xml2js.Builder();
+
+var data = fs.readFileSync("src/data-out/metadata.csv").toString();
+var data = d3.csvParse(data);
 
 const calculateFOVdistance = (height, tilt) => {
   const minDistanceValue = 400;
@@ -38,13 +42,42 @@ const kmlTokml = (photoOverlays) => {
 };
 
 let features = [];
+
+function getIndex(recordname) {
+  var index = data.findIndex(item => item.id == recordname);
+  return index
+};
+
 const kmlToGeojson = (photoOverlays) => {
   photoOverlays.forEach((photo) => {
-    const feature = {
+    const dataIndex = getIndex(photo.name[0])
+
+    const point = {
       type: "Feature",
       properties: {
-        name: photo.name[0],
-        angle: 50,
+        id: photo.name[0],
+        title: (data[dataIndex] ? data[dataIndex].title : NaN),
+        creator: (data[dataIndex] ? data[dataIndex].creator : NaN),
+        date: (data[dataIndex] ? data[dataIndex].date : NaN),
+        dateAccuracy: (data[dataIndex] ? data[dataIndex].date_accuracy : NaN),
+        thumbnail: (data[dataIndex] ? data[dataIndex].img_sd : NaN),
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [
+          parseFloat(photo.Camera[0].longitude[0]),
+          parseFloat(photo.Camera[0].latitude[0]),
+        ],
+      },
+    };
+    features.push({ ...point })
+
+
+    const polygon = {
+      type: "Feature",
+      properties: {
+        id: photo.name[0],
+        //angle: 50,
         height: parseFloat(photo.Camera[0].altitude[0]),
         heading: parseFloat(photo.Camera[0].heading[0]),
         bearing: parseFloat(photo.Camera[0].heading[0]),
@@ -63,16 +96,16 @@ const kmlToGeojson = (photoOverlays) => {
       },
     };
 
-    const point = feature.geometry;
+    const origin = polygon.geometry;
     const bearing1 =
-      feature.properties.bearing + parseFloat(photo.ViewVolume[0].leftFov[0]);
+      polygon.properties.bearing + parseFloat(photo.ViewVolume[0].leftFov[0]);
     const bearing2 =
-      feature.properties.bearing + parseFloat(photo.ViewVolume[0].rightFov[0]);
-    const distance = feature.properties.distance;
-    const sorvete = turf.sector(point, distance / 1000, bearing1, bearing2);
+      polygon.properties.bearing + parseFloat(photo.ViewVolume[0].rightFov[0]);
+    const distance = polygon.properties.distance;
+    const sorvete = turf.sector(origin, distance / 1000, bearing1, bearing2);
 
     //need to recreate the feature because convex() overrides it properties
-    features.push({ ...feature, geometry: sorvete.geometry });
+    features.push({ ...polygon, geometry: sorvete.geometry });
   });
 
   const file = {
@@ -141,9 +174,9 @@ let extractor = (error, files) => {
             }
             const photoOverlays = result.kml.Folder[0].PhotoOverlay;
 
-            kmlToCSV(photoOverlays);
+            //kmlToCSV(photoOverlays);
             kmlToGeojson(photoOverlays);
-            kmlTokml(photoOverlays);
+            //kmlTokml(photoOverlays);
             // kmlToCSVWikidata(photoOverlays);
             console.log(file, "done.");
           });
