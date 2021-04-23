@@ -63,20 +63,22 @@ def fill_records(context,root,a):
 
 @dg.solid # Create the actual DataFrame
 def create_actual_df(context,formated_table):
-    catalog_df = pd.DataFrame(formated_table)
-    return catalog_df
+    created_df = pd.DataFrame(formated_table)
+    return created_df
 
 @dg.solid # load
-def load(context,catalog_df):   
-    catalog_df = catalog_df.astype(
+def load(context,df):   
+    loaded_df = df.astype(
         {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str}
     )
     catalog_df[["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]] = catalog_df[
         ["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]
     ].applymap(lambda x: x.split(".")[0])
+    return loaded_df
 
-    # rename columns
-    catalog_df = catalog_df.rename(
+@dg.solid # rename columns
+def rename_columns(df):    
+    renamed_columns = df.rename(
         columns={
             "Record Name": "id",
             "TÍTULO": "title",
@@ -91,9 +93,12 @@ def load(context,catalog_df):
             "DESIGNAÇÃO GENÉRICA": "type",
         },
     )
+    return renamed_columns
 
-    # select columns
-    catalog_df = catalog_df[
+
+@dg.solid # select columns from renamed coluns of catalog df
+def select_columns(df):    
+    selected_columns = df[
         [
             "id",
             "title",
@@ -108,27 +113,38 @@ def load(context,catalog_df):
             "place",
         ]
     ]
+    return selected_columns
 
-    # remove file extension
-    catalog_df["id"] = catalog_df["id"].str.split(".", n=1, expand=True)
 
-    # remove duplicates
-    catalog_df = catalog_df.drop_duplicates(subset="id", keep="last")
+@dg.solid # remove file extension    
+def remove_extension(df):
+    df["id"] = df["id"].str.split(".", n=1, expand=True)
+    return removed_extension_df
 
-    # check dates accuracy
-    circa = catalog_df["date"].str.contains(r"[a-z]", na=False,)
-    year = catalog_df["date"].str.count(r"[\/-]") == 0
-    month = catalog_df["date"].str.count(r"[\/-]") == 1
-    day = catalog_df["date"].str.count(r"[\/-]") == 2
-    startna = catalog_df["start_date"].isna()
-    endna = catalog_df["end_date"].isna()
+@dg.solid # remove duplicates    
+def remove_duplicates(df): 
+    df = df.drop_duplicates(subset="id", keep="last")
+    return removed_duplicates_df
 
-    catalog_df.loc[year, "date_accuracy"] = "year"
-    catalog_df.loc[month, "date_accuracy"] = "month"
-    catalog_df.loc[day, "date_accuracy"] = "day"
-    catalog_df.loc[circa, "date_accuracy"] = "circa"
 
-    # dates to datetime
+@dg.solid# check dates accuracy
+def check_dates(df):
+    circa = df["date"].str.contains(r"[a-z]", na=False,)
+    year = df["date"].str.count(r"[\/-]") == 0
+    month = df["date"].str.count(r"[\/-]") == 1
+    day = df["date"].str.count(r"[\/-]") == 2
+    startna = df["start_date"].isna()
+    endna = df["end_date"].isna()
+
+    df.loc[year, "date_accuracy"] = "year"
+    df.loc[month, "date_accuracy"] = "month"
+    df.loc[day, "date_accuracy"] = "day"
+    df.loc[circa, "date_accuracy"] = "circa"
+
+    return df
+
+@dg.solid # dates to datetime
+def dates_datetime(df):    
     catalog_df["date"] = catalog_df["date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
     catalog_df["start_date"] = catalog_df["start_date"].str.extract(
         r"([\d\/-]*\d{4}[-\/\d]*)"
@@ -140,14 +156,15 @@ def load(context,catalog_df):
         ["date", "start_date", "end_date"]
     ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
-    # reverse cretor name
+@dg.solid   # reverse cretor name
     catalog_df["creator"] = catalog_df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
 
-    # save list of creators for rights assessment
+@dg.solid   # save list of creators for rights assessment
     creators_df = catalog_df["creator"].unique()
     #pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
 
-    # fill empty start/end dates
+@dg.solid    # fill empty start/end dates
+def 
     catalog_df.loc[circa & startna, "start_date"] = catalog_df["date"] - pd.DateOffset(
         years=5
     )
@@ -157,14 +174,15 @@ def load(context,catalog_df):
     catalog_df.loc[startna, "start_date"] = catalog_df["date"]
     catalog_df.loc[endna, "end_date"] = catalog_df["date"]
 
-    # extract dimensions
-    dimensions_df = catalog_df["dimensions"].str.extract(
+@dg.solid    # extract dimensions
+def extrac_dimensions(df):
+    dimensions_df = df["dimensions"].str.extract(
         r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
     )
-    catalog_df["image_width"] = dimensions_df["width"]
-    catalog_df["image_height"] = dimensions_df["height"]
+    df["image_width"] = dimensions_df["width"]
+    df["image_height"] = dimensions_df["height"]
 
-    return catalog_df
+    return df
 
 
 
