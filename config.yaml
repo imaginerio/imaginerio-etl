@@ -1,0 +1,5 @@
+solids:  
+  read_xml:
+    inputs:    
+      path: 
+        value: "src/data-in/cumulus.xml"
