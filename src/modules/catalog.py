@@ -4,26 +4,40 @@ from xml.etree import ElementTree
 
 import numpy as np
 import pandas as pd
+#from dagster import execute_pipeline, pipeline, solid, OutputDefinition, Output
+import dagster as dg
 
 
-def xml_to_df(path):
-
-    with open(path) as f:
+#def xml_to_df(path):
+@dg.solid
+def read_xml(context,path):    
+    with open(path, encoding="utf8") as f:
         tree = ElementTree.parse(f)
     root = tree.getroot()
 
-    ns = {"cumulus": "http://www.canto.com/ns/Export/1.0"}
+    return root   
 
-    # Find the uids
+
+@dg.solid  # Find the uids
+def find_uids(context, root):   
     uids = {}
     for thing in root[0][0]:
-        uids[thing.attrib["uid"]] = thing[0].text
+        uids[thing.attrib["uid"]] = thing[0].text   
 
     table = {}
     for field in uids.values():
         table[field] = []
 
-    # Fill the records
+    
+    a = {"table": table, "uids":uids}
+
+    return a
+    
+    
+
+@dg.solid # Fill the records
+def fill_records(context,root,a): 
+    ns = {"cumulus": "http://www.canto.com/ns/Export/1.0"} 
     for thing in root[1]:
         added = set()
         for field_value in thing.findall("cumulus:FieldValue", ns):
@@ -34,24 +48,26 @@ def xml_to_df(path):
                     value = field_value[0].text.strip().split(":")
                     value = str(value).strip("[']")
 
-                table[uids[field_value.attrib["uid"]]].append(value)
+                a['table'][a['uids'][field_value.attrib["uid"]]].append(value)
                 added.add(field_value.attrib["uid"])
             except KeyError:
                 continue
-        for missing in uids.keys() - added:
+        for missing in a['uids'].keys() - added:
             try:
-                table[uids[missing]].append(None)
+                a['table'][a['uids'][missing]].append(None)
             except KeyError:
                 continue
-
-    # Create the actual DataFrame
-    cumulus_df = pd.DataFrame(table)
-
-    return cumulus_df
+    formated_table = a['table']
+    return formated_table
 
 
-def load(path):
-    catalog_df = xml_to_df(path)
+@dg.solid # Create the actual DataFrame
+def create_actual_df(context,formated_table):
+    catalog_df = pd.DataFrame(formated_table)
+    return catalog_df
+
+@dg.solid # load
+def load(context,catalog_df):   
     catalog_df = catalog_df.astype(
         {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str}
     )
@@ -129,7 +145,7 @@ def load(path):
 
     # save list of creators for rights assessment
     creators_df = catalog_df["creator"].unique()
-    pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
+    #pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
 
     # fill empty start/end dates
     catalog_df.loc[circa & startna, "start_date"] = catalog_df["date"] - pd.DateOffset(
@@ -151,5 +167,16 @@ def load(path):
     return catalog_df
 
 
-if __name__ == "__main__":
-    load(os.environ["CUMULUS_XML"])
+
+@dg.pipeline
+def catalog_main():     
+    root = read_xml()
+    a = find_uids(root)
+    formated_table = fill_records(root, a)
+    cumulus_df = create_actual_df(formated_table)
+    load(cumulus_df)
+
+
+
+''' if __name__ == "__main__":
+    load(os.environ["CUMULUS_XML"]) '''
