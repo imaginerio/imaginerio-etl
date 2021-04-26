@@ -58,12 +58,14 @@ def fill_records(context,root,a):
             except KeyError:
                 continue
     formated_table = a['table']
+    
     return formated_table
 
 
 @dg.solid # Create the actual DataFrame
 def create_actual_df(context,formated_table):
     created_df = pd.DataFrame(formated_table)
+
     return created_df
 
 @dg.solid # load
@@ -74,6 +76,7 @@ def load(context,df):
     catalog_df[["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]] = catalog_df[
         ["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]
     ].applymap(lambda x: x.split(".")[0])
+
     return loaded_df
 
 @dg.solid # rename columns
@@ -93,6 +96,7 @@ def rename_columns(df):
             "DESIGNAÇÃO GENÉRICA": "type",
         },
     )
+
     return renamed_columns
 
 
@@ -113,22 +117,25 @@ def select_columns(df):
             "place",
         ]
     ]
+
     return selected_columns
 
 
 @dg.solid # remove file extension    
 def remove_extension(df):
     df["id"] = df["id"].str.split(".", n=1, expand=True)
+
     return removed_extension_df
 
 @dg.solid # remove duplicates    
 def remove_duplicates(df): 
     df = df.drop_duplicates(subset="id", keep="last")
+
     return removed_duplicates_df
 
 
 @dg.solid# check dates accuracy
-def check_dates(df):
+def dates_accuracy(df):
     circa = df["date"].str.contains(r"[a-z]", na=False,)
     year = df["date"].str.count(r"[\/-]") == 0
     month = df["date"].str.count(r"[\/-]") == 1
@@ -141,38 +148,48 @@ def check_dates(df):
     df.loc[day, "date_accuracy"] = "day"
     df.loc[circa, "date_accuracy"] = "circa"
 
-    return df
+    return accuraced_dates
 
 @dg.solid # dates to datetime
 def dates_datetime(df):    
-    catalog_df["date"] = catalog_df["date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    catalog_df["start_date"] = catalog_df["start_date"].str.extract(
+    f["date"] = f["date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    df["start_date"] = df["start_date"].str.extract(
         r"([\d\/-]*\d{4}[-\/\d]*)"
     )
-    catalog_df["end_date"] = catalog_df["end_date"].str.extract(
+    f["end_date"] = df["end_date"].str.extract(
         r"([\d\/-]*\d{4}[-\/\d]*)"
     )
-    catalog_df[["date", "start_date", "end_date"]] = catalog_df[
+    df[["date", "start_date", "end_date"]] = df[
         ["date", "start_date", "end_date"]
     ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
-@dg.solid   # reverse cretor name
-    catalog_df["creator"] = catalog_df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
+    return parsed_dates
 
+@dg.solid   # reverse cretor name
+def reverse_creators_name(df):
+    df["creator"] = df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
+
+    return organized_names
+ 
 @dg.solid   # save list of creators for rights assessment
-    creators_df = catalog_df["creator"].unique()
+def creators_list(df):
+    df = df["creator"].unique()
     #pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
 
+    return listed_creators
+
 @dg.solid    # fill empty start/end dates
-def 
-    catalog_df.loc[circa & startna, "start_date"] = catalog_df["date"] - pd.DateOffset(
+def fill_dates(df):
+    df.loc[circa & startna, "start_date"] = df["date"] - pd.DateOffset(
         years=5
     )
-    catalog_df.loc[circa & endna, "end_date"] = catalog_df["date"] + pd.DateOffset(
+    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(
         years=5
     )
-    catalog_df.loc[startna, "start_date"] = catalog_df["date"]
-    catalog_df.loc[endna, "end_date"] = catalog_df["date"]
+    df.loc[startna, "start_date"] = df["date"]
+    df.loc[endna, "end_date"] = _df["date"]
+
+    return filled_dates
 
 @dg.solid    # extract dimensions
 def extrac_dimensions(df):
@@ -182,11 +199,13 @@ def extrac_dimensions(df):
     df["image_width"] = dimensions_df["width"]
     df["image_height"] = dimensions_df["height"]
 
-    return df
+    return extracted_dimensions
 
 
 
-@dg.pipeline
+
+
+@dg.pipeline  
 def catalog_main():     
     root = read_xml()
     a = find_uids(root)
