@@ -3,3 +3,9 @@ solids:
     inputs:    
       path: 
         value: "src/data-in/cumulus.xml"
+  camera:
+    config: 
+      path: "src/data-out/camera.csv"
+  images:
+    config: 
+      path: "src/data-out/images.csv"
