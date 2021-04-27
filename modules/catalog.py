@@ -4,40 +4,39 @@ from xml.etree import ElementTree
 
 import numpy as np
 import pandas as pd
-#from dagster import execute_pipeline, pipeline, solid, OutputDefinition, Output
+
+# from dagster import execute_pipeline, pipeline, solid, OutputDefinition, Output
 import dagster as dg
 
-#solids catalog
-#def xml_to_df(path):
+# solids catalog
+# def xml_to_df(path):
 @dg.solid
-def read_xml(context,path):    
+def read_xml(context, path):
     with open(path, encoding="utf8") as f:
         tree = ElementTree.parse(f)
     root = tree.getroot()
 
-    return root   
+    return root
 
 
 @dg.solid  # Find the uids
-def find_uids(context, root):   
+def find_uids(context, root):
     uids = {}
     for thing in root[0][0]:
-        uids[thing.attrib["uid"]] = thing[0].text   
+        uids[thing.attrib["uid"]] = thing[0].text
 
     table = {}
     for field in uids.values():
         table[field] = []
 
-    
-    outDict = {"table": table, "uids":uids}
+    outDict = {"table": table, "uids": uids}
 
     return outDict
-    
-    
 
-@dg.solid # Fill the records
-def fill_records(context,root,outDict): 
-    ns = {"cumulus": "http://www.canto.com/ns/Export/1.0"} 
+
+@dg.solid  # Fill the records
+def fill_records(context, root, outDict):
+    ns = {"cumulus": "http://www.canto.com/ns/Export/1.0"}
     for thing in root[1]:
         added = set()
         for field_value in thing.findall("cumulus:FieldValue", ns):
@@ -48,28 +47,31 @@ def fill_records(context,root,outDict):
                     value = field_value[0].text.strip().split(":")
                     value = str(value).strip("[']")
 
-                outDict['table'][outDict['uids'][field_value.attrib["uid"]]].append(value)
+                outDict["table"][outDict["uids"][field_value.attrib["uid"]]].append(
+                    value
+                )
                 added.add(field_value.attrib["uid"])
             except KeyError:
                 continue
-        for missing in outDict['uids'].keys() - added:
+        for missing in outDict["uids"].keys() - added:
             try:
-                outDict['table'][outDict['uids'][missing]].append(None)
+                outDict["table"][outDict["uids"][missing]].append(None)
             except KeyError:
                 continue
-    formated_table = outDict['table']
-    
+    formated_table = outDict["table"]
+
     return formated_table
 
 
-@dg.solid # Create the actual DataFrame
-def create_actual_df(context,formated_table):
+@dg.solid  # Create the actual DataFrame
+def create_actual_df(context, formated_table):
     created_df = pd.DataFrame(formated_table)
 
     return created_df
 
-@dg.solid # load
-def load(context,df):   
+
+@dg.solid  # load
+def load(context, df):
     loaded_df = df.astype(
         {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str}
     )
@@ -79,8 +81,9 @@ def load(context,df):
 
     return loaded_df
 
-@dg.solid # rename columns
-def rename_columns(context,df):    
+
+@dg.solid  # rename columns
+def rename_columns(context, df):
     renamed_columns = df.rename(
         columns={
             "Record Name": "id",
@@ -100,8 +103,8 @@ def rename_columns(context,df):
     return renamed_columns
 
 
-@dg.solid # select columns from renamed coluns of catalog df
-def select_columns(context,df):    
+@dg.solid  # select columns from renamed coluns of catalog df
+def select_columns(context, df):
     selected_columns = df[
         [
             "id",
@@ -121,22 +124,23 @@ def select_columns(context,df):
     return selected_columns
 
 
-@dg.solid # remove file extension    
-def remove_extension(context,df):
+@dg.solid  # remove file extension
+def remove_extension(context, df):
     df["id"] = df["id"].str.split(".", n=1, expand=True)
     removed_extension_df = df
 
     return removed_extension_df
 
-@dg.solid # remove duplicates    
-def remove_duplicates(context,df): 
+
+@dg.solid  # remove duplicates
+def remove_duplicates(context, df):
     removed_duplicates_df = df.drop_duplicates(subset="id", keep="last")
 
     return removed_duplicates_df
 
 
-@dg.solid# check dates accuracy
-def dates_accuracy(context,df):
+@dg.solid  # check dates accuracy
+def dates_accuracy(context, df):
     circa = df["date"].str.contains(r"[a-z]", na=False,)
     year = df["date"].str.count(r"[\/-]") == 0
     month = df["date"].str.count(r"[\/-]") == 1
@@ -149,25 +153,17 @@ def dates_accuracy(context,df):
     df.loc[day, "date_accuracy"] = "day"
     df.loc[circa, "date_accuracy"] = "circa"
 
-    #format date
+    # format date
     df["date"] = df["date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    df["start_date"] = df["start_date"].str.extract(
-        r"([\d\/-]*\d{4}[-\/\d]*)"
-    )
-    df["end_date"] = df["end_date"].str.extract(
-        r"([\d\/-]*\d{4}[-\/\d]*)"
-    )
+    df["start_date"] = df["start_date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    df["end_date"] = df["end_date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
     df[["date", "start_date", "end_date"]] = df[
         ["date", "start_date", "end_date"]
     ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
-    #fill dates
-    df.loc[circa & startna, "start_date"] = df["date"] - pd.DateOffset(
-        years=5
-    )
-    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(
-        years=5
-    )
+    # fill dates
+    df.loc[circa & startna, "start_date"] = df["date"] - pd.DateOffset(years=5)
+    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(years=5)
     df.loc[startna, "start_date"] = df["date"]
     df.loc[endna, "end_date"] = df["date"]
 
@@ -175,22 +171,25 @@ def dates_accuracy(context,df):
 
     return accuraced_dates
 
-@dg.solid   # reverse cretor name
-def reverse_creators_name(context,df):
+
+@dg.solid  # reverse cretor name
+def reverse_creators_name(context, df):
     df["creator"] = df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
     organized_names = df
 
     return organized_names
- 
-@dg.solid   # save list of creators for rights assessment
-def creators_list(context,df):
+
+
+@dg.solid  # save list of creators for rights assessment
+def creators_list(context, df):
     listed_creators = df["creator"].unique()
-    #pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
+    # pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
 
     return listed_creators
 
-@dg.solid    # extract dimensions
-def extract_dimensions(context,df):
+
+@dg.solid  # extract dimensions
+def extract_dimensions(context, df):
     dimensions = df["dimensions"].str.extract(
         r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
     )
@@ -201,6 +200,8 @@ def extract_dimensions(context,df):
 
     return extracted_dimensions
 
+
+"""
 #pipeline catalog
 @dg.pipeline  
 def catalog_main():
@@ -219,5 +220,6 @@ def catalog_main():
     listed_creators = creators_list(organized_names)
 
 
-''' if __name__ == "__main__":
-    load(os.environ["CUMULUS_XML"]) '''
+if __name__ == "__main__":
+    load(os.environ["CUMULUS_XML"]) """
+

@@ -1,15 +1,24 @@
 import pandas as pd
 import dagster as dg
-from dotenv import load_dotenv
-
-load_dotenv(override=True)
 
 
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid
 def read_csv(context):
     path = context.solid_config
     df = pd.read_csv(path)
+    df.name = path.split("/")[-1]
     return df
+
+
+@dg.solid
+def save_csv(context, df):
+    df.to_csv(df.name, index=False)
+
+
+"""
+@dg.solid
+def merge(context)
+
 
 
 run_config = {
@@ -18,17 +27,8 @@ run_config = {
         "images": {"config": {"env": "IMAGES"}},
     }
 }
+"""
 
 read_camera = read_csv.alias("camera")
 read_images = read_csv.alias("images")
-
-
-@dg.pipeline
-def utilities_main():
-    read_camera()
-    read_images()
-
-
-if __name__ == "__main__":
-    result = dg.execute_pipeline(utilities_main, run_config=run_config)
 
