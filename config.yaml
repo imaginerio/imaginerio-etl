@@ -1,11 +1,5 @@
-solids:  
-  read_xml:
-    inputs:    
-      path: 
-        value: "src/data-in/cumulus.xml"
+solids:
   camera:
-    config: 
-      path: "src/data-out/camera.csv"
+    config: "src/data-out/camera.csv"
   images:
-    config: 
-      path: "src/data-out/images.csv"
+    config: "src/data-out/images.csv"
