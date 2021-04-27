@@ -1,5 +1,9 @@
-solids:  
+solids:
   camera:
-    config: "src/data-out/camera.csv"
+    config: src/data-out/camera.csv
+  catalog_main:
+    solids:
+      read_xml:
+        config: src/data-in/cumulus.xml
   images:
-    config: "src/data-out/images.csv"
+    config: src/data-out/images.csv
