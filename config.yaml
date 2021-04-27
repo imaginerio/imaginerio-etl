@@ -1,4 +1,4 @@
-solids:
+solids:  
   camera:
     config: "src/data-out/camera.csv"
   images:
