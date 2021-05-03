@@ -55,24 +55,31 @@ query_omeka = query_api.alias("omeka") """
 
 class PandasCsvIOManager(dg.IOManager):
     def load_input(self, context):
-        path = os.path.join("src/data-out", context.name)
-        return read_csv(path)
+        file_path = os.path.join("src/data-out", context.upstream_output.name)
+        return pd.read_csv(file_path + ".csv")
     
-    def save_output(self, context, df):
-        path = os.path.join("src/data-out", context.name)
-        df.to_csv(path)
+    def handle_output(self, context, obj):
+        file_path = os.path.join("src/data-out", context.name)
+        obj.to_csv(file_path + ".csv", index=False)
 
-        yield dg.AssetMaterialization(asset_key = AssetKey(path), description = "saved csv")
+        yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved csv")
+
+@dg.solid
+def rename_column(context,df):
+    df = df.rename(columns={"id":"ids"})
+    return df
 
 @dg.io_manager
-def df_csv_io_manager(_):
+def df_csv_io_manager(init_context):
     return PandasCsvIOManager()
 
-@dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"df_csv":df_csv_io_manager})])
+@dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"pandas_csv":df_csv_io_manager})])
 def main():
     #images_df = read_images()
     #camera_df = camera_main()
-    catalog_df= catalog_main()
+    catalog_df = catalog_main()
+    renamed = rename_column(catalog_df)
+
     #catalog_df = catalog_df.rename(columns= {'id':'ids'})
     #portals_df = 
     #wikidata_df = 
