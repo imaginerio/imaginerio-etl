@@ -182,7 +182,7 @@ def creators_list(context,df):
 
     return listed_creators
 
-@dg.solid    # extract dimensions
+@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="catalog")])    # extract dimensions
 def extract_dimensions(context,df):
     dimensions = df["dimensions"].str.extract(
         r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
@@ -191,11 +191,11 @@ def extract_dimensions(context,df):
     df["image_height"] = dimensions["height"]
 
     catalog_df = df
-
+    catalog_df.name="catalog"
     return catalog_df
 
  
-@dg.composite_solid(output_defs=[dg.OutputDefinition(io_manager_key="df_csv")])
+@dg.composite_solid
 def catalog_main():
     root = read_xml()   
     outDict = find_uids(root)
