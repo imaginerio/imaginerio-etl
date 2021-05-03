@@ -195,7 +195,7 @@ def extract_dimensions(context,df):
     return catalog_df
 
  
-@dg.composite_solid
+@dg.composite_solid(output_defs=[dg.OutputDefinition(io_manager_key="df_csv")])
 def catalog_main():
     root = read_xml()   
     outDict = find_uids(root)
