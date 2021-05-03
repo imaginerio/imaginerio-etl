@@ -1,9 +1,13 @@
 solids:
-  camera:
-    config: src/data-out/camera.csv
   catalog_main:
     solids:
       read_xml:
         config: src/data-in/cumulus.xml
+  camera_main:
+    solids:
+      geoCamera:
+        config: src/data-out/geoCamera.geojson
+      camera:
+        config: src/data-out/camera.csv
   images:
     config: src/data-out/images.csv
