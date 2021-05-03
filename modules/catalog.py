@@ -4,11 +4,9 @@ from xml.etree import ElementTree
 
 import numpy as np
 import pandas as pd
-#from dagster import execute_pipeline, pipeline, solid, OutputDefinition, Output
 import dagster as dg
 
 #solids catalog
-#def xml_to_df(path):
 @dg.solid
 def read_xml(context):    
     path = context.solid_config
@@ -196,8 +194,7 @@ def extract_dimensions(context,df):
 
     return catalog_df
 
-#pipeline catalog
-#@dg.pipeline  
+ 
 @dg.composite_solid
 def catalog_main():
     root = read_xml()   
@@ -214,7 +211,3 @@ def catalog_main():
     listed_creators = creators_list(catalog_df)
     
     return catalog
-
-
-''' if __name__ == "__main__":
-    load(os.environ["CUMULUS_XML"]) '''
