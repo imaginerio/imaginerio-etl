@@ -1,6 +1,7 @@
 import dagster as dg
 import pandas as pd
-import geopandas as gpd
+#import geopandas as gpd
+import os
 from modules.catalog import catalog_main
 
 
@@ -22,12 +23,12 @@ def read_geojson(context):
     return geometry
 
 @dg.solid
-def save_csv(context, *dataframes):
+def save_csv(context, dataframes):
     for df in dataframes:
         df.to_csv(df.name, index=False)
 
 @dg.solid
-def merge(context, df, *dataframes):
+def merge(context, df, dataframes):
     #using reduce?
     final_df = df
     for dataframe in dataframes:
@@ -36,30 +37,47 @@ def merge(context, df, *dataframes):
         )
     return final_df
 
-@dg.composite_solid
+""" @dg.composite_solid
 def camera_main():
     cameras = read_camera().rename(columns={"long":"lng"})
     viewcones = read_geojson()
     camera = merge(cameras, viewcones)
 
-    return camera
+    return camera """
 
-read_images = read_csv.alias("images")
+""" read_images = read_csv.alias("images")
 read_camera = read_csv.alias("camera")
 read_geometry = read_geojson.alias("geoCamera") 
 query_portals = query_api.alias("portals")
 query_wikidata = query_api.alias("wikidata")
-query_omeka = query_api.alias("omeka")
+query_omeka = query_api.alias("omeka") """
 
-@dg.pipeline
+
+class PandasCsvIOManager(dg.IOManager):
+    def load_input(self, context):
+        path = os.path.join("src/data-out", context.name)
+        return read_csv(path)
+    
+    def save_output(self, context, df):
+        path = os.path.join("src/data-out", context.name)
+        df.to_csv(path)
+
+        yield dg.AssetMaterialization(asset_key = AssetKey(path), description = "saved csv")
+
+@dg.io_manager
+def df_csv_io_manager(_):
+    return PandasCsvIOManager()
+
+@dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"df_csv":df_csv_io_manager})])
 def main():
-    images_df = read_images()
-    camera_df = camera_main()
+    #images_df = read_images()
+    #camera_df = camera_main()
     catalog_df= catalog_main()
-    portals_df = 
-    wikidata_df = 
-    omeka_df =
-    metadata_df = merge_by_id(catalog_df,camera_df, portals_df, wikidata_df,omeka_df)
+    #catalog_df = catalog_df.rename(columns= {'id':'ids'})
+    #portals_df = 
+    #wikidata_df = 
+    #omeka_df =
+    #metadata_df = merge(catalog_df,camera_df)
     # omeka = omeka(metadata)
     # wiki = wiki(metadata)
-    save_csv(catalog_df, images_df, camera_df, portals_df, wikidata_df, omeka_df, metadata_df)
+    #save_csv(catalog_df, images_df, camera_df)
