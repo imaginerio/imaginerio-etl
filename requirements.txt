@@ -35,5 +35,5 @@ tqdm==4.47.0
 typing-extensions==3.7.4.2
 urllib3==1.25.9
 xlrd==1.2.0
-dagster==0.11.5
-dagit==0.11.6
+dagster==0.11.7
+dagit==0.11.7
