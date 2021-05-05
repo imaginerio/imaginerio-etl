@@ -8,21 +8,9 @@
 # set PWD variable (Windows users only):
 $ $env:PWD=$PWD
 
-# up!
-$ docker-compose up -d --build
+# build an image named 'dagster-image' from Dockerfile at root
+$ docker build -t dagster-image .
 
-# update images
-$ docker-compose run app modules/update_images.py
-
-# update metadata (requires moving tiles and index.html after running)
-$ docker-compose run app modules/update_data.py
-
-# kml parser
-# npm run kml (TO-DO: CHANGE TO CONES.PY FROM CONES BRANCH)
-
-# down!
-$ docker-compose down
-
-# introduces the dagster to the project
-
+# run Dagit from a detached container named 'dagster-container' that listens to port 3000
+$ docker run -p 3000:3000 -d --name dagster-container dagster-image -f modules/main.py
 ```
