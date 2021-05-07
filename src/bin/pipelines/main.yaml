@@ -1,0 +1,4 @@
+solids:
+  read_xml:
+    config:
+      env: XML_PATH
