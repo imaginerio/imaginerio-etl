@@ -1,0 +1,20 @@
+services:
+
+  dagit:
+    build:
+      context: .
+      dockerfile: Dagit.Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: dagit-container
+
+  dagster:
+    build:
+      context: .
+      dockerfile: Daemon.Dockerfile
+    container_name: dagster-container
+    #volumes:
+    #  - $PWD/src/:/home/user/
+    tty: true
+    env_file: .env
+

@@ -8,9 +8,9 @@
 # set PWD variable (Windows users only):
 $ $env:PWD=$PWD
 
-# build an image named 'dagster-image' from Dockerfile at root
-$ docker build -t dagster-image .
+# build detached images
+$ docker compose up -d --build
 
-# run Dagit from a detached container named 'dagster-container' that listens to port 3000
-$ docker run -p 3000:3000 -d --name dagster-container dagster-image -f modules/main.py
+# launch dagit on localhost:3000
+$ docker compose run dagit
 ```
