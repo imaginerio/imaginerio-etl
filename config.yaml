@@ -1,0 +1,6 @@
+solids:
+  catalog_main:
+    solids:
+      read_xml:
+        config: src/data-in/cumulus.xml
+  
