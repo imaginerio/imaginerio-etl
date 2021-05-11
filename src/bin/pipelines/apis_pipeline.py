@@ -1,29 +1,26 @@
 import os
 import dagster as dg
 
-from bin.solids.utils import df_csv_io_manager,query_api
-from bin.solids.apis import query_omeka, create_dataframes
-
-
-#query_omeka = configured(query_api, name="query_omeka")({"env": OMEKA_API"})
-#query_wikidata = configured(query_api, name="aquery_wikidata ")({"env": "WIKIDATA_API"})
-#query_portals= configured(query_api, name="aquery_wikidata ")({"env": os.environ["WIKIDATA_API"]})
-
-#query_omeka = load_omeka.alias('omeka')
-#query_wikidata = query_api.alias('wikidata')
-#query_portals = query_api.alias('portals')
+from src.bin.solids.utils import df_csv_io_manager
+from src.bin.solids.apis import portals_dataframe, query_portals, query_wikidata, query_omeka, omeka_dataframe, wikidata_dataframe
 
 
 @dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"pandas_csv":df_csv_io_manager})])
 def apis(): 
 
-    results = query_omeka()
-    create_dataframes(results)
+    omeka_result = query_omeka()
+    omeka_dataframe(omeka_result)
+
+    wiki_data = query_wikidata()
+    wikidata_dataframe(wiki_data)
+
+    portals_result = query_portals
+    portals_dataframe(portals_result) 
 
     
 
 
 
 
-#CLI: dagit -f bin\pipelines\apis_pipeline.py
+#CLI: dagit -f src\bin\pipelines\apis_pipeline.py
     
