@@ -7,6 +7,7 @@ services:
     ports:
       - "3000:3000"
     container_name: dagit-container
+    #volumes: /Users/martimpassos/Desktop/jpeg-sd:/opt/images/
 
   dagster:
     build:
