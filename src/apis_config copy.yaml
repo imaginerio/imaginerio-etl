@@ -1,0 +1,13 @@
+solids:
+  query_omeka:
+    config: 'https://images.imaginerio.org/api/items'
+  load_wikidata:
+    config:
+      env: 'WIKIDATA_API'
+  load_portals:
+    config:
+      env: 'PORTALS_API'
+       
+ 
+
+

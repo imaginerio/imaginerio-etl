@@ -1,0 +1,4 @@
+solids:
+  read_xml:
+    config: src/data-in/cumulus.xml
+  

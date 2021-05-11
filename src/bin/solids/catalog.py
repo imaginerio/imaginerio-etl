@@ -2,9 +2,10 @@ import os
 from pprint import pprint
 from xml.etree import ElementTree
 
+import dagster as dg
 import numpy as np
 import pandas as pd
-import dagster as dg
+
 
 #solids catalog
 @dg.solid
@@ -17,8 +18,10 @@ def read_xml(context):
     return root   
 
 
-@dg.solid  # Find the uids
-def find_uids(context, root):   
+@dg.solid  
+def xml_to_df(context, root): 
+
+    # Find the uids 
     uids = {}
     for thing in root[0][0]:
         uids[thing.attrib["uid"]] = thing[0].text   
@@ -28,14 +31,10 @@ def find_uids(context, root):
         table[field] = []
 
     
-    outDict = {"table": table, "uids":uids}
-
-    return outDict
-    
+    outDict = {"table": table, "uids":uids}   
     
 
-@dg.solid # Fill the records
-def fill_records(context,root,outDict): 
+   # Fill the records 
     ns = {"cumulus": "http://www.canto.com/ns/Export/1.0"} 
     for thing in root[1]:
         added = set()
@@ -58,12 +57,9 @@ def fill_records(context,root,outDict):
                 continue
     formated_table = outDict['table']
     catalog_df = pd.DataFrame(formated_table)
-
-    return catalog_df
-
-@dg.solid # load
-def load(context,df):   
-    catalog_df = df.astype(
+   
+    #load
+    catalog_df = catalog_df.astype(
         {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str}
     )
     catalog_df[["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]] = catalog_df[
@@ -72,8 +68,9 @@ def load(context,df):
 
     return catalog_df
 
-@dg.solid # rename columns
-def rename_columns(context,df):    
+@dg.solid 
+def organize_columns(context,df): 
+    # rename columns  
     catalog_df = df.rename(
         columns={
             "Record Name": "id",
@@ -89,13 +86,8 @@ def rename_columns(context,df):
             "DESIGNAÇÃO GENÉRICA": "type",
         },
     )
-
-    return catalog_df
-
-
-@dg.solid # select columns from renamed coluns of catalog df
-def select_columns(context,df):    
-    catalog_df = df[
+ # select columns
+    catalog_df = catalog_df[
         [
             "id",
             "title",
@@ -111,24 +103,27 @@ def select_columns(context,df):
         ]
     ]
 
+    # remove file extension
+    catalog_df["id"] = catalog_df["id"].str.split(".", n=1, expand=True)
+    
+    # remove duplicates
+    catalog_df = catalog_df.drop_duplicates(subset="id", keep="last")
+
+    # reverse cretor name
+    catalog_df["creator"] = catalog_df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
+    
     return catalog_df
 
 
-@dg.solid # remove file extension    
-def remove_extension(context,df):
-    df["id"] = df["id"].str.split(".", n=1, expand=True)
-    catalog_df = df
+@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="creators")])  # save list of creators for rights assessment
+def creators_list(context,df):
+    creators_df = df["creator"].unique()
+    listed_creators = pd.DataFrame(creators_df)
 
-    return catalog_df
-
-@dg.solid # remove duplicates    
-def remove_duplicates(context,df): 
-    catalog_df = df.drop_duplicates(subset="id", keep="last")
-
-    return catalog_df
+    return listed_creators
 
 
-@dg.solid# check dates accuracy
+@dg.solid # check dates accuracy
 def dates_accuracy(context,df):
     circa = df["date"].str.contains(r"[a-z]", na=False,)
     year = df["date"].str.count(r"[\/-]") == 0
@@ -168,21 +163,8 @@ def dates_accuracy(context,df):
 
     return catalog_df
 
-@dg.solid   # reverse cretor name
-def reverse_creators_name(context,df):
-    df["creator"] = df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
-    catalog_df = df
-
-    return catalog_df
- 
-@dg.solid   # save list of creators for rights assessment
-def creators_list(context,df):
-    listed_creators = df["creator"].unique()
-    #pd.DataFrame(creators_df).to_csv(os.environ["CREATORS"], index=False)
-
-    return listed_creators
-
-@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="catalog")])    # extract dimensions
+  
+@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="catalog")]) # extract dimensions
 def extract_dimensions(context,df):
     dimensions = df["dimensions"].str.extract(
         r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
@@ -190,24 +172,9 @@ def extract_dimensions(context,df):
     df["image_width"] = dimensions["width"]
     df["image_height"] = dimensions["height"]
 
-    catalog_df = df
-    catalog_df.name="catalog"
-    return catalog_df
+    catalog = df
+    catalog.name="catalog"
 
- 
-@dg.composite_solid
-def catalog_main():
-    root = read_xml()   
-    outDict = find_uids(root)
-    formated_table = fill_records(root,outDict)
-    catalog_df = load(formated_table)
-    catalog_df = rename_columns(catalog_df)
-    catalog_df = select_columns(catalog_df)
-    catalog_df = remove_extension(catalog_df)
-    catalog_df = remove_duplicates(catalog_df)
-    catalog_df = reverse_creators_name(catalog_df)
-    catalog_df = dates_accuracy(catalog_df)
-    catalog = extract_dimensions(catalog_df)
-    listed_creators = creators_list(catalog_df)
-    
     return catalog
+
+
