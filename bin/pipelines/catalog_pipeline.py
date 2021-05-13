@@ -17,7 +17,7 @@ def calatog_main():
     catalog = extract_dimensions(catalog_df)
     listed_creators = creators_list(catalog_df)
     
-    return catalog
+    return catalog 
 
 
 #CLI: dagit -f src\bin\pipelines\catalog_pipeline.py 
