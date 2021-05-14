@@ -1,0 +1,18 @@
+solids:
+  query_omeka:
+    config: 
+      url: 'https://images.imaginerio.org/api/items'     
+  query_wikidata:
+    config:
+      url: 'https://query.wikidata.org/sparql'      
+  query_portals:
+    config:
+      url: 'https://acervos.ims.com.br/CIP/metadata/search/portals-general-access/situatedviews'      
+
+resources:
+  slack:
+    config:
+      token: 'xoxb-1834482702337-2052999958327-l0bS2ArNjhx8F25Uax8Zf7t7'
+ 
+
+

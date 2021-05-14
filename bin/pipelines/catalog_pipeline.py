@@ -2,10 +2,10 @@ import os
 
 
 import dagster as dg
-from src.bin.solids.catalog import (creators_list, dates_accuracy,
+from bin.solids.catalog import (creators_list, dates_accuracy,
                                     extract_dimensions, organize_columns,
                                     read_xml, xml_to_df)
-from src.bin.solids.utils import df_csv_io_manager
+from bin.solids.utils import df_csv_io_manager,slack_solid
 
 
 @dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"pandas_csv":df_csv_io_manager})])
@@ -17,9 +17,10 @@ def calatog_main():
     catalog = extract_dimensions(catalog_df)
     listed_creators = creators_list(catalog_df)
     
+    
     return catalog 
 
 
-#CLI: dagit -f src\bin\pipelines\catalog_pipeline.py 
+#CLI: dagit -f sbin\pipelines\catalog_pipeline.py 
 
 
