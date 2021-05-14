@@ -2,9 +2,11 @@ import os
 from pprint import pprint
 from xml.etree import ElementTree
 
+import dagster as dg
+import geopandas as gpd
 import numpy as np
 import pandas as pd
-import dagster as dg
+
 
 # solids catalog
 @dg.solid
@@ -133,7 +135,10 @@ def remove_duplicates(context, df):
 
 @dg.solid  # check dates accuracy
 def dates_accuracy(context, df):
-    circa = df["date"].str.contains(r"[a-z]", na=False,)
+    circa = df["date"].str.contains(
+        r"[a-z]",
+        na=False,
+    )
     year = df["date"].str.count(r"[\/-]") == 0
     month = df["date"].str.count(r"[\/-]") == 1
     day = df["date"].str.count(r"[\/-]") == 2
@@ -211,4 +216,3 @@ def catalog_main():
     listed_creators = creators_list(catalog_df)
 
     return catalog
-
