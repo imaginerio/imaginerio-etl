@@ -17,8 +17,7 @@ from urllib3.util import Retry
 #OMEKA   
 @dg.solid
 def query_omeka(context):
-    endpoint = context.solid_config['url']
-    path = context.solid_config['path']
+    endpoint = context.solid_config['url']  
 
     try:  
         # start session
@@ -78,7 +77,6 @@ def omeka_dataframe(context,results):
 @dg.solid
 def query_wikidata(context):    
     endpoint = context.solid_config['url']
-    path = context.solid_config['path']
     
     query = None
     if query == None:

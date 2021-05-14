@@ -34,6 +34,7 @@ dagster = "==0.11.6"
 IPTCInfo3 = "==2.1.4"
 Pillow = "==8.1.1"
 PyYAML = "==5.4"
+dagster-slack = "*"
 
 [dev-packages]
 
