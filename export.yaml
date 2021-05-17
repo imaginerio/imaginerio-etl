@@ -1,0 +1,5 @@
+solids:  
+  omeka_dafaframe:
+      inputs:
+        jstor:
+          path: "data-in/jstor.csv"
