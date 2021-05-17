@@ -1,4 +1,8 @@
 solids:
+  merge_dfs:
+      inputs:
+        metadata:
+          path: "data-out/metadata.csv"
   query_omeka:
     config: 
       url: 'https://images.imaginerio.org/api/items'     

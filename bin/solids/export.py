@@ -3,26 +3,39 @@ import shutil
 from datetime import datetime as dt
 from pathlib import Path
 
+import dagster as dg
 import geojson
 import numpy as np
 import pandas as pd
+from bin.maps import update as maps_update
+from bin.report import update as report_update
 from bokeh.layouts import column, layout
 from bokeh.plotting import output_file, show
+from dagster.core.definitions import solid
 from geomet import wkt
 
-from maps import update as maps_update
-from report import update as report_update
+@dg.solid()
+def load_metadata(_,metadata):
+
+    # read metadata.csv
+    export_df = pd.read_csv(metadata, parse_dates=["date", "start_date", "end_date"])
+
+    # checking dates
+    l = []
+    for i in range(len(export_df)):
+        if export_df["start_date"][i] > export_df["end_date"][i]:
+            l.append(export_df["id"][i])
+    # print(l)
+
+    # filter items
+    export_df = export_df.copy().dropna(
+        subset=["geometry", "start_date", "end_date", "portals_url", "img_hd"]
+    )
+    return export_df
 
 
-# environment variables
-IMPORT_OMEKA = os.environ["IMPORT_OMEKA"]
-IMPORT_GIS = os.environ["IMPORT_GIS"]
-IMPORT_WIKI = os.environ["IMPORT_WIKI"]
-IMPORT_VIKUS = os.environ["IMPORT_VIKUS"]
-JSTOR = os.environ["JSTOR"]
-
-
-def omeka_csv(df):
+@dg.solid
+def dates_accuracy_to_omeka(_,df):
     """
     Export omeka.csv
     """
@@ -53,7 +66,12 @@ def omeka_csv(df):
         omeka_df["start_date"] + "/" + omeka_df["end_date"]
     )
 
+    return omeka_df
+
+@dg.solid
+def organize_columns_to_omeka(_,df):
     # format data
+    omeka_df = df
     omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
     omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
@@ -66,6 +84,7 @@ def omeka_csv(df):
     smapshot = pd.read_csv("data-out/smapshot.csv")
     include = omeka_df["id"].isin(smapshot["id"])
     omeka_df.loc[include, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
+
 
     # rename columns
     omeka_df = omeka_df.rename(
@@ -116,18 +135,19 @@ def omeka_csv(df):
         ]
     ]
 
-    # append JSTOR migration
-    jstor = pd.read_csv(JSTOR)
-    omeka_df = omeka_df.append(jstor)
+    return omeka_df
 
-    # save csv
-    omeka_df.to_csv(IMPORT_OMEKA, index=False)
+@dg.solid( 
+    input_defs=[dg.InputDefinition("jstor", root_manager_key="jstor_root")],
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_omeka")]    
+)
+def omeka_dataframe(_,df,jstor):
+    # append JSTOR migration    
+    omeka_df = df.append(jstor)
+    return omeka_df
 
-    # print dataframe
-    print(omeka_df.head())
-
-
-def gis_csv(df):
+@dg.solid 
+def organize_df_to_gis(_,df):
     """
     Export gis.csv
     """
@@ -146,8 +166,13 @@ def gis_csv(df):
     gis_df["first_year"] = gis_df["first_year"].dt.strftime("%Y")
     gis_df["last_year"] = gis_df["last_year"].dt.strftime("%Y")
 
+    return gis_df
+
+@solid(output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="import_gis")])
+def create_featureCollection(_,df):
     # to geojson
     feature_list = []
+    gis_df = df
 
     for _, row in gis_df.iterrows():
         wkt_string = row["geometry"]
@@ -164,20 +189,13 @@ def gis_csv(df):
         feature_list.append(feature)
 
     feature_collection = geojson.FeatureCollection(feature_list)
+   
 
-    # save geojson
-    with open(IMPORT_GIS, "w", encoding="utf-8") as f:
-        geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)
-
-    # print dataframe
-    print(gis_df.head())
+    return feature_collection
 
 
-def quickstate_csv(df):
-    """
-    Export CSV file for QuickStatements import on Wikidata
-    """
-
+@dg.solid
+def make_df_to_wikidata(_,df):
     quickstate = pd.DataFrame(
         columns=[
             "qid",
@@ -212,15 +230,6 @@ def quickstate_csv(df):
     month = quickstate["date_accuracy"] == "month"
     day = quickstate["date_accuracy"] == "day"
 
-    # pt-br label
-    quickstate["Lpt-br"] = df["title"]
-    # pt-br description
-    quickstate["Dpt-br"] = "Fotografia de " + df["creator"]
-    # en description
-    quickstate["Den"] = "Photograph by " + df["creator"]
-    # Instance of
-    quickstate["P31"] = "Q125191"
-    # inception
     quickstate["P571"] = df["date"].apply(dt.isoformat)
     quickstate.loc[circa, "P571"] = quickstate["P571"] + "Z/8"
     quickstate.loc[year, "P571"] = quickstate["P571"] + "Z/9"
@@ -230,7 +239,15 @@ def quickstate_csv(df):
     quickstate.loc[circa, "qal1319"] = df["start_date"].apply(dt.isoformat) + "Z/9"
     # latest date
     quickstate.loc[circa, "qal1326"] = df["end_date"].apply(dt.isoformat) + "Z/9"
-    # country
+    # pt-br label
+    quickstate["Lpt-br"] = df["title"]
+    # pt-br description
+    quickstate["Dpt-br"] = "Fotografia de " + df["creator"]
+    # en description
+    quickstate["Den"] = "Photograph by " + df["creator"]
+    # Instance of
+    quickstate["P31"] = "Q125191"
+      # country
     quickstate["P17"] = "Q155"
     # coordinate of POV
     quickstate["P1259"] = "@" + df["lat"].astype(str) + "/" + df["lng"].astype(str)
@@ -263,11 +280,12 @@ def quickstate_csv(df):
     # Copyright status
     # quickstate["P6216"]
 
-    # material
+
     paper = quickstate["P186"].str.contains("Papel", na=False)
     glass = quickstate["P186"].str.contains("Vidro", na=False)
     quickstate.loc[paper, "P186"] = "Q11472"
     quickstate.loc[glass, "P186"] = "Q11469"
+    
 
     # fabrication method
     gelatin = quickstate["P2079"].str.contains("GELATINA", na=False)
@@ -275,7 +293,11 @@ def quickstate_csv(df):
     quickstate.loc[gelatin, "P2079"] = "Q172984"
     quickstate.loc[albumin, "P2079"] = "Q580807"
 
-    # creator
+    return quickstate
+     
+
+@solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_wiki")])
+def organise_creator(_,quickstate):
     creators = {
         "Augusto Malta": "Q16495239",
         "Anônimo": "Q4233718",
@@ -331,151 +353,5 @@ def quickstate_csv(df):
 
     quickstate = quickstate.drop(columns="date_accuracy")
 
-    quickstate.to_csv((IMPORT_WIKI), index=False)
-
-    print(quickstate.head())
-
-
-def vikus_csv(df):
-    """
-    Export csv for Vikus Viewer
-    """
-
-    vikus_df = df.copy()
-
-    vikus_df["portals_url"] = (
-        '<a href="' + vikus_df["portals_url"] + ">Instituto Moreira Salles</a>"
-    )
-    vikus_df.loc[vikus_df["date_accuracy"] == "circa", "_date"] = (
-        vikus_df["start_date"].dt.strftime("%Y")
-        + "/"
-        + vikus_df["end_date"].dt.strftime("%Y")
-    )
-    vikus_df.loc[~(vikus_df["date_accuracy"] == "circa"), "_date"] = vikus_df[
-        "date"
-    ].dt.strftime("%d-%m-%Y")
-    vikus_df["date"] = vikus_df["date"].dt.strftime("%Y")
-    vikus_df["creator"] = vikus_df["creator"] + "," + vikus_df["type"]
-    vikus_df["wikidata_depict"] = vikus_df["wikidata_depict"].str.split(r"\|\|")
-    vikus_df = vikus_df.explode(column="wikidata_depict")
-    vikus_df["wikidata_depict"] = vikus_df["wikidata_depict"].str.split(" ", 1)
-    has_depicts = vikus_df["wikidata_depict"].notna()
-
-    def href(valuelist):
-        return '<a href="' + valuelist[0] + ">" + valuelist[1] + "</a>"
-
-    vikus_df.loc[has_depicts, "wikidata_depict"] = vikus_df.loc[
-        has_depicts, "wikidata_depict"
-    ].apply(href)
-    vikus_df = vikus_df.groupby("id", as_index=False).agg(lambda x: set(x))
-    vikus_df = vikus_df.applymap(lambda x: str(x).strip("{'}"))
-
-    vikus_df = vikus_df[
-        [
-            "id",
-            "title",
-            "description",
-            "creator",
-            "date",
-            "_date",
-            "portals_url",
-            "wikidata_depict",
-            "image_width",
-            "image_height",
-        ]
-    ]
-
-    vikus_df = vikus_df.rename(
-        columns={
-            "date": "year",
-            "creator": "keywords",
-            "title": "_title",
-            "description": "_description",
-            "portals_url": "_source",
-            "wikidata_depict": "_depicts",
-            "image_width": "_width",
-            "image_height": "_height",
-        }
-    )
-
-    vikus_df.to_csv(IMPORT_VIKUS)
-    print(vikus_df.head())
-
-
-def img_to_commons(METADATA, IMAGES):
-
-    # Get unplubished geolocated images
-    final_df = pd.read_csv(METADATA)
-    commons_df = pd.DataFrame(
-        final_df[
-            final_df["geometry"].notna()
-            & final_df["img_hd"].notna()
-            & final_df["wikidata_image"].isna()
-        ]
-    )
-
-    # Create folder with images to be sent
-    today = datetime.now()
-
-    new_folder = IMAGES + "commons_" + today.strftime("%Y%m%d")
-
-    Path(new_folder).mkdir(parents=True, exist_ok=True)
-
-    for id in commons_df["id"]:
-        shutil.copy2(f"./images/jpeg-hd/{id}.jpg", new_folder)
-
-
-def load(METADATA):
-
-    # read metadata.csv
-    export_df = pd.read_csv(METADATA, parse_dates=["date", "start_date", "end_date"])
-
-    # checking dates
-    l = []
-    for i in range(len(export_df)):
-        if export_df["start_date"][i] > export_df["end_date"][i]:
-            l.append(export_df["id"][i])
-    # print(l)
-
-    # filter items
-    export_df = export_df.copy().dropna(
-        subset=["geometry", "start_date", "end_date", "portals_url", "img_hd"]
-    )
-
-    # export import-omeka.csv
-    omeka_csv(export_df)
-
-    # export import-gis.csv
-    gis_csv(export_df)
-
-    # export import-wiki.csv
-    quickstate_csv(export_df)
-
-    # export import-vikus.csv
-    vikus_csv(export_df)
-
-    # load items for dashboard
-    dashboard_plot = report_update(METADATA)
-    map_plot = maps_update(METADATA)
-
-    # export graphs.html
-    output_file(os.environ["INDEX"], title="Situated Views - Progress Dashboard")
-    show(
-        layout(
-            [[dashboard_plot["hbar"], dashboard_plot["pie"]], [map_plot["map"]]],
-            sizing_mode="stretch_both",
-        )
-    )
-
-    # export tiles.html
-    output_file(os.environ["TILES"], title="Situated Views - Item heatmap")
-    show(dashboard_plot["tiles"])
-
-    # export index.html
-    output_file(os.environ["SEARCH"], title="Situated Views - Search by ID")
-    show(map_plot["search"])
-
-
-if __name__ == "__main__":
-    load(os.environ["METADATA"])
+    return quickstate
 
