@@ -1,15 +1,23 @@
 solids:
   file_picker:
-    config: "Y:/PROJETOS/Getty"
-  file_dispatcher:
+    config: "/mnt/y/getty"
     inputs:
-      camera: 
+      camera:
         path: "data-out/camera.csv"
+    file_dispatcher:
     config:
-      TIFF: "D:/imagineRio-images/tiff"
-      JPEG_HD: "D:/imagineRio-images/jpeg-hd"
-      JPEG_SD: "D:/imagineRio-images/jpeg-sd"
-  merge_df:
+      tiff: "/mnt/d/imagineRio-images/tiff"
+      jpeg_hd: "/mnt/d/imagineRio-images/jpeg-hd"
+      jpeg_sd: "/mnt/d/imagineRio-images/jpeg-sd"
+      backlog: "/mnt/d/imagineRio-images/jpeg-sd/backlog"
+  create_images_df:
+    config: "https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/"
+  merge_dfs:
+    inputs:
+      metadata:
+        path: "data-out/metadata.csv"
+  write_metadata:
+    config: "C:\exiftool.exe"
     inputs:
       metadata:
         path: "data-out/metadata.csv"
