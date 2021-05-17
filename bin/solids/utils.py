@@ -51,6 +51,6 @@ def df_csv_io_manager(init_context):
 
 @dg.root_input_manager
 def root_input(context):
-    return pd.read_csv(name=context.config["path"])
+    return pd.read_csv(context.config["path"])
 
 
