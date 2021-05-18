@@ -8,20 +8,10 @@ import pandas as pd
 
 
 #solids catalog
-@dg.solid
-def read_xml(context):    
-    path = context.solid_config
-    with open(path, encoding="utf8") as f:
-        tree = ElementTree.parse(f)
-    root = tree.getroot()
-
-    return root   
-
-
-@dg.solid  
+@dg.solid(input_defs=[dg.InputDefinition("root", root_manager_key="xml")]) 
 def xml_to_df(context, root): 
-
     # Find the uids 
+    
     uids = {}
     for thing in root[0][0]:
         uids[thing.attrib["uid"]] = thing[0].text   
