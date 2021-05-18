@@ -1,16 +1,22 @@
-from typing import Any
-import dagster as dg
-import pandas as pd
-import requests
 #import geopandas as gpd
 import os
-from urllib3.util import Retry
+from typing import Any
+from xml.etree import ElementTree
+
+import dagster as dg
+from dagster.core.definitions.events import Failure
+import geojson
+import numpy as np
+import pandas as pd
+from pandas.core.frame import DataFrame
+import requests
 from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 
 class PandasCsvIOManager(dg.IOManager):
     def load_input(self, context):
-        file_path = context.config.upstream_output.name
+        file_path = os.path.join("data-out", context.upstream_output.name)
         return pd.read_csv(file_path + ".csv")
     
     def handle_output(self, context, obj):
@@ -19,43 +25,55 @@ class PandasCsvIOManager(dg.IOManager):
 
         yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved csv")
 
-#@dg.solid
-#def read_geojson(context):
-    #path = context.solid_config
-    #geometry = gpd.read_file(path)
-    #geometry = geometry.rename(columns={"name":"id"})
-    #geometry = geometry[["id","geometry"]]
-    #geometry = geometry.drop_duplicates(subsete="id",keep ="last")
-    #geometry.name = path.split("/")[-1]
-    #return geometry
+@dg.io_manager
+def df_csv_io_manager(init_context):
+    return PandasCsvIOManager()
 
-@dg.solid
-def save_csv(context, dataframes):
-    for df in dataframes:
-        df.to_csv(df.name, index=False)
+
+class GeojsonIOManager(dg.IOManager):
+    def load_input(self, context):
+        file_path = context.upstream_output.name
+        return geojson.loads(file_path + ".geojson")
+    
+    def handle_output(self, context, feature_collection):
+        file_path = os.path.join("data-out", context.name,"geojson")
+        with open(file_path, "w", encoding="utf-8") as f:
+            geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)        
+
+        yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved geojson")
+
+@dg.io_manager
+def geojson_io_manager(init_context):
+    return GeojsonIOManager()
 
 @dg.solid
 def rename_column(context,df,dic):
     df = df.rename(columns = dic)
     return df
 
-@dg.io_manager
-def df_csv_io_manager(init_context):
-    return PandasCsvIOManager()
-
 @dg.solid(
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")]    
 )
-def merge_dfs(_,metadata,df):
-    metadata = df.combine_first(metadata)
-
-    return metadata
+def merge_dfs(context,metadata,df):
+    if isinstance(df,pd.DataFrame):
+        metadata = df.combine_first(metadata)  
+        return metadata
+    else:          
+        return metadata
 
 @dg.root_input_manager
 def root_input(context):
-    return pd.read_csv(name=context.config["path"])
+    return pd.read_csv(context.config['path'])
+
+@dg.root_input_manager
+def root_input_xml(context):
+    path = context.config['path']
+    with open(path, encoding="utf8") as f:
+        tree = ElementTree.parse(f)
+    root = tree.getroot()
+    return root       
 
 @dg.solid(required_resource_keys={'slack'})
 def slack_solid(context):
-    context.resources.slack.chat_postMessage(channel='#tutoriais-e-links', text=':wave: testeeeeee!')
+    context.resources.slack.chat_postMessage(channel='#tutoriais-e-links', text=':wave: teste!')

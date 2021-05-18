@@ -59,7 +59,7 @@ def query_omeka(context):
 @dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_omeka")])
 def omeka_dataframe(context,results):
     if results == None :        
-        context.log.info("Couldn't update. Returning existing file")
+        context.log.info("Couldn't update")
         return None
 
     else:
@@ -116,7 +116,7 @@ def query_wikidata(context):
 @dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_wikidata")])
 def wikidata_dataframe(context, results):
     if results == None :        
-        context.log.info("Couldn't update. Returning existing file")
+        context.log.info("Couldn't update")
         return None
 
     else:
@@ -155,10 +155,8 @@ def wikidata_dataframe(context, results):
 #PORTALS
 @dg.solid
 def query_portals(context):
-    endpoint = context.solid_config['url']
-    
+    endpoint = context.solid_config['url'] 
     try:
-
         retry_strategy = Retry(
             total=3,
             status_forcelist=[429, 500, 502, 503, 504],
@@ -185,19 +183,16 @@ def query_portals(context):
             data = response.json()
             results = pd.json_normalize(data["items"])           
 
-            return results
+        return results
 
     except Exception as e:
         context.log.info(e)
-        return None    
+        return None 
+
    
 @dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_portals")])
-def portals_dataframe(context,results):    
-    if results == None :                
-        context.log.info("Couldn't update. Returning existing file")
-        return None
-
-    else:
+def portals_dataframe(context,results):      
+    if isinstance(results, pd.DataFrame):        
         dataframe = pd.DataFrame()
         dataframe = dataframe.append(results, ignore_index=True)
         dataframe = dataframe.rename(
@@ -226,8 +221,12 @@ def portals_dataframe(context,results):
 
         dataframe = dataframe.drop_duplicates(subset="id")        
 
-        return dataframe
+        return dataframe  
 
+    else:
+        context.log.info("Couldn't update")
+        return None
+        
 
         
 
