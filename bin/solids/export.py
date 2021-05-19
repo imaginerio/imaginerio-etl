@@ -14,11 +14,18 @@ from bokeh.plotting import output_file, show
 from dagster.core.definitions import solid
 from geomet import wkt
 
-@dg.solid()
+@dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
 def load_metadata(_,metadata):
 
     # read metadata.csv
-    export_df = pd.read_csv(metadata, parse_dates=["date", "start_date", "end_date"])
+    #export_df = pd.read_csv(metadata, parse_dates=["date", "start_date", "end_date"])
+  
+    #metadata["date", "start_date", "end_date"] = pd.to_datetime(metadata["date", "start_date", "end_date"])
+
+    metadata["date"] = pd.to_datetime(metadata.date)
+    metadata["start_date"] = pd.to_datetime(metadata.start_date)
+    metadata["end_date"] = pd.to_datetime(metadata.end_date)
+    export_df = metadata
 
     # checking dates
     l = []
