@@ -9,6 +9,10 @@ pandas = "*"
 pillow = "*"
 dagit = "*"
 dagster = "*"
+ipython = "*"
+ipykernel = "*"
+pykml = "*"
+mercantile = "*"
 
 [dev-packages]
 

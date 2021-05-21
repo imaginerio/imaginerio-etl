@@ -41,7 +41,9 @@ def rename_column(context, df):
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")]    
 )
 def merge_dfs(_,metadata,df):
-    metadata = df.combine_first(metadata)
+    metadata = metadata.merge(df, how="outer", on="id")
+    id = metadata.pop('id')
+    metadata.insert(0, 'id', id)
     return metadata
 
 

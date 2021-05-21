@@ -2,8 +2,11 @@ import os
 import shutil
 
 import pandas as pd
+from numpy import nan
 import dagster as dg
 from PIL import Image as PILImage
+
+from bin.solids.exiftool import ExifTool
 
 
 class Image:
@@ -18,7 +21,7 @@ class Image:
 
 
 @dg.solid(input_defs=[dg.InputDefinition("camera", root_manager_key="camera_root")])
-def file_picker(context):
+def file_picker(context, camera):
     source = context.solid_config
     has_kml = list(camera["id"])
     image_list = [
@@ -30,17 +33,16 @@ def file_picker(context):
         and not name.endswith(("v.tif"))
         and not name.endswith("a.tif")
     ]
-    context.log.info(f"Globbed {len(image_list)} images")
 
     geolocated = [img for img in image_list if img.id in has_kml]
     backlog = [img for img in image_list if img.id not in has_kml]
 
-    yield dg.Output(geolocated, "geolocated")
-    yield dg.Output(backlog, "backlog")
+    context.log.info(f"Geolocated: {len(geolocated)} images; Backlog: {len(backlog)} images")
 
+    return {"geolocated":geolocated,"backlog":backlog}
 
 @dg.solid
-def file_dispatcher(context, geolocated, backlog):
+def file_dispatcher(context, files):
 
     TIFF = context.solid_config["tiff"]
     JPEG_HD = context.solid_config["jpeg_hd"]
@@ -73,63 +75,80 @@ def file_dispatcher(context, geolocated, backlog):
   
     def handle_backlog(infiles):
         for infile in infiles:
-            backlog = os.path.join(IMG_BACKLOG, infile.jpg)
+            if not os.path.exists(os.path.join(TIFF, infile.tif)):
+                shutil.copy2(infile.path, TIFF)
+            backlog_path = os.path.join(IMG_BACKLOG, infile.jpg)
             size = (1000, 1000)
-            if not os.path.exists(backlog):
+            if not os.path.exists(backlog_path):
                 try:
                     with PILImage.open(os.path.join(TIFF, infile.tif)) as im:
                         im.thumbnail(size)
-                        im.save(backlog)
+                        im.save(backlog_path)
                 except OSError:
-                    print(f"Cannot create backlog thumbnail for {infile.tif}")
+                    context.log.info(f"Cannot create backlog thumbnail for {infile.tif}")
+        current = os.listdir(IMG_BACKLOG)
+        for image in current:
+            if image.split(".")[0] in geolocated:
+                if not os.path.exists(os.path.join(JPEG_SD, image)):
+                    os.rename(
+                        os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image)
+                    )
+                else:
+                    os.remove(os.path.join(IMG_BACKLOG, image))
+            else:
+                continue
 
-    handle_geolocated(geolocated)
-    handle_backlog(backlog)
+    handle_geolocated(files["geolocated"])
+    handle_backlog(files["backlog"])
 
     to_tag = [
         os.path.join(JPEG_HD, file)
         for file in os.listdir(JPEG_HD)
         if not os.path.exists(os.path.join(JPEG_HD, f"{file}_original"))
+        and not file.endswith("_original")
     ]
 
+    context.log.info(f"Passed {len(to_tag)} images to be tagged")
     return to_tag
 
+
 @dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="images")])
-def create_images_df(context, geolocated, backlog)
+def create_images_df(context, files):
     """Creates a dataframe with every image available and links to full size and thumbnail"""
     
     hd = context.solid_config
     sd = hd + "sd/"
     dicts = []
 
-    for img in geolocated:
+    for img in files["geolocated"]:
         img_dict = {
-            id: img.id
-            img_hd: os.path.join(hd, img.jpg)
-            img_sd: os.path.join(sd, img.jpg)
+            "id": img.id,
+            "img_hd": os.path.join(hd, img.jpg),
+            "img_sd": os.path.join(sd, img.jpg),
         }
         dicts.append(img_dict)
     
-    for img in backlog:
+    for img in files["backlog"]:
         img_dict = {
-            id: img.id
-            img_hd: np.Nan
-            img_sd: os.path.join(sd, img.jpg)
+            "id": img.id,
+            "img_hd": nan,
+            "img_sd": nan,
         }
         dicts.append(img_dict)
 
     images_df = pd.DataFrame(data=dicts)
     images_df.sort_values(by='id')
+    context.log.info(f"{len(images_df)} images available in hi-res")
     return images_df
 
 
-@dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key:"metadata_root"), dg.InputDefinition("ok", dg.Nothing)])
-def write_metadata(_, metadata, files):
+@dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
+def write_metadata(context, metadata, files_to_tag):
 
     metadata.fillna(value="", inplace=True)
     metadata.set_index("id", inplace=True)
 
-    for i, item in enumerate(files):
+    for i, item in enumerate(files_to_tag):
         if item.endswith(".jpg"):
             basename = os.path.split(item)[1]
             name = basename.split(".")[0]
@@ -148,6 +167,8 @@ def write_metadata(_, metadata, files):
                     datecreated = metadata.loc[name, "date"].strftime("%Y-%m-%d")
             except AttributeError:
                 print(f"Review {basename} date")
+                datecreated = ""
+                continue
             byline = metadata.loc[name, "creator"]
             headline = metadata.loc[name, "title"]
             caption = metadata.loc[name, "description"]
@@ -182,12 +203,12 @@ def write_metadata(_, metadata, files):
                 f"-GPSAltitude={altitude}",
                 f"-GPSImgDirection={imgdirection}",
             ]
-            with exiftool.ExifTool(executable_=context.solid_config) as et:
+            with ExifTool(executable_=context.solid_config) as et:
                 for param in params:
                     param = param.encode(encoding="utf-8")
                     dest = item.encode(encoding="utf-8")
                     et.execute(param, dest)
-            print(
+            context.log.info(
                 f"{basename}\n{metadata.loc[name, 'date']}\nTagged {i+1} of {len(files)} images"
             )
 
