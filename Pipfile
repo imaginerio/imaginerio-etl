@@ -13,6 +13,7 @@ ipython = "*"
 ipykernel = "*"
 pykml = "*"
 mercantile = "*"
+geojson = "*"
 
 [dev-packages]
 

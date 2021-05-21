@@ -1,6 +1,6 @@
 import dagster as dg
-from bin.pipelines.catalog import catalog_pipeline
-from bin.pipelines.images import images_pipeline
+from bin.pipelines.catalog_pipeline import catalog_pipeline
+from bin.pipelines.images_pipeline import images_pipeline
 from bin.schedules.daily import daily
 
 
