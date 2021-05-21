@@ -23,6 +23,7 @@ class PandasCsvIOManager(dg.IOManager):
         obj.to_csv(file_path + ".csv", index=False)
 
         yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved csv")
+        yield dg.EventMetadataEntry.int(obj.shape[0], label="number of rows")
 
 @dg.io_manager
 def df_csv_io_manager(init_context):
@@ -40,6 +41,7 @@ class GeojsonIOManager(dg.IOManager):
             geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)        
 
         yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved geojson")
+        
 
 @dg.io_manager
 def geojson_io_manager(init_context):
@@ -55,11 +57,12 @@ def rename_column(context,df,dic):
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")]    
 )
 def merge_dfs(context,metadata,df):
-    if isinstance(df,pd.DataFrame):
-        metadata = df.combine_first(metadata)  
+        metadata = metadata.merge(df, how="outer", on="id")
+        id = metadata.pop('id')
+        metadata.insert(0, 'id', id)
+        context.log.info(f'{df.name} merged on metadata') 
         return metadata
-    else:          
-        return metadata
+    
 
 @dg.root_input_manager
 def root_input(context):
@@ -76,3 +79,17 @@ def root_input_xml(context):
 @dg.solid(required_resource_keys={'slack'})
 def slack_solid(context):
     context.resources.slack.chat_postMessage(channel='#tutoriais-e-links', text=':wave: teste!')
+
+@dg.solid(input_defs=[dg.InputDefinition( "omeka", root_manager_key= "omeka_root"), dg.InputDefinition( "catalog", root_manager_key= "catalog_root"), dg.InputDefinition( "wikidata", root_manager_key= "wikidata_root")], output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadatateste")])
+def create_metadata(context, omeka, catalog, wikidata):
+    dataframes = [omeka, catalog, wikidata]
+    df1 = pd.DataFrame(columns=['id'])
+    for df in dataframes:       
+        metadata = df1.merge(df, how="outer", on="id")
+        id = metadata.pop('id')
+        metadata.insert(0, 'id', id) 
+       
+    return metadata
+       
+
+    

@@ -10,18 +10,19 @@ from bin.solids.apis import portals_dataframe, query_portals, query_wikidata, qu
 def apis(): 
     #slack_solid()
 
-    omeka_results = query_omeka()
-    omeka_df = omeka_dataframe(omeka_results)
-    merge_dfs(df=omeka_df)
+    #omeka_results = query_omeka()
+    #omeka_df = omeka_dataframe(omeka_results)
+    #merge_dfs(df=omeka_df)
    
 
     wikidata_results = query_wikidata()
     wikidata_df = wikidata_dataframe(wikidata_results)
-    merge_dfs(df=wikidata_df)
+    #merge_dfs(df=wikidata_df)
 
-    portals_results = query_portals()
-    portals_df = portals_dataframe(portals_results)
-    merge_dfs(df=portals_df)  
+    #portals_results = query_portals()
+    #portals_df = portals_dataframe(portals_results)
+    #merge_dfs(df=portals_df)  
 
-#CLI: dagit -f bin\pipelines\apis_pipeline.py
+#CLI: dagit -f bin/pipelines/apis_pipeline.py
+#CLI: dagster pipeline execute -f bin\pipelines\apis_pipeline.py
     
