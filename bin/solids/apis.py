@@ -93,18 +93,10 @@ def query_wikidata(context):
     SERVICE wikibase:label { bd:serviceParam wikibase:language "pt-br", "en" . }
 
     }"""
-    try:
-        retry_strategy = Retry(
-            total=3,
-            status_forcelist=[429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "OPTIONS"],
+    try:        
+        response = requests.get(
+            endpoint, params={"format": "json", "query": query}
         )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        http = requests.Session()
-        http.mount("https://", adapter)
-        http.mount("http://", adapter)
-
-        response = http.get(endpoint, params={"format": "json", "query": query})       
         data = response.json()
         return data
 
