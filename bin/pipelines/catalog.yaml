@@ -1,3 +1,10 @@
 solids:
-  read_xml:
-    config: data-in/cumulus.xml
+  xml_to_df:
+    inputs:
+      root:
+        path: '/mnt/y/getty/cumulus.xml'
+  merge_dfs:
+    inputs:
+       metadata:
+        path: 'data-out/metadata.csv'
+  

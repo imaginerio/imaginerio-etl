@@ -1,19 +1,15 @@
+import geopandas as gpd
 import os
+from typing import Any
+from xml.etree import ElementTree
 
 import dagster as dg
+import geojson
+import numpy as np
 import pandas as pd
-import geopandas as gpd
-
-
-@dg.solid
-def read_geojson(context):
-    path = context.solid_config
-    geometry = gpd.read_file(path)
-    geometry = geometry.rename(columns={"name": "id"})
-    geometry = geometry[["id", "geometry"]]
-    geometry = geometry.drop_duplicates(subsete="id", keep="last")
-    geometry.name = path.split("/")[-1]
-    return geometry
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 
 class PandasCsvIOManager(dg.IOManager):
@@ -25,14 +21,35 @@ class PandasCsvIOManager(dg.IOManager):
         file_path = os.path.join("data-out", context.name)
         obj.to_csv(file_path + ".csv", index=False)
 
-        yield dg.AssetMaterialization(
-            asset_key=dg.AssetKey(file_path), description="saved csv"
-        )
+        yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved csv")
+
+
+@dg.io_manager
+def df_csv_io_manager(init_context):
+    return PandasCsvIOManager()
+
+
+class GeojsonIOManager(dg.IOManager):
+    def load_input(self, context):
+        file_path = context.upstream_output.name
+        return geojson.loads(file_path + ".geojson")
+    
+    def handle_output(self, context, feature_collection):
+        file_path = os.path.join("data-out", context.name,"geojson")
+        with open(file_path, "w", encoding="utf-8") as f:
+            geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)        
+
+        yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved geojson")
+
+
+@dg.io_manager
+def geojson_io_manager(init_context):
+    return GeojsonIOManager()
 
 
 @dg.solid
-def rename_column(context, df):
-    df = df.rename(columns={"id": "ids"})
+def rename_column(context,df,dic):
+    df = df.rename(columns = dic)
     return df
 
 
@@ -40,8 +57,10 @@ def rename_column(context, df):
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")]    
 )
-def merge_dfs(_,metadata,df):
-    metadata = metadata.merge(df, how="outer", on="id")
+def merge_dfs(_,df,metadata):
+    metadata = metadata.combine_first(df)
+    #metadata = metadata[[id, title, description, etc]]
+    #metadata = metadata.set_index('id')
     id = metadata.pop('id')
     metadata.insert(0, 'id', id)
     return metadata
@@ -51,8 +70,22 @@ def merge_dfs(_,metadata,df):
 def df_csv_io_manager(init_context):
     return PandasCsvIOManager()
 
+
 @dg.root_input_manager
 def root_input(context):
-    return pd.read_csv(context.config["path"])
+    return pd.read_csv(context.config['path'])
 
+
+@dg.root_input_manager
+def root_input_xml(context):
+    path = context.config['path']
+    with open(path, encoding="utf8") as f:
+        tree = ElementTree.parse(f)
+    root = tree.getroot()
+    return root       
+
+
+@dg.solid(required_resource_keys={'slack'})
+def slack_solid(context):
+    context.resources.slack.chat_postMessage(channel='#tutoriais-e-links', text=':wave: teste!')
 

@@ -5,12 +5,9 @@
 
 
 ```bash
-# set PWD variable (Windows users only):
-$ $env:PWD=$PWD
+# load workspace in Dagit
+$ dagit
 
-# build detached images
-$ docker compose up -d --build
-
-# launch dagit on localhost:3000
-$ docker compose run dagit
+# run pipeline
+$ dagster pipeline execute -f <pipeline.py> -c <configuration.yaml>
 ```
