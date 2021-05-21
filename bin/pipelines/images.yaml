@@ -4,7 +4,7 @@ solids:
     inputs:
       camera:
         path: "data-out/camera.csv"
-    file_dispatcher:
+  file_dispatcher:
     config:
       tiff: "/mnt/d/imagineRio-images/tiff"
       jpeg_hd: "/mnt/d/imagineRio-images/jpeg-hd"
@@ -17,7 +17,7 @@ solids:
       metadata:
         path: "data-out/metadata.csv"
   write_metadata:
-    config: "C:\exiftool.exe"
+    config: "/mnt/c/exiftool.exe"
     inputs:
       metadata:
         path: "data-out/metadata.csv"
