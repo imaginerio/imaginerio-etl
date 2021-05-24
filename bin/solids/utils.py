@@ -24,6 +24,7 @@ class PandasCsvIOManager(dg.IOManager):
         obj.to_csv(file_path + ".csv", index=False)
 
         yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved csv")
+        yield dg.EventMetadataEntry.int(obj.shape[0], label="number of rows")
 
 @dg.io_manager
 def df_csv_io_manager(init_context):

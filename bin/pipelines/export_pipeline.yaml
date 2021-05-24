@@ -1,0 +1,9 @@
+solids: 
+  omeka_dataframe:
+    inputs:
+      jstor: 
+        path: "data-in/jstor.csv"
+  load_metadata:
+    inputs:
+      metadata:
+        path: 'data-out/metadata.csv'
