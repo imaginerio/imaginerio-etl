@@ -3,7 +3,6 @@ from pprint import pprint
 from xml.etree import ElementTree
 
 import dagster as dg
-import geopandas as gpd
 import numpy as np
 import pandas as pd
 
@@ -167,5 +166,3 @@ def extract_dimensions(context,df):
     catalog.name="catalog"
 
     return catalog
-
-
