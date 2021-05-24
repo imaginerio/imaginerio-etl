@@ -1,21 +1,21 @@
 [[source]]
-url = "https://pypi.org/simple"
+name = “pypi”
+url = “https://pypi.org/simple”
 verify_ssl = true
-name = "pypi"
-
-[packages]
-geopandas = "*"
-pandas = "*"
-pillow = "*"
-dagit = "*"
-dagster = "*"
-ipython = "*"
-ipykernel = "*"
-pykml = "*"
-mercantile = "*"
-geojson = "*"
-
 [dev-packages]
-
+black = “*”
+pylint = “*”
+[packages]
+pandas = “*”
+numpy = “*”
+bokeh = “*”
+xlrd = “*”
+ffmpeg-python = “*”
+requests = “*”
+tqdm = “*”
+python-dotenv = “*”
+iptcinfo3 = “*”
 [requires]
-python_version = "3.8"
+python_version = “3.8"
+[pipenv]
+allow_prereleases = true

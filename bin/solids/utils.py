@@ -4,9 +4,11 @@ from typing import Any
 from xml.etree import ElementTree
 
 import dagster as dg
+from dagster.core.definitions.events import Failure
 import geojson
 import numpy as np
 import pandas as pd
+from pandas.core.frame import DataFrame
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
@@ -16,13 +18,12 @@ class PandasCsvIOManager(dg.IOManager):
     def load_input(self, context):
         file_path = os.path.join("data-out", context.upstream_output.name)
         return pd.read_csv(file_path + ".csv")
-
+    
     def handle_output(self, context, obj):
         file_path = os.path.join("data-out", context.name)
         obj.to_csv(file_path + ".csv", index=False)
 
         yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved csv")
-
 
 @dg.io_manager
 def df_csv_io_manager(init_context):
@@ -41,17 +42,14 @@ class GeojsonIOManager(dg.IOManager):
 
         yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved geojson")
 
-
 @dg.io_manager
 def geojson_io_manager(init_context):
     return GeojsonIOManager()
-
 
 @dg.solid
 def rename_column(context,df,dic):
     df = df.rename(columns = dic)
     return df
-
 
 @dg.solid(
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
@@ -75,7 +73,6 @@ def df_csv_io_manager(init_context):
 def root_input(context):
     return pd.read_csv(context.config['path'])
 
-
 @dg.root_input_manager
 def root_input_xml(context):
     path = context.config['path']
@@ -84,8 +81,6 @@ def root_input_xml(context):
     root = tree.getroot()
     return root       
 
-
 @dg.solid(required_resource_keys={'slack'})
 def slack_solid(context):
     context.resources.slack.chat_postMessage(channel='#tutoriais-e-links', text=':wave: teste!')
-

@@ -1,0 +1,10 @@
+solids:
+  xml_to_df:
+    inputs:
+      root:
+        path: '/mnt/y/getty/cumulus.xml'
+  merge_dfs:
+    inputs:
+       metadata:
+        path: 'data-out/metadata.csv'
+  
