@@ -23,7 +23,7 @@ class PandasCsvIOManager(dg.IOManager):
         file_path = os.path.join("data-out", context.name)
         obj.to_csv(file_path + ".csv", index=False)
 
-        yield dg.AssetMaterialization(asset_key = dg.AssetKey(file_path), description = "saved csv")
+        yield dg.AssetMaterialization(asset_key = dg.AssetKey(context.name), description = "saved csv")
         yield dg.EventMetadataEntry.int(obj.shape[0], label="number of rows")
 
 @dg.io_manager
