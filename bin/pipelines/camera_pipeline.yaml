@@ -1,0 +1,3 @@
+solids:
+  get_list:
+    path: "data-in/kml-sessions/"
