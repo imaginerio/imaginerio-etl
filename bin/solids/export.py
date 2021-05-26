@@ -7,10 +7,10 @@ import dagster as dg
 import geojson
 import numpy as np
 import pandas as pd
-from bokeh.layouts import column, layout
-from bokeh.plotting import output_file, show
+# from bokeh.layouts import column, layout
+# from bokeh.plotting import output_file, show
 from dagster.core.definitions import solid
-from geomet import wkt
+# from geomet import wkt
 
 @dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
 def load_metadata(_,metadata):
@@ -146,7 +146,7 @@ def organize_columns_to_omeka(_,df):
     input_defs=[dg.InputDefinition("jstor", root_manager_key="jstor_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_omeka")]    
 )
-def omeka_dataframe(_,df,jstor):
+def import_omeka_dataframe(_,df,jstor):
     # append JSTOR migration    
     omeka_df = df.append(jstor)
     return omeka_df
