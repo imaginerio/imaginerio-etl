@@ -1,10 +1,9 @@
-import os
 import dagster as dg
 
-from bin.solids.utils import geojson_io_manager
-from bin.solids.camera import get_list, split_photooverlays, change_img_href, correct_altitude_mode, create_geojson, geojson_geodataframe
+from bin.solids.utils import *
+from bin.solids.camera import *
 
-@dg.pipeline
+@dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"geojson":geojson_io_manager, "pandas_csv":df_csv_io_manager, "metadata_root":root_input})])
 def camera_pipeline():
 
     kmls = get_list()
@@ -12,4 +11,4 @@ def camera_pipeline():
     kmls_img_href = change_img_href(kmls_splitteds)
     kmls_altitude = correct_altitude_mode(kmls_img_href)
     geojson = create_geojson(kmls_altitude)
-    camera_df = geojson_geodataframe(geojson)
+    merge_dfs(df=geojson)

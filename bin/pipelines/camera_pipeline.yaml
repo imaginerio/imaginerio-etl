@@ -1,7 +1,5 @@
 solids:
   get_list:
-    path: "data-in/kml-sessions/raw"
+    config: "data-in/kml/raw"
   split_photooverlays:
-    path: "data-in/kml-sessions/splitted"
-  create_geojson:
-    path: "/mnt/d/dev/situated-views/data-out/camera.geojson"
+    config: "data-in/kml"

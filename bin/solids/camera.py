@@ -122,7 +122,7 @@ def draw_cone(kml, radius=400, steps=200):
 
 @dg.solid
 def get_list(context):
-  path = context.solid_config['path']
+  path = context.solid_config
   list_kmls = os.listdir(path)
   kmls=[]
   for kml in list_kmls:
@@ -132,7 +132,7 @@ def get_list(context):
 
 @dg.solid
 def split_photooverlays(context, kmls, delete_original=False):
-  path = context.solid_config['path']
+  path = context.solid_config
   for kml in kmls:
     with open(kml, "r") as f:
         txt = f.read()
@@ -140,16 +140,15 @@ def split_photooverlays(context, kmls, delete_original=False):
           header = "\n".join(txt.split("\n")[:2])
           photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
           photooverlays[-1] = re.sub("</Folder>\n</kml>", "",photooverlays[-1])
-    for po in photooverlays[:-1]:
+    for po in photooverlays:
         filename = find_with_re("name", po)
         with open(os.path.join(os.path.dirname("kml_folder"), filename + ".kml"), "w") as k:
             k.write(f"{header}\n{po}</kml>")
     if delete_original:
         os.remove(os.path.abspath(kml))
 
-    return [os.path.join(path, file) for file in os.listdir(path)]
-      # [data-in/kml-sessions/001ALA001.kml, data-in/kml-sessions/001ALA002.kml,...]
-
+  return [os.path.join(path, file) for file in os.listdir(path)]
+  
 @dg.solid
 def change_img_href(context,kmls):
   for kml in kmls:
@@ -197,11 +196,9 @@ def correct_altitude_mode(context,kmls):
             continue
     return kmls
 
-@dg.solid
+@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="camera")])
 def create_geojson(context,kmls):
-  path = context.solid_config['path']
   features = []
-
   for kml in kmls:
     with open(kml, "r") as f:
       KML = parser.parse(f).getroot()
@@ -224,10 +221,5 @@ def create_geojson(context,kmls):
 
   collection = geojson.FeatureCollection(features=features)
 
-  f = open(path, 'w')
-  f.write(geojson.dumps(collection))
-  f.close()
-
-@dg.solid
-def geojson_geodataframe(context):
+  return collection
 
