@@ -33,11 +33,11 @@ def df_csv_io_manager(init_context):
 
 class GeojsonIOManager(dg.IOManager):
     def load_input(self, context):
-        file_path = context.upstream_output.name
-        return geojson.loads(file_path + ".geojson")
+        file_path = os.path.join("data-out", context.upstream_output.name)
+        return gpd.read_file(file_path + ".geojson")
     
     def handle_output(self, context, feature_collection):
-        file_path = os.path.join("data-out", context.name,"geojson")
+        file_path = os.path.join("data-out", context.name)+".geojson"
         with open(file_path, "w", encoding="utf-8") as f:
             geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)        
 
