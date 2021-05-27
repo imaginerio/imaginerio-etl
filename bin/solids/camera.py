@@ -58,6 +58,7 @@ def get_radius(kml):
     with open(kml, "r") as f:
       KML = parser.parse(f).getroot()
     id = str(KML.PhotoOverlay.name)
+    tilt = KML.PhotoOverlay.Camera.tilt
     df = pd.read_csv("https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-out/metadata.csv", index_col="id")
     depicts = df.loc["id", "wikidata_depict"]
     if depicts != np.nan:
@@ -131,21 +132,22 @@ def get_list(context):
 
 @dg.solid
 def split_photooverlays(context, kmls, delete_original=False):
-    for kml in kmls:
-      with open(kml, "r") as f:
-          txt = f.read()
-          if re.search("<Folder>", txt):
-            header = "\n".join(txt.split("\n")[:2])
-            photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
-            photooverlays[-1] = re.sub("</Folder>\n</kml>", "",photooverlays[-1])
-      for po in photooverlays[:-1]:
-          filename = find_with_re("name", po)
-          with open(os.path.join(os.path.dirname("kml_folder"), filename + ".kml"), "w") as k:
-              k.write(f"{header}\n{po}</kml>")
-      if delete_original:
-          os.remove(os.path.abspath(kml))
+  path = context.solid_config['path']
+  for kml in kmls:
+    with open(kml, "r") as f:
+        txt = f.read()
+        if re.search("<Folder>", txt):
+          header = "\n".join(txt.split("\n")[:2])
+          photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
+          photooverlays[-1] = re.sub("</Folder>\n</kml>", "",photooverlays[-1])
+    for po in photooverlays[:-1]:
+        filename = find_with_re("name", po)
+        with open(os.path.join(os.path.dirname("kml_folder"), filename + ".kml"), "w") as k:
+            k.write(f"{header}\n{po}</kml>")
+    if delete_original:
+        os.remove(os.path.abspath(kml))
 
-      return [os.path.join("data-in/kml-sessions", file) for file in os.listdir("data-in/kml-sessions")]
+    return [os.path.join(path, file) for file in os.listdir(path)]
       # [data-in/kml-sessions/001ALA001.kml, data-in/kml-sessions/001ALA002.kml,...]
 
 @dg.solid
@@ -195,10 +197,9 @@ def correct_altitude_mode(context,kmls):
             continue
     return kmls
 
-#aqui é output
 @dg.solid
 def create_geojson(context,kmls):
-
+  path = context.solid_config['path']
   features = []
 
   for kml in kmls:
@@ -223,8 +224,10 @@ def create_geojson(context,kmls):
 
   collection = geojson.FeatureCollection(features=features)
 
-  f = open('/content/camera.geojson', 'w')
+  f = open(path, 'w')
   f.write(geojson.dumps(collection))
   f.close()
 
+@dg.solid
+def geojson_geodataframe(context):
 
