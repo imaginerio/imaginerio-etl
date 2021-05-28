@@ -20,5 +20,6 @@ def situated_views():
         "sensors": {
             "trigger_catalog": lambda: trigger_catalog,
             "trigger_export": lambda: trigger_export,
+            "trigger_metadata": lambda: trigger_metadata,
         }
     }
