@@ -1,0 +1,45 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+<PhotoOverlay>
+		<name>007A5P3F13-006</name>
+		<Camera>
+			<longitude>-43.17545661635994</longitude>
+			<latitude>-22.91101857866167</latitude>
+			<altitude>11.96107735896368</altitude>
+			<heading>-17.33806317944918</heading>
+			<tilt>97.86684708500003</tilt>
+			<roll>-3.93533624764271e-008</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>https://images.imaginerio.org/iiif-img/007A5P3F13-006/full/^1200,/0/default.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-25.33</leftFov>
+			<rightFov>25.33</rightFov>
+			<bottomFov>-19.405</bottomFov>
+			<topFov>19.405</topFov>
+			<near>0.723724</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17545661635994,-22.91101857866167,11.96107735896368</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

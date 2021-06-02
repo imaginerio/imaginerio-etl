@@ -1,0 +1,46 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+<PhotoOverlay>
+		<name>001MF002008</name>
+		<Camera>
+			<longitude>-43.17599817230438</longitude>
+			<latitude>-22.94331456582764</latitude>
+			<altitude>10.08505372997573</altitude>
+			<heading>170.9283925247079</heading>
+			<tilt>91.10173297490367</tilt>
+			<roll>8.514599326652352e-010</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/001MF002008.jpg</href>
+		</Icon>
+		<rotation>1.79</rotation>
+		<ViewVolume>
+			<leftFov>-12.585</leftFov>
+			<rightFov>12.585</rightFov>
+			<bottomFov>-7.475</bottomFov>
+			<topFov>7.475</topFov>
+			<near>1.45169</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17599817230438,-22.94331456582764,10.08505372997573</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

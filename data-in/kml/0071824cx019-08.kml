@@ -1,0 +1,46 @@
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:ns1="http://www.google.com/kml/ext/2.2">
+<Folder>
+<PhotoOverlay>
+		<name>0071824cx019-08</name>
+		<Camera>
+			<longitude>-43.17624039799991</longitude>
+			<latitude>-22.90191793899995</latitude>
+			<altitude>12.63596125388244</altitude>
+			<heading>129.5741666002076</heading>
+			<tilt>94.84387346509723</tilt>
+			<roll>-0.0006513168031270331</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a295805/Pictures/Saved Pictures/0071824cx019-08.JPG</href>
+		</Icon>
+		<rotation>1.03</rotation>
+		<ViewVolume>
+			<leftFov>-23.1862</leftFov>
+			<rightFov>23.1862</rightFov>
+			<bottomFov>-17.775</bottomFov>
+			<topFov>17.775</topFov>
+			<near>2.06514</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17624039799991,-22.90191793899995,12.63596125388244</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

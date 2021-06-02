@@ -55,40 +55,47 @@ def query_wikidata(Q):
   return result_list
 
 def get_radius(kml):
-    with open(kml, "r") as f:
-      KML = parser.parse(f).getroot()
-    id = str(KML.PhotoOverlay.name)
-    tilt = KML.PhotoOverlay.Camera.tilt
-    df = pd.read_csv("https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-out/metadata.csv", index_col="id")
-    depicts = df.loc["id", "wikidata_depict"]
-    if depicts != np.nan:
-      depicts = depicts.split("||")
-      distances = []
-      for depict in depicts:
-        q = re.search("(?<=\/)Q\d+", depicts).group(0)
-        point = query_wikidata(q)
-        if point:
-          lng = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point).group(0)
-          lat = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point).group(1)
-          depicted = reproject((lng, lat))
-          origin = reproject((KML.PhotoOverlay.Camera.longitude, KML.PhotoOverlay.Camera.latitude))
-          distance = origin.distance(depicted)
-          distances.append(distance)
-        else:
-          continue
-      if distances:
-        radius = distances.max()
+  with open(kml, "r") as f:
+    print(kml)
+    KML = parser.parse(f).getroot()
+  id = str(KML.PhotoOverlay.name)
+  tilt = KML.PhotoOverlay.Camera.tilt
+  df = pd.read_csv("https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-out/metadata.csv", index_col="id")
+  depicts = df.loc[id, "wikidata_depict"]
+  if depicts != np.nan:
+    depicts = depicts.split("||")
+    distances = []
+    for depict in depicts:
+      q = re.search("(?<=\/)Q\d+", depict).group(0)
+      point = str(query_wikidata(q))
+      if point:
+        latlng = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point)
+        lng = latlng.group(0)
+        lat = latlng.group(1)
+        depicted = reproject((float(lng), float(lat)))
+        origin = reproject((KML.PhotoOverlay.Camera.longitude, KML.PhotoOverlay.Camera.latitude))
+        distance = origin.distance(depicted)
+        distances.append(distance)
       else:
+        continue
+    if distances:
+      radius = distances.max()
+      print(radius)
+    else:
+      print("None")
+      return None
+  else:
+    if tilt <= 89:
+      tan = math.tan((tilt * math.pi) / 180)
+      radius = KML.PhotoOverlay.altitude * tan
+      if radius < 400:
+        print("None")
         return None
     else:
-      if tilt <= 89:
-        tan = math.tan((tilt * math.pi) / 180)
-        radius = KML.PhotoOverlay.altitude * tan
-        if radius < 400:
-          return None
-      else:
-        return None
-    return radius
+      print("None")
+      return None
+  print(radius)
+  return radius
 
 def draw_cone(kml, radius=400, steps=200):
 
@@ -142,12 +149,11 @@ def split_photooverlays(context, kmls, delete_original=False):
           photooverlays[-1] = re.sub("</Folder>\n</kml>", "",photooverlays[-1])
     for po in photooverlays:
         filename = find_with_re("name", po)
-        with open(os.path.join(os.path.dirname("kml_folder"), filename + ".kml"), "w") as k:
+        with open(os.path.join(path, filename + ".kml"), "w") as k:
             k.write(f"{header}\n{po}</kml>")
     if delete_original:
         os.remove(os.path.abspath(kml))
-
-  return [os.path.join(path, file) for file in os.listdir(path)]
+  return [os.path.join(path,file) for file in os.listdir(path) if os.path.isfile(os.path.join(path,file))]
   
 @dg.solid
 def change_img_href(context,kmls):
@@ -212,14 +218,17 @@ def create_geojson(context,kmls):
         "fov": abs(float(KML.PhotoOverlay.ViewVolume.leftFov)) + abs(float(KML.PhotoOverlay.ViewVolume.rightFov)),
     }
     radius = get_radius(kml)
+    print(radius)
     if radius:
       viewcone = draw_cone(kml, radius=radius)
     else:
       viewcone = draw_cone(kml)
-  
     features.append(geojson.Feature(geometry=viewcone, properties=properties))
 
   collection = geojson.FeatureCollection(features=features)
-
+  context.log.info(f"{collection}")
   return collection
 
+
+#kmls = [os.path.join("data-in", "kml",file) for file in os.listdir("data-in/kml") if os.path.isfile(os.path.join("data-in", "kml",file))]
+#dg.execute_solid(create_geojson, input_values={"kmls":kmls})

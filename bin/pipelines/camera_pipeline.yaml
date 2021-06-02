@@ -3,3 +3,7 @@ solids:
     config: "data-in/kml/raw"
   split_photooverlays:
     config: "data-in/kml"
+  merge_dfs:
+    inputs:
+      metadata:
+        path: 'data-out/metadata.csv'
