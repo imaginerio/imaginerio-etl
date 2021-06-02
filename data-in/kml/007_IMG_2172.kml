@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>007_IMG_2172</name>
+		<Camera>
+			<longitude>-43.17001810243421</longitude>
+			<latitude>-22.90511879292087</latitude>
+			<altitude>8.529449386427391</altitude>
+			<heading>35.08402738165766</heading>
+			<tilt>92.57080663212476</tilt>
+			<roll>3.632193446231336e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Estereoscopias-Ferrez/crop/007_IMG_2172.jpg</href>
+		</Icon>
+		<rotation>-1.91</rotation>
+		<ViewVolume>
+			<leftFov>-29.92</leftFov>
+			<rightFov>29.92</rightFov>
+			<bottomFov>-28.165</bottomFov>
+			<topFov>28.165</topFov>
+			<near>0.620607</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17001810243421,-22.90511879292087,8.529449386427391</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

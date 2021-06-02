@@ -1,0 +1,45 @@
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:ns1="http://www.google.com/kml/ext/2.2">
+<Folder>
+<PhotoOverlay>
+		<name>014avulsa</name>
+		<Camera>
+			<longitude>-43.1741158626572</longitude>
+			<latitude>-22.90118040107847</latitude>
+			<altitude>7.902921952573527</altitude>
+			<heading>-125.6357234563882</heading>
+			<tilt>94.97242746752768</tilt>
+			<roll>2.52128525188254e-08</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>https://images.imaginerio.org/iiif-img/014avulsa/full/^1200,/0/default.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-25.195</leftFov>
+			<rightFov>25.195</rightFov>
+			<bottomFov>-19.67</bottomFov>
+			<topFov>19.67</topFov>
+			<near>0.105</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.1741158626572,-22.90118040107847,7.902921952573527</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

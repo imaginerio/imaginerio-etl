@@ -1,0 +1,45 @@
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:ns1="http://www.google.com/kml/ext/2.2">
+<Folder>
+<PhotoOverlay>
+		<name>0072430cx030-04</name>
+		<Camera>
+			<longitude>-43.18946457116279</longitude>
+			<latitude>-22.90498098958041</latitude>
+			<altitude>1.78896517176115</altitude>
+			<heading>-91.43348098921366</heading>
+			<tilt>88.79080608949027</tilt>
+			<roll>5.291092542340315e-07</roll>
+			<ns1:altitudeMode>relativeToSeaFloor</ns1:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>https://images.imaginerio.org/iiif-img/0072430cx030-04/full/^1200,/0/default.jpg</href>
+		</Icon>
+		<ViewVolume>
+			<leftFov>-29.92</leftFov>
+			<rightFov>29.92</rightFov>
+			<bottomFov>-24.83</bottomFov>
+			<topFov>24.83</topFov>
+			<near>0.619876</near>
+		</ViewVolume>
+		<Point>
+			<ns1:altitudeMode>relativeToSeaFloor</ns1:altitudeMode>
+			<coordinates>-43.18946457116279,-22.90498098958041,1.78896517176115</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

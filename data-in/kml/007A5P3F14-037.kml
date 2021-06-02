@@ -1,0 +1,46 @@
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:ns1="http://www.google.com/kml/ext/2.2">
+<Folder>
+<PhotoOverlay>
+		<name>007A5P3F14-037</name>
+		<Camera>
+			<longitude>-43.18185004249759</longitude>
+			<latitude>-22.90668571382685</latitude>
+			<altitude>9.298842531246414</altitude>
+			<heading>-102.734991275651</heading>
+			<tilt>84.66208174687742</tilt>
+			<roll>1.065487488081486e-07</roll>
+			<ns1:altitudeMode>relativeToSeaFloor</ns1:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/007A5P3F14-037.jpg</href>
+		</Icon>
+		<rotation>1.31</rotation>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-19.32</bottomFov>
+			<topFov>19.32</topFov>
+			<near>3.22205</near>
+		</ViewVolume>
+		<Point>
+			<ns1:altitudeMode>relativeToSeaFloor</ns1:altitudeMode>
+			<coordinates>-43.18185004249759,-22.90668571382685,9.298842531246414</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>
