@@ -1,4 +1,5 @@
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:ns1="http://www.google.com/kml/ext/2.2">
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-07-25-Martim</name>
 	<open>1</open>
@@ -2552,11 +2553,11 @@
 	<PhotoOverlay>
 		<name>0071824cx036b-07</name>
 		<Camera>
-			<ns1:ViewerOptions>
-				<ns1:option enabled="0" name="historicalimagery" />
-				<ns1:option enabled="0" name="sunlight" />
-				<ns1:option name="streetview" />
-			</ns1:ViewerOptions>
+			<gx:ViewerOptions>
+				<gx:option enabled="0" name="historicalimagery" />
+				<gx:option enabled="0" name="sunlight" />
+				<gx:option name="streetview" />
+			</gx:ViewerOptions>
 			<longitude>-43.27781899999995</longitude>
 			<latitude>-22.95706000000004</latitude>
 			<altitude>478.7034397383509</altitude>

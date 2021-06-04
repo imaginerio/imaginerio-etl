@@ -1,4 +1,5 @@
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:ns1="http://www.google.com/kml/ext/2.2">
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Folder>
 	<name>2019-05-14-Martim</name>
 	<open>1</open>
@@ -53,7 +54,7 @@
 			<heading>-133.6833247771691</heading>
 			<tilt>87.70924830617338</tilt>
 			<roll>0.00055064394933988</roll>
-			<ns1:altitudeMode>relativeToSeaFloor</ns1:altitudeMode>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 		</Camera>
 		<Style>
 			<IconStyle>
@@ -82,7 +83,7 @@
 			<near>9.39139</near>
 		</ViewVolume>
 		<Point>
-			<ns1:altitudeMode>relativeToSeaFloor</ns1:altitudeMode>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
 			<coordinates>-43.17372734499988,-22.89599573999992,27.10358384315173</coordinates>
 		</Point>
 	</PhotoOverlay>
