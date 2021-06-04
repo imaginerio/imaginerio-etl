@@ -25,8 +25,9 @@ def find_with_re(property, kml):
 def reproject(coordinates):
     rj = Proj(init='EPSG:32722')
     origin = Point(coordinates)
-    origin_proj = rj(origin.y, origin.x)
-    return origin_proj
+    origin_proj = rj(origin.x,origin.y)
+    #print(f'x: {origin.x}, Y: {origin.y}')
+    return Point(origin_proj)
 
 def query_wikidata(Q):
   endpoint_url = "https://query.wikidata.org/sparql"
@@ -56,30 +57,31 @@ def query_wikidata(Q):
 
 def get_radius(kml):
   with open(kml, "r") as f:
-    print(kml)
+    #print(kml)
     KML = parser.parse(f).getroot()
   id = str(KML.PhotoOverlay.name)
   tilt = KML.PhotoOverlay.Camera.tilt
   df = pd.read_csv("https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-out/metadata.csv", index_col="id")
-  depicts = df.loc[id, "wikidata_depict"]
-  if depicts != np.nan:
+  depicts = df.loc[id, "wikidata_depict"]  
+  if isinstance(depicts, str):    
     depicts = depicts.split("||")
-    distances = []
+    distances = []    
     for depict in depicts:
       q = re.search("(?<=\/)Q\d+", depict).group(0)
       point = str(query_wikidata(q))
       if point:
         latlng = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point)
-        lng = latlng.group(0)
-        lat = latlng.group(1)
+        lng = latlng.group(1)
+        lat = latlng.group(2)
         depicted = reproject((float(lng), float(lat)))
         origin = reproject((KML.PhotoOverlay.Camera.longitude, KML.PhotoOverlay.Camera.latitude))
+        #print(f'origin : {origin}')
         distance = origin.distance(depicted)
         distances.append(distance)
       else:
         continue
     if distances:
-      radius = distances.max()
+      radius = max(distances)
       print(radius)
     else:
       print("None")
