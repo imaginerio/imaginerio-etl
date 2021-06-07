@@ -129,26 +129,26 @@ def dates_accuracy(context,df):
 
     #format date
     df["date"] = df["date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    df["start_date"] = df["start_date"].str.extract(
-        r"([\d\/-]*\d{4}[-\/\d]*)"
-    )
-    df["end_date"] = df["end_date"].str.extract(
-        r"([\d\/-]*\d{4}[-\/\d]*)"
-    )
-    df[["date", "start_date", "end_date"]] = df[
-        ["date", "start_date", "end_date"]
-    ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
+    df["start_date"] = df["start_date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    df["end_date"] = df["end_date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    df[["date", "start_date", "end_date"]] = df[["date", "start_date", "end_date"]].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
     #fill dates
-    df.loc[circa & startna, "start_date"] = df["date"] - pd.DateOffset(
-        years=5
-    )
-    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(
-        years=5
-    )
+    df.loc[circa & startna, "start_date"] = df["date"] - pd.DateOffset(years=5)
+    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(years=5)
     df.loc[startna, "start_date"] = df["date"]
     df.loc[endna, "end_date"] = df["date"]
 
+    # datetime to string according to date accuracy
+    df.loc[df["date_accuracy"] == "day", "date_created"] = df["date"].dt.strftime("%Y-%m-%d")
+    df.loc[df["date_accuracy"] == "month", "date_created"] = df["date"].dt.strftime("%Y-%m")
+    df.loc[df["date_accuracy"] == "year", "date_created"] = df["date"].dt.strftime("%Y")
+
+    df.loc[df["date_accuracy"] == "circa", "date_created"] = np.nan
+    df["start_date"] = df["start_date"].dt.strftime("%Y")
+    df["end_date"] = df["end_date"].dt.strftime("%Y")
+    df.loc[df["date_accuracy"] == "circa", "date_circa"] = (df["start_date"] + "/" + df["end_date"])   
+    df.loc[~(df["date_accuracy"] == "circa"), "date_circa"] = (df["start_date"] + "/" + df["end_date"])
     catalog_df = df
 
     return catalog_df

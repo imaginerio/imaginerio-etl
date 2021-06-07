@@ -38,41 +38,6 @@ def load_metadata(_,metadata):
     )
     return export_df
 
-
-@dg.solid
-def dates_accuracy_to_omeka(_,df):
-    """
-    Export omeka.csv
-    """
-
-    # read final dataframe
-    omeka_df = df.copy()
-
-    # datetime to string according to date accuracy
-    omeka_df.loc[omeka_df["date_accuracy"] == "day", "dcterms:created"] = omeka_df[
-        "date"
-    ].dt.strftime("%Y-%m-%d")
-    omeka_df.loc[omeka_df["date_accuracy"] == "month", "dcterms:created"] = omeka_df[
-        "date"
-    ].dt.strftime("%Y-%m")
-    omeka_df.loc[omeka_df["date_accuracy"] == "year", "dcterms:created"] = omeka_df[
-        "date"
-    ].dt.strftime("%Y")
-    # omeka_df.loc[omeka_df["date_accuracy"] == "circa", "dcterms:created"] = np.nan
-    omeka_df["start_date"] = omeka_df["start_date"].dt.strftime("%Y")
-    omeka_df["end_date"] = omeka_df["end_date"].dt.strftime("%Y")
-    omeka_df.loc[omeka_df["date_accuracy"] == "circa", "interval"] = (
-        omeka_df["start_date"] + "/" + omeka_df["end_date"]
-    )
-
-    #
-    omeka_df["dcterms:available"] = omeka_df["interval"]
-    omeka_df.loc[~(omeka_df["date_accuracy"] == "circa"), "dcterms:available"] = (
-        omeka_df["start_date"] + "/" + omeka_df["end_date"]
-    )
-
-    return omeka_df
-
 @dg.solid
 def organize_columns_to_omeka(_,df):
     # format data
@@ -89,7 +54,8 @@ def organize_columns_to_omeka(_,df):
     smapshot = pd.read_csv("data-out/smapshot.csv")
     include = omeka_df["id"].isin(smapshot["id"])
     omeka_df.loc[include, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
-
+    omeka_df["dcterms:available"] = df["date_circa"]
+    omeka_df.loc[~(df["date_accuracy"] == "circa"), "dcterms:available"] = (df["start_date"] + "/" + df["end_date"])
 
     # rename columns
     omeka_df = omeka_df.rename(
@@ -98,7 +64,8 @@ def organize_columns_to_omeka(_,df):
             "title": "dcterms:title",
             "description": "dcterms:description",
             "creator": "dcterms:creator",
-            "interval": "dcterms:temporal",
+            "date_created": "dcterms:created",
+            "date_circa": "dcterms:temporal",            
             "type": "dcterms:type",
             "image_width": "schema:width",
             "image_height": "schema:height",

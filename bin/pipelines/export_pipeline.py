@@ -15,12 +15,11 @@ def export_pipeline():
     export_df = load_metadata()
 
     #Import OMEKA
-    accuraced_dates = dates_accuracy_to_omeka(export_df)
-    omeka_organized = organize_columns_to_omeka(accuraced_dates)
+    omeka_organized = organize_columns_to_omeka(export_df)
     omeka_df = omeka_dataframe(df=omeka_organized)
 
     #import GIS
-    gis_df = organize_df_to_gis(export_df)
+    gis_df = organize_df_to_gis(expo*rt_df)
     feature_collection = create_featureCollection(gis_df)
 
     #import WIKIDATA

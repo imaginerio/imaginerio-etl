@@ -3,6 +3,10 @@ solids:
     config: "data-in/kml/raw"
   split_photooverlays:
     config: "data-in/kml"
+  create_geojson:
+    inputs:
+      metadata:
+        path: 'data-out/metadata.csv'
   merge_dfs:
     inputs:
       metadata:
