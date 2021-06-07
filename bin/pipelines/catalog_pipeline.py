@@ -18,5 +18,7 @@ def calatog_main():
 
 
 #CLI: dagit -f bin/pipelines/catalog_pipeline.py 
+#CLI: dagster pipeline execute -f bin/pipelines/catalog_pipeline.py -c bin/pipelines/catalog_pipeline.yaml
+
 
 

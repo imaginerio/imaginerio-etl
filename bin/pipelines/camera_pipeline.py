@@ -10,5 +10,5 @@ def camera_pipeline():
     kmls_splitteds=split_photooverlays(kmls)
     kmls_img_href = change_img_href(kmls_splitteds)
     kmls_altitude = correct_altitude_mode(kmls_img_href)
-    geojson = create_geojson(kmls_altitude)
+    geojson = create_geojson(kmls=kmls_altitude)
     merge_dfs(df=geojson)

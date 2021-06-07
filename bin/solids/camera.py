@@ -3,9 +3,10 @@ import os
 import re
 import sys
 from io import BytesIO
-
+import math
 import dagster as dg
 import geojson
+
 import geopandas as gpd
 import matplotlib._png as png
 import mercantile
@@ -23,7 +24,7 @@ def find_with_re(property, kml):
     return re.search(f"(?<=<{property}>).+(?=<\/{property}>)", kml).group(0)
 
 def reproject(coordinates):
-    rj = Proj(init='EPSG:32722')
+    rj = Proj('EPSG:32722')
     origin = Point(coordinates)
     origin_proj = rj(origin.x,origin.y)
     #print(f'x: {origin.x}, Y: {origin.y}')
@@ -65,38 +66,43 @@ def get_radius(kml):
   depicts = df.loc[id, "wikidata_depict"]  
   if isinstance(depicts, str):    
     depicts = depicts.split("||")
-    distances = []    
+    distances = []
+    points = []   
     for depict in depicts:
       q = re.search("(?<=\/)Q\d+", depict).group(0)
-      point = str(query_wikidata(q))
+      point = query_wikidata(q)
       if point:
-        latlng = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point)
-        lng = latlng.group(1)
-        lat = latlng.group(2)
+        points.append(point[0])
+      else:
+        continue
+      for point in points: 
+        #print(point)
+        lnglat = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point)    
+        lng = lnglat.group(1)
+        lat = lnglat.group(2)
         depicted = reproject((float(lng), float(lat)))
         origin = reproject((KML.PhotoOverlay.Camera.longitude, KML.PhotoOverlay.Camera.latitude))
         #print(f'origin : {origin}')
         distance = origin.distance(depicted)
         distances.append(distance)
-      else:
-        continue
+
     if distances:
       radius = max(distances)
-      print(radius)
+      #print(radius)
     else:
-      print("None")
+      #print("None")
       return None
   else:
     if tilt <= 89:
       tan = math.tan((tilt * math.pi) / 180)
-      radius = KML.PhotoOverlay.altitude * tan
+      radius = KML.PhotoOverlay.Camera.altitude * tan
       if radius < 400:
-        print("None")
+        #print("None")
         return None
     else:
-      print("None")
+      #print("None")
       return None
-  print(radius)
+  #print(radius)
   return radius
 
 def draw_cone(kml, radius=400, steps=200):
@@ -178,7 +184,7 @@ def correct_altitude_mode(context,kmls):
     for kml in kmls:
       with open(kml, "r+") as f:
           txt = f.read()
-          if re.search("(?<=<altitudeMode>)relative(.+)?(?=<\/altitudeMode>)", txt):
+          if re.search("(?<=altitudeMode>)relative(.+)?(?=\/altitudeMode>)", txt):
             lat = round(float(find_with_re("latitude", txt)), 5)
             lng = round(float(find_with_re("longitude", txt)), 5)
             alt = round(float(find_with_re("altitude", txt)), 5)
@@ -204,33 +210,55 @@ def correct_altitude_mode(context,kmls):
             continue
     return kmls
 
-@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="camera")])
-def create_geojson(context,kmls):
+@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="camera")], input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")] )
+def create_geojson(context, kmls, metadata):  
   features = []
-  for kml in kmls:
-    with open(kml, "r") as f:
-      KML = parser.parse(f).getroot()
-    properties = {
-        "id": KML.PhotoOverlay.name,
-        "lng": KML.PhotoOverlay.Camera.longitude,
-        "lat": KML.PhotoOverlay.Camera.latitude,
-        "height": KML.PhotoOverlay.Camera.altitude,
-        "heading": KML.PhotoOverlay.Camera.heading,
-        "tilt": KML.PhotoOverlay.Camera.tilt,
-        "fov": abs(float(KML.PhotoOverlay.ViewVolume.leftFov)) + abs(float(KML.PhotoOverlay.ViewVolume.rightFov)),
-    }
-    radius = get_radius(kml)
-    print(radius)
-    if radius:
-      viewcone = draw_cone(kml, radius=radius)
-    else:
-      viewcone = draw_cone(kml)
-    features.append(geojson.Feature(geometry=viewcone, properties=properties))
+  metadata = metadata.set_index("id")
+
+  for kml in kmls:    
+    try:    
+      with open(kml, "r") as f:   
+        KML = parser.parse(f).getroot()
+        Id = str(KML.PhotoOverlay.name) 
+        created = metadata.loc[Id, "date_created"]
+        circa = metadata.loc[Id, "date_circa"]
+        accurate = not isinstance(created, float)       
+      properties = {
+          "id": Id,
+          "title": "" if  isinstance((metadata.loc[Id,"title"]), float) else str(metadata.loc[Id,"title"]),
+          "description": "" if  isinstance((metadata.loc[Id,"description"]), float) else str(metadata.loc[Id,"description"]),
+          "creator": "" if  isinstance((metadata.loc[Id,"creator"]), float) else str(metadata.loc[Id,"creator"]),
+          "date": str(created) if accurate else str(circa),
+          #"date_created": "" if  isinstance((metadata.loc[Id,"date_created"]), float) else str(metadata.loc[Id,"date_created"]),
+          #"date_circa": "" if  isinstance((metadata.loc[Id,"date_circa"]), float) else str(metadata.loc[Id,"date_circa"]),
+          "fist_year": "" if  isinstance((metadata.loc[Id,"start_date"]), float) else str(metadata.loc[Id,"start_date"]),
+          "last_year": "" if  isinstance((metadata.loc[Id,"end_date"]), float) else str(metadata.loc[Id,"end_date"]),  
+          "source": "Instituto Moreira Salles",
+          "longitude": str(KML.PhotoOverlay.Camera.longitude),
+          "latitude": str(KML.PhotoOverlay.Camera.latitude),
+          "altitude": str(KML.PhotoOverlay.Camera.altitude),
+          "heading": str(KML.PhotoOverlay.Camera.heading),
+          "tilt": str(KML.PhotoOverlay.Camera.tilt),
+          "fov": str(abs(float(KML.PhotoOverlay.ViewVolume.leftFov)) + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))),
+      }
+      radius = get_radius(kml)
+      print(f'OK: {metadata.loc[Id,"description"]}')
+      if radius:
+        viewcone = draw_cone(kml, radius=radius)
+      else:
+        viewcone = draw_cone(kml)
+      features.append(geojson.Feature(geometry=viewcone, properties=properties))
+
+    except:
+      print (f'ERRO: {str(KML.PhotoOverlay.name)}')
+      continue
 
   collection = geojson.FeatureCollection(features=features)
-  context.log.info(f"{collection}")
+  #context.log.info(f"{collection}")
   return collection
-
 
 #kmls = [os.path.join("data-in", "kml",file) for file in os.listdir("data-in/kml") if os.path.isfile(os.path.join("data-in", "kml",file))]
 #dg.execute_solid(create_geojson, input_values={"kmls":kmls})
+
+#CLI: dagit -f bin/pipelines/camera_pipeline.py 
+#CLI: dagster pipeline execute -f bin/pipelines/camera_pipeline.py -c bin/pipelines/camera_pipeline.yaml

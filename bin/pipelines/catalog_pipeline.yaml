@@ -2,7 +2,7 @@ solids:
   xml_to_df:
     inputs:
       root:
-        path: '/mnt/y/getty/cumulus.xml'
+        path: 'data-in/cumulus.xml'
   merge_dfs:
     inputs:
        metadata:

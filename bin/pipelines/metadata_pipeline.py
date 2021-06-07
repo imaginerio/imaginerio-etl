@@ -38,3 +38,4 @@ def metadata_pipeline():
 
 
 #CLI dagit -f  bin/pipelines/metadata_pipeline.py
+#CLI dagster pipeline execute -f bin/pipelines/metadata_pipeline.py -c bin/pipelines/metadata_pipeline.yaml
