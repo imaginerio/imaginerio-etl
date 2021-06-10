@@ -112,15 +112,26 @@ def creators_list(context,df):
 
     return listed_creators
 
+@dg.solid # extract dimensions
+def extract_dimensions(context,df):
+    dimensions = df["dimensions"].str.extract(
+        r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
+    )
+    df["image_width"] = dimensions["width"]
+    df["image_height"] = dimensions["height"]
 
-@dg.solid # check dates accuracy
+    catalog = df
+   
+
+    return catalog
+
+@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="catalog")])
 def dates_accuracy(context,df):
-    circa = df["date"].str.contains(r"[a-z]", na=False,)
+    circa = df["date"].str.contains(r"[a-z]", na=False)
     year = df["date"].str.count(r"[\/-]") == 0
     month = df["date"].str.count(r"[\/-]") == 1
     day = df["date"].str.count(r"[\/-]") == 2
-    startna = df["start_date"].isna()
-    endna = df["end_date"].isna()
+    
 
     df.loc[year, "date_accuracy"] = "year"
     df.loc[month, "date_accuracy"] = "month"
@@ -134,8 +145,12 @@ def dates_accuracy(context,df):
     df[["date", "start_date", "end_date"]] = df[["date", "start_date", "end_date"]].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
     #fill dates
+    circa = df["date_accuracy"] == "circa"
+    startna = df["start_date"].isna()
+    endna = df["end_date"].isna()
+
     df.loc[circa & startna, "start_date"] = df["date"] - pd.DateOffset(years=5)
-    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(years=5)
+    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(years=5)    
     df.loc[startna, "start_date"] = df["date"]
     df.loc[endna, "end_date"] = df["date"]
 
@@ -143,26 +158,15 @@ def dates_accuracy(context,df):
     df.loc[df["date_accuracy"] == "day", "date_created"] = df["date"].dt.strftime("%Y-%m-%d")
     df.loc[df["date_accuracy"] == "month", "date_created"] = df["date"].dt.strftime("%Y-%m")
     df.loc[df["date_accuracy"] == "year", "date_created"] = df["date"].dt.strftime("%Y")
-
-    df.loc[df["date_accuracy"] == "circa", "date_created"] = np.nan
+    
     df["start_date"] = df["start_date"].dt.strftime("%Y")
     df["end_date"] = df["end_date"].dt.strftime("%Y")
     df.loc[df["date_accuracy"] == "circa", "date_circa"] = (df["start_date"] + "/" + df["end_date"])   
-    df.loc[~(df["date_accuracy"] == "circa"), "date_circa"] = (df["start_date"] + "/" + df["end_date"])
-    catalog_df = df
 
-    return catalog_df
+    df.loc[df["date_accuracy"] == "circa", "date_circa"] = (df["start_date"] + "/" + df["end_date"])
+    
+    catalog.name="catalog"       
+
+    return df
 
   
-@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="catalog")]) # extract dimensions
-def extract_dimensions(context,df):
-    dimensions = df["dimensions"].str.extract(
-        r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
-    )
-    df["image_width"] = dimensions["width"]
-    df["image_height"] = dimensions["height"]
-
-    catalog = df
-    catalog.name="catalog"
-
-    return catalog

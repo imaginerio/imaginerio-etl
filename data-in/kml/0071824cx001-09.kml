@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>0071824cx001-09</name>
+		<Camera>
+			<longitude>-43.13492486663755</longitude>
+			<latitude>-22.93794070564669</latitude>
+			<altitude>26.36320442196302</altitude>
+			<heading>-115.5783553018278</heading>
+			<tilt>89.97231138604694</tilt>
+			<roll>0.002123955809669519</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>W:/USUARIOS/MARTIM/resize/0071824cx001-09.jpg</href>
+		</Icon>
+		<rotation>0.39</rotation>
+		<ViewVolume>
+			<leftFov>-21.045</leftFov>
+			<rightFov>21.045</rightFov>
+			<bottomFov>-16.12</bottomFov>
+			<topFov>16.12</topFov>
+			<near>3.93076</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.13492486663755,-22.93794070564669,26.36320442196302</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>0071824cx017a-02</name>
+		<Camera>
+			<longitude>-43.2099666786245</longitude>
+			<latitude>-22.95184666616817</latitude>
+			<altitude>660.7395108134676</altitude>
+			<heading>88.29829494096217</heading>
+			<tilt>85.43088121528115</tilt>
+			<roll>-2.860908935976433e-012</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/0071824cx017a-02.jpg</href>
+		</Icon>
+		<rotation>-3.35</rotation>
+		<ViewVolume>
+			<leftFov>-31.9127</leftFov>
+			<rightFov>31.9127</rightFov>
+			<bottomFov>-25.07</bottomFov>
+			<topFov>25.07</topFov>
+			<near>66.1107</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.2099666786245,-22.95184666616817,660.7395108134676</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

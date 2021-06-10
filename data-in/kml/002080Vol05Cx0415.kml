@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>002080Vol05Cx0415</name>
+		<Camera>
+			<longitude>-43.18688800241974</longitude>
+			<latitude>-22.97538760577793</latitude>
+			<altitude>8.287207124694058</altitude>
+			<heading>33.84591770247081</heading>
+			<tilt>95.05543952768896</tilt>
+			<roll>6.810493114425696e-009</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-in/jpeg-sd/Estereoscopias-Guilherme-Santos/crop/002080Vol05Cx0415.jpg</href>
+		</Icon>
+		<rotation>-0.67</rotation>
+		<ViewVolume>
+			<leftFov>-20</leftFov>
+			<rightFov>20</rightFov>
+			<bottomFov>-20</bottomFov>
+			<topFov>20</topFov>
+			<near>0.595482</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18688800241974,-22.97538760577793,8.287207124694058</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>
