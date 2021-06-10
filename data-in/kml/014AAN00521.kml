@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>014AAN00521</name>
+		<Camera>
+			<longitude>-43.17964804545689</longitude>
+			<latitude>-22.96734168160514</latitude>
+			<altitude>8.752384653052202</altitude>
+			<heading>-174.6552843878748</heading>
+			<tilt>90.70073880695134</tilt>
+			<roll>-1.132277466601012e-12</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/a092701/Documents/geolocation/geolocated/014AAN00521.jpg</href>
+		</Icon>
+		<rotation>1.05</rotation>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-19.205</bottomFov>
+			<topFov>19.205</topFov>
+			<near>1.23045</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17964804545689,-22.96734168160514,8.752384653052202</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

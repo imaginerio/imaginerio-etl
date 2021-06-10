@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>002086AMF01</name>
+		<Camera>
+			<longitude>-43.1825188401857</longitude>
+			<latitude>-22.90685966270284</latitude>
+			<altitude>2.337628144213611</altitude>
+			<heading>-103.5223851427851</heading>
+			<tilt>99.34003238311274</tilt>
+			<roll>4.14519282364969e-08</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>Y:/USUARIOS/MARTIM/resize/002086AMF01.jpg</href>
+		</Icon>
+		<rotation>0.96</rotation>
+		<ViewVolume>
+			<leftFov>-17.5</leftFov>
+			<rightFov>17.5</rightFov>
+			<bottomFov>-23.795</bottomFov>
+			<topFov>23.795</topFov>
+			<near>0.286539</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.1825188401857,-22.90685966270284,2.337628144213611</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

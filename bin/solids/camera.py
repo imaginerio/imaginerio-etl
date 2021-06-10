@@ -23,13 +23,14 @@ from SPARQLWrapper import JSON, SPARQLWrapper
 def find_with_re(property, kml):
     return re.search(f"(?<=<{property}>).+(?=<\/{property}>)", kml).group(0)
 
-def reproject(coordinates):
-    rj = Proj('EPSG:32722')
+def reproject(coordinates,inverse=False):
+    rj = Proj('EPSG:32722') 
     origin = Point(coordinates)
-    origin_proj = rj(origin.x,origin.y)
+    origin_proj = rj(origin.x,origin.y,inverse=inverse)
     #print(f'x: {origin.x}, Y: {origin.y}')
     return Point(origin_proj)
-
+      
+          
 def query_wikidata(Q):
   endpoint_url = "https://query.wikidata.org/sparql"
 
@@ -126,12 +127,12 @@ def draw_cone(kml, radius=400, steps=200):
     step_angle_width = (end_angle-start_angle) / steps
     sector_width = (end_angle-start_angle) 
     segment_vertices = []
-    segment_vertices.append(polar_point(center, 0,0))
-    segment_vertices.append(polar_point(center, start_angle,radius))
+    segment_vertices.append(reproject(polar_point(center, 0,0), inverse = True))
+    segment_vertices.append(reproject(polar_point(center, start_angle,radius), inverse = True))
     for z in range(1, steps):
-        segment_vertices.append((polar_point(center, start_angle + z * step_angle_width,radius)))
-    segment_vertices.append(polar_point(center, start_angle+sector_width,radius))
-    segment_vertices.append(polar_point(center, 0,0))
+        segment_vertices.append((reproject(polar_point(center, start_angle + z * step_angle_width,radius), inverse = True)))
+    segment_vertices.append(reproject(polar_point(center, start_angle+sector_width,radius), inverse = True))
+    segment_vertices.append(reproject(polar_point(center, 0,0), inverse = True))
 
     return Polygon(segment_vertices)
 
@@ -213,48 +214,57 @@ def correct_altitude_mode(context,kmls):
 @dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="camera")], input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")] )
 def create_geojson(context, kmls, metadata):  
   features = []
-  metadata = metadata.set_index("id")
+  not_on_geojson = []  
+  metadata['upper_ids'] = metadata['id'].str.upper()
+  metadata = metadata.set_index("upper_ids")  
 
   for kml in kmls:    
-    try:    
-      with open(kml, "r") as f:   
-        KML = parser.parse(f).getroot()
-        Id = str(KML.PhotoOverlay.name) 
+    try:           
+      with open(kml, "r") as f:
+        KML = parser.parse(f).getroot() 
+        Id = (str(KML.PhotoOverlay.name)).upper()
         created = metadata.loc[Id, "date_created"]
-        circa = metadata.loc[Id, "date_circa"]
-        accurate = not isinstance(created, float)       
-      properties = {
-          "id": Id,
-          "title": "" if  isinstance((metadata.loc[Id,"title"]), float) else str(metadata.loc[Id,"title"]),
-          "description": "" if  isinstance((metadata.loc[Id,"description"]), float) else str(metadata.loc[Id,"description"]),
-          "creator": "" if  isinstance((metadata.loc[Id,"creator"]), float) else str(metadata.loc[Id,"creator"]),
-          "date": str(created) if accurate else str(circa),
-          #"date_created": "" if  isinstance((metadata.loc[Id,"date_created"]), float) else str(metadata.loc[Id,"date_created"]),
-          #"date_circa": "" if  isinstance((metadata.loc[Id,"date_circa"]), float) else str(metadata.loc[Id,"date_circa"]),
-          "fist_year": "" if  isinstance((metadata.loc[Id,"start_date"]), float) else str(metadata.loc[Id,"start_date"]),
-          "last_year": "" if  isinstance((metadata.loc[Id,"end_date"]), float) else str(metadata.loc[Id,"end_date"]),  
-          "source": "Instituto Moreira Salles",
-          "longitude": str(KML.PhotoOverlay.Camera.longitude),
-          "latitude": str(KML.PhotoOverlay.Camera.latitude),
-          "altitude": str(KML.PhotoOverlay.Camera.altitude),
-          "heading": str(KML.PhotoOverlay.Camera.heading),
-          "tilt": str(KML.PhotoOverlay.Camera.tilt),
-          "fov": str(abs(float(KML.PhotoOverlay.ViewVolume.leftFov)) + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))),
-      }
-      radius = get_radius(kml)
-      print(f'OK: {metadata.loc[Id,"description"]}')
-      if radius:
-        viewcone = draw_cone(kml, radius=radius)
-      else:
-        viewcone = draw_cone(kml)
-      features.append(geojson.Feature(geometry=viewcone, properties=properties))
+        circa = "" if pd.isna(metadata.loc[Id, "date_circa"]) else str(metadata.loc[Id, "date_circa"])
+        accurate = pd.notna(metadata.loc[Id, "date_created"])      
+        properties = {
+            "id": metadata.loc[Id, "id"],
+            "title": "" if pd.isna(metadata.loc[Id,"title"]) else str(metadata.loc[Id,"title"]),
+            "description": "" if  pd.isna(metadata.loc[Id,"description"])  else str(metadata.loc[Id,"description"]),
+            "creator": "" if  pd.isna(metadata.loc[Id,"creator"])  else str(metadata.loc[Id,"creator"]),
+            #"date": str(created) if accurate else str(circa),
+            #"date_created": "" if  pd.isna(metadata.loc[Id,"date_created"]) else str(metadata.loc[Id,"date_created"]),
+            #"date_circa": "" if pd.isna(metadata.loc[Id,"date_created"]) else str(metadata.loc[Id,"date_created"]),
+            "first_year": "" if  pd.isna(metadata.loc[Id,"start_date"]) else str(int(metadata.loc[Id,"start_date"])),
+            "last_year": "" if  pd.isna(metadata.loc[Id,"end_date"]) else str(int(metadata.loc[Id,"end_date"])),  
+            "source": "Instituto Moreira Salles",
+            "longitude": str(KML.PhotoOverlay.Camera.longitude),
+            "latitude": str(KML.PhotoOverlay.Camera.latitude),
+            "altitude": str(KML.PhotoOverlay.Camera.altitude),
+            "heading": str(KML.PhotoOverlay.Camera.heading),
+            "tilt": str(KML.PhotoOverlay.Camera.tilt),
+            "fov": str(abs(float(KML.PhotoOverlay.ViewVolume.leftFov)) + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))),
+        }
 
-    except:
-      print (f'ERRO: {str(KML.PhotoOverlay.name)}')
-      continue
+        if accurate:              
+          properties["date_created"] = created
+        else:
+          properties["date_circa"] = circa
+        
+        radius = get_radius(kml)
+        print(f'OK: {Id}')
+        if radius:
+          viewcone = draw_cone(kml, radius=radius)
+        else:
+          viewcone = draw_cone(kml)
+        features.append(geojson.Feature(geometry=viewcone, properties=properties))
+    
+    except Exception as E :      
+      not_on_geojson.append(Id)
+      print(f'ERROR: {E} no ID: {Id}')          
 
   collection = geojson.FeatureCollection(features=features)
   #context.log.info(f"{collection}")
+  print(not_on_geojson)
   return collection
 
 #kmls = [os.path.join("data-in", "kml",file) for file in os.listdir("data-in/kml") if os.path.isfile(os.path.join("data-in", "kml",file))]
