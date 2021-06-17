@@ -1,6 +1,6 @@
 solids:
   file_picker:
-    config: "/mnt/y/getty"
+    config: "/mnt/y/projetos/getty"
     inputs:
       camera:
         path: "data-out/camera.csv"
