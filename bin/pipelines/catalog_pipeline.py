@@ -8,8 +8,12 @@ from bin.solids.utils import (df_csv_io_manager, merge_dfs, root_input,
 
 
 @dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"pandas_csv":df_csv_io_manager,  "metadata_root":root_input, "xml": root_input_xml})])
+<<<<<<< HEAD
 def calatog_main():
 
+=======
+def catalog_pipeline(): 
+>>>>>>> feature/dagster-sensors
     catalog_df = xml_to_df()
     catalog_df = organize_columns(catalog_df)
     catalog_df = extract_dimensions(catalog_df)    
