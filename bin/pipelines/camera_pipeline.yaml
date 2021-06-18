@@ -7,7 +7,7 @@ solids:
     inputs:
       metadata:
         path: 'data-out/metadata.csv'
-  merge_dfs:
+  update_metadata:
     inputs:
       metadata:
         path: 'data-out/metadata.csv'

@@ -1,13 +1,13 @@
 solids:
-  merge_dfs:
+  update_metadata:
     inputs:
       metadata:
         path: 'data-out/metadata.csv'
-  merge_dfs_2:
+  update_metadata_2:
     inputs:
       metadata:
         path: 'data-out/metadata.csv'
-  merge_dfs_3:
+  update_metadata_3:
     inputs:
       metadata:
         path: 'data-out/metadata.csv'        

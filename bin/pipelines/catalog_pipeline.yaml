@@ -3,7 +3,7 @@ solids:
     inputs:
       root:
         path: 'data-in/cumulus.xml'
-  merge_dfs:
+  update_metadata:
     inputs:
        metadata:
        path: 'data-out/metadata.csv'
