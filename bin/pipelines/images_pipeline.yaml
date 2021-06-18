@@ -12,7 +12,7 @@ solids:
       backlog: "/mnt/d/imagineRio-images/jpeg-sd/backlog"
   create_images_df:
     config: "https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/"
-  merge_dfs:
+  update_metadata:
     inputs:
       metadata:
         path: "data-out/metadata.csv"

@@ -60,8 +60,7 @@ def rename_column(context,df,dic):
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")]    
 )
-def update_metadata(_,df,metadata):
-    metadata = metadata.combine_first(df)
+def update_metadata(_,df,metadata):    
     metadata = metadata.update(df)
     return metadata
 
