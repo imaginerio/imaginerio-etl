@@ -73,8 +73,6 @@ def organize_columns_to_omeka(_,df):
             "citation": "dcterms:bibliographicCitation",
             "portals_url": "dcterms:source",
             "wikidata_id": "dcterms:hasVersion",
-            "lat": "latitude",
-            "lng": "longitude",
             "geometry": "schema:polygon",
             "wikidata_depict": "foaf:depicts",
             "img_hd": "media",
@@ -117,53 +115,6 @@ def import_omeka_dataframe(_,df,jstor):
     # append JSTOR migration    
     omeka_df = df.append(jstor)
     return omeka_df
-
-@dg.solid 
-def organize_df_to_gis(_,df):
-    """
-    Export gis.csv
-    """
-
-    gis_df = df.copy()
-
-    # rename columns
-    gis_df = gis_df.rename(
-        columns={"start_date": "first_year", "end_date": "last_year"}
-    )
-
-    # select columns
-    gis_df = gis_df[["id", "first_year", "last_year", "geometry"]]
-
-    # date formatting
-    gis_df["first_year"] = gis_df["first_year"].dt.strftime("%Y")
-    gis_df["last_year"] = gis_df["last_year"].dt.strftime("%Y")
-
-    return gis_df
-
-@solid(output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="import_gis")])
-def create_featureCollection(_,df):
-    # to geojson
-    feature_list = []
-    gis_df = df
-
-    for _, row in gis_df.iterrows():
-        wkt_string = row["geometry"]
-        geojson_string = wkt.loads(wkt_string)
-        feature = geojson.Feature(
-            id=row["id"],
-            geometry=geojson_string,
-            properties={
-                "id": row["id"],
-                "first_year": row["first_year"],
-                "last_year": row["last_year"],
-            },
-        )
-        feature_list.append(feature)
-
-    feature_collection = geojson.FeatureCollection(feature_list)
-   
-
-    return feature_collection
 
 
 @dg.solid

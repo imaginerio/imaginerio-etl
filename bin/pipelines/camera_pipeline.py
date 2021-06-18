@@ -3,7 +3,8 @@ import dagster as dg
 from bin.solids.utils import *
 from bin.solids.camera import *
 
-@dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"geojson":geojson_io_manager, "pandas_csv":df_csv_io_manager, "metadata_root":root_input})])
+
+@dg.pipeline(mode_defs =[dg.ModeDefinition(resource_defs={"geojson":geojson_io_manager, "pandas_csv":df_csv_io_manager, "metadata_root":root_input_csv)])
 def camera_pipeline():
 
     kmls = get_list()

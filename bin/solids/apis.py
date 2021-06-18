@@ -192,7 +192,8 @@ def query_portals(context):
    
 @dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_portals")])
 def portals_dataframe(context,results):      
-    if isinstance(results, pd.DataFrame):        
+    if isinstance(results, pd.DataFrame):
+        prefix = context.solid_config['url']        
         dataframe = pd.DataFrame()
         dataframe = dataframe.append(results, ignore_index=True)
         dataframe = dataframe.rename(
@@ -209,7 +210,7 @@ def portals_dataframe(context,results):
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 
-        dataframe["portals_url"] = (os.environ["PORTALS_PREFIX"] + dataframe["portals_id"])
+        dataframe["portals_url"] = (prefix + dataframe["portals_id"])
 
         dataframe = dataframe[
             [
