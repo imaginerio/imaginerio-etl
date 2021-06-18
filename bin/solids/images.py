@@ -177,8 +177,8 @@ def write_metadata(context, metadata, files_to_tag):
                 f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
             )
             keywords = metadata.loc[name, "wikidata_depict"].split("||")
-            latitude = metadata.loc[name, "lat"]
-            longitude = metadata.loc[name, "lng"]
+            latitude = metadata.loc[name, "latitude"]
+            longitude = metadata.loc[name, "longitude"]
             altitude = metadata.loc[name, "height"]
             imgdirection = metadata.loc[name, "heading"]
 

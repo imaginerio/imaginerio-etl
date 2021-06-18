@@ -10,6 +10,6 @@ solids:
       portals: 
         path: "data-out/api_portals.csv"
       camera: 
-        path: "data-out/camera.csv"
+        path: "data-out/camera.geojson"
       images: 
         path: "data-out/images.csv"

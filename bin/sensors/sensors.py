@@ -39,40 +39,34 @@ def trigger_catalog(context):
     context.update_cursor(str(max_mtime))
 
 
-@dg.sensor(solid_selection = merge_df, query_omeka, omeka_dataframe])
+@dg.sensor(pipeline_name="apis_pipeline", solid_selection = merge_df, query_omeka, omeka_dataframe])
 def trigger_api_omeka(context):
     api_omeka = 'data-out/api_omeka.csv'
     now = datetime.now().strftime("%d/%m/%Y%H%M%S")
 
-    if not os.path.exists (api_omeka):        
-		run_key = f"api_omeka_{now}"
-        yield dg.RunRequest(run_key=run_key
-        )   
+    if not os.path.exists (api_omeka):
+        run_key = f"api_omeka_{now}"
+        yield dg.RunRequest(run_key=run_key])   
 
 
-@dg.sensor(solid_selection = merge_df, query_wikidata, wikidata_dataframe])
+@dg.sensor(pipeline_name="apis_pipeline", solid_selection = merge_df, query_wikidata, wikidata_dataframe])
 def trigger_api_wikidata(context):
     api_wikidata = 'data-out/api_wikidata.csv'
     now = datetime.now().strftime("%d/%m/%Y%H%M%S")
 
-    if not os.path.exists (api_wikidata):        
-		run_key = f"api_wikidata_{now}"
+    if not os.path.exists (api_wikidata):
+        run_key = f"api_wikidata_{now}"
         yield dg.RunRequest(run_key=run_key)
 
 
-@dg.sensor(solid_selection = merge_df, query_portals, portals_dataframe])
+@dg.sensor(pipeline_name="apis_pipeline", solid_selection = merge_df, query_portals, portals_dataframe])
 def trigger_api_portals(context):    
     api_portals = 'data-out/api_portals.csv    
     now = datetime.now().strftime("%d/%m/%Y%H%M%S")
     
-    if not os.path.exists (api_portals):        
-		run_key = f"api_portals_{now}"
+    if not os.path.exists (api_portals):
+        run_key = f"api_portals_{now}"
         yield dg.RunRequest(run_key=run_key)
-
-
-@dg.sensor
-def trigger_images(context):
-
 
 
 @dg.sensor
@@ -98,4 +92,4 @@ def trigger_metadata(context):
     if not os.path.exists(metadata):
         now = datetime.now().strftime("%d/%m/%Y%H%M%S")
         run_key = f"metadata_{now}"
-            yield dg.RunRequest(run_key=run_key)
+        yield dg.RunRequest(run_key=run_key)
