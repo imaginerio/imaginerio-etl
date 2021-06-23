@@ -14,14 +14,14 @@ from tqdm import tqdm
 from urllib3.util import Retry
 
 
-#OMEKA   
-@dg.solid
+# OMEKA
+@dg.solid(config_schema=dg.StringSource)
 def query_omeka(context):
-    endpoint = context.solid_config['url']  
+    endpoint = context.solid_config
 
-    try:  
+    try:
         # start session
-        
+
         retry_strategy = Retry(
             total=3,
             status_forcelist=[429, 500, 502, 503, 504],
@@ -53,12 +53,14 @@ def query_omeka(context):
 
     except Exception as e:
         context.log.info(e)
-        return None    
-          
+        return None
 
-@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_omeka")])
-def omeka_dataframe(context,results):
-    if results == None :        
+
+@dg.solid(
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_omeka")]
+)
+def omeka_dataframe(context, results):
+    if results == None:
         context.log.info("Couldn't update")
         return None
 
@@ -69,15 +71,16 @@ def omeka_dataframe(context,results):
         if len(omeka_duplicated) > 0:
             omeka_duplicated.to_csv("data-out/duplicated-omeka.csv")
         omeka_df.drop_duplicates(subset="id", inplace=True)
-        #omeka_df.to_csv(os.environ["OMEKA"])
+        # omeka_df.to_csv(os.environ["OMEKA"])
 
         return omeka_df
 
-#WIKIDATA
-@dg.solid
-def query_wikidata(context):    
-    endpoint = context.solid_config['url']
-    
+
+# WIKIDATA
+@dg.solid(config_schema=dg.StringSource)
+def query_wikidata(context):
+    endpoint = context.solid_config
+
     query = None
     if query == None:
         query = """SELECT DISTINCT (?inventoryNumber as ?id) (?item as ?wikidata_id) (?imsid as ?wikidata_ims_id) (?image as ?wikidata_image) ?depict ?depictLabel
@@ -104,18 +107,20 @@ def query_wikidata(context):
         http.mount("https://", adapter)
         http.mount("http://", adapter)
 
-        response = http.get(endpoint, params={"format": "json", "query": query})       
+        response = http.get(endpoint, params={"format": "json", "query": query})
         data = response.json()
         return data
 
     except Exception as e:
         context.log.info(e)
-        return None    
-   
+        return None
 
-@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_wikidata")])
+
+@dg.solid(
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_wikidata")]
+)
 def wikidata_dataframe(context, results):
-    if results == None :        
+    if results == None:
         context.log.info("Couldn't update")
         return None
 
@@ -152,10 +157,11 @@ def wikidata_dataframe(context, results):
 
         return wikidata_df
 
-#PORTALS
-@dg.solid
+
+# PORTALS
+@dg.solid(config_schema=dg.StringSource)
 def query_portals(context):
-    endpoint = context.solid_config['url'] 
+    endpoint = context.solid_config
     try:
         retry_strategy = Retry(
             total=3,
@@ -181,19 +187,22 @@ def query_portals(context):
             params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
             response = http.post(endpoint, params=params)
             data = response.json()
-            results = pd.json_normalize(data["items"])           
+            results = pd.json_normalize(data["items"])
 
         return results
 
     except Exception as e:
         context.log.info(e)
-        return None 
+        return None
 
-   
-@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_portals")])
-def portals_dataframe(context,results):      
+
+@dg.solid(
+    config_schema=dg.StringSource,
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_portals")],
+)
+def portals_dataframe(context, results):
     if isinstance(results, pd.DataFrame):
-        prefix = context.solid_config['url']        
+        prefix = context.solid_config
         dataframe = pd.DataFrame()
         dataframe = dataframe.append(results, ignore_index=True)
         dataframe = dataframe.rename(
@@ -210,7 +219,7 @@ def portals_dataframe(context,results):
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 
-        dataframe["portals_url"] = (prefix + dataframe["portals_id"])
+        dataframe["portals_url"] = prefix + dataframe["portals_id"]
 
         dataframe = dataframe[
             [
@@ -220,20 +229,10 @@ def portals_dataframe(context,results):
             ]
         ]
 
-        dataframe = dataframe.drop_duplicates(subset="id")        
+        dataframe = dataframe.drop_duplicates(subset="id")
 
-        return dataframe  
+        return dataframe
 
     else:
         context.log.info("Couldn't update")
         return None
-        
-
-        
-
-    
-
-   
-
-
-
