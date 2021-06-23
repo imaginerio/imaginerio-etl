@@ -6,7 +6,6 @@ from bin.pipelines.export_pipeline import *
 from bin.pipelines.metadata_pipeline import *
 from bin.pipelines.images_pipeline import *
 from bin.pipelines.camera_pipeline import *
-from bin.schedules.daily import daily
 
 
 @dg.repository

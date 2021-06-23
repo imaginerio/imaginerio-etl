@@ -5,24 +5,16 @@
 
 
 ```bash
-# set PWD variable (Windows users only):
-$ $env:PWD=$PWD
 
-# up!
-$ docker-compose up -d --build
+# Launch Dagit for monitoring pipelines, sensors and schedules
+dagit
 
-# update images
-$ docker-compose run app modules/update_images.py
+# Launch daemon
+dagster-daemon run
 
-# update metadata (requires moving tiles and index.html after running)
-$ docker-compose run app modules/update_data.py
+# Force pipeline execution
+dagster pipeline execute -f some_pipeline.py --preset some_preset
 
-# kml parser
-# npm run kml (TO-DO: CHANGE TO CONES.PY FROM CONES BRANCH)
-
-# down!
-$ docker-compose down
-
-# introduces the dagster to the project
-
+# Test sensor 
+dagster sensor preview my_sensor_name
 ```

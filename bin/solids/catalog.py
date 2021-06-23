@@ -8,7 +8,10 @@ import pandas as pd
 
 
 # solids catalog
-@dg.solid(input_defs=[dg.InputDefinition("root", root_manager_key="xml")])
+@dg.solid(
+    config_schema=dg.StringSource,
+    input_defs=[dg.InputDefinition("root", root_manager_key="xml")],
+)
 def xml_to_df(context, root):
     # Find the uids
 

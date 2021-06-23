@@ -21,10 +21,7 @@ load_dotenv(override=True)
 
 
 preset = {
-    "solids": {
-        "xml_to_df": {"inputs": {"root": {"path": "data-in/cumulus.xml"}}},
-        "update_metadata": {"inputs": {"metadata": {"path": "data-out/metadata.csv"}}},
-    },
+    "solids": {"xml_to_df": {"config": {"env": "CUMULUS_XML"}}},
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
 
@@ -32,13 +29,21 @@ preset = {
 @dg.pipeline(
     mode_defs=[
         dg.ModeDefinition(
+            name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": root_input_csv,
                 "xml": root_input_xml,
-            }
+            },
         )
-    ]
+    ],
+    preset_defs=[
+        dg.PresetDefinition(
+            "default",
+            run_config=preset,
+            mode="default",
+        )
+    ],
 )
 def catalog_pipeline():
     catalog_df = xml_to_df()
@@ -73,3 +78,4 @@ def catalog_pipeline():
 
 # CLI: dagit -f bin/pipelines/catalog_pipeline.py
 # CLI: dagster pipeline execute -f bin/pipelines/catalog_pipeline.py -c bin/pipelines/catalog_pipeline.yaml
+# CLI: dagster pipeline execute -f bin/pipelines/catalog_pipeline.py --preset default

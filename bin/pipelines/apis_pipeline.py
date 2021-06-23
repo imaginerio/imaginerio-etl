@@ -1,16 +1,7 @@
 import os
 import dagster as dg
 from datetime import datetime
-
 from dotenv import load_dotenv
-
-load_dotenv(override=True)
-
-METADATA = os.environ["METADATA"]
-OMEKA_API = os.environ["OMEKA_API"]
-PORTALS_API = os.environ["PORTALS_API"]
-PORTALS_API = os.environ["PORTALS_API"]
-PORTALS_PREFIX = os.environ["PORTALS_PREFIX"]
 
 
 from bin.solids.utils import (
@@ -27,8 +18,9 @@ from bin.solids.apis import (
     wikidata_dataframe,
 )
 
+load_dotenv(override=True)
 
-preset_apis = {
+preset = {
     "solids": {
         "query_omeka": {"config": {"env": "OMEKA_API"}},
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
@@ -38,11 +30,13 @@ preset_apis = {
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
 
+################   PIPELINE   ##################
+
 
 @dg.pipeline(
     mode_defs=[
         dg.ModeDefinition(
-            name="one",
+            name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": root_input_csv,
@@ -51,10 +45,10 @@ preset_apis = {
     ],
     preset_defs=[
         dg.PresetDefinition(
-            "one",
-            run_config=preset_apis,
-            mode="one",
-        ),
+            "default",
+            run_config=preset,
+            mode="default",
+        )
     ],
 )
 def apis_pipeline():
@@ -73,10 +67,6 @@ def apis_pipeline():
     update_metadata(df=portals_df)
 
 
-# CLI: dagit -f bin/pipelines/apis_pipeline.py
-# CLI: dagster pipeline execute apis_pipeline --preset one
-# dagster pipeline execute -f bin/pipelines/apis_pipeline.py --preset one
-
 ################   SENSORS   ##################
 
 
@@ -93,7 +83,7 @@ def trigger_apis(context):
             # if not os.path.exists(f"data-out/{item}.csv"):
             run_key = f"{item}_{now}"
 
-            yield dg.RunRequest(run_key=run_key, run_config=preset_apis)
+            yield dg.RunRequest(run_key=run_key, run_config=preset)
 
 
 ################   SCHEDULES   ##################
@@ -106,3 +96,8 @@ def trigger_apis(context):
 )
 def daily():
     return {}
+
+
+# CLI: dagit -f bin/pipelines/apis_pipeline.py
+# CLI: dagster pipeline execute apis_pipeline --preset one
+# CLT: dagster pipeline execute -f bin/pipelines/apis_pipeline.py --preset default
