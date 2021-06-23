@@ -83,18 +83,18 @@ def root_input_csv(context):
     return pd.read_csv(context.resource_config, index_col="id")
 
 
-@dg.root_input_manager
+@dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_xml(context):
-    path = context.config["path"]
+    path = context.resource_config
     with open(path, encoding="utf8") as f:
         tree = ElementTree.parse(f)
-    root = tree.getroot()
+    root = (tree.getroot()).set_index("id")
     return root
 
 
-@dg.root_input_manager
+@dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_geojson(context):
-    return gpd.read_file(context.config["path"])
+    return (gpd.read_file(context.resource_config)).set_index("id")
 
 
 @dg.solid(required_resource_keys={"slack"})

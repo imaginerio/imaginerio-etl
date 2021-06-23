@@ -3,23 +3,26 @@ import pandas as pd
 from bin.solids.utils import *
 from datetime import datetime
 
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
 preset = {
-    "solids": {
-        "create_metadata": {
-            "inputs": {
-                "catalog": {"path": "data-out/catalog.csv"},
-                "omeka": {"path": "data-out/api_omeka.csv"},
-                "wikidata": {"path": "data-out/api_wikidata.csv"},
-                "portals": {"path": "data-out/api_portals.csv"},
-                "camera": {"path": "data-out/camera.geojson"},
-                "images": {"path": "data-out/images.csv"},
-            }
-        }
+    "resources": {
+        "catalog_root": {"config": {"env": "CATALOG"}},
+        "omeka_root": {"config": {"env": "OMEKA"}},
+        "wikidata_root": {"config": {"env": "WIKIDATA"}},
+        "portals_root": {"config": {"env": "PORTALS"}},
+        "camera_root": {"config": {"env": "CAMERA"}},
+        "images_root": {"config": {"env": "IMAGENS"}},
     }
 }
 
+################   SOLIDS   ##################
+
 
 @dg.solid(
+    config_schema=dg.StringSource,
     input_defs=[
         dg.InputDefinition("omeka", root_manager_key="omeka_root"),
         dg.InputDefinition("catalog", root_manager_key="catalog_root"),
@@ -90,9 +93,13 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
     return metadata_new.set_index("id")
 
 
+################   PIPELINE   ##################
+
+
 @dg.pipeline(
     mode_defs=[
         dg.ModeDefinition(
+            name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
                 "catalog_root": root_input_csv,
@@ -102,9 +109,16 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
                 "portals_root": root_input_csv,
                 "camera_root": root_input_geojson,
                 "images_root": root_input_csv,
-            }
+            },
         )
-    ]
+    ],
+    preset_defs=[
+        dg.PresetDefinition(
+            "default",
+            run_config=preset,
+            mode="default",
+        )
+    ],
 )
 def metadata_pipeline():
     create_metadata()
@@ -120,3 +134,6 @@ def trigger_metadata(context):
         now = datetime.now().strftime("%d/%m/%Y%H%M%S")
         run_key = f"metadata_{now}"
         yield dg.RunRequest(run_key=run_key)
+
+
+# CLT: dagster pipeline execute -f bin/pipelines/metadata_pipeline.py --preset default
