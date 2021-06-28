@@ -14,15 +14,14 @@ preset = {
         "wikidata_root": {"config": {"env": "WIKIDATA"}},
         "portals_root": {"config": {"env": "PORTALS"}},
         "camera_root": {"config": {"env": "CAMERA"}},
-        "images_root": {"config": {"env": "IMAGENS"}},
-    }
+        "images_root": {"config": {"env": "IMAGES"}},
+    },
 }
 
 ################   SOLIDS   ##################
 
 
 @dg.solid(
-    config_schema=dg.StringSource,
     input_defs=[
         dg.InputDefinition("omeka", root_manager_key="omeka_root"),
         dg.InputDefinition("catalog", root_manager_key="catalog_root"),
@@ -43,23 +42,25 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
             "latitude",
             "heading",
             "tilt",
-            "source",
             "geometry",
-            "last_year",
-            "first_year",
         ]
     ]
-    dataframes = [omeka, catalog, wikidata, portals, camera_new, images]
+    dataframes_outer = [catalog, camera_new, images]
+    dataframe_left = [portals, omeka, wikidata]
     metadata = pd.DataFrame(columns=["id"])
 
-    for df in dataframes:
+    for df in dataframes_outer:
         metadata = metadata.merge(df, how="outer", on="id")
+
+    for df in dataframe_left:
+        metadata = metadata.merge(df, how="left", on="id")
 
     metadata_new = metadata[
         [
             "id",
             "title",
             "creator",
+            "date",
             "date_circa",
             "date_created",
             "date_accuracy",
@@ -90,6 +91,7 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
         ]
     ]
 
+    metadata.name = "metadata"
     return metadata_new.set_index("id")
 
 

@@ -1,3 +1,4 @@
+from datetime import date
 import os
 from pprint import pprint
 from xml.etree import ElementTree
@@ -9,8 +10,7 @@ import pandas as pd
 
 # solids catalog
 @dg.solid(
-    config_schema=dg.StringSource,
-    input_defs=[dg.InputDefinition("root", root_manager_key="xml")],
+    input_defs=[dg.InputDefinition("root", root_manager_key="xml_root")],
 )
 def xml_to_df(context, root):
     # Find the uids
@@ -53,7 +53,8 @@ def xml_to_df(context, root):
 
     # load
     catalog_df = catalog_df.astype(
-        {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str}
+        {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str},
+        copy=False,
     )
     catalog_df[["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]] = catalog_df[
         ["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]
@@ -72,8 +73,8 @@ def organize_columns(context, df):
             "RESUMO": "description",
             "AUTORIA": "creator",
             "DATA": "date",
-            "DATA LIMITE INFERIOR": "start_date",
-            "DATA LIMITE SUPERIOR": "end_date",
+            "DATA LIMITE INFERIOR": "first_year",
+            "DATA LIMITE SUPERIOR": "last_year",
             "DIMENSÃO": "dimensions",
             "PROCESSO FORMADOR DA IMAGEM": "fabrication_method",
             "LOCAL": "place",
@@ -88,8 +89,8 @@ def organize_columns(context, df):
             "description",
             "creator",
             "date",
-            "start_date",
-            "end_date",
+            "first_year",
+            "last_year",
             "type",
             "fabrication_method",
             "dimensions",
@@ -115,6 +116,9 @@ def organize_columns(context, df):
 def creators_list(context, df):
     creators_df = df["creator"].unique()
     listed_creators = pd.DataFrame(creators_df)
+    listed_creators.set_index(0, inplace=True)
+
+    listed_creators.name = "creators"
 
     return listed_creators
 
@@ -146,21 +150,27 @@ def dates_accuracy(context, df):
 
     # format date
     df["date"] = df["date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    df["start_date"] = df["start_date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    df["end_date"] = df["end_date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    df[["date", "start_date", "end_date"]] = df[
-        ["date", "start_date", "end_date"]
+    df["first_year"] = df["first_year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    df["last_year"] = df["last_year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+
+    df[["first_year", "last_year"]] = df[["first_year", "last_year"]].astype("str")
+
+    df[["date", "first_year", "last_year"]] = df[
+        ["date", "first_year", "last_year"]
     ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
+    print("TYPE OF FIRST:", type(df["first_year"].dtypes))
     # fill dates
     circa = df["date_accuracy"] == "circa"
-    startna = df["start_date"].isna()
-    endna = df["end_date"].isna()
+    startna = df["first_year"].isna()
+    endna = df["last_year"].isna()
 
-    df.loc[circa & startna, "start_date"] = df["date"] - pd.DateOffset(years=5)
-    df.loc[circa & endna, "end_date"] = df["date"] + pd.DateOffset(years=5)
-    df.loc[startna, "start_date"] = df["date"]
-    df.loc[endna, "end_date"] = df["date"]
+    df.loc[circa & startna, "first_year"] = df["date"] - pd.DateOffset(years=5)
+    df.loc[circa & endna, "last_year"] = df["date"] + pd.DateOffset(years=5)
+    df.loc[startna, "first_year"] = df["date"]
+    df.loc[endna, "last_year"] = df["date"]
+
+    print("TYPE OF FIRST2:", type(df["first_year"].dtypes))
 
     # datetime to string according to date accuracy
     df.loc[df["date_accuracy"] == "day", "date_created"] = df["date"].dt.strftime(
@@ -171,17 +181,19 @@ def dates_accuracy(context, df):
     )
     df.loc[df["date_accuracy"] == "year", "date_created"] = df["date"].dt.strftime("%Y")
 
-    df["start_date"] = df["start_date"].dt.strftime("%Y")
-    df["end_date"] = df["end_date"].dt.strftime("%Y")
+    df["first_year"] = df["first_year"].dt.strftime("%Y")
+    df["last_year"] = df["last_year"].dt.strftime("%Y")
     df.loc[df["date_accuracy"] == "circa", "date_circa"] = (
-        df["start_date"] + "/" + df["end_date"]
+        df["first_year"] + "/" + df["last_year"]
     )
 
+    print("TYPE:", type(df["first_year"].dtypes))
+
     df.loc[df["date_accuracy"] == "circa", "date_circa"] = (
-        df["start_date"] + "/" + df["end_date"]
+        df["first_year"] + "/" + df["last_year"]
     )
 
-    catalog = df
+    catalog = df.set_index("id")
     catalog.name = "catalog"
 
-    return df
+    return catalog

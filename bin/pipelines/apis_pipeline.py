@@ -24,11 +24,12 @@ preset = {
     "solids": {
         "query_omeka": {"config": {"env": "OMEKA_API"}},
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
-        "query_portals": {"config": {"env": "PORTALS_API"}},
-        "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
+        # "query_portals": {"config": {"env": "PORTALS_API"}},
+        # "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
+
 
 ################   PIPELINE   ##################
 
@@ -61,10 +62,9 @@ def apis_pipeline():
     wikidata_df = wikidata_dataframe(wikidata_results)
     update_metadata(df=wikidata_df)
 
-    portals_results = query_portals()
-    portals_df = portals_dataframe(portals_results)
-
-    update_metadata(df=portals_df)
+    # portals_results = query_portals()
+    # portals_df = portals_dataframe(portals_results)
+    # update_metadata(df=portals_df)
 
 
 ################   SENSORS   ##################

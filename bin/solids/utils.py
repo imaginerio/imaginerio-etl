@@ -21,11 +21,7 @@ class PandasCsvIOManager(dg.IOManager):
 
     def handle_output(self, context, obj):
         file_path = os.path.join("data-out", context.name)
-
-        if context.name == "metadata":
-            obj.to_csv(file_path + ".csv")
-        else:
-            obj.to_csv(file_path + ".csv", index=False)
+        obj.to_csv(file_path + ".csv")
 
         yield dg.AssetMaterialization(
             asset_key=dg.AssetKey(context.name), description="saved csv"
@@ -41,7 +37,7 @@ def df_csv_io_manager(init_context):
 class GeojsonIOManager(dg.IOManager):
     def load_input(self, context):
         file_path = os.path.join("data-out", context.upstream_output.name)
-        return (gpd.read_file(file_path + ".geojson")).set_index("id")
+        return gpd.read_file(file_path + ".geojson")
 
     def handle_output(self, context, feature_collection):
         file_path = os.path.join("data-out", context.name) + ".geojson"
@@ -70,7 +66,20 @@ def rename_column(context, df, dic):
 )
 def update_metadata(_, df, metadata):
     metadata.update(df)
-    return metadata
+
+    metadata[["first_year", "last_year"]] = metadata[
+        ["first_year", "last_year"]
+    ].applymap(lambda x: x if pd.isnull(x) else str(int(x)).split(".")[0])
+
+    #  metadata[["first_year", "last_year"]] = metadata[
+    #     ["first_year", "last_year"]
+    # ].astype
+
+    # metadata[["first_year", "last_year"]] = metadata[
+    #     ["first_year", "last_year"]
+    # ].applymap(lambda x: x.split(".")[0])
+
+    return metadata.set_index("id")
 
 
 @dg.io_manager
@@ -80,7 +89,7 @@ def df_csv_io_manager(init_context):
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_csv(context):
-    return pd.read_csv(context.resource_config, index_col="id")
+    return pd.read_csv(context.resource_config)
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
@@ -88,13 +97,13 @@ def root_input_xml(context):
     path = context.resource_config
     with open(path, encoding="utf8") as f:
         tree = ElementTree.parse(f)
-    root = (tree.getroot()).set_index("id")
+    root = tree.getroot()
     return root
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_geojson(context):
-    return (gpd.read_file(context.resource_config)).set_index("id")
+    return gpd.read_file(context.resource_config)
 
 
 @dg.solid(required_resource_keys={"slack"})

@@ -7,39 +7,28 @@ import dagster as dg
 import geojson
 import numpy as np
 import pandas as pd
-# from bokeh.layouts import column, layout
-# from bokeh.plotting import output_file, show
+
 from dagster.core.definitions import solid
-# from geomet import wkt
+
 
 @dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
-def load_metadata(_,metadata):
+def load_metadata(_, metadata):
 
-    # read metadata.csv
-    #export_df = pd.read_csv(metadata, parse_dates=["date", "start_date", "end_date"])
-  
-    #metadata["date", "start_date", "end_date"] = pd.to_datetime(metadata["date", "start_date", "end_date"])
-
-    metadata["date"] = pd.to_datetime(metadata.date)
-    metadata["start_date"] = pd.to_datetime(metadata.start_date)
-    metadata["end_date"] = pd.to_datetime(metadata.end_date)
-    export_df = metadata
-
-    # checking dates
-    l = []
-    for i in range(len(export_df)):
-        if export_df["start_date"][i] > export_df["end_date"][i]:
-            l.append(export_df["id"][i])
-    # print(l)
+    metadata[["first_year", "last_year"]] = metadata[
+        ["first_year", "last_year"]
+    ].applymap(lambda x: x if pd.isnull(x) else int(x))
 
     # filter items
-    export_df = export_df.copy().dropna(
-        subset=["geometry", "start_date", "end_date", "portals_url", "img_hd"]
+    export_df = metadata.dropna(
+        subset=["geometry", "first_year", "last_year", "portals_url", "img_hd"]
     )
+
+    print(export_df.head())
     return export_df
 
+
 @dg.solid
-def organize_columns_to_omeka(_,df):
+def organize_columns_to_omeka(_, df):
     # format data
     omeka_df = df
     omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
@@ -55,7 +44,9 @@ def organize_columns_to_omeka(_,df):
     include = omeka_df["id"].isin(smapshot["id"])
     omeka_df.loc[include, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
     omeka_df["dcterms:available"] = df["date_circa"]
-    omeka_df.loc[~(df["date_accuracy"] == "circa"), "dcterms:available"] = (df["start_date"] + "/" + df["end_date"])
+    omeka_df.loc[~(df["date_accuracy"] == "circa"), "dcterms:available"] = (
+        df["first_year"].astype(str) + "/" + df["last_year"].astype(str)
+    )
 
     # rename columns
     omeka_df = omeka_df.rename(
@@ -65,7 +56,7 @@ def organize_columns_to_omeka(_,df):
             "description": "dcterms:description",
             "creator": "dcterms:creator",
             "date_created": "dcterms:created",
-            "date_circa": "dcterms:temporal",            
+            "date_circa": "dcterms:temporal",
             "type": "dcterms:type",
             "image_width": "schema:width",
             "image_height": "schema:height",
@@ -107,18 +98,22 @@ def organize_columns_to_omeka(_,df):
 
     return omeka_df
 
-@dg.solid( 
+
+@dg.solid(
     input_defs=[dg.InputDefinition("jstor", root_manager_key="jstor_root")],
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_omeka")]    
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_omeka")],
 )
-def import_omeka_dataframe(_,df,jstor):
-    # append JSTOR migration    
+def import_omeka_dataframe(_, df, jstor):
+    # append JSTOR migration
     omeka_df = df.append(jstor)
-    return omeka_df
+    omeka_df.name = "import_omeka"
+
+    return omeka_df.set_index("dcterms:identifier")
 
 
 @dg.solid
-def make_df_to_wikidata(_,df):
+def make_df_to_wikidata(_, df):
+    print(df.head())
     quickstate = pd.DataFrame(
         columns=[
             "qid",
@@ -153,15 +148,23 @@ def make_df_to_wikidata(_,df):
     month = quickstate["date_accuracy"] == "month"
     day = quickstate["date_accuracy"] == "day"
 
+    print("TYPE:", type(df["first_year"].dtypes))
+
+    df["date"] = pd.to_datetime(df["date"])
+    df["fisrt_year"] = pd.to_datetime(df["first_year"], errors="coerce")
+    df["last_year"] = pd.to_datetime(df["last_year"], errors="coerce")
+
+    print("TYPE2:", type(df["first_year"].dtypes))
+
     quickstate["P571"] = df["date"].apply(dt.isoformat)
     quickstate.loc[circa, "P571"] = quickstate["P571"] + "Z/8"
     quickstate.loc[year, "P571"] = quickstate["P571"] + "Z/9"
     quickstate.loc[month, "P571"] = quickstate["P571"] + "Z/10"
     quickstate.loc[day, "P571"] = quickstate["P571"] + "Z/11"
     # earliest date
-    quickstate.loc[circa, "qal1319"] = df["start_date"].apply(dt.isoformat) + "Z/9"
+    quickstate.loc[circa, "qal1319"] = df["first_year"].apply(dt.isoformat) + "Z/9"
     # latest date
-    quickstate.loc[circa, "qal1326"] = df["end_date"].apply(dt.isoformat) + "Z/9"
+    quickstate.loc[circa, "qal1326"] = df["last_year"].apply(dt.isoformat) + "Z/9"
     # pt-br label
     quickstate["Lpt-br"] = df["title"]
     # pt-br description
@@ -170,12 +173,14 @@ def make_df_to_wikidata(_,df):
     quickstate["Den"] = "Photograph by " + df["creator"]
     # Instance of
     quickstate["P31"] = "Q125191"
-      # country
+    # country
     quickstate["P17"] = "Q155"
     # coordinate of POV
-    quickstate["P1259"] = "@" + df["lat"].astype(str) + "/" + df["lng"].astype(str)
+    quickstate["P1259"] = (
+        "@" + df["latitude"].astype(str) + "/" + df["longitude"].astype(str)
+    )
     # altitude
-    quickstate["qal2044"] = df["height"].astype(str) + "U11573"
+    quickstate["qal2044"] = df["altitude"].astype(str) + "U11573"
     # heading
     quickstate["qal7787"] = df["heading"].astype(str) + "U28390"
     # tilt
@@ -203,12 +208,10 @@ def make_df_to_wikidata(_,df):
     # Copyright status
     # quickstate["P6216"]
 
-
     paper = quickstate["P186"].str.contains("Papel", na=False)
     glass = quickstate["P186"].str.contains("Vidro", na=False)
     quickstate.loc[paper, "P186"] = "Q11472"
     quickstate.loc[glass, "P186"] = "Q11469"
-    
 
     # fabrication method
     gelatin = quickstate["P2079"].str.contains("GELATINA", na=False)
@@ -217,10 +220,14 @@ def make_df_to_wikidata(_,df):
     quickstate.loc[albumin, "P2079"] = "Q580807"
 
     return quickstate
-     
 
-@solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_wiki")])
-def organise_creator(_,quickstate):
+
+@solid(
+    output_defs=[
+        dg.OutputDefinition(io_manager_key="pandas_csv", name="import_wikidata")
+    ]
+)
+def organise_creator(_, quickstate):
     creators = {
         "Augusto Malta": "Q16495239",
         "Anônimo": "Q4233718",
@@ -273,8 +280,7 @@ def organise_creator(_,quickstate):
         return qid
 
     quickstate["P170"] = quickstate["P170"].apply(name2qid)
-
     quickstate = quickstate.drop(columns="date_accuracy")
+    quickstate.name = "mport_wikidata"
 
-    return quickstate
-
+    return quickstate.set_index("id")

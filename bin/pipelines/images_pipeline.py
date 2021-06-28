@@ -2,30 +2,34 @@ import dagster as dg
 
 from bin.solids.images import *
 from bin.solids.utils import df_csv_io_manager, root_input_csv, update_metadata
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 preset = {
     "solids": {
         "file_picker": {
-            "config": "/mnt/y/projetos/getty",
-            "inputs": {"camera": {"path": "data-out/camera.csv"}},
+            "config": {"env": "SOURCE"},
         },
         "file_dispatcher": {
             "config": {
-                "tiff": "/mnt/d/imagineRio-images/tiff",
-                "jpeg_hd": "/mnt/d/imagineRio-images/jpeg-hd",
-                "jpeg_sd": "/mnt/d/imagineRio-images/jpeg-sd",
-                "backlog": "/mnt/d/imagineRio-images/jpeg-sd/backlog",
+                "env": {
+                    "tiff": "TIFF",
+                    "jpeg_hd": "JPEG_HD",
+                    "jpeg_sd": "JPEG_SD",
+                    "backlog": "IMG_BACKLOG",
+                }
             }
         },
-        "create_images_df": {
-            "config": "https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/"
-        },
-        "update_metadata": {"inputs": {"metadata": {"path": "data-out/metadata.csv"}}},
+        "create_images_df": {"config": {"env:" "CLOUD"}},
         "write_metadata": {
-            "config": "/mnt/c/exiftool.exe",
-            "inputs": {"metadata": {"path": "data-out/metadata.csv"}},
+            "config": "EXIFTOLL",
         },
-    }
+    },
+    "resources": {
+        "metadata_root": {"config": {"env": "METADATA"}},
+        "camera_root": {"config": {"env": "CAMERA"}},
+    },
 }
 
 
