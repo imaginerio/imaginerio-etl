@@ -21,7 +21,6 @@ def query_omeka(context):
 
     try:
         # start session
-
         retry_strategy = Retry(
             total=3,
             status_forcelist=[429, 500, 502, 503, 504],
@@ -71,9 +70,10 @@ def omeka_dataframe(context, results):
         if len(omeka_duplicated) > 0:
             omeka_duplicated.to_csv("data-out/duplicated-omeka.csv")
         omeka_df.drop_duplicates(subset="id", inplace=True)
-        # omeka_df.to_csv(os.environ["OMEKA"])
 
-        return omeka_df
+        omeka_df.name = "api_omeka"
+
+        return omeka_df.set_index("id", inplace=True)
 
 
 # WIKIDATA
@@ -111,8 +111,8 @@ def query_wikidata(context):
         data = response.json()
         return data
 
-    except Exception as e:
-        context.log.info(e)
+    except Exception:
+        context.log.info("Couldn't update")
         return None
 
 
@@ -155,7 +155,9 @@ def wikidata_dataframe(context, results):
 
         wikidata_df = wikidata_df.drop_duplicates(subset="id")
 
-        return wikidata_df
+        wikidata_df.name = "api_wikidata"
+
+        return wikidata_df.set_index("id", inplace=True)
 
 
 # PORTALS
@@ -173,14 +175,14 @@ def query_portals(context):
         http.mount("https://", adapter)
         http.mount("http://", adapter)
 
-        API_STEPS = ["0", "55000"]
+        API_STEPS = ["0", "65000"]
 
         for i in API_STEPS:
 
             payload = {
                 "table": "AssetRecords",
                 "quicksearchstring": "jpg",
-                "maxreturned": "55000",
+                "maxreturned": "65000",
                 "startindex": i,
             }
 
@@ -191,8 +193,8 @@ def query_portals(context):
 
         return results
 
-    except Exception as e:
-        context.log.info(e)
+    except Exception:
+        context.log.info("Couldn't update")
         return None
 
 
@@ -221,7 +223,7 @@ def portals_dataframe(context, results):
 
         dataframe["portals_url"] = prefix + dataframe["portals_id"]
 
-        dataframe = dataframe[
+        portals_df = dataframe[
             [
                 "id",
                 "portals_id",
@@ -229,9 +231,11 @@ def portals_dataframe(context, results):
             ]
         ]
 
-        dataframe = dataframe.drop_duplicates(subset="id")
+        portals_df = portals_df.drop_duplicates(subset="id")
 
-        return dataframe
+        portals_df.name = "api_portals"
+
+        return portals_df.set_index("id", inplace=True)
 
     else:
         context.log.info("Couldn't update")

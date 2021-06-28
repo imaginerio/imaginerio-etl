@@ -21,8 +21,10 @@ load_dotenv(override=True)
 
 
 preset = {
-    "solids": {"xml_to_df": {"config": {"env": "CUMULUS_XML"}}},
-    "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
+    "resources": {
+        "metadata_root": {"config": {"env": "METADATA"}},
+        "xml_root": {"config": {"env": "CUMULUS_XML"}},
+    }
 }
 
 
@@ -33,7 +35,7 @@ preset = {
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": root_input_csv,
-                "xml": root_input_xml,
+                "xml_root": root_input_xml,
             },
         )
     ],

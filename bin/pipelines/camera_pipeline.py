@@ -1,15 +1,17 @@
 import dagster as dg
+from dotenv import load_dotenv
 
 from bin.solids.utils import *
 from bin.solids.camera import *
 
+load_dotenv(override=True)
+
 preset = {
     "solids": {
-        "get_list": {"config": "data-in/kml/raw"},
-        "split_photooverlays": {"config": "data-in/kml"},
-        "create_geojson": {"inputs": {"metadata": {"path": "data-out/metadata.csv"}}},
-        "update_metadata": {"inputs": {"metadata": {"path": "data-out/metadata.csv"}}},
-    }
+        "get_list": {"config": {"env": "KML_RAW"}},
+        "split_photooverlays": {"config": {"env": "KML"}},
+    },
+    "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
 
 
@@ -22,7 +24,14 @@ preset = {
                 "metadata_root": root_input_csv,
             }
         )
-    ]
+    ],
+    preset_defs=[
+        dg.PresetDefinition(
+            "default",
+            run_config=preset,
+            mode="default",
+        )
+    ],
 )
 def camera_pipeline():
 

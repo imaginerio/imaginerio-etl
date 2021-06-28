@@ -1,27 +1,37 @@
 import dagster as dg
 from bin.solids.export import *
 from bin.solids.utils import df_csv_io_manager, geojson_io_manager, root_input_csv
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 # from dagster_slack import slack_resource
 preset = {
-    "solids": {
-        "omeka_dataframe": {"inputs": {"jstor": {"path": "data-in/jstor.csv"}}},
-        "load_metadata": {"inputs": {"metadata": {"path": "data-out/metadata.csv"}}},
-    }
+    "resources": {
+        "metadata_root": {"config": {"env": "METADATA"}},
+        "jstor_root": {"config": {"env": "JSTOR"}},
+    },
 }
 
 
 @dg.pipeline(
     mode_defs=[
         dg.ModeDefinition(
+            name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
                 "jstor_root": root_input_csv,
-                "geojson": geojson_io_manager,
                 "metadata_root": root_input_csv,
-            }
+            },
         )
-    ]
+    ],
+    preset_defs=[
+        dg.PresetDefinition(
+            "default",
+            run_config=preset,
+            mode="default",
+        )
+    ],
 )
 def export_pipeline():
 
@@ -34,7 +44,7 @@ def export_pipeline():
 
     # import WIKIDATA
     wikidata_df = make_df_to_wikidata(export_df)
-    organised_creator = organise_creator(wikidata_df)
+    organised_creator = organise_creator(quickstate=wikidata_df)
 
 
 ################   SENSORS   ##################

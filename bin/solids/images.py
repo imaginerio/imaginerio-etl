@@ -5,6 +5,7 @@ import pandas as pd
 from numpy import nan
 import dagster as dg
 from PIL import Image as PILImage
+from dotenv import load_dotenv
 
 from bin.solids.exiftool import ExifTool
 
@@ -20,7 +21,10 @@ class Image:
         self.id = str(os.path.split(self.path)[1].split(".")[0])
 
 
-@dg.solid(input_defs=[dg.InputDefinition("camera", root_manager_key="camera_root")])
+@dg.solid(
+    config_schema=dg.StringSource,
+    input_defs=[dg.InputDefinition("camera", root_manager_key="camera_root")],
+)
 def file_picker(context, camera):
     source = context.solid_config
     has_kml = list(camera["id"])
@@ -37,17 +41,21 @@ def file_picker(context, camera):
     geolocated = [img for img in image_list if img.id in has_kml]
     backlog = [img for img in image_list if img.id not in has_kml]
 
-    context.log.info(f"Geolocated: {len(geolocated)} images; Backlog: {len(backlog)} images")
+    context.log.info(
+        f"Geolocated: {len(geolocated)} images; Backlog: {len(backlog)} images"
+    )
 
-    return {"geolocated":geolocated,"backlog":backlog}
+    return {"geolocated": geolocated, "backlog": backlog}
 
-@dg.solid
+
+@dg.solid(config_schema=dg.StringSource)
 def file_dispatcher(context, files):
 
-    TIFF = context.solid_config["tiff"]
-    JPEG_HD = context.solid_config["jpeg_hd"]
-    JPEG_SD = context.solid_config["jpeg_sd"]
-    IMG_BACKLOG = context.solid_config["backlog"]
+    geolocated = files["geolocated"]
+    TIFF = context.solid_config["env"]["tiff"]
+    JPEG_HD = context.solid_config["env"]["jpeg_hd"]
+    JPEG_SD = context.solid_config["env"]["jpeg_sd"]
+    IMG_BACKLOG = context.solid_config["env"]["backlog"]
 
     def handle_geolocated(infiles):
         for infile in infiles:
@@ -72,7 +80,7 @@ def file_dispatcher(context, files):
                         im.save(sdout)
                 except OSError:
                     context.log.info(f"Cannot create thumbnail for {infile.tif}")
-  
+
     def handle_backlog(infiles):
         for infile in infiles:
             if not os.path.exists(os.path.join(TIFF, infile.tif)):
@@ -85,7 +93,9 @@ def file_dispatcher(context, files):
                         im.thumbnail(size)
                         im.save(backlog_path)
                 except OSError:
-                    context.log.info(f"Cannot create backlog thumbnail for {infile.tif}")
+                    context.log.info(
+                        f"Cannot create backlog thumbnail for {infile.tif}"
+                    )
         current = os.listdir(IMG_BACKLOG)
         for image in current:
             if image.split(".")[0] in geolocated:
@@ -112,10 +122,13 @@ def file_dispatcher(context, files):
     return to_tag
 
 
-@dg.solid(output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="images")])
+@dg.solid(
+    config_schema=dg.StringSource,
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="images")],
+)
 def create_images_df(context, files):
     """Creates a dataframe with every image available and links to full size and thumbnail"""
-    
+
     hd = context.solid_config
     sd = hd + "sd/"
     dicts = []
@@ -127,7 +140,7 @@ def create_images_df(context, files):
             "img_sd": os.path.join(sd, img.jpg),
         }
         dicts.append(img_dict)
-    
+
     for img in files["backlog"]:
         img_dict = {
             "id": img.id,
@@ -137,12 +150,16 @@ def create_images_df(context, files):
         dicts.append(img_dict)
 
     images_df = pd.DataFrame(data=dicts)
-    images_df.sort_values(by='id')
+    images_df.sort_values(by="id")
     context.log.info(f"{len(images_df)} images available in hi-res")
-    return images_df
+
+    return images_df.set_index("id", inplace=True)
 
 
-@dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
+@dg.solid(
+    config_schema=dg.StringSource,
+    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
+)
 def write_metadata(context, metadata, files_to_tag):
 
     metadata.fillna(value="", inplace=True)
@@ -155,9 +172,9 @@ def write_metadata(context, metadata, files_to_tag):
             try:
                 if metadata.loc[name, "date_accuracy"] == "circa":
                     datecreated = (
-                        metadata.loc[name, "start_date"].strftime("%Y")
+                        metadata.loc[name, "first_year"].strftime("%Y")
                         + "/"
-                        + metadata.loc[name, "end_date"].strftime("%Y")
+                        + metadata.loc[name, "last_year"].strftime("%Y")
                     )
                 elif metadata.loc[name, "date_accuracy"] == "year":
                     datecreated = metadata.loc[name, "date"].strftime("%Y")
@@ -173,9 +190,7 @@ def write_metadata(context, metadata, files_to_tag):
             headline = metadata.loc[name, "title"]
             caption = metadata.loc[name, "description"]
             objecttype = metadata.loc[name, "type"]
-            dimensions = (
-                f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
-            )
+            dimensions = f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
             keywords = metadata.loc[name, "wikidata_depict"].split("||")
             latitude = metadata.loc[name, "latitude"]
             longitude = metadata.loc[name, "longitude"]
@@ -209,7 +224,7 @@ def write_metadata(context, metadata, files_to_tag):
                     dest = item.encode(encoding="utf-8")
                     et.execute(param, dest)
             context.log.info(
-                f"{basename}\n{metadata.loc[name, 'date']}\nTagged {i+1} of {len(files)} images"
+                f"{basename}\n{metadata.loc[name, 'date']}\nTagged {i+1} of {len(files_to_tag)} images"
             )
 
 
