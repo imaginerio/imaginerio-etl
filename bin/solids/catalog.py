@@ -159,7 +159,6 @@ def dates_accuracy(context, df):
         ["date", "first_year", "last_year"]
     ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
-    print("TYPE OF FIRST:", type(df["first_year"].dtypes))
     # fill dates
     circa = df["date_accuracy"] == "circa"
     startna = df["first_year"].isna()
@@ -169,8 +168,6 @@ def dates_accuracy(context, df):
     df.loc[circa & endna, "last_year"] = df["date"] + pd.DateOffset(years=5)
     df.loc[startna, "first_year"] = df["date"]
     df.loc[endna, "last_year"] = df["date"]
-
-    print("TYPE OF FIRST2:", type(df["first_year"].dtypes))
 
     # datetime to string according to date accuracy
     df.loc[df["date_accuracy"] == "day", "date_created"] = df["date"].dt.strftime(
@@ -187,13 +184,15 @@ def dates_accuracy(context, df):
         df["first_year"] + "/" + df["last_year"]
     )
 
-    print("TYPE:", type(df["first_year"].dtypes))
+    print("TYPE OF FIRST(before strftime):", type(df["first_year"].dtypes))
 
     df.loc[df["date_accuracy"] == "circa", "date_circa"] = (
         df["first_year"] + "/" + df["last_year"]
     )
+    #########
 
-    catalog = df.set_index("id")
+    catalog = df
     catalog.name = "catalog"
+    print("CATALOG:", catalog["first_year"][10], type(catalog["first_year"][10]))
 
-    return catalog
+    return catalog.set_index("id")

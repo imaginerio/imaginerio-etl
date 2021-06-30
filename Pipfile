@@ -49,5 +49,10 @@ matplotlib = "==3.2.2"
 black = "*"
 benedict = "*"
 bios = "*"
-decouple = "*"
 python-dotenv = "*"
+
+[dev-packages]
+black = "*"
+
+[pipenv]
+allow_prereleases = true

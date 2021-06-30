@@ -23,7 +23,9 @@ preset = {
         },
         "create_images_df": {"config": {"env:" "CLOUD"}},
         "write_metadata": {
-            "config": "EXIFTOLL",
+            "config": {
+                "env": "EXIFTOLL",
+            }
         },
     },
     "resources": {

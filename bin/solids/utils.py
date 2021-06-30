@@ -20,13 +20,16 @@ class PandasCsvIOManager(dg.IOManager):
         return pd.read_csv(file_path + ".csv", index_col="id")
 
     def handle_output(self, context, obj):
-        file_path = os.path.join("data-out", context.name)
+        obj_name = context.name
+        file_path = os.path.join("data-out", obj_name)
         obj.to_csv(file_path + ".csv")
 
         yield dg.AssetMaterialization(
-            asset_key=dg.AssetKey(context.name), description="saved csv"
+            asset_key=dg.AssetKey(obj_name),
+            description=f"The {obj_name.upper()} was saved as csv",
+            metadata={"number of rows": dg.EventMetadata.int(len(obj))},
         )
-        yield dg.EventMetadataEntry.int(obj.shape[0], label="number of rows")
+        # yield dg.EventMetadataEntry.text(obj.shape[0], label="number of rows")
 
 
 @dg.io_manager
@@ -67,17 +70,9 @@ def rename_column(context, df, dic):
 def update_metadata(_, df, metadata):
     metadata.update(df)
 
-    metadata[["first_year", "last_year"]] = metadata[
-        ["first_year", "last_year"]
-    ].applymap(lambda x: x if pd.isnull(x) else str(int(x)).split(".")[0])
-
-    #  metadata[["first_year", "last_year"]] = metadata[
-    #     ["first_year", "last_year"]
-    # ].astype
-
     # metadata[["first_year", "last_year"]] = metadata[
     #     ["first_year", "last_year"]
-    # ].applymap(lambda x: x.split(".")[0])
+    # ].applymap(lambda x: x if pd.isnull(x) else str(int(x)).split(".")[0])
 
     return metadata.set_index("id")
 
