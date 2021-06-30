@@ -73,7 +73,7 @@ def omeka_dataframe(context, results):
 
         omeka_df.name = "api_omeka"
 
-        return omeka_df.set_index("id", inplace=True)
+        return omeka_df.set_index("id")
 
 
 # WIKIDATA
@@ -157,45 +157,50 @@ def wikidata_dataframe(context, results):
 
         wikidata_df.name = "api_wikidata"
 
-        return wikidata_df.set_index("id", inplace=True)
+        return wikidata_df.set_index("id")
 
 
 # PORTALS
 @dg.solid(config_schema=dg.StringSource)
 def query_portals(context):
     endpoint = context.solid_config
-    try:
-        retry_strategy = Retry(
-            total=3,
-            status_forcelist=[429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "OPTIONS"],
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        http = requests.Session()
-        http.mount("https://", adapter)
-        http.mount("http://", adapter)
+    # try:
+    retry_strategy = Retry(
+        total=3,
+        status_forcelist=[429, 500, 502, 503, 504],
+        method_whitelist=["HEAD", "GET", "OPTIONS"],
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount("https://", adapter)
+    http.mount("http://", adapter)
 
-        API_STEPS = ["0", "65000"]
+    API_STEPS = ["0", "55000"]
 
-        for i in API_STEPS:
+    dataframe = pd.DataFrame()
 
-            payload = {
-                "table": "AssetRecords",
-                "quicksearchstring": "jpg",
-                "maxreturned": "65000",
-                "startindex": i,
-            }
+    for i in API_STEPS:
 
-            params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
-            response = http.post(endpoint, params=params)
-            data = response.json()
-            results = pd.json_normalize(data["items"])
+        payload = {
+            "table": "AssetRecords",
+            "quicksearchstring": "jpg",
+            "maxreturned": "55000",
+            "startindex": i,
+        }
 
-        return results
+        params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
+        response = http.post(endpoint, params=params)
+        data = response.json()
+        results = pd.json_normalize(data["items"])
+        dataframe = dataframe.append(results, ignore_index=True)
 
-    except Exception:
-        context.log.info("Couldn't update")
-        return None
+    print(len(dataframe.shape))
+
+    return dataframe
+
+    # except Exception as E:
+    #     context.log.info(E)
+    #     return None
 
 
 @dg.solid(
@@ -235,7 +240,7 @@ def portals_dataframe(context, results):
 
         portals_df.name = "api_portals"
 
-        return portals_df.set_index("id", inplace=True)
+        return portals_df.set_index("id")
 
     else:
         context.log.info("Couldn't update")

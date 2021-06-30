@@ -45,9 +45,15 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
             "geometry",
         ]
     ]
+
+    catalog[["first_year", "last_year"]] = catalog[
+        ["first_year", "last_year"]
+    ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))
+
     dataframes_outer = [catalog, camera_new, images]
     dataframe_left = [portals, omeka, wikidata]
     metadata = pd.DataFrame(columns=["id"])
+    print("CATALOG:", catalog["first_year"][10], type(catalog["first_year"][10]))
 
     for df in dataframes_outer:
         metadata = metadata.merge(df, how="outer", on="id")
@@ -71,7 +77,6 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
             "fabrication_method",
             "image_width",
             "image_height",
-            "source",
             "portals_id",
             "portals_url",
             "wikidata_depict",
@@ -90,7 +95,7 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
             "geometry",
         ]
     ]
-
+    print("METADATA:", metadata["first_year"][10], type(catalog["first_year"][10]))
     metadata.name = "metadata"
     return metadata_new.set_index("id")
 

@@ -14,16 +14,16 @@ from dagster.core.definitions import solid
 @dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
 def load_metadata(_, metadata):
 
-    metadata[["first_year", "last_year"]] = metadata[
-        ["first_year", "last_year"]
-    ].applymap(lambda x: x if pd.isnull(x) else int(x))
+    metadata["date"] = pd.to_datetime(metadata["date"])
+    metadata["first_year"] = pd.to_datetime(metadata["first_year"])
+    metadata["last_year"] = pd.to_datetime(metadata["last_year"])
+    export_df = metadata
 
     # filter items
-    export_df = metadata.dropna(
+    export_df = export_df.dropna(
         subset=["geometry", "first_year", "last_year", "portals_url", "img_hd"]
     )
 
-    print(export_df.head())
     return export_df
 
 
@@ -113,10 +113,9 @@ def import_omeka_dataframe(_, df, jstor):
 
 @dg.solid
 def make_df_to_wikidata(_, df):
-    print(df.head())
     quickstate = pd.DataFrame(
         columns=[
-            "qid",
+            "Qid",
             "P31",
             "Lpt-br",
             "Dpt-br",
@@ -147,14 +146,6 @@ def make_df_to_wikidata(_, df):
     year = quickstate["date_accuracy"] == "year"
     month = quickstate["date_accuracy"] == "month"
     day = quickstate["date_accuracy"] == "day"
-
-    print("TYPE:", type(df["first_year"].dtypes))
-
-    df["date"] = pd.to_datetime(df["date"])
-    df["fisrt_year"] = pd.to_datetime(df["first_year"], errors="coerce")
-    df["last_year"] = pd.to_datetime(df["last_year"], errors="coerce")
-
-    print("TYPE2:", type(df["first_year"].dtypes))
 
     quickstate["P571"] = df["date"].apply(dt.isoformat)
     quickstate.loc[circa, "P571"] = quickstate["P571"] + "Z/8"
@@ -283,4 +274,4 @@ def organise_creator(_, quickstate):
     quickstate = quickstate.drop(columns="date_accuracy")
     quickstate.name = "mport_wikidata"
 
-    return quickstate.set_index("id")
+    return quickstate.set_index("qid")
