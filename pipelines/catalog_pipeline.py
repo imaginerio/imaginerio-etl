@@ -2,14 +2,14 @@ import os
 
 import dagster as dg
 from dotenv import load_dotenv
-from bin.solids.catalog import (
+from solids.catalog import (
     creators_list,
     dates_accuracy,
     extract_dimensions,
     organize_columns,
     xml_to_df,
 )
-from bin.solids.utils import (
+from solids.utils import (
     df_csv_io_manager,
     update_metadata,
     root_input_csv,

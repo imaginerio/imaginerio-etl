@@ -68,7 +68,7 @@ def omeka_dataframe(context, results):
         omeka_df = pd.DataFrame(results)
         omeka_duplicated = omeka_df[omeka_df.duplicated(subset="id")]
         if len(omeka_duplicated) > 0:
-            omeka_duplicated.to_csv("data-out/duplicated-omeka.csv")
+            omeka_duplicated.to_csv("data/output/duplicated-omeka.csv")
         omeka_df.drop_duplicates(subset="id", inplace=True)
 
         omeka_df.name = "api_omeka"

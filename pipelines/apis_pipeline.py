@@ -4,12 +4,12 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 
-from bin.solids.utils import (
+from solids.utils import (
     df_csv_io_manager,
     update_metadata,
     root_input_csv,
 )  # slack_solid
-from bin.solids.apis import (
+from solids.apis import (
     portals_dataframe,
     query_portals,
     query_wikidata,
@@ -72,15 +72,15 @@ def apis_pipeline():
 
 @dg.sensor(pipeline_name="apis_pipeline")
 def trigger_apis(context):
-    api_wikidata = "data-out/api_wikidata.csv"
-    api_portals = "data-out/api_portals.csv"
-    api_omeka = "data-out/api_omeka.csv"
+    api_wikidata = "data/output/api_wikidata.csv"
+    api_portals = "data/output/api_portals.csv"
+    api_omeka = "data/output/api_omeka.csv"
     now = datetime.now().strftime("%d/%m/%Y%H%M%S")
     apis = [api_omeka, api_portals, api_wikidata]
 
     for item in apis:
         if not os.path.exists(item):
-            # if not os.path.exists(f"data-out/{item}.csv"):
+            # if not os.path.exists(f"data/output/{item}.csv"):
             run_key = f"{item}_{now}"
 
             yield dg.RunRequest(run_key=run_key, run_config=preset)

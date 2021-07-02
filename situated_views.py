@@ -1,11 +1,11 @@
 import dagster as dg
-from bin.pipelines.catalog_pipeline import *
-from bin.pipelines.images_pipeline import *
-from bin.pipelines.apis_pipeline import *
-from bin.pipelines.export_pipeline import *
-from bin.pipelines.metadata_pipeline import *
-from bin.pipelines.images_pipeline import *
-from bin.pipelines.camera_pipeline import *
+from pipelines.catalog_pipeline import *
+from pipelines.images_pipeline import *
+from pipelines.apis_pipeline import *
+from pipelines.export_pipeline import *
+from pipelines.metadata_pipeline import *
+from pipelines.images_pipeline import *
+from pipelines.camera_pipeline import *
 
 
 @dg.repository

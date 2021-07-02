@@ -1,8 +1,8 @@
 import dagster as dg
 from dotenv import load_dotenv
 
-from bin.solids.utils import *
-from bin.solids.camera import *
+from solids.utils import *
+from solids.camera import *
 
 load_dotenv(override=True)
 
