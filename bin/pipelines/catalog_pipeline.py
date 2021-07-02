@@ -58,24 +58,26 @@ def catalog_pipeline():
 
 ################   SENSORS   ##################
 
-# @dg.sensor(pipeline_name="catalog_pipeline")
-# def trigger_catalog(context):
-#     last_mtime = float(context.cursor) if context.cursor else 0
 
-#     max_mtime = last_mtime
+@dg.sensor(pipeline_name="catalog_pipeline")
+def trigger_catalog(context):
+    last_mtime = float(context.cursor) if context.cursor else 0
 
-#     fstats = os.stat("/mnt/y/projetos/getty/cumulus.xml")
-#     file_mtime = fstats.st_mtime
-#     if file_mtime <= last_mtime:
-#         return
+    max_mtime = last_mtime
 
-#     # the run key should include mtime if we want to kick off new runs based on file modifications
-#     run_key = f"cumulus.xml:{str(file_mtime)}"
-#     # run_config = {"solids": {"process_file": {"config": {"filename": filename}}}}
-#     yield dg.RunRequest(run_key=run_key)
-#     max_mtime = max(max_mtime, file_mtime)
+    fstats = os.stat("/mnt/y/projetos/getty/cumulus.xml")
+    file_mtime = fstats.st_mtime
+    if file_mtime <= last_mtime:
+        return
 
-#     context.update_cursor(str(max_mtime))
+    # the run key should include mtime if we want to kick off new runs based on file modifications
+    run_key = f"cumulus.xml:{str(file_mtime)}"
+    # run_config = {"solids": {"process_file": {"config": {"filename": filename}}}}
+    yield dg.RunRequest(run_key=run_key)
+
+    max_mtime = max(max_mtime, file_mtime)
+
+    context.update_cursor(str(max_mtime))
 
 
 # CLI: dagit -f bin/pipelines/catalog_pipeline.py

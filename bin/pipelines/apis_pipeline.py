@@ -1,6 +1,7 @@
 import os
 import dagster as dg
 from datetime import datetime
+from dagster.core.definitions import mode
 from dotenv import load_dotenv
 
 
@@ -70,7 +71,7 @@ def apis_pipeline():
 ################   SENSORS   ##################
 
 
-@dg.sensor(pipeline_name="apis_pipeline")
+@dg.sensor(pipeline_name="apis_pipeline", minimum_interval_seconds=120)
 def trigger_apis(context):
     api_wikidata = "data-out/api_wikidata.csv"
     api_portals = "data-out/api_portals.csv"
@@ -86,15 +87,20 @@ def trigger_apis(context):
             yield dg.RunRequest(run_key=run_key, run_config=preset)
 
 
+def test_sensor():
+    for run_request in trigger_apis(None):
+        assert dg.validate_run_config(dg.log_file_pipeline, run_request.run_config)
+
+
 ################   SCHEDULES   ##################
 
 
 @dg.schedule(
-    cron_schedule="0 18 * * 1-5",
+    cron_schedule="0 0 * * 0",
     pipeline_name="apis_pipeline",
     execution_timezone="America/Sao_Paulo",
 )
-def daily():
+def weekly():
     return {}
 
 
@@ -102,3 +108,4 @@ def daily():
 # CLI: dagster pipeline execute apis_pipeline --preset one
 # CLT: dagster pipeline execute -f bin/pipelines/apis_pipeline.py --preset default
 # CLI: dagster sensor preview trigger_apis
+# CLI: dagster-daemon run

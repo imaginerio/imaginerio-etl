@@ -334,6 +334,10 @@ def create_geojson(context, kmls, metadata):
     return collection
 
 
+# dg.solid()
+# def update_geojson(context):
+
+
 # kmls = [os.path.join("data-in", "kml",file) for file in os.listdir("data-in/kml") if os.path.isfile(os.path.join("data-in", "kml",file))]
 # dg.execute_solid(create_geojson, input_values={"kmls":kmls})
 
