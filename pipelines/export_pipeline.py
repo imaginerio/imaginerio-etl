@@ -62,9 +62,9 @@ def trigger_export(context):
         record_id, event = events[0]  # take the most recent materialization
         yield dg.RunRequest(
             run_key=str(record_id),
-            run_config={},
+            run_config=preset,
             tags={"source_pipeline": event.pipeline_name},
         )
 
 
-# CLI: dagit -f bin/pipelines/export_pipeline.py
+# CLI: dagit -f pipelines/export_pipeline.py

@@ -46,21 +46,21 @@ def camera_pipeline():
 ################   SENSORS   ##################
 
 
-# @dg.sensor
-# def trigger_camera(context):
-#     last_mtime = float(context.cursor) if context.cursor else 0
+@dg.sensor
+def trigger_camera(context):
+    last_mtime = float(context.cursor) if context.cursor else 0
 
-#     # os.walk(top[,topdown=True[,onerror=None[,followlinks=False]))
+    # os.walk(top[,topdown=True[,onerror=None[,followlinks=False]))
 
-#     max_mtime = last_mtime
+    max_mtime = last_mtime
 
-#     fstats = os.stat("")
-#     file_mtime = fstats.st_mtime
-#     if file_mtime <= last_mtime:
-#         # yield dg.RunRequest(run_key=run_key)
-#         max_mtime = max(max_mtime, file_mtime)
+    fstats = os.stat("")
+    file_mtime = fstats.st_mtime
+    if file_mtime <= last_mtime:
+        # yield dg.RunRequest(run_key=run_key)
+        max_mtime = max(max_mtime, file_mtime)
 
-#     context.update_cursor(str(max_mtime))
+    context.update_cursor(str(max_mtime))
 
 
-# CLI dagster pipeline execute -f bin/pipelines/camera_pipeline.py -c bin/pipelines/camera_pipeline.yaml
+# CLI dagster pipeline execute -f pipelines/camera_pipeline.py -c pipelines/camera_pipeline.yaml

@@ -69,7 +69,7 @@ def get_radius(kml):
     id = str(KML.PhotoOverlay.name)
     tilt = KML.PhotoOverlay.Camera.tilt
     df = pd.read_csv(
-        "https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data/output/metadata.csv",
+        "https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-out/metadata.csv",
         index_col="id",
     )
     depicts = df.loc[id, "wikidata_depict"]
@@ -334,7 +334,11 @@ def create_geojson(context, kmls, metadata):
     return collection
 
 
-# kmls = [os.path.join("data/input", "kml",file) for file in os.listdir("data/input/kml") if os.path.isfile(os.path.join("data/input", "kml",file))]
+# dg.solid()
+# def update_geojson(context):
+
+
+# kmls = [os.path.join("data-in", "kml",file) for file in os.listdir("data-in/kml") if os.path.isfile(os.path.join("data-in", "kml",file))]
 # dg.execute_solid(create_geojson, input_values={"kmls":kmls})
 
 # CLI: dagit -f bin/pipelines/camera_pipeline.py
