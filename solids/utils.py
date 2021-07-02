@@ -16,12 +16,12 @@ from urllib3.util import Retry
 
 class PandasCsvIOManager(dg.IOManager):
     def load_input(self, context):
-        file_path = os.path.join("data-out", context.upstream_output.name)
+        file_path = os.path.join("data/output", context.upstream_output.name)
         return pd.read_csv(file_path + ".csv", index_col="id")
 
     def handle_output(self, context, obj):
         obj_name = context.name
-        file_path = os.path.join("data-out", obj_name)
+        file_path = os.path.join("data/output", obj_name)
         obj.to_csv(file_path + ".csv")
 
         yield dg.AssetMaterialization(
@@ -39,11 +39,11 @@ def df_csv_io_manager(init_context):
 
 class GeojsonIOManager(dg.IOManager):
     def load_input(self, context):
-        file_path = os.path.join("data-out", context.upstream_output.name)
+        file_path = os.path.join("data/output", context.upstream_output.name)
         return gpd.read_file(file_path + ".geojson")
 
     def handle_output(self, context, feature_collection):
-        file_path = os.path.join("data-out", context.name) + ".geojson"
+        file_path = os.path.join("data/output", context.name) + ".geojson"
         with open(file_path, "w", encoding="utf-8") as f:
             geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)
 

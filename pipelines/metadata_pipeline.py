@@ -1,6 +1,6 @@
 import dagster as dg
 import pandas as pd
-from bin.solids.utils import *
+from solids.utils import *
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -136,7 +136,7 @@ def metadata_pipeline():
 
 @dg.sensor(pipeline_name="metadata_pipeline")
 def trigger_metadata(context):
-    metadata = "data-out/metadata.csv"
+    metadata = "data/output/metadata.csv"
     if not os.path.exists(metadata):
         now = datetime.now().strftime("%d/%m/%Y%H%M%S")
         run_key = f"metadata_{now}"

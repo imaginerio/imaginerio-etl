@@ -1,6 +1,6 @@
 import dagster as dg
-from bin.solids.export import *
-from bin.solids.utils import df_csv_io_manager, geojson_io_manager, root_input_csv
+from solids.export import *
+from solids.utils import df_csv_io_manager, geojson_io_manager, root_input_csv
 from dotenv import load_dotenv
 
 load_dotenv(override=True)

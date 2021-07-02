@@ -40,7 +40,7 @@ def organize_columns_to_omeka(_, df):
     omeka_df["rights"] = ""
     omeka_df["citation"] = ""
     omeka_df["item_sets"] = "all||views"
-    smapshot = pd.read_csv("data-out/smapshot.csv")
+    smapshot = pd.read_csv("data/output/smapshot.csv")
     include = omeka_df["id"].isin(smapshot["id"])
     omeka_df.loc[include, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
     omeka_df["dcterms:available"] = df["date_circa"]

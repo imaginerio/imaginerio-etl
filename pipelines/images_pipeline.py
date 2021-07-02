@@ -1,7 +1,7 @@
 import dagster as dg
 
-from bin.solids.images import *
-from bin.solids.utils import df_csv_io_manager, root_input_csv, update_metadata
+from solids.images import *
+from solids.utils import df_csv_io_manager, root_input_csv, update_metadata
 from dotenv import load_dotenv
 
 load_dotenv(override=True)

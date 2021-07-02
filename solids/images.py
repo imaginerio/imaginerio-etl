@@ -7,7 +7,7 @@ import dagster as dg
 from PIL import Image as PILImage
 from dotenv import load_dotenv
 
-from bin.solids.exiftool import ExifTool
+from solids.exiftool import ExifTool
 
 
 class Image:
