@@ -143,4 +143,4 @@ def trigger_metadata(context):
         yield dg.RunRequest(run_key=run_key)
 
 
-# CLT: dagster pipeline execute -f bin/pipelines/metadata_pipeline.py --preset default
+# CLT: dagster pipeline execute -f pipelines/metadata_pipeline.py --preset default

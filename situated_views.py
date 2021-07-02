@@ -6,6 +6,7 @@ from pipelines.export_pipeline import *
 from pipelines.metadata_pipeline import *
 from pipelines.images_pipeline import *
 from pipelines.camera_pipeline import *
+from pipelines.git_pipeline import *
 
 
 @dg.repository
@@ -19,7 +20,10 @@ def situated_views():
             "metadata_pipeline": lambda: metadata_pipeline,
             "camera_pipeline": lambda: camera_pipeline,
         },
-        "schedules": {"daily": lambda: daily},
+        "schedules": {
+            "weekly": lambda: weekly,
+            "pull_new_data_weekly": lambda: pull_new_data_weekly,
+        },
         "sensors": {
             # "trigger_catalog": lambda: trigger_catalog,
             "trigger_export": lambda: trigger_export,

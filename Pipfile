@@ -50,6 +50,7 @@ black = "*"
 benedict = "*"
 bios = "*"
 python-dotenv = "*"
+gitpython = "*"
 
 [dev-packages]
 black = "*"

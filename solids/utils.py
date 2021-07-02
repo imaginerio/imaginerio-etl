@@ -1,3 +1,4 @@
+from dagster.core.definitions import output
 import geopandas as gpd
 import os
 from typing import Any
@@ -6,12 +7,17 @@ from xml.etree import ElementTree
 import dagster as dg
 from dagster.core.definitions.events import Failure
 import geojson
+from git.refs.symbolic import _git_dir
+from git.repo.base import Repo
 import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+
+# import git
+import subprocess
 
 
 class PandasCsvIOManager(dg.IOManager):
@@ -69,11 +75,6 @@ def rename_column(context, df, dic):
 )
 def update_metadata(_, df, metadata):
     metadata.update(df)
-
-    # metadata[["first_year", "last_year"]] = metadata[
-    #     ["first_year", "last_year"]
-    # ].applymap(lambda x: x if pd.isnull(x) else str(int(x)).split(".")[0])
-
     return metadata.set_index("id")
 
 
@@ -106,3 +107,22 @@ def slack_solid(context):
     context.resources.slack.chat_postMessage(
         channel="#tutoriais-e-links", text=":wave: teste!"
     )
+
+
+@dg.solid
+def pull_new_data(context):
+    # git submodule update --init --recursive
+    # subprocess.call(["git", "pull", "fetch", "origin", "data"])
+    # subprocess.run("git submodule update --init --recursive")
+    comands = ["git", "submodule", "update", "--init", "--recursive"]
+    process = subprocess.Popen(comands)
+    # return process.communicate()[0]
+
+
+# git.cmd.Git().pull()
+
+
+# @dg.solid
+# def push_new_data(context):
+#
+#    commit_messege = f"{}"

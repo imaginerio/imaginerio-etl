@@ -2,19 +2,8 @@ import os
 
 import dagster as dg
 from dotenv import load_dotenv
-from solids.catalog import (
-    creators_list,
-    dates_accuracy,
-    extract_dimensions,
-    organize_columns,
-    xml_to_df,
-)
-from solids.utils import (
-    df_csv_io_manager,
-    update_metadata,
-    root_input_csv,
-    root_input_xml,
-)
+from solids.catalog import *
+from solids.utils import *
 
 
 load_dotenv(override=True)
@@ -58,26 +47,28 @@ def catalog_pipeline():
 
 ################   SENSORS   ##################
 
-# @dg.sensor(pipeline_name="catalog_pipeline")
-# def trigger_catalog(context):
-#     last_mtime = float(context.cursor) if context.cursor else 0
 
-#     max_mtime = last_mtime
+@dg.sensor(pipeline_name="catalog_pipeline")
+def trigger_catalog(context):
+    last_mtime = float(context.cursor) if context.cursor else 0
 
-#     fstats = os.stat("/mnt/y/projetos/getty/cumulus.xml")
-#     file_mtime = fstats.st_mtime
-#     if file_mtime <= last_mtime:
-#         return
+    max_mtime = last_mtime
 
-#     # the run key should include mtime if we want to kick off new runs based on file modifications
-#     run_key = f"cumulus.xml:{str(file_mtime)}"
-#     # run_config = {"solids": {"process_file": {"config": {"filename": filename}}}}
-#     yield dg.RunRequest(run_key=run_key)
-#     max_mtime = max(max_mtime, file_mtime)
+    fstats = os.stat("/mnt/y/projetos/getty/cumulus.xml")
+    file_mtime = fstats.st_mtime
+    if file_mtime <= last_mtime:
+        return
 
-#     context.update_cursor(str(max_mtime))
+    # the run key should include mtime if we want to kick off new runs based on file modifications
+    run_key = f"cumulus.xml:{str(file_mtime)}"
+    # run_config = {"solids": {"process_file": {"config": {"filename": filename}}}}
+    yield dg.RunRequest(run_key=run_key)
+
+    max_mtime = max(max_mtime, file_mtime)
+
+    context.update_cursor(str(max_mtime))
 
 
-# CLI: dagit -f bin/pipelines/catalog_pipeline.py
-# CLI: dagster pipeline execute -f bin/pipelines/catalog_pipeline.py -c bin/pipelines/catalog_pipeline.yaml
-# CLI: dagster pipeline execute -f bin/pipelines/catalog_pipeline.py --preset default
+# CLI: dagit -f pipelines/catalog_pipeline.py
+# CLI: dagster pipeline execute -f pipelines/catalog_pipeline.py -c pipelines/catalog_pipeline.yaml
+# CLI: dagster pipeline execute -f pipelines/catalog_pipeline.py --preset default
