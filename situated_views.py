@@ -19,7 +19,7 @@ def situated_views():
             "metadata_pipeline": lambda: metadata_pipeline,
             "camera_pipeline": lambda: camera_pipeline,
         },
-        "schedules": {"daily": lambda: daily},
+        "schedules": {"weekly": lambda: weekly},
         "sensors": {
             # "trigger_catalog": lambda: trigger_catalog,
             "trigger_export": lambda: trigger_export,
