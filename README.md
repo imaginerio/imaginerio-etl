@@ -13,7 +13,7 @@ dagit
 dagster-daemon run
 
 # Force pipeline execution
-dagster pipeline execute -f some_pipeline.py --preset some_preset
+dagster pipeline execute -f bin/pipelines/some_pipeline.py --preset default
 
 # Test sensor 
 dagster sensor preview my_sensor_name
