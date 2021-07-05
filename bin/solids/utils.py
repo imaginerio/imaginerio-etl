@@ -27,7 +27,7 @@ class PandasCsvIOManager(dg.IOManager):
         yield dg.AssetMaterialization(
             asset_key=dg.AssetKey(obj_name),
             description=f"The {obj_name.upper()} was saved as csv",
-            metadata={"number of rows": dg.EventMetadata.int(len(obj))},
+            #metadata={"number of rows": dg.EventMetadata.int(len(obj))},
         )
         # yield dg.EventMetadataEntry.text(obj.shape[0], label="number of rows")
 
