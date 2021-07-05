@@ -19,15 +19,17 @@ def situated_views():
             "export_pipeline": lambda: export_pipeline,
             "metadata_pipeline": lambda: metadata_pipeline,
             "camera_pipeline": lambda: camera_pipeline,
+            "git_pipeline": lambda: git_pipeline,
         },
         "schedules": {
             "weekly": lambda: weekly,
-            "pull_new_data_weekly": lambda: pull_new_data_weekly,
+            # "pull_new_data_weekly": lambda: pull_new_data_weekly,
         },
         "sensors": {
             # "trigger_catalog": lambda: trigger_catalog,
             "trigger_export": lambda: trigger_export,
             "trigger_metadata": lambda: trigger_metadata,
             "trigger_apis": lambda: trigger_apis,
+            "trigger_git_push": lambda: trigger_git_push,
         },
     }
