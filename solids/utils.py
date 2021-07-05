@@ -15,6 +15,7 @@ from pandas.core.frame import DataFrame
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+import datetime
 
 # import git
 import subprocess
@@ -33,7 +34,7 @@ class PandasCsvIOManager(dg.IOManager):
         yield dg.AssetMaterialization(
             asset_key=dg.AssetKey(obj_name),
             description=f"The {obj_name.upper()} was saved as csv",
-            metadata={"number of rows": dg.EventMetadata.int(len(obj))},
+            # metadata={"number of rows": dg.EventMetadata.int(len(obj))},
         )
         # yield dg.EventMetadataEntry.text(obj.shape[0], label="number of rows")
 
@@ -111,18 +112,43 @@ def slack_solid(context):
 
 @dg.solid
 def pull_new_data(context):
-    # git submodule update --init --recursive
-    # subprocess.call(["git", "pull", "fetch", "origin", "data"])
-    # subprocess.run("git submodule update --init --recursive")
     comands = ["git", "submodule", "update", "--init", "--recursive"]
-    process = subprocess.Popen(comands)
-    # return process.communicate()[0]
+    pull = subprocess.Popen(comands)
 
 
-# git.cmd.Git().pull()
+@dg.solid
+def push_new_data(context):
+    # commit_messege = f"Data files updated on {datetime.date.today()}"
+    # git_cd_submodule = subprocess.Popen("cd data")
+    # git_checkout = subprocess.Popen("git checkout main")
+    # git_commit = subprocess.Popen("git commit -a -m 'Update data in submodule'")
+    # git_push = subprocess.Popen("git push")
+    # git_cd_submodule = subprocess.Popen("cd ..")
+    # git_add = subprocess.Popen("git add data")
+    # git_commit = subprocess.Popen("git commit -m 'Update submodule'")
 
+    commands = [
+        "cd data",
+        "git checkout main",
+        "git commit -a -m 'Update data in submodule'",
+        "git push",
+        "cd ..",
+        "git add data",
+        "git commit -m 'Update submodule'",
+        "git push",
+    ]
 
-# @dg.solid
-# def push_new_data(context):
-#
-#    commit_messege = f"{}"
+    for command in commands:
+        git_cli = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+
+        output, errors = git_cli.communicate()
+        print(command, output, errors)
+
+        # print(git_cli.stderr)
+        # slack message with git_cli.strerr
