@@ -76,9 +76,10 @@ def organize_columns(context, df):
             "DATA LIMITE INFERIOR": "first_year",
             "DATA LIMITE SUPERIOR": "last_year",
             "DIMENSÃO": "dimensions",
-            "PROCESSO FORMADOR DA IMAGEM": "fabrication_method",
+            "PROCESSO FORMADOR DA IMAGEM": "process",
             "LOCAL": "place",
             "DESIGNAÇÃO GENÉRICA": "type",
+            "FORMATO PADRÃO": "format",
         },
     )
     # select columns
@@ -92,7 +93,8 @@ def organize_columns(context, df):
             "first_year",
             "last_year",
             "type",
-            "fabrication_method",
+            "process",
+            "format",
             "dimensions",
             "place",
         ]
