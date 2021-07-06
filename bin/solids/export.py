@@ -29,14 +29,13 @@ def load_metadata(_, metadata):
 
 @dg.solid
 def organize_columns_to_omeka(_, df):
-    # format data
     omeka_df = df
-    omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
-    omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
-    omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
-    omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
 
     # create columns
+    omeka_df["dcterms:type:pt"] = ""
+    omeka_df["dcterms:type:en"] = ""
+    omeka_df["dcterms:medium:pt"] = ""
+    omeka_df["dcterms:medium:en"] = ""
     omeka_df["rights"] = ""
     omeka_df["citation"] = ""
     omeka_df["item_sets"] = "all||views"
@@ -48,51 +47,72 @@ def organize_columns_to_omeka(_, df):
         df["first_year"].astype(str) + "/" + df["last_year"].astype(str)
     )
 
+    # format data
+    omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
+    omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
+    omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
+    omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
+    
+    omeka_df.loc[omeka_df["type"] == "FOTOGRAFIA/ Papel", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q56055236 Fotografia em papel","wikidata.org/wiki/Q56055236 Photographic print"
+    omeka_df.loc[omeka_df["type"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q100575647 Impressão fotomecânica","wikidata.org/wiki/Q100575647 Photomechanical print"
+    omeka_df.loc[omeka_df["type"] == "NEGATIVO/ Vidro", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q85621807 Negativo de vidro","wikidata.org/wiki/Q85621807 Glass plate negative"
+    filter = (omeka_df["format"] == "Estereoscopia") & (omeka_df["type"] == "DIAPOSITIVO/ Vidro")
+    omeka_df.loc[filter, ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro||wikidata.org/wiki/Q35158 Estereoscopia","wikidata.org/wiki/Q97570383 Glass diapositive||wikidata.org/wiki/Q35158 Stereoscopy"
+    omeka_df.loc[omeka_df["type"] == "DIAPOSITIVO/ Vidro", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro","wikidata.org/wiki/Q97570383 Glass diapositive"
+
+    omeka_df.loc[omeka_df["process"] == "AUTOCHROME / Corante e prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q355674 Autocromo", "wikidata.org/wiki/Q355674 Autochrome"
+    omeka_df.loc[omeka_df["process"] == "ALBUMINA/ Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q107387614 Albumina", "wikidata.org/wiki/Q107387614 Albumine"
+    omeka_df.loc[omeka_df["process"] == "GELATINA/ Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q172984 Gelatina e prata", "wikidata.org/wiki/Q172984 Silver gelatin"
+    omeka_df.loc[omeka_df["process"] == "COLÓDIO/ Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q904614 Colódio", "wikidata.org/wiki/Q904614 Collodion"
+    omeka_df.loc[omeka_df["process"] == "LANTERN SLIDE / Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q87714739","wikidata.org/wiki/Q87714739"
+
     # rename columns
     omeka_df = omeka_df.rename(
-        columns={
-            "id": "dcterms:identifier",
-            "title": "dcterms:title",
-            "description": "dcterms:description",
-            "creator": "dcterms:creator",
-            "date_created": "dcterms:created",
-            "date_circa": "dcterms:temporal",
-            "type": "dcterms:type",
-            "image_width": "schema:width",
-            "image_height": "schema:height",
-            "rights": "dcterms:rights",
-            "citation": "dcterms:bibliographicCitation",
-            "portals_url": "dcterms:source",
-            "wikidata_id": "dcterms:hasVersion",
-            "geometry": "schema:polygon",
-            "wikidata_depict": "foaf:depicts",
-            "img_hd": "media",
+    columns={
+        "id": "dcterms:identifier",
+        "title": "dcterms:title",
+        "description": "dcterms:description",
+        "creator": "dcterms:creator",
+        "date_created": "dcterms:created",
+        "date_circa": "dcterms:temporal",
+        "image_width": "schema:width",
+        "image_height": "schema:height",
+        "rights": "dcterms:rights",
+        "citation": "dcterms:bibliographicCitation",
+        "portals_url": "dcterms:source",
+        "wikidata_id": "dcterms:hasVersion",
+        "geometry": "schema:polygon",
+        "wikidata_depict": "foaf:depicts",
+        "img_hd": "media"
         }
     )
 
     # select columns
     omeka_df = omeka_df[
-        [
-            "dcterms:identifier",
-            "dcterms:title",
-            "dcterms:description",
-            "dcterms:creator",
-            "dcterms:created",
-            "dcterms:temporal",
-            "dcterms:available",
-            "dcterms:type",
-            "dcterms:rights",
-            "dcterms:bibliographicCitation",
-            "dcterms:source",
-            "dcterms:hasVersion",
-            "latitude",
-            "longitude",
-            "schema:polygon",
-            "foaf:depicts",
-            "schema:width",
-            "schema:height",
-            "media",
-            "item_sets",
+    [
+        "dcterms:identifier",
+        "dcterms:title",
+        "dcterms:description",
+        "dcterms:creator",
+        "dcterms:created",
+        "dcterms:temporal",
+        "dcterms:available",
+        "dcterms:type:pt",
+        "dcterms:type:en",
+        "dcterms:medium:pt",
+        "dcterms:medium:en",
+        "dcterms:rights",
+        "dcterms:bibliographicCitation",
+        "dcterms:source",
+        "dcterms:hasVersion",
+        "latitude",
+        "longitude",
+        "schema:polygon",
+        "foaf:depicts",
+        "schema:width",
+        "schema:height",
+        "media",
+        "item_sets",
         ]
     ]
 
@@ -178,14 +198,14 @@ def make_df_to_wikidata(_, df):
     quickstate["qal8208"] = df["tilt"].astype(str) + "U28390"
     # creator
     quickstate["P170"] = df["creator"]
-    # material used
+    # made from material
     quickstate["P186"] = df["type"]
     # collection
     quickstate["P195"] = "Q71989864"
     # inventory number
     quickstate["P217"] = df["id"]
     # fabrication method
-    quickstate["P2079"] = df["fabrication_method"]
+    quickstate["P2079"] = df["process"]
     # field of view
     quickstate["P4036"] = df["fov"].astype(str) + "U28390"
     # width
@@ -204,7 +224,7 @@ def make_df_to_wikidata(_, df):
     quickstate.loc[paper, "P186"] = "Q11472"
     quickstate.loc[glass, "P186"] = "Q11469"
 
-    # fabrication method
+    # process
     gelatin = quickstate["P2079"].str.contains("GELATINA", na=False)
     albumin = quickstate["P2079"].str.contains("ALBUMINA", na=False)
     quickstate.loc[gelatin, "P2079"] = "Q172984"
