@@ -70,6 +70,16 @@ def rename_column(context, df, dic):
     return df
 
 
+# @dg.solid(
+#     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")]
+# )  # tem que ver como colocar o nome desse input
+# def compare_dfs(_, df_upstream, df_inputed):
+#     if not df_upstream.equals(df_inputed):
+#         return df_upstream
+# else:
+# ver como para a execução da pipeline
+
+
 @dg.solid(
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")],
@@ -118,37 +128,43 @@ def pull_new_data(context):
 
 @dg.solid
 def push_new_data(context):
-    # commit_messege = f"Data files updated on {datetime.date.today()}"
-    # git_cd_submodule = subprocess.Popen("cd data")
-    # git_checkout = subprocess.Popen("git checkout main")
-    # git_commit = subprocess.Popen("git commit -a -m 'Update data in submodule'")
-    # git_push = subprocess.Popen("git push")
-    # git_cd_submodule = subprocess.Popen("cd ..")
-    # git_add = subprocess.Popen("git add data")
-    # git_commit = subprocess.Popen("git commit -m 'Update submodule'")
-
-    commands = [
-        "cd data",
+    submodule_push = [
+        "pwd",
         "git checkout main",
-        "git commit -a -m 'Update data in submodule'",
-        "git push",
-        "cd ..",
-        "git add data",
-        "git commit -m 'Update submodule'",
+        "git add .",
+        "git commit -a -m ':white_check_mark: Update data in submodule'",
         "git push",
     ]
 
-    for command in commands:
-        git_cli = subprocess.Popen(
+    for command in submodule_push:
+        git_cli_sub = subprocess.Popen(
             command,
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True,
+            cwd="data",
+        )
+        output, errors = git_cli_sub.communicate()
+        print(f"command: {command} \noutput: {output} \nERRO: {errors}")
+
+    etl_push = [
+        "pwd",
+        "git checkout feature/dagster-submodule",
+        "git add data",
+        "git commit -m ':white_check_mark: Update submodule'",
+        "git push",
+    ]
+
+    for command in etl_push:
+        git_cli_etl = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            cwd=".",
         )
 
-        output, errors = git_cli.communicate()
-        print(command, output, errors)
-
-        # print(git_cli.stderr)
-        # slack message with git_cli.strerr
+        output, errors = git_cli_etl.communicate()
+        print(f"command: {command} \noutput: {output} \nERRO: {errors}")

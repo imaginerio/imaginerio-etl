@@ -16,7 +16,7 @@ def git_pipeline():
 @dg.sensor(
     pipeline_name="git_pipeline",
     solid_selection=["push_new_data"],
-    minimum_interval_seconds=140,
+    minimum_interval_seconds=300,
 )
 def trigger_git_push(context):
     last_mtime = float(context.cursor) if context.cursor else 0
@@ -45,14 +45,14 @@ def trigger_git_push(context):
 ################   SCHEDULES   ##################
 
 
-# @dg.schedule(
-#     cron_schedule="0 19 * * FRI",  # rodar toda sexta as 19hs
-#     pipeline_name="git_pipeline",
-#     solid_selection=["pull_new_data"],
-#     execution_timezone="America/Sao_Paulo",
-# )
-# def pull_new_data_weekly():
-#     return {}
+@dg.schedule(
+    cron_schedule="0 * * * *",
+    pipeline_name="git_pipeline",
+    solid_selection=["pull_new_data"],
+    execution_timezone="America/Sao_Paulo",
+)
+def pull_new_data_weekly():
+    return {}
 
 
 # from dagster import validate_run_config

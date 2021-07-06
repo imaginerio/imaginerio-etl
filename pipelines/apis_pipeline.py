@@ -105,7 +105,6 @@ def weekly():
 
 
 # CLI: dagit -f pipelines/apis_pipeline.py
-# CLI: dagster pipeline execute apis_pipeline --preset one
 # CLT: dagster pipeline execute -f pipelines/apis_pipeline.py --preset default
 # CLI: dagster sensor preview trigger_apis
 # CLI: dagster-daemon run
