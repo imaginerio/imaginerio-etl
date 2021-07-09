@@ -6,6 +6,7 @@ from io import BytesIO
 import math
 import dagster as dg
 import geojson
+import shutil
 
 import geopandas as gpd
 import matplotlib._png as png
@@ -69,7 +70,7 @@ def get_radius(kml):
     id = str(KML.PhotoOverlay.name)
     tilt = KML.PhotoOverlay.Camera.tilt
     df = pd.read_csv(
-        "https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data/output/metadata.csv",
+        "https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-out/metadata.csv",
         index_col="id",
     )
     depicts = df.loc[id, "wikidata_depict"]
@@ -168,11 +169,13 @@ def draw_cone(kml, radius=400, steps=200):
 @dg.solid(config_schema=dg.StringSource)
 def get_list(context):
     path = context.solid_config
+    print(path)
     list_kmls = os.listdir(path)
     kmls = []
     for kml in list_kmls:
         full_path = os.path.join(path, kml)
         kmls.append(full_path)
+    print("get_List:", kmls)
     return kmls
 
 
@@ -187,23 +190,29 @@ def split_photooverlays(context, kmls, delete_original=False):
                 photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
                 photooverlays[-1] = re.sub("</Folder>\n</kml>", "", photooverlays[-1])
         for po in photooverlays:
+
             filename = find_with_re("name", po)
             with open(os.path.join(path, filename + ".kml"), "w") as k:
                 k.write(f"{header}\n{po}</kml>")
         if delete_original:
             os.remove(os.path.abspath(kml))
-    return [
+        shutil.move(kml, "data/input/kmls/processed_raw")
+
+    new_kmls = [
         os.path.join(path, file)
         for file in os.listdir(path)
         if os.path.isfile(os.path.join(path, file))
     ]
+    
+    return new_kmls
 
 
 @dg.solid
-def change_img_href(context, kmls):
+def change_img_href(context, kmls):    
     for kml in kmls:
-        with open(kml, "r+") as f:
+        with open(kml, "r+") as f:           
             txt = f.read()
+            print("text:", kml)
             filename = find_with_re("name", txt)
             txt = re.sub(
                 "(?<=<href>).+(?=<\/href>\n\t+<\/Icon>\n\t+<ViewVolume>)",
@@ -213,6 +222,7 @@ def change_img_href(context, kmls):
             f.seek(0)
             f.write(txt)
             f.truncate()
+    print("after_change_img:", kmls)
     return kmls
 
 
@@ -267,6 +277,7 @@ def create_geojson(context, kmls, metadata):
     not_on_geojson = []
     metadata["upper_ids"] = metadata["id"].str.upper()
     metadata = metadata.set_index("upper_ids")
+    path = context.solid_config
 
     for kml in kmls:
         try:
@@ -327,6 +338,7 @@ def create_geojson(context, kmls, metadata):
         except Exception as E:
             not_on_geojson.append(Id)
             print(f"ERROR: {E} no ID: {Id}")
+        shutil.move(kml, path)
 
     collection = geojson.FeatureCollection(features=features)
     # context.log.info(f"{collection}")
@@ -338,7 +350,7 @@ def create_geojson(context, kmls, metadata):
 # def update_geojson(context):
 
 
-# kmls = [os.path.join("data/input", "kml",file) for file in os.listdir("data/input/kml") if os.path.isfile(os.path.join("data/input", "kml",file))]
+# kmls = [os.path.join("data-in", "kml",file) for file in os.listdir("data-in/kml") if os.path.isfile(os.path.join("data-in", "kml",file))]
 # dg.execute_solid(create_geojson, input_values={"kmls":kmls})
 
 # CLI: dagit -f bin/pipelines/camera_pipeline.py
