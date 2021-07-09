@@ -18,41 +18,41 @@ from urllib3.util import Retry
 @dg.solid(config_schema=dg.StringSource)
 def query_omeka(context):
     endpoint = context.solid_config
+    print(endpoint)
 
-    try:
-        # start session
-        retry_strategy = Retry(
-            total=3,
-            status_forcelist=[429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "OPTIONS"],
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        http = requests.Session()
-        http.mount("https://", adapter)
-        http.mount("http://", adapter)
+    # start session
+    retry_strategy = Retry(
+        total=3,
+        status_forcelist=[429, 500, 502, 503, 504],
+        method_whitelist=["HEAD", "GET", "OPTIONS"],
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount("https://", adapter)
+    http.mount("http://", adapter)
 
-        response = http.get(endpoint, params={"per_page": 1})
+    response = http.get(endpoint, params={"per_page": 1})
 
-        # loop over pages until response is blank
-        results = {}
-        l1 = []
-        l2 = []
-        page = 1
-        while response != []:
-            response = http.get(endpoint, params={"page": page, "per_page": 250}).json()
-            for item in response:
+    # loop over pages until response is blank
+    results = {}
+    l1 = []
+    l2 = []
+    page = 1
+    while response != []:
+        response = http.get(endpoint, params={"page": page, "per_page": 250}).json()
+
+        for item in response:
+            try:
                 l1.append(item["dcterms:identifier"][0]["@value"])
                 l2.append(item["@id"])
-            page += 1
-            sleep(0.5)
+            except:
+                pass
+        page += 1
+        sleep(0.5)
 
-        results.update({"id": l1, "omeka_url": l2})
+    results.update({"id": l1, "omeka_url": l2})
 
-        return results
-
-    except Exception as e:
-        context.log.info(e)
-        return None
+    return results
 
 
 @dg.solid(
@@ -164,7 +164,7 @@ def wikidata_dataframe(context, results):
 @dg.solid(config_schema=dg.StringSource)
 def query_portals(context):
     endpoint = context.solid_config
-    # try:
+
     retry_strategy = Retry(
         total=3,
         status_forcelist=[429, 500, 502, 503, 504],
@@ -197,10 +197,6 @@ def query_portals(context):
     print(len(dataframe.shape))
 
     return dataframe
-
-    # except Exception as E:
-    #     context.log.info(E)
-    #     return None
 
 
 @dg.solid(

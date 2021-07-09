@@ -53,7 +53,7 @@ def create_metadata(context, omeka, cumulus, wikidata, portals, camera, images):
     dataframes_outer = [cumulus, camera_new, images]
     dataframe_left = [portals, omeka, wikidata]
     metadata = pd.DataFrame(columns=["id"])
-    print("CUMULUS:", cumulus["first_year"][10], type(cumulus["first_year"][10]))
+    # print("CUMULUS:", cumulus["first_year"][10], type(cumulus["first_year"][10]))
 
     for df in dataframes_outer:
         metadata = metadata.merge(df, how="outer", on="id")

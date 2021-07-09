@@ -100,5 +100,5 @@ def test_sensor():
     pipeline_name="apis_pipeline",
     execution_timezone="America/Sao_Paulo",
 )
-def weekly():
+def apis_pipeline_weekly():
     return {}
