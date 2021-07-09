@@ -107,6 +107,7 @@ def import_omeka_dataframe(_, df, jstor):
     # append JSTOR migration
     omeka_df = df.append(jstor)
     omeka_df.name = "import_omeka"
+    print(omeka_df["dcterms:identifier"].dtypes)
 
     return omeka_df.set_index("dcterms:identifier")
 

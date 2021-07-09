@@ -2,7 +2,7 @@ import os
 
 import dagster as dg
 from dotenv import load_dotenv
-from solids.catalog import *
+from solids.cumulus import *
 from solids.utils import *
 
 
@@ -13,6 +13,7 @@ preset = {
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
         "xml_root": {"config": {"env": "CUMULUS_XML"}},
+        # "current_df_root": {"config": {"env": "CUMULUS"}},
     }
 }
 
@@ -25,6 +26,7 @@ preset = {
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": root_input_csv,
                 "xml_root": root_input_xml,
+                # "current_df_root": root_input_csv,
             },
         )
     ],
@@ -36,20 +38,20 @@ preset = {
         )
     ],
 )
-def catalog_pipeline():
-    catalog_df = xml_to_df()
-    catalog_df = organize_columns(catalog_df)
-    catalog_df = extract_dimensions(catalog_df)
-    listed_creators = creators_list(catalog_df)
-    catalog = dates_accuracy(catalog_df)
-    update_metadata(df=catalog)
+def cumulus_pipeline():
+    cumulus_df = xml_to_df()
+    cumulus_df = organize_columns(cumulus_df)
+    cumulus_df = extract_dimensions(cumulus_df)
+    listed_creators = creators_list(cumulus_df)
+    cumulus_df = dates_accuracy(cumulus_df)
+    update_metadata(df=cumulus_df)
 
 
 ################   SENSORS   ##################
 
 
-@dg.sensor(pipeline_name="catalog_pipeline")
-def trigger_catalog(context):
+@dg.sensor(pipeline_name="cumulus_pipeline")
+def trigger_cumulus(context):
     last_mtime = float(context.cursor) if context.cursor else 0
 
     max_mtime = last_mtime
@@ -67,8 +69,3 @@ def trigger_catalog(context):
     max_mtime = max(max_mtime, file_mtime)
 
     context.update_cursor(str(max_mtime))
-
-
-# CLI: dagit -f pipelines/catalog_pipeline.py
-# CLI: dagster pipeline execute -f pipelines/catalog_pipeline.py -c pipelines/catalog_pipeline.yaml
-# CLI: dagster pipeline execute -f pipelines/catalog_pipeline.py --preset default

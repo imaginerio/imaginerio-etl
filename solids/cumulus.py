@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 
-# solids catalog
+# solids cumulus
 @dg.solid(
     input_defs=[dg.InputDefinition("root", root_manager_key="xml_root")],
 )
@@ -49,24 +49,24 @@ def xml_to_df(context, root):
             except KeyError:
                 continue
     formated_table = outDict["table"]
-    catalog_df = pd.DataFrame(formated_table)
+    cumulus_df = pd.DataFrame(formated_table)
 
     # load
-    catalog_df = catalog_df.astype(
+    cumulus_df = cumulus_df.astype(
         {"DATA": str, "DATA LIMITE INFERIOR": str, "DATA LIMITE SUPERIOR": str},
         copy=False,
     )
-    catalog_df[["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]] = catalog_df[
+    cumulus_df[["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]] = cumulus_df[
         ["DATA LIMITE SUPERIOR", "DATA LIMITE INFERIOR"]
     ].applymap(lambda x: x.split(".")[0])
 
-    return catalog_df
+    return cumulus_df
 
 
 @dg.solid
 def organize_columns(context, df):
     # rename columns
-    catalog_df = df.rename(
+    cumulus_df = df.rename(
         columns={
             "Record Name": "id",
             "TÍTULO": "title",
@@ -82,7 +82,7 @@ def organize_columns(context, df):
         },
     )
     # select columns
-    catalog_df = catalog_df[
+    cumulus_df = cumulus_df[
         [
             "id",
             "title",
@@ -99,15 +99,15 @@ def organize_columns(context, df):
     ]
 
     # remove file extension
-    catalog_df["id"] = catalog_df["id"].str.split(".", n=1, expand=True)
+    cumulus_df["id"] = cumulus_df["id"].str.split(".", n=1, expand=True)
 
     # remove duplicates
-    catalog_df = catalog_df.drop_duplicates(subset="id", keep="last")
+    cumulus_df = cumulus_df.drop_duplicates(subset="id", keep="last")
 
     # reverse cretor name
-    catalog_df["creator"] = catalog_df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
+    cumulus_df["creator"] = cumulus_df["creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
 
-    return catalog_df
+    return cumulus_df
 
 
 @dg.solid(
@@ -135,7 +135,7 @@ def extract_dimensions(context, df):
 
 
 @dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="catalog")]
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="cumulus")]
 )
 def dates_accuracy(context, df):
     circa = df["date"].str.contains(r"[a-z]", na=False)
@@ -184,15 +184,15 @@ def dates_accuracy(context, df):
         df["first_year"] + "/" + df["last_year"]
     )
 
-    print("TYPE OF FIRST(before strftime):", type(df["first_year"].dtypes))
+    # print("TYPE OF FIRST(before strftime):", type(df["first_year"].dtypes))
 
     df.loc[df["date_accuracy"] == "circa", "date_circa"] = (
         df["first_year"] + "/" + df["last_year"]
     )
     #########
 
-    catalog = df
-    catalog.name = "catalog"
-    print("CATALOG:", catalog["first_year"][10], type(catalog["first_year"][10]))
-
-    return catalog.set_index("id")
+    cumulus = df
+    cumulus.name = "cumulus"
+    # print("CUMULUS:", cumulus["first_year"].dtypes)
+    # print(cumulus.head())
+    return cumulus.set_index("id")
