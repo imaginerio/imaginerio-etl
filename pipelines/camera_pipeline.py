@@ -8,8 +8,9 @@ load_dotenv(override=True)
 
 preset = {
     "solids": {
-        "get_list": {"config": {"env": "KML_RAW"}},
-        "split_photooverlays": {"config": {"env": "KML"}},
+        "get_list": {"config": {"env": "NEW_RAW"}},
+        "split_photooverlays": {"config": {"env": "NEW_SINGLE"}},
+        "create_geojson": {"config": {"env": "PROCESSED_SINGLE"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
