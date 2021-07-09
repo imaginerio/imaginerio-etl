@@ -52,19 +52,50 @@ def organize_columns_to_omeka(_, df):
     omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
     omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
-    
-    omeka_df.loc[omeka_df["type"] == "FOTOGRAFIA/ Papel", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q56055236 Fotografia em papel","wikidata.org/wiki/Q56055236 Photographic print"
-    omeka_df.loc[omeka_df["type"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q100575647 Impressão fotomecânica","wikidata.org/wiki/Q100575647 Photomechanical print"
-    omeka_df.loc[omeka_df["type"] == "NEGATIVO/ Vidro", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q85621807 Negativo de vidro","wikidata.org/wiki/Q85621807 Glass plate negative"
-    filter = (omeka_df["format"] == "Estereoscopia") & (omeka_df["type"] == "DIAPOSITIVO/ Vidro")
-    omeka_df.loc[filter, ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro||wikidata.org/wiki/Q35158 Estereoscopia","wikidata.org/wiki/Q97570383 Glass diapositive||wikidata.org/wiki/Q35158 Stereoscopy"
-    omeka_df.loc[omeka_df["type"] == "DIAPOSITIVO/ Vidro", ("dcterms:type:pt","dcterms:type:en")] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro","wikidata.org/wiki/Q97570383 Glass diapositive"
 
-    omeka_df.loc[omeka_df["process"] == "AUTOCHROME / Corante e prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q355674 Autocromo", "wikidata.org/wiki/Q355674 Autochrome"
-    omeka_df.loc[omeka_df["process"] == "ALBUMINA/ Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q107387614 Albumina", "wikidata.org/wiki/Q107387614 Albumine"
-    omeka_df.loc[omeka_df["process"] == "GELATINA/ Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q172984 Gelatina e prata", "wikidata.org/wiki/Q172984 Silver gelatin"
-    omeka_df.loc[omeka_df["process"] == "COLÓDIO/ Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q904614 Colódio", "wikidata.org/wiki/Q904614 Collodion"
-    omeka_df.loc[omeka_df["process"] == "LANTERN SLIDE / Prata",("dcterms:medium:pt","dcterms:medium:en")] = "wikidata.org/wiki/Q87714739","wikidata.org/wiki/Q87714739"
+    omeka_df.loc[
+             omeka_df["type"] == "FOTOGRAFIA/ Papel", 
+             ("dcterms:type:pt","dcterms:type:en")
+             ] = "wikidata.org/wiki/Q56055236 Fotografia em papel","wikidata.org/wiki/Q56055236 Photographic print"
+    omeka_df.loc[
+                omeka_df["type"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", 
+                ("dcterms:type:pt","dcterms:type:en")
+                ] = "wikidata.org/wiki/Q100575647 Impressão fotomecânica","wikidata.org/wiki/Q100575647 Photomechanical print"
+    omeka_df.loc[
+                omeka_df["type"] == "NEGATIVO/ Vidro", 
+                ("dcterms:type:pt","dcterms:type:en")
+                ] = "wikidata.org/wiki/Q85621807 Negativo de vidro","wikidata.org/wiki/Q85621807 Glass plate negative"
+    omeka_df.loc[
+                omeka_df["type"] == "DIAPOSITIVO/ Vidro", 
+                ("dcterms:type:pt","dcterms:type:en")
+                ] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro","wikidata.org/wiki/Q97570383 Glass diapositive"
+
+    filter = (omeka_df["format"] == "Estereoscopia") & (omeka_df["type"] == "DIAPOSITIVO/ Vidro")
+    omeka_df.loc[filter, 
+                ("dcterms:type:pt","dcterms:type:en")
+                ] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro||wikidata.org/wiki/Q35158 Estereoscopia","wikidata.org/wiki/Q97570383 Glass diapositive||wikidata.org/wiki/Q35158 Stereoscopy"
+
+
+    omeka_df.loc[
+                omeka_df["process"] == "AUTOCHROME / Corante e prata",
+                ("dcterms:medium:pt","dcterms:medium:en")
+                ] = "wikidata.org/wiki/Q355674 Autocromo", "wikidata.org/wiki/Q355674 Autochrome"
+    omeka_df.loc[
+                omeka_df["process"] == "ALBUMINA/ Prata",
+                ("dcterms:medium:pt","dcterms:medium:en")
+                ] = "wikidata.org/wiki/Q107387614 Albumina", "wikidata.org/wiki/Q107387614 Albumine"
+    omeka_df.loc[
+                omeka_df["process"] == "GELATINA/ Prata",
+                ("dcterms:medium:pt","dcterms:medium:en")
+                ] = "wikidata.org/wiki/Q172984 Gelatina e prata", "wikidata.org/wiki/Q172984 Silver gelatin"
+    omeka_df.loc[
+                omeka_df["process"] == "COLÓDIO/ Prata",
+                ("dcterms:medium:pt","dcterms:medium:en")
+                ] = "wikidata.org/wiki/Q904614 Colódio", "wikidata.org/wiki/Q904614 Collodion"
+    omeka_df.loc[
+                omeka_df["process"] == "LANTERN SLIDE / Prata",
+                ("dcterms:medium:pt","dcterms:medium:en")
+                ] = "wikidata.org/wiki/Q87714739","wikidata.org/wiki/Q87714739"
 
     # rename columns
     omeka_df = omeka_df.rename(
@@ -150,6 +181,7 @@ def make_df_to_wikidata(_, df):
             "qal8208",
             "P170",
             "P186",
+            "format",
             "P195",
             "P217",
             "P2079",
@@ -200,6 +232,8 @@ def make_df_to_wikidata(_, df):
     quickstate["P170"] = df["creator"]
     # made from material
     quickstate["P186"] = df["type"]
+    # format
+    quickstate["format"] = df["format"]
     # collection
     quickstate["P195"] = "Q71989864"
     # inventory number
@@ -219,16 +253,22 @@ def make_df_to_wikidata(_, df):
     # Copyright status
     # quickstate["P6216"]
 
-    paper = quickstate["P186"].str.contains("Papel", na=False)
-    glass = quickstate["P186"].str.contains("Vidro", na=False)
-    quickstate.loc[paper, "P186"] = "Q11472"
-    quickstate.loc[glass, "P186"] = "Q11469"
+    # format data P186
+    quickstate.loc[quickstate["P186"] == "FOTOGRAFIA/ Papel", "P186"] = "Q56055236"
+    quickstate.loc[quickstate["P186"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", "P186"] = "Q100575647"
+    quickstate.loc[quickstate["P186"] == "NEGATIVO/ Vidro", "P186"] = "Q85621807"
+    quickstate.loc[quickstate["P186"] == "DIAPOSITIVO/ Vidro", "P186"] = "Q97570383"
+    filter = (quickstate["format"] == "Estereoscopia") & (quickstate["P186"] == "Q97570383")
+    quickstate.loc[filter, "P186"] = "Q97570383||Q35158"
 
-    # process
-    gelatin = quickstate["P2079"].str.contains("GELATINA", na=False)
-    albumin = quickstate["P2079"].str.contains("ALBUMINA", na=False)
-    quickstate.loc[gelatin, "P2079"] = "Q172984"
-    quickstate.loc[albumin, "P2079"] = "Q580807"
+    # format data P2079
+    quickstate.loc[quickstate["P2079"] == "AUTOCHROME / Corante e prata","P2079"] = "Q355674"
+    quickstate.loc[quickstate["P2079"] == "ALBUMINA/ Prata","P2079"] = "Q107387614"
+    quickstate.loc[quickstate["P2079"] == "GELATINA/ Prata","P2079"] = "Q172984"
+    quickstate.loc[quickstate["P2079"] == "COLÓDIO/ Prata","P2079"] = "Q904614"
+    quickstate.loc[quickstate["P2079"] == "LANTERN SLIDE / Prata","P2079"] = "Q87714739"
+
+    quickstate = quickstate.drop(["format"], axis=1)
 
     return quickstate
 
