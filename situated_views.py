@@ -22,14 +22,14 @@ def situated_views():
             "git_pipeline": lambda: git_pipeline,
         },
         "schedules": {
-            "weekly": lambda: weekly,
-            # "pull_new_data_weekly": lambda: pull_new_data_weekly,
+            "apis_pipeline_weekly": lambda: apis_pipeline_weekly,
+            "pull_new_data_hour": lambda: pull_new_data_hour,
+            "push_new_data_daily": lambda: push_new_data_daily,
         },
         "sensors": {
             # "trigger_cumulus": lambda: trigger_cumulus,
             "trigger_export": lambda: trigger_export,
             "trigger_metadata": lambda: trigger_metadata,
             "trigger_apis": lambda: trigger_apis,
-            "trigger_git_push": lambda: trigger_git_push,
         },
     }
