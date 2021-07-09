@@ -1,5 +1,5 @@
 import dagster as dg
-from pipelines.catalog_pipeline import *
+from pipelines.cumulus_pipeline import *
 from pipelines.images_pipeline import *
 from pipelines.apis_pipeline import *
 from pipelines.export_pipeline import *
@@ -13,7 +13,7 @@ from pipelines.git_pipeline import *
 def situated_views():
     return {
         "pipelines": {
-            "catalog_pipeline": lambda: catalog_pipeline,
+            "cumulus_pipeline": lambda: cumulus_pipeline,
             "images_pipeline": lambda: images_pipeline,
             "apis_pipeline": lambda: apis_pipeline,
             "export_pipeline": lambda: export_pipeline,
@@ -26,7 +26,7 @@ def situated_views():
             # "pull_new_data_weekly": lambda: pull_new_data_weekly,
         },
         "sensors": {
-            # "trigger_catalog": lambda: trigger_catalog,
+            # "trigger_cumulus": lambda: trigger_cumulus,
             "trigger_export": lambda: trigger_export,
             "trigger_metadata": lambda: trigger_metadata,
             "trigger_apis": lambda: trigger_apis,

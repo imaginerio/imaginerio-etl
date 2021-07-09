@@ -61,6 +61,3 @@ def trigger_camera(context):
         max_mtime = max(max_mtime, file_mtime)
 
     context.update_cursor(str(max_mtime))
-
-
-# CLI dagster pipeline execute -f pipelines/camera_pipeline.py -c pipelines/camera_pipeline.yaml

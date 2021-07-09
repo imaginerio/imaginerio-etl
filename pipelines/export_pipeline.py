@@ -39,12 +39,12 @@ def export_pipeline():
 
     # Import OMEKA
 
-    omeka_organized = organize_columns_to_omeka(export_df)
-    omeka_df = import_omeka_dataframe(df=omeka_organized)
+    omeka_df = organize_columns_to_omeka(export_df)
+    omeka_df = import_omeka_dataframe(df=omeka_df)
 
     # import WIKIDATA
     wikidata_df = make_df_to_wikidata(export_df)
-    organised_creator = organise_creator(quickstate=wikidata_df)
+    wikidata_df = organise_creator(quickstate=wikidata_df)
 
 
 ################   SENSORS   ##################

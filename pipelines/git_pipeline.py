@@ -1,45 +1,36 @@
-import os
-import dagster as dg
 import datetime
+import os
+
+import dagster as dg
 from solids.utils import *
 
 
 @dg.pipeline
 def git_pipeline():
-    # pull_new_data()
+    pull_new_data()
     push_new_data()
 
 
 ################   SENSORS   ##################
-
-# cada hora
 @dg.sensor(
     pipeline_name="git_pipeline",
     solid_selection=["push_new_data"],
     minimum_interval_seconds=300,
 )
 def trigger_git_push(context):
-    last_mtime = float(context.cursor) if context.cursor else 0
-    max_mtime = last_mtime
-    processed_single = "data/input/kmls/processed_single"
-    run_key = datetime.now().strftime("%d/%m/%Y%H%M%S")
-
-    for filename in os.listdir(processed_single):
-        filepath = os.path.join(processed_single, filename)
-        fstats = os.stat(filepath)
-        file_mtime = fstats.st_mtime
-
-        if file_mtime > last_mtime:
-            max_mtime = max(
-                max_mtime, file_mtime
-            )  # pq precisa disso? pode ser só: "context.update_cursor(str(file_mtime))" no final?
-            yield dg.RunRequest(run_key=run_key)
-            break
-
-        else:
-            continue
-
-    context.update_cursor(str(max_mtime))
+    events = context.instance.events_for_asset_key(
+        dg.AssetKey("metadata"),
+        after_cursor=context.last_run_key,
+        ascending=False,
+        limit=1,
+    )
+    if events:
+        record_id, event = events[0]  # take the most recent materialization
+        yield dg.RunRequest(
+            run_key=str(record_id),
+            run_config={},
+            tags={"source_pipeline": event.pipeline_name},
+        )
 
 
 ################   SCHEDULES   ##################
@@ -55,12 +46,5 @@ def pull_new_data_weekly():
     return {}
 
 
-# from dagster import validate_run_config
-
-
-# def test_my_cron_schedule():
-#     run_config = pull_new_data_weekly(None)
-#     assert validate_run_config(git_pipeline, run_config)
-
-
 # CLI: dagster pipeline execute -f pipelines/git_pipeline.py
+# CLI: dagster sensor preview trigger_git_push

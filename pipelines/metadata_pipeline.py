@@ -9,7 +9,7 @@ load_dotenv(override=True)
 
 preset = {
     "resources": {
-        "catalog_root": {"config": {"env": "CATALOG"}},
+        "cumulus_root": {"config": {"env": "CUMULUS"}},
         "omeka_root": {"config": {"env": "OMEKA"}},
         "wikidata_root": {"config": {"env": "WIKIDATA"}},
         "portals_root": {"config": {"env": "PORTALS"}},
@@ -24,7 +24,7 @@ preset = {
 @dg.solid(
     input_defs=[
         dg.InputDefinition("omeka", root_manager_key="omeka_root"),
-        dg.InputDefinition("catalog", root_manager_key="catalog_root"),
+        dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
         dg.InputDefinition("wikidata", root_manager_key="wikidata_root"),
         dg.InputDefinition("portals", root_manager_key="portals_root"),
         dg.InputDefinition("camera", root_manager_key="camera_root"),
@@ -32,7 +32,7 @@ preset = {
     ],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")],
 )
-def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
+def create_metadata(context, omeka, cumulus, wikidata, portals, camera, images):
     camera_new = camera[
         [
             "id",
@@ -46,14 +46,14 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
         ]
     ]
 
-    catalog[["first_year", "last_year"]] = catalog[
+    cumulus[["first_year", "last_year"]] = cumulus[
         ["first_year", "last_year"]
     ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))
 
-    dataframes_outer = [catalog, camera_new, images]
+    dataframes_outer = [cumulus, camera_new, images]
     dataframe_left = [portals, omeka, wikidata]
     metadata = pd.DataFrame(columns=["id"])
-    print("CATALOG:", catalog["first_year"][10], type(catalog["first_year"][10]))
+    print("CUMULUS:", cumulus["first_year"][10], type(cumulus["first_year"][10]))
 
     for df in dataframes_outer:
         metadata = metadata.merge(df, how="outer", on="id")
@@ -95,8 +95,9 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
             "geometry",
         ]
     ]
-    print("METADATA:", metadata["first_year"][10], type(catalog["first_year"][10]))
+    # print("METADATA:", metadata["first_year"][10], type(cumulus["first_year"][10]))
     metadata.name = "metadata"
+    # metadata_new.set_index("id", inplace=True)
     return metadata_new.set_index("id")
 
 
@@ -109,9 +110,9 @@ def create_metadata(context, omeka, catalog, wikidata, portals, camera, images):
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "catalog_root": root_input_csv,
+                "cumulus_root": root_input_csv,
                 "omeka_root": root_input_csv,
-                "catalog_root": root_input_csv,
+                "cumulus_root": root_input_csv,
                 "wikidata_root": root_input_csv,
                 "portals_root": root_input_csv,
                 "camera_root": root_input_geojson,
@@ -141,6 +142,3 @@ def trigger_metadata(context):
         now = datetime.now().strftime("%d/%m/%Y%H%M%S")
         run_key = f"metadata_{now}"
         yield dg.RunRequest(run_key=run_key)
-
-
-# CLT: dagster pipeline execute -f pipelines/metadata_pipeline.py --preset default

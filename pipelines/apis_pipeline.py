@@ -73,15 +73,15 @@ def apis_pipeline():
 
 @dg.sensor(pipeline_name="apis_pipeline", minimum_interval_seconds=120)
 def trigger_apis(context):
-    api_wikidata = "data-out/api_wikidata.csv"
-    api_portals = "data-out/api_portals.csv"
-    api_omeka = "data-out/api_omeka.csv"
+    api_wikidata = "data/output/api_wikidata.csv"
+    api_portals = "data/output/api_portals.csv"
+    api_omeka = "data/output/api_omeka.csv"
     now = datetime.now().strftime("%d/%m/%Y%H%M%S")
     apis = [api_omeka, api_portals, api_wikidata]
 
     for item in apis:
         if not os.path.exists(item):
-            # if not os.path.exists(f"data-out/{item}.csv"):
+            # if not os.path.exists(f"data/output/{item}.csv"):
             run_key = f"{item}_{now}"
 
             yield dg.RunRequest(run_key=run_key, run_config=preset)
@@ -102,9 +102,3 @@ def test_sensor():
 )
 def weekly():
     return {}
-
-
-# CLI: dagit -f pipelines/apis_pipeline.py
-# CLT: dagster pipeline execute -f pipelines/apis_pipeline.py --preset default
-# CLI: dagster sensor preview trigger_apis
-# CLI: dagster-daemon run
