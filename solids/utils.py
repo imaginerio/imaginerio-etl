@@ -21,21 +21,23 @@ from urllib3.util import Retry
 
 class PandasCsvIOManager(dg.IOManager):
     def load_input(self, context):
-        # file_path = os.path.join("data", "output", context.upstream_output.name)
         obj_name = context.upstream_output.name
 
-        if obj_name == "import_omeka" or "import_wikidata":
+        if obj_name.startswith("imp"):
             file_path = os.path.join("data", "output", context.upstream_output.name)
         else:
             file_path = os.path.join(
                 "data", "output", "log", context.upstream_output.name
             )
+
         return pd.read_csv(file_path + ".csv", index_col="id")
 
     def handle_output(self, context, obj):
         obj_name = context.name
+        obj.index = obj.index.astype(str)
+        obj.sort_index(inplace=True)
 
-        if obj_name == "import_omeka" or "import_wikidata":
+        if obj_name.startswith("imp"):
             file_path = os.path.join("data", "output", obj_name)
         else:
             file_path = os.path.join("data", "output", "log", obj_name)
@@ -153,12 +155,14 @@ def push_new_data(context):
             cwd="data",
         )
         output, errors = git_cli_sub.communicate()
-        print(f"command: {command} \noutput: {output} \nERRO: {errors}")
+        if "nothing" in output:
+            break
+            print(f"command: {command} \noutput: {output} \nERRO: {errors}")
 
     etl_push = [
         "pwd",
         "git checkout feature/dagster-submodule",
-        "git add .",
+        "git add data",
         "git commit -m ':card_file_box: Update submodule'",
         "git push",
     ]
