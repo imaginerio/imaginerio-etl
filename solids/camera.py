@@ -1,3 +1,4 @@
+import collections
 import math
 import os
 import re
@@ -203,14 +204,14 @@ def split_photooverlays(context, kmls, delete_original=False):
         for file in os.listdir(path)
         if os.path.isfile(os.path.join(path, file))
     ]
-    
+
     return new_kmls
 
 
 @dg.solid
-def change_img_href(context, kmls):    
+def change_img_href(context, kmls):
     for kml in kmls:
-        with open(kml, "r+") as f:           
+        with open(kml, "r+") as f:
             txt = f.read()
             print("text:", kml)
             filename = find_with_re("name", txt)
@@ -269,12 +270,11 @@ def correct_altitude_mode(context, kmls):
 
 
 @dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="camera")],
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
 )
-def create_geojson(context, kmls, metadata):
-    features = []
-    not_on_geojson = []
+def create_feature(context, kmls, metadata):
+    new_features = []
+    ids_with_error = []
     metadata["upper_ids"] = metadata["id"].str.upper()
     metadata = metadata.set_index("upper_ids")
     path = context.solid_config
@@ -331,27 +331,34 @@ def create_geojson(context, kmls, metadata):
                     viewcone = draw_cone(kml, radius=radius)
                 else:
                     viewcone = draw_cone(kml)
-                features.append(
+                new_features.append(
                     geojson.Feature(geometry=viewcone, properties=properties)
                 )
-
+                shutil.move(kml, path)
         except Exception as E:
-            not_on_geojson.append(Id)
+            ids_with_error.append(Id)
             print(f"ERROR: {E} no ID: {Id}")
-        shutil.move(kml, path)
 
-    collection = geojson.FeatureCollection(features=features)
-    # context.log.info(f"{collection}")
-    print(not_on_geojson)
-    return collection
+    print(ids_with_error)
+    return new_features
 
 
-# dg.solid()
-# def update_geojson(context):
+dg.solid(
+    config_schema=dg.StringSource,
+    output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="camera")],
+)
 
 
-# kmls = [os.path.join("data-in", "kml",file) for file in os.listdir("data-in/kml") if os.path.isfile(os.path.join("data-in", "kml",file))]
-# dg.execute_solid(create_geojson, input_values={"kmls":kmls})
+def create_geojson(context, new_features):
+    camera = context.config
+    if os.path.isfile(camera):
+        feature_collection = geojson.load(open(camera))  # open as a dict
+        for feature in new_features:
+            feature_collection.append(feature)
+            feature_collection = geojson.FeatureCollection(features=feature_collection)
 
-# CLI: dagit -f bin/pipelines/camera_pipeline.py
-# CLI: dagster pipeline execute -f bin/pipelines/camera_pipeline.py -c bin/pipelines/camera_pipeline.yaml
+        return feature_collection
+
+    else:
+        feature_collection = geojson.FeatureCollection(features=new_features)
+        return feature_collection

@@ -62,7 +62,7 @@ def df_csv_io_manager(init_context):
 class GeojsonIOManager(dg.IOManager):
     def load_input(self, context):
         file_path = os.path.join("data", "output", context.upstream_output.name)
-        return gpd.read_file(file_path + ".geojson")
+        return gpd.read_file(file_path + ".geojson")  # retorno um df
 
     def handle_output(self, context, feature_collection):
         file_path = os.path.join("data", "output", context.name) + ".geojson"
@@ -126,7 +126,7 @@ def root_input_xml(context):
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_geojson(context):
-    return gpd.read_file(context.resource_config)
+    return gpd.read_file(context.resource_config)  # retorn geopandas
 
 
 @dg.solid
