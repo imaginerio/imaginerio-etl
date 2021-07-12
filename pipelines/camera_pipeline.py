@@ -10,7 +10,8 @@ preset = {
     "solids": {
         "get_list": {"config": {"env": "NEW_RAW"}},
         "split_photooverlays": {"config": {"env": "NEW_SINGLE"}},
-        "create_geojson": {"config": {"env": "PROCESSED_SINGLE"}},
+        "create_feature": {"config": {"env": "PROCESSED_SINGLE"}},
+        "create_geojson": {"config": {"env": "CAMERA"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -40,7 +41,8 @@ def camera_pipeline():
     kmls_splitteds = split_photooverlays(kmls)
     kmls_img_href = change_img_href(kmls_splitteds)
     kmls_altitude = correct_altitude_mode(kmls_img_href)
-    geojson = create_geojson(kmls=kmls_altitude)
+    features = create_feature(kmls=kmls_altitude)
+    geojson = create_geojson(features)
     update_metadata(df=geojson)
 
 
