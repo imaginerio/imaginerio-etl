@@ -2,6 +2,7 @@ import os
 import shutil
 from datetime import datetime as dt
 from pathlib import Path
+from copy import deepcopy
 
 import dagster as dg
 import geojson
@@ -9,6 +10,13 @@ import numpy as np
 import pandas as pd
 
 from dagster.core.definitions import solid
+from bokeh.layouts import layout
+from bokeh.transform import cumsum
+from bokeh.plotting import output_file, show, figure
+from bokeh.models import (
+    HoverTool,
+    Span
+)
 
 
 @dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
@@ -19,16 +27,15 @@ def load_metadata(_, metadata):
     metadata["last_year"] = pd.to_datetime(metadata["last_year"])
     export_df = metadata
 
+    return export_df
+
+@dg.solid(input_defs=[dg.InputDefinition("smapshot", root_manager_key="smapshot_root")])
+def organize_columns_to_omeka(_, df, smapshot):
     # filter items
-    export_df = export_df.dropna(
+    df = df.dropna(
         subset=["geometry", "first_year", "last_year", "portals_url", "img_hd"]
     )
 
-    return export_df
-
-
-@dg.solid
-def organize_columns_to_omeka(_, df):
     # format data
     omeka_df = df
     omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
@@ -40,7 +47,6 @@ def organize_columns_to_omeka(_, df):
     omeka_df["rights"] = ""
     omeka_df["citation"] = ""
     omeka_df["item_sets"] = "all||views"
-    smapshot = pd.read_csv("data/output/log/smapshot.csv")
     include = omeka_df["id"].isin(smapshot["id"])
     omeka_df.loc[include, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
     omeka_df["dcterms:available"] = df["date_circa"]
@@ -113,6 +119,12 @@ def import_omeka_dataframe(_, df, jstor):
 
 @dg.solid
 def make_df_to_wikidata(_, df):
+
+    # filter items
+    df = df.dropna(
+        subset=["geometry", "first_year", "last_year", "portals_url", "img_hd"]
+    )
+
     quickstate = pd.DataFrame(
         columns=[
             "Qid",
@@ -213,7 +225,7 @@ def make_df_to_wikidata(_, df):
     return quickstate
 
 
-@solid(
+@dg.solid(
     output_defs=[
         dg.OutputDefinition(io_manager_key="pandas_csv", name="import_wikidata")
     ]
@@ -275,3 +287,247 @@ def organise_creator(_, quickstate):
     quickstate.name = "mport_wikidata"
 
     return quickstate.set_index("qid")
+
+@dg.solid
+def format_values_chart(context, DF):
+    
+    DF["img_sd"] = DF["img_sd"].str.strip('"')
+
+    # create a new df
+    DF_AUX = pd.DataFrame(columns=["A", "B", "C", "D", "E"])
+
+    # add items in global variables and new dataframe
+    # kml finished
+    val_kml = len(DF[DF["geometry"].notna()])
+    DF_AUX["A"] = DF["geometry"].notna().astype(int)
+    # kml total
+    val_kml_total = 0
+
+    # image finished
+    val_img = len(DF[DF["img_hd"].notna()])
+    DF_AUX["B"] = DF["img_sd"].notna().astype(int)
+    # image total
+    val_img_total = len(DF[DF["img_sd"].notna()])
+
+    # cumulus published
+    val_meta = len(DF[DF["portals_id"].notna()])
+    DF_AUX["C"] = DF["portals_id"].notna().astype(int)
+    # cumulus total
+    val_meta_total = len(DF)
+
+    # wiki published
+    val_wiki = len(DF[DF["wikidata_image"].notna()])
+    # wiki total
+    val_wiki_total = len(DF[DF["wikidata_id"].notna()])
+    DF_AUX["D"] = DF["wikidata_id"].notna().astype(int)
+
+    # omeka published
+    val_omeka = len(DF[DF["omeka_url"].notna()])
+    DF_AUX["E"] = DF["omeka_url"].notna().astype(int)
+    # omeka total
+    val_omeka_total = 0
+
+    values_hbar = {
+        "Done_orange": [ 
+            0,
+            val_wiki, 
+            val_meta,
+            0,
+            0
+            ],
+        "Done_blue": [
+            val_omeka,
+            0,
+            0, 
+            val_img, 
+            val_kml
+            ],
+        "To do": [
+            val_omeka_total,
+            val_wiki_total - val_wiki,
+            val_meta_total - val_meta,
+            val_img_total - val_img,
+            val_kml_total,
+        ],
+        "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
+    }
+
+    values_pie = {
+        "Done": [
+            val_omeka,
+            val_wiki, 
+            val_meta, 
+            val_img, 
+            val_kml
+            ],
+        "To do": [
+            val_omeka_total,
+            val_wiki_total - val_wiki,
+            val_meta_total - val_meta,
+            val_img_total - val_img,
+            val_kml_total,
+        ],
+        "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
+    }
+
+    values = [values_hbar,values_pie]
+    
+    return values 
+
+@dg.solid
+def create_hbar(context, values_hbar):
+
+    # construct a data source
+    list1 = ["Done_orange","Done_blue", "To do"]
+    data = values_hbar
+    # deepcopy the data for later use
+    data1 = deepcopy(data)
+
+    data1.update(
+        {
+            "tooltip_grey": [
+                "Not on Omeka",
+                "Wikidata only",
+                "Potential items",
+                "To geolocate",
+                "Not geolocated",
+            ],
+            "tooltip_b-o": [
+                "Published",
+                "Commons and Wikidata",
+                "On IMS' Cumulus Portals",
+                "Geolocated",
+                "Total geolocated items",
+            ],
+        }
+    )
+
+    # base dashboard
+    for i in range(1, len(list1)):
+        data[list1[i]] = [sum(x) for x in zip(data[list1[i]], data[list1[i - 1]])]
+
+    plot_hbar = figure(
+        y_range=data["y"],
+        x_range=(0, 6000),
+        plot_height=300,
+        plot_width=900,
+        toolbar_location=None,
+    )
+
+    # construct bars with differents colors
+    hbar_1 = plot_hbar.hbar(
+        y=data["y"],
+        right=data["Done_orange"],
+        left=0,
+        height=0.8,
+        color="orange"
+    )
+    hbar_1.data_source.add(data1["tooltip_b-o"], "data")
+    hbar_1.data_source.add(data1["Done_orange"], "value")
+
+    hbar_2 = plot_hbar.hbar(
+        y=data["y"],
+        right=data["Done_blue"],
+        left=data["Done_orange"],
+        height=0.8,
+        color="royalblue"
+    )
+    hbar_2.data_source.add(data1["tooltip_b-o"], "data")
+    hbar_2.data_source.add(data1["Done_blue"], "value")
+
+    hbar_3 = plot_hbar.hbar(
+        y=data["y"],
+        right=data["To do"],
+        left=data["Done_blue"],
+        height=0.8,
+        color="lightgrey",
+    )
+    hbar_3.data_source.add(data1["tooltip_grey"], "data")
+    hbar_3.data_source.add(data1["To do"], "value")
+
+    # add hover tool for each bar chart
+    TOOLTIPS = "@data: @value"
+    h1 = HoverTool(
+        renderers=[hbar_1], tooltips=TOOLTIPS, mode="mouse", show_arrow=False
+    )
+    h2 = HoverTool(
+        renderers=[hbar_2], tooltips=TOOLTIPS, mode="mouse", show_arrow=False
+    )
+    h3 = HoverTool(
+        renderers=[hbar_3], tooltips=TOOLTIPS, mode="mouse", show_arrow=False
+    )
+
+    plot_hbar.add_tools(h1, h2, h3)
+
+    # data goal line
+    hline = Span(
+        location=4000,
+        dimension="height",
+        line_color="grey",
+        line_dash="dashed",
+        line_width=3,
+    )
+
+    plot_hbar.add_layout(hline)
+    plot_hbar.ygrid.grid_line_color = None
+    plot_hbar.toolbar.active_drag = None
+    plot_hbar.background_fill_color = "ghostwhite"
+
+    return plot_hbar
+
+@dg.solid
+def create_pie(context, values_pie):
+    # construct a data source
+    total = 20000
+    s = sum(values["Done"])
+    x = round((100 * s) / total, 1)
+
+    a = {"To do": 100 - x, "Done": x}
+
+    datas = pd.Series(a).reset_index(name="value").rename(columns={"index": "data"})
+    datas["angle"] = (360 * datas["value"]) / 100
+    datas["color"] = ["lightgrey", "orange"]
+
+    # create a legend label
+    sep = []
+    for i in range(len(datas.index)):
+        sep.append(": ")
+    datas["legend"] = datas["data"] + sep + datas["value"].astype(str) + "%"
+
+    # base pie chart
+    plot_pie = figure(plot_height=100, toolbar_location=None)
+
+    # construct wedges
+    plot_pie.wedge(
+        x=0,
+        y=1,
+        radius=0.5,
+        start_angle=cumsum("angle"),
+        end_angle=cumsum("angle", include_zero=True),
+        start_angle_units="deg",
+        end_angle_units="deg",
+        legend_field="legend",
+        line_color=None,
+        fill_color="color",
+        direction="clock",
+        source=datas,
+    )
+
+    plot_pie.axis.axis_label = None
+    plot_pie.axis.visible = False
+    plot_pie.grid.grid_line_color = None
+    plot_pie.background_fill_color = "ghostwhite"
+
+    return plot_pie
+
+@dg.solid(config_schema=dg.StringSource)
+def export_html(context,plot_hbar,plot_pie):
+    path = context.config
+
+    output_file(path, title="Situated Views - Progress Dashboard")
+    show(layout(
+        [[plot_hbar,plot_pie]],
+        sizing_mode="stretch_both"
+    ))
+
+    print("Done!")
