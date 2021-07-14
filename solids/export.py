@@ -14,6 +14,10 @@ from bokeh.layouts import layout
 from bokeh.transform import cumsum
 from bokeh.plotting import output_file, show, figure
 from bokeh.models import (
+    CheckboxButtonGroup,
+    CustomJS,
+    LinearColorMapper,
+    Row,
     HoverTool,
     Span
 )
@@ -290,6 +294,21 @@ def organise_creator(_, quickstate):
 
 @dg.solid
 def format_values_chart(context, DF):
+
+    values_tiles = DF[
+        [
+            "id",
+            "img_sd",
+            "img_hd",
+            "latitude",
+            "longitude",
+            "geometry",
+            "portals_id",
+            "portals_url",
+            "wikidata_id",
+            "omeka_url",
+            ]
+    ]
     
     DF["img_sd"] = DF["img_sd"].str.strip('"')
 
@@ -327,6 +346,10 @@ def format_values_chart(context, DF):
     # omeka total
     val_omeka_total = 0
 
+    # count fields for each item and add result as column
+    DF_AUX = DF_AUX.replace(0, np.nan)
+    values_tiles["rate"] = DF_AUX.count(axis=1)
+
     values_hbar = {
         "Done_orange": [ 
             0,
@@ -352,38 +375,28 @@ def format_values_chart(context, DF):
         "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
     }
 
-    values_pie = {
-        "Done": [
-            val_omeka,
-            val_wiki, 
-            val_meta, 
-            val_img, 
-            val_kml
-            ],
-        "To do": [
-            val_omeka_total,
-            val_wiki_total - val_wiki,
-            val_meta_total - val_meta,
-            val_img_total - val_img,
-            val_kml_total,
-        ],
-        "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
-    }
+    values_pie = [
+        val_omeka,
+        val_wiki, 
+        val_meta, 
+        val_img, 
+        val_kml
+        ]
 
-    values = [values_hbar,values_pie]
+    values = [values_hbar,values_pie, values_tiles]
     
     return values 
 
 @dg.solid
-def create_hbar(context, values_hbar):
+def create_hbar(context, values):
 
     # construct a data source
     list1 = ["Done_orange","Done_blue", "To do"]
-    data = values_hbar
+    values_hbar = values[0]
     # deepcopy the data for later use
-    data1 = deepcopy(data)
+    values_hbar1 = deepcopy(values_hbar)
 
-    data1.update(
+    values_hbar1.update(
         {
             "tooltip_grey": [
                 "Not on Omeka",
@@ -404,10 +417,10 @@ def create_hbar(context, values_hbar):
 
     # base dashboard
     for i in range(1, len(list1)):
-        data[list1[i]] = [sum(x) for x in zip(data[list1[i]], data[list1[i - 1]])]
+        values_hbar[list1[i]] = [sum(x) for x in zip(values_hbar[list1[i]], values_hbar[list1[i - 1]])]
 
     plot_hbar = figure(
-        y_range=data["y"],
+        y_range=values_hbar["y"],
         x_range=(0, 6000),
         plot_height=300,
         plot_width=900,
@@ -416,34 +429,34 @@ def create_hbar(context, values_hbar):
 
     # construct bars with differents colors
     hbar_1 = plot_hbar.hbar(
-        y=data["y"],
-        right=data["Done_orange"],
+        y=values_hbar["y"],
+        right=values_hbar["Done_orange"],
         left=0,
         height=0.8,
         color="orange"
     )
-    hbar_1.data_source.add(data1["tooltip_b-o"], "data")
-    hbar_1.data_source.add(data1["Done_orange"], "value")
+    hbar_1.data_source.add(values_hbar1["tooltip_b-o"], "data")
+    hbar_1.data_source.add(values_hbar1["Done_orange"], "value")
 
     hbar_2 = plot_hbar.hbar(
-        y=data["y"],
-        right=data["Done_blue"],
-        left=data["Done_orange"],
+        y=values_hbar["y"],
+        right=values_hbar["Done_blue"],
+        left=values_hbar["Done_orange"],
         height=0.8,
         color="royalblue"
     )
-    hbar_2.data_source.add(data1["tooltip_b-o"], "data")
-    hbar_2.data_source.add(data1["Done_blue"], "value")
+    hbar_2.data_source.add(values_hbar1["tooltip_b-o"], "data")
+    hbar_2.data_source.add(values_hbar1["Done_blue"], "value")
 
     hbar_3 = plot_hbar.hbar(
-        y=data["y"],
-        right=data["To do"],
-        left=data["Done_blue"],
+        y=values_hbar["y"],
+        right=values_hbar["To do"],
+        left=values_hbar["Done_blue"],
         height=0.8,
         color="lightgrey",
     )
-    hbar_3.data_source.add(data1["tooltip_grey"], "data")
-    hbar_3.data_source.add(data1["To do"], "value")
+    hbar_3.data_source.add(values_hbar1["tooltip_grey"], "data")
+    hbar_3.data_source.add(values_hbar1["To do"], "value")
 
     # add hover tool for each bar chart
     TOOLTIPS = "@data: @value"
@@ -476,10 +489,11 @@ def create_hbar(context, values_hbar):
     return plot_hbar
 
 @dg.solid
-def create_pie(context, values_pie):
+def create_pie(context, values):
     # construct a data source
+    values_pie = values[1]
     total = 20000
-    s = sum(values["Done"])
+    s = sum(values_pie)
     x = round((100 * s) / total, 1)
 
     a = {"To do": 100 - x, "Done": x}
@@ -520,13 +534,144 @@ def create_pie(context, values_pie):
 
     return plot_pie
 
+@dg.solid
+def create_tiles(context,values):
+    values_tiles = values[2]
+
+    # construct coordinates
+    coord = []
+    for y in range(0, 52):
+        for x in range(0, 100):
+            if len(coord) != len(values_tiles):
+                coord.append([(x, y)])
+            else:
+                break
+
+    df_coord = pd.DataFrame(coord, columns=["coordinate"])
+    df_coord[["x", "y"]] = pd.DataFrame(
+        df_coord["coordinate"].tolist(), index=df_coord.index
+    )
+    df_coord = df_coord.drop(columns="coordinate")
+
+    df_tiles = pd.merge(
+        values_tiles, df_coord, left_index=True, right_index=True, validate="one_to_one"
+    )
+    df_tiles_s = df_tiles.iloc[:, [0, 1, 2, 3, 4, 4, 5, 6, 7, 8, 9, 10]].sort_values(
+        by=["rate"], ascending=False, ignore_index=True
+    )
+    df_tiles_sort = df_tiles_s.join(df_tiles[["x", "y"]])
+
+    # setting colors
+    colors = ["#edf8e9", "#c7e9c0", "#a1d99b", "#74c476", "#31a354", "#006d2c"]
+    mapper = LinearColorMapper(palette=colors, low=values_tiles.rate.min(), high=values_tiles.rate.max())
+
+    # config tooltip
+    TOOLTIPS = """
+        <div style="margin: 5px; width: 400px" >
+        <h3 
+            style='font-size: 12px; font-weight: bold;'>
+            @id
+        </h3>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Geolocated: (@latitude,@longitude)
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Image: @img_sd @img_hd
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Portals: @portals_url
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Wikimedia: @wikidata_id
+        </p>
+        <p 
+            style='font-size: 10px; font-weight: bold;'>
+            Omeka-S: @omeka_url
+        </p>
+        <img
+            src="@img_sd" alt="@img_sd" height=200
+            style="margin: 0px;"
+            border="2"
+            ></img>        
+        </div>
+        """
+
+    # construct base chart
+    tiles = figure(
+        x_axis_type=None,
+        y_axis_type=None,
+        plot_width=1500,
+        plot_height=1000,
+        min_border_bottom=150,
+        min_border_top=150,
+        toolbar_location=None,
+    )
+
+    # create tiles
+    rect_sort = tiles.rect(
+        x="x",
+        y="y",
+        width=0.8,
+        height=0.8,
+        fill_color={"field": "rate", "transform": mapper},
+        line_color="black",
+        line_join="round",
+        line_width=1,
+        source=df_tiles_sort,
+    )
+
+    rect = tiles.rect(
+        x="x",
+        y="y",
+        width=0.8,
+        height=0.8,
+        fill_color={"field": "rate", "transform": mapper},
+        line_color="black",
+        line_join="round",
+        line_width=1,
+        source=df_tiles,
+    )
+
+    # add tooltip in hover
+    h1 = HoverTool(renderers=[rect], tooltips=TOOLTIPS, mode="mouse", show_arrow=False)
+    h2 = HoverTool(renderers=[rect_sort], tooltips=TOOLTIPS, mode="mouse", show_arrow=False)
+
+    callback = CustomJS(
+        args={"rect": rect, "rect_sort": rect_sort},
+        code="""
+    rect.visible = false;
+    rect_sort.visible = false;
+    if (cb_obj.active.includes(0)){rect_sort.visible = true;}
+    else{rect.visible = true;}
+    """,
+    )
+
+    button = CheckboxButtonGroup(labels=["Sort by rate"])
+    button.js_on_click(callback)
+
+    tiles.add_tools(h1, h2)
+    tiles.grid.grid_line_color = None
+    tiles.axis.axis_line_color = None
+    tiles.axis.major_tick_line_color = None
+    tiles.toolbar.active_drag = None
+    tiles.axis.major_label_standoff = 0
+    tiles.y_range.flipped = True
+
+    plot_tiles = Row(button, tiles)
+
+    return plot_tiles
+
 @dg.solid(config_schema=dg.StringSource)
-def export_html(context,plot_hbar,plot_pie):
-    path = context.config
+def export_html(context,plot_hbar,plot_pie, plot_tiles):
+    path = context.solid_config
 
     output_file(path, title="Situated Views - Progress Dashboard")
     show(layout(
-        [[plot_hbar,plot_pie]],
+        [[plot_hbar,plot_pie],[plot_tiles]],
         sizing_mode="stretch_both"
     ))
 

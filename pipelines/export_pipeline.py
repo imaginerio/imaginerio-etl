@@ -10,8 +10,11 @@ preset = {
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
         "jstor_root": {"config": {"env": "JSTOR"}},
-        "smapshot_root":{"config":{"env":"SMAPSHOT"}}
+        "smapshot_root":{"config":{"env":"SMAPSHOT"}},
     },
+    "solids": {
+        "export_html":{"config":{"env":"INDEX"}},
+    }
 }
 
 
@@ -49,10 +52,11 @@ def export_pipeline():
     wikidata_df = organise_creator(quickstate=wikidata_df)
 
     # index.html
-    #graph_html = format_values_chart(export_df)
-    #plot_hbar = create_hbar(graph_html[0])
-    #plot_pie = create_pie(graph_html[1])
-    #graph_html = export_html(plot_hbar,plot_pie)
+    values = format_values_chart(export_df)
+    plot_hbar = create_hbar(values)
+    plot_pie = create_pie(values)
+    plot_tiles = create_tiles(values)
+    graph_html = export_html(plot_hbar,plot_pie,plot_tiles)
 
 
 ################   SENSORS   ##################
