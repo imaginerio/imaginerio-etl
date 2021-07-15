@@ -1,24 +1,21 @@
-import collections
 import math
 import os
 import re
+import shutil
 import sys
-from io import BytesIO
-import math
+from typing import List
+
 import dagster as dg
 import geojson
-import shutil
-
-import geopandas as gpd
-import matplotlib._png as png
 import mercantile
 import numpy as np
 import pandas as pd
 import requests
+from dagster.config.config_type import String
 from PIL import Image
 from pykml import parser
 from pyproj import Proj
-from shapely.geometry import Point, Polygon, shape
+from shapely.geometry import Point, Polygon
 from SPARQLWrapper import JSON, SPARQLWrapper
 
 
@@ -233,7 +230,7 @@ def change_img_href(context):
 
 
 @dg.solid
-def correct_altitude_mode(context, kmls):
+def correct_altitude_mode(context, kmls: List):
 
     for kml in kmls:
         with open(kml, "r+") as f:
@@ -247,13 +244,13 @@ def correct_altitude_mode(context, kmls):
                 westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
                 pixel_column = np.interp(lng, [westmost, eastmost], [0, 256])
                 pixel_row = np.interp(lat, [southmost, northmost], [256, 0])
-                response = requests.get(
-                    f"https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{tile.x}/{tile.y}.pngraw?access_token=pk.eyJ1IjoibWFydGltcGFzc29zIiwiYSI6ImNra3pmN2QxajBiYWUycW55N3E1dG1tcTEifQ.JFKSI85oP7M2gbeUTaUfQQ"
-                )
-                buffer = BytesIO(
-                    response.content
-                )  # opening directly from raw response doesn't work for JPEGs
-                tile_img = png.read_png_int(buffer)
+                tile_img = Image.open(
+                    requests.get(
+                        "https://api.mapbox.com/v4/mapbox.terrain-rgb/10/800/200.pngraw?access_token=pk.eyJ1IjoibWFydGltcGFzc29zIiwiYSI6ImNra3pmN2QxajBiYWUycW55N3E1dG1tcTEifQ.JFKSI85oP7M2gbeUTaUfQQ",
+                        stream=True,
+                    ).raw
+                ).load()
+
                 R, G, B, _ = tile_img[int(pixel_row), int(pixel_column)]
                 height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
                 new_height = height + alt
@@ -279,7 +276,7 @@ def correct_altitude_mode(context, kmls):
     config_schema=dg.StringSource,
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
 )
-def create_feature(context, kmls, metadata):
+def create_feature(context, kmls: List, metadata):
     new_features = []
     ids_with_error = []
     processed_ids = []
@@ -366,7 +363,7 @@ def create_feature(context, kmls, metadata):
         dg.OutputDefinition(io_manager_key="geojson", name="import_viewcones")
     ],
 )
-def create_geojson(context, new_features):
+def create_geojson(context, new_features: List):
     camera = context.solid_config
 
     if os.path.isfile(camera):

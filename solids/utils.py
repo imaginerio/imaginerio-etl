@@ -1,22 +1,11 @@
-import datetime
 import os
 import subprocess
-from typing import Any
 from xml.etree import ElementTree
 
 import dagster as dg
 import geojson
 import geopandas as gpd
-import numpy as np
 import pandas as pd
-import requests
-from dagster.core.definitions import output
-from dagster.core.definitions.events import Failure
-from git.refs.symbolic import _git_dir
-from git.repo.base import Repo
-from pandas.core.frame import DataFrame
-from requests.adapters import HTTPAdapter
-from urllib3.util import Retry
 
 
 class PandasCsvIOManager(dg.IOManager):
@@ -27,7 +16,7 @@ class PandasCsvIOManager(dg.IOManager):
             file_path = os.path.join("data", "output", context.upstream_output.name)
         else:
             file_path = os.path.join(
-                "data", "output", "log", context.upstream_output.name
+                "data", "output", context.upstream_output.name
             )
 
         return pd.read_csv(file_path + ".csv", index_col="id")
@@ -40,7 +29,7 @@ class PandasCsvIOManager(dg.IOManager):
         if obj_name.startswith("imp"):
             file_path = os.path.join("data", "output", obj_name)
         else:
-            file_path = os.path.join("data", "output", "log", obj_name)
+            file_path = os.path.join("data", "output", obj_name)
 
         obj.to_csv(file_path + ".csv")
 
@@ -140,7 +129,6 @@ def push_new_data(context):
     submodule_push = [
         "pwd",
         "git checkout main",
-        # "git add .",
         "git commit -a -m ':card_file_box: Update data'",
         "git push",
     ]

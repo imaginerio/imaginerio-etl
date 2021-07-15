@@ -1,23 +1,17 @@
 import os
-import dagster as dg
 from datetime import datetime
-from dagster.core.definitions import mode
+
+import dagster as dg
 from dotenv import load_dotenv
-
-
-from solids.utils import (
-    df_csv_io_manager,
-    update_metadata,
-    root_input_csv,
-)  # slack_solid
 from solids.apis import (
+    omeka_dataframe,
     portals_dataframe,
+    query_omeka,
     query_portals,
     query_wikidata,
-    query_omeka,
-    omeka_dataframe,
     wikidata_dataframe,
 )
+from solids.utils import df_csv_io_manager, root_input_csv, update_metadata
 
 load_dotenv(override=True)
 
