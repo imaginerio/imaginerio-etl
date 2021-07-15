@@ -1,4 +1,5 @@
 import dagster as dg
+from datetime import datetime
 from dotenv import load_dotenv
 
 from solids.utils import *
@@ -10,6 +11,7 @@ preset = {
     "solids": {
         "get_list": {"config": {"env": "NEW_RAW"}},
         "split_photooverlays": {"config": {"env": "NEW_SINGLE"}},
+        "change_img_href": {"config": {"env": "NEW_SINGLE"}},
         "create_feature": {"config": {"env": "PROCESSED_SINGLE"}},
         "create_geojson": {"config": {"env": "CAMERA"}},
     },
@@ -38,29 +40,46 @@ preset = {
 def camera_pipeline():
 
     kmls = get_list()
-    kmls_splitteds = split_photooverlays(kmls)
-    kmls_img_href = change_img_href(kmls_splitteds)
-    kmls_altitude = correct_altitude_mode(kmls_img_href)
-    features = create_feature(kmls=kmls_altitude)
-    geojson = create_geojson(features)
+    kmls = split_photooverlays(kmls)
+
+    kmls = change_img_href()
+    kmls = correct_altitude_mode(kmls)
+    new_features = create_feature(kmls=kmls)
+    geojson = create_geojson(new_features=new_features)
     update_metadata(df=geojson)
 
 
 ################   SENSORS   ##################
 
 
-@dg.sensor
-def trigger_camera(context):
-    last_mtime = float(context.cursor) if context.cursor else 0
+@dg.sensor(
+    pipeline_name="camera_pipeline",
+    solid_selection=["*split_photooverlays"],
+    minimum_interval_seconds=60,
+)
+def trigger_camera_step1(context):
+    path = "data/input/kmls/new_raw"
+    kmls = os.listdir(path)
+    list_kmls = [x for x in kmls if x != ".gitkeep"]
 
-    # os.walk(top[,topdown=True[,onerror=None[,followlinks=False]))
+    now = datetime.datetime.now().strftime("%d/%m/%Y%H%M%S")
+    run_key = f"step1_{now}"
 
-    max_mtime = last_mtime
+    if list_kmls:
+        yield dg.RunRequest(run_key=run_key, run_config=preset)
 
-    fstats = os.stat("")
-    file_mtime = fstats.st_mtime
-    if file_mtime <= last_mtime:
-        # yield dg.RunRequest(run_key=run_key)
-        max_mtime = max(max_mtime, file_mtime)
 
-    context.update_cursor(str(max_mtime))
+@dg.sensor(
+    pipeline_name="camera_pipeline",
+    solid_selection=["change_img_href++++"],
+    minimum_interval_seconds=240,
+)
+def trigger_camera_step2(context):
+    path = "data/input/kmls/new_single"
+    kmls = os.listdir(path)
+    list_kmls = [x for x in kmls if x != ".gitkeep"]
+    now = datetime.datetime.now().strftime("%d/%m/%Y%H%M%S")
+    run_key = f"step2_{now}"
+
+    if list_kmls != []:
+        yield dg.RunRequest(run_key=run_key, run_config=preset)
