@@ -23,7 +23,7 @@ def situated_views():
         },
         "schedules": {
             "apis_pipeline_weekly": lambda: apis_pipeline_weekly,
-            "pull_new_data_hour": lambda: pull_new_data_hour,
+            "pull_new_data_hourly": lambda: pull_new_data_hourly,
             "push_new_data_daily": lambda: push_new_data_daily,
         },
         "sensors": {
@@ -31,5 +31,7 @@ def situated_views():
             "trigger_export": lambda: trigger_export,
             "trigger_metadata": lambda: trigger_metadata,
             "trigger_apis": lambda: trigger_apis,
+            "trigger_camera_step1": lambda: trigger_camera_step1,
+            "trigger_camera_step2": lambda: trigger_camera_step2,
         },
     }

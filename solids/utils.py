@@ -12,8 +12,8 @@ import pandas as pd
 import requests
 from dagster.core.definitions import output
 from dagster.core.definitions.events import Failure
-#from git.refs.symbolic import _git_dir
-#from git.repo.base import Repo
+from git.refs.symbolic import _git_dir
+from git.repo.base import Repo
 from pandas.core.frame import DataFrame
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
@@ -140,7 +140,7 @@ def push_new_data(context):
     submodule_push = [
         "pwd",
         "git checkout main",
-        "git add .",
+        # "git add .",
         "git commit -a -m ':card_file_box: Update data'",
         "git push",
     ]

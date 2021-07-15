@@ -52,7 +52,7 @@ def push_new_data_daily():
     solid_selection=["pull_new_data"],
     execution_timezone="America/Sao_Paulo",
 )
-def pull_new_data_hour():
+def pull_new_data_hourly():
     return {}
 
 

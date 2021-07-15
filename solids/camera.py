@@ -170,28 +170,32 @@ def draw_cone(kml, radius=400, steps=200):
 @dg.solid(config_schema=dg.StringSource)
 def get_list(context):
     path = context.solid_config
-    print(path)
     list_kmls = os.listdir(path)
     kmls = []
     for kml in list_kmls:
         full_path = os.path.join(path, kml)
         kmls.append(full_path)
-    print("get_List:", kmls)
-    return kmls
+    list_kmls = [x for x in kmls if x != "data/input/kmls/new_raw/.gitkeep"]
+
+    return list_kmls
 
 
 @dg.solid(config_schema=dg.StringSource)
 def split_photooverlays(context, kmls, delete_original=False):
     path = context.solid_config
+    splited_kmls = []
+    photooverlays = ""
+    print("KMLS:", kmls)
     for kml in kmls:
+        splited_kmls.append(kml)
         with open(kml, "r") as f:
             txt = f.read()
             if re.search("<Folder>", txt):
                 header = "\n".join(txt.split("\n")[:2])
                 photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
                 photooverlays[-1] = re.sub("</Folder>\n</kml>", "", photooverlays[-1])
-        for po in photooverlays:
 
+        for po in photooverlays:
             filename = find_with_re("name", po)
             with open(os.path.join(path, filename + ".kml"), "w") as k:
                 k.write(f"{header}\n{po}</kml>")
@@ -199,21 +203,22 @@ def split_photooverlays(context, kmls, delete_original=False):
             os.remove(os.path.abspath(kml))
         shutil.move(kml, "data/input/kmls/processed_raw")
 
-    new_kmls = [
+    print(splited_kmls)
+
+
+@dg.solid(config_schema=dg.StringSource)
+def change_img_href(context):
+    path = context.solid_config
+    kmls = [
         os.path.join(path, file)
         for file in os.listdir(path)
         if os.path.isfile(os.path.join(path, file))
     ]
+    list_kmls = [x for x in kmls if x != "data/input/kmls/new_single/.gitkeep"]
 
-    return new_kmls
-
-
-@dg.solid
-def change_img_href(context, kmls):
-    for kml in kmls:
+    for kml in list_kmls:
         with open(kml, "r+") as f:
             txt = f.read()
-            print("text:", kml)
             filename = find_with_re("name", txt)
             txt = re.sub(
                 "(?<=<href>).+(?=<\/href>\n\t+<\/Icon>\n\t+<ViewVolume>)",
@@ -223,12 +228,13 @@ def change_img_href(context, kmls):
             f.seek(0)
             f.write(txt)
             f.truncate()
-    print("after_change_img:", kmls)
-    return kmls
+
+    return list_kmls
 
 
 @dg.solid
 def correct_altitude_mode(context, kmls):
+
     for kml in kmls:
         with open(kml, "r+") as f:
             txt = f.read()
@@ -260,7 +266,7 @@ def correct_altitude_mode(context, kmls):
                     f"{lng},{lat},{new_height}",
                     txt,
                 )
-                # print(txt)
+
                 f.seek(0)
                 f.write(txt)
                 f.truncate()
@@ -270,14 +276,18 @@ def correct_altitude_mode(context, kmls):
 
 
 @dg.solid(
+    config_schema=dg.StringSource,
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
 )
 def create_feature(context, kmls, metadata):
     new_features = []
     ids_with_error = []
+    processed_ids = []
     metadata["upper_ids"] = metadata["id"].str.upper()
     metadata = metadata.set_index("upper_ids")
     path = context.solid_config
+    Id = ""
+    print("KMLS:", kmls)
 
     for kml in kmls:
         try:
@@ -334,29 +344,48 @@ def create_feature(context, kmls, metadata):
                 new_features.append(
                     geojson.Feature(geometry=viewcone, properties=properties)
                 )
-                shutil.move(kml, path)
+                processed_ids.append(Id)
+
         except Exception as E:
             ids_with_error.append(Id)
             print(f"ERROR: {E} no ID: {Id}")
+        try:
+            shutil.move(kml, path)
+        except:
+            print("kml can't be moved: ", kml)
 
-    print(ids_with_error)
+    with open("data/input/kmls/processed_single/not_on_gejson.txt", "w") as output:
+        output.write(str(ids_with_error))
+
     return new_features
 
 
-dg.solid(
+@dg.solid(
     config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(io_manager_key="geojson", name="camera")],
+    output_defs=[
+        dg.OutputDefinition(io_manager_key="geojson", name="import_viewcones")
+    ],
 )
-
-
 def create_geojson(context, new_features):
-    camera = context.config
-    if os.path.isfile(camera):
-        feature_collection = geojson.load(open(camera))  # open as a dict
-        for feature in new_features:
-            feature_collection.append(feature)
-            feature_collection = geojson.FeatureCollection(features=feature_collection)
+    camera = context.solid_config
 
+    if os.path.isfile(camera):
+        current_features = (geojson.load(open(camera))).features
+        current_ids = [feature["properties"]["id"] for feature in current_features]
+
+        for new_feature in new_features:
+            id_new = new_feature["properties"]["id"]
+
+            if id_new in current_ids:
+                print("Updated:  ", id_new)
+                index = current_ids.index(id_new)
+                current_features[index] = new_feature
+
+            else:
+                print("appended: ", id_new)
+                current_features.append(new_feature)
+
+        feature_collection = geojson.FeatureCollection(features=current_features)
         return feature_collection
 
     else:
