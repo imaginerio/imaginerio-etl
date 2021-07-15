@@ -1,11 +1,10 @@
 import os
 import shutil
 
+import dagster as dg
 import pandas as pd
 from numpy import nan
-import dagster as dg
 from PIL import Image as PILImage
-from dotenv import load_dotenv
 
 from solids.exiftool import ExifTool
 

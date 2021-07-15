@@ -1,6 +1,3 @@
-import datetime
-import os
-
 import dagster as dg
 from solids.utils import *
 
@@ -9,28 +6,6 @@ from solids.utils import *
 def git_pipeline():
     pull_new_data()
     push_new_data()
-
-
-################   SENSORS   ##################
-# @dg.sensor(
-#     pipeline_name="git_pipeline",
-#     solid_selection=["push_new_data"],
-#     minimum_interval_seconds=300,
-# )
-# def trigger_git_push(context):
-#     events = context.instance.events_for_asset_key(
-#         dg.AssetKey("metadata"),
-#         after_cursor=context.last_run_key,
-#         ascending=False,
-#         limit=1,
-#     )
-#     if events:
-#         record_id, event = events[0]  # take the most recent materialization
-#         yield dg.RunRequest(
-#             run_key=str(record_id),
-#             run_config={},
-#             tags={"source_pipeline": event.pipeline_name},
-#         )
 
 
 ################   SCHEDULES   ##################
@@ -54,7 +29,3 @@ def push_new_data_daily():
 )
 def pull_new_data_hourly():
     return {}
-
-
-# CLI: dagster pipeline execute -f pipelines/git_pipeline.py
-# CLI: dagster sensor preview trigger_git_push

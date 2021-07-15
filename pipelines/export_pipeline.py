@@ -1,7 +1,7 @@
 import dagster as dg
+from dotenv import load_dotenv
 from solids.export import *
 from solids.utils import df_csv_io_manager, geojson_io_manager, root_input_csv
-from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
@@ -10,11 +10,11 @@ preset = {
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
         "jstor_root": {"config": {"env": "JSTOR"}},
-        "smapshot_root":{"config":{"env":"SMAPSHOT"}},
+        "smapshot_root": {"config": {"env": "SMAPSHOT"}},
     },
     "solids": {
-        "export_html":{"config":{"env":"INDEX"}},
-    }
+        "export_html": {"config": {"env": "INDEX"}},
+    },
 }
 
 
@@ -56,7 +56,7 @@ def export_pipeline():
     plot_hbar = create_hbar(values)
     plot_pie = create_pie(values)
     plot_tiles = create_tiles(values)
-    graph_html = export_html(plot_hbar,plot_pie,plot_tiles)
+    graph_html = export_html(plot_hbar, plot_pie, plot_tiles)
 
 
 ################   SENSORS   ##################

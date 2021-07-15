@@ -1,9 +1,9 @@
-import dagster as dg
-import pandas as pd
-from solids.utils import *
 from datetime import datetime
 
+import dagster as dg
+import pandas as pd
 from dotenv import load_dotenv
+from solids.utils import *
 
 load_dotenv(override=True)
 

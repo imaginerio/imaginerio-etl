@@ -1,16 +1,10 @@
-import json
-import os
-from os import path
-import re
 import urllib
 from time import sleep
 
 import dagster as dg
-from dagster import check
 import pandas as pd
 import requests
-from requests.adapters import HTTPAdapter, Response
-from tqdm import tqdm
+from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
 
