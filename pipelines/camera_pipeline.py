@@ -12,7 +12,7 @@ preset = {
         "get_list": {"config": {"env": "NEW_RAW"}},
         "split_photooverlays": {"config": {"env": "NEW_SINGLE"}},
         "change_img_href": {"config": {"env": "NEW_SINGLE"}},
-        "create_feature": {"config": {"env": "PROCESSED_SINGLE"}},
+        "move_files": {"config": {"env": "PROCESSED_SINGLE"}},
         "create_geojson": {"config": {"env": "CAMERA"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
@@ -45,6 +45,7 @@ def camera_pipeline():
     kmls = change_img_href()
     kmls = correct_altitude_mode(kmls)
     new_features = create_feature(kmls=kmls)
+    move_files(new_features)
     geojson = create_geojson(new_features=new_features)
     update_metadata(df=geojson)
 
@@ -62,7 +63,7 @@ def trigger_camera_step1(context):
     kmls = os.listdir(path)
     list_kmls = [x for x in kmls if x != ".gitkeep"]
 
-    now = datetime.datetime.now().strftime("%d/%m/%Y%H%M%S")
+    now = datetime.now().strftime("%d/%m/%Y%H%M%S")
     run_key = f"step1_{now}"
 
     if list_kmls:
@@ -72,13 +73,13 @@ def trigger_camera_step1(context):
 @dg.sensor(
     pipeline_name="camera_pipeline",
     solid_selection=["change_img_href++++"],
-    minimum_interval_seconds=240,
+    minimum_interval_seconds=7200,
 )
 def trigger_camera_step2(context):
     path = "data/input/kmls/new_single"
     kmls = os.listdir(path)
     list_kmls = [x for x in kmls if x != ".gitkeep"]
-    now = datetime.datetime.now().strftime("%d/%m/%Y%H%M%S")
+    now = datetime.now().strftime("%d/%m/%Y%H%M%S")
     run_key = f"step2_{now}"
 
     if list_kmls != []:

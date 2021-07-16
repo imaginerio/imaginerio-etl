@@ -2,8 +2,10 @@ import math
 import os
 import re
 import shutil
+from solids.utils import df_csv_io_manager
 import sys
 from typing import List
+from dotenv import load_dotenv
 
 import dagster as dg
 import geojson
@@ -18,6 +20,8 @@ from pyproj import Proj
 from shapely.geometry import Point, Polygon
 from SPARQLWrapper import JSON, SPARQLWrapper
 
+load_dotenv(override=True)
+
 
 def find_with_re(property, kml):
     return re.search(f"(?<=<{property}>).+(?=<\/{property}>)", kml).group(0)
@@ -27,7 +31,7 @@ def reproject(coordinates, inverse=False):
     rj = Proj("EPSG:32722")
     origin = Point(coordinates)
     origin_proj = rj(origin.x, origin.y, inverse=inverse)
-    # print(f'x: {origin.x}, Y: {origin.y}')
+
     return Point(origin_proj)
 
 
@@ -63,12 +67,12 @@ def query_wikidata(Q):
 
 def get_radius(kml):
     with open(kml, "r") as f:
-        # print(kml)
+
         KML = parser.parse(f).getroot()
     id = str(KML.PhotoOverlay.name)
     tilt = KML.PhotoOverlay.Camera.tilt
     df = pd.read_csv(
-        "https://raw.githubusercontent.com/imaginerio/situated-views/dev/src/data-out/metadata.csv",
+        os.environ["METADATA"],
         index_col="id",
     )
     depicts = df.loc[id, "wikidata_depict"]
@@ -84,7 +88,7 @@ def get_radius(kml):
             else:
                 continue
             for point in points:
-                # print(point)
+
                 lnglat = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point)
                 lng = lnglat.group(1)
                 lat = lnglat.group(2)
@@ -95,27 +99,27 @@ def get_radius(kml):
                         KML.PhotoOverlay.Camera.latitude,
                     )
                 )
-                # print(f'origin : {origin}')
+
                 distance = origin.distance(depicted)
                 distances.append(distance)
 
         if distances:
             radius = max(distances)
-            # print(radius)
+
         else:
-            # print("None")
+
             return None
     else:
         if tilt <= 89:
             tan = math.tan((tilt * math.pi) / 180)
             radius = KML.PhotoOverlay.Camera.altitude * tan
             if radius < 400:
-                # print("None")
+
                 return None
         else:
-            # print("None")
+
             return None
-    # print(radius)
+
     return radius
 
 
@@ -182,7 +186,7 @@ def split_photooverlays(context, kmls, delete_original=False):
     path = context.solid_config
     splited_kmls = []
     photooverlays = ""
-    print("KMLS:", kmls)
+
     for kml in kmls:
         splited_kmls.append(kml)
         with open(kml, "r") as f:
@@ -199,8 +203,6 @@ def split_photooverlays(context, kmls, delete_original=False):
         if delete_original:
             os.remove(os.path.abspath(kml))
         shutil.move(kml, "data/input/kmls/processed_raw")
-
-    print(splited_kmls)
 
 
 @dg.solid(config_schema=dg.StringSource)
@@ -230,7 +232,7 @@ def change_img_href(context):
 
 
 @dg.solid
-def correct_altitude_mode(context, kmls: List):
+def correct_altitude_mode(context, kmls):
 
     for kml in kmls:
         with open(kml, "r+") as f:
@@ -273,18 +275,14 @@ def correct_altitude_mode(context, kmls: List):
 
 
 @dg.solid(
-    config_schema=dg.StringSource,
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
 )
-def create_feature(context, kmls: List, metadata):
+def create_feature(context, kmls, metadata):
     new_features = []
-    ids_with_error = []
     processed_ids = []
     metadata["upper_ids"] = metadata["id"].str.upper()
     metadata = metadata.set_index("upper_ids")
-    path = context.solid_config
-    Id = ""
-    print("KMLS:", kmls)
+    # Id = ""
 
     for kml in kmls:
         try:
@@ -344,17 +342,31 @@ def create_feature(context, kmls: List, metadata):
                 processed_ids.append(Id)
 
         except Exception as E:
-            ids_with_error.append(Id)
             print(f"ERROR: {E} no ID: {Id}")
-        try:
-            shutil.move(kml, path)
-        except:
-            print("kml can't be moved: ", kml)
-
-    with open("data/input/kmls/processed_single/not_on_gejson.txt", "w") as output:
-        output.write(str(ids_with_error))
 
     return new_features
+
+
+@dg.solid(config_schema=dg.StringSource)
+def move_files(context, new_features):
+    list_kmls = [feature["properties"]["id"] for feature in new_features]
+    path_from = "data/input/kmls/new_single"
+    path_to = context.solid_config
+
+    for kml in list_kmls:
+        try:
+            kml_from = os.path.join(path_from, kml + ".kml")
+            kml_to = os.path.join(path_to, kml + ".kml")
+            if os.path.exists(kml_to):
+                os.remove(os.path.abspath(kml_to))
+                shutil.move(kml_from, path_to)
+            else:
+                shutil.move(kml_from, path_to)
+
+        except Exception as e:
+            print(e)
+
+    return list
 
 
 @dg.solid(
@@ -363,28 +375,32 @@ def create_feature(context, kmls: List, metadata):
         dg.OutputDefinition(io_manager_key="geojson", name="import_viewcones")
     ],
 )
-def create_geojson(context, new_features: List):
+def create_geojson(context, new_features):
     camera = context.solid_config
 
-    if os.path.isfile(camera):
-        current_features = (geojson.load(open(camera))).features
-        current_ids = [feature["properties"]["id"] for feature in current_features]
+    if new_features:
+        if os.path.isfile(camera):
+            current_features = (geojson.load(open(camera))).features
+            current_ids = [feature["properties"]["id"] for feature in current_features]
 
-        for new_feature in new_features:
-            id_new = new_feature["properties"]["id"]
+            for new_feature in new_features:
+                id_new = new_feature["properties"]["id"]
 
-            if id_new in current_ids:
-                print("Updated:  ", id_new)
-                index = current_ids.index(id_new)
-                current_features[index] = new_feature
+                if id_new in current_ids:
+                    print("Updated:  ", id_new)
+                    index = current_ids.index(id_new)
+                    current_features[index] = new_feature
 
-            else:
-                print("appended: ", id_new)
-                current_features.append(new_feature)
+                else:
+                    print("Appended: ", id_new)
+                    current_features.append(new_feature)
 
-        feature_collection = geojson.FeatureCollection(features=current_features)
-        return feature_collection
+            feature_collection = geojson.FeatureCollection(features=current_features)
+            return feature_collection
 
+        else:
+            feature_collection = geojson.FeatureCollection(features=new_features)
+            return feature_collection
     else:
-        feature_collection = geojson.FeatureCollection(features=new_features)
-        return feature_collection
+        print("Nothing's to updated on import_viewcones")
+        pass

@@ -15,9 +15,7 @@ class PandasCsvIOManager(dg.IOManager):
         if obj_name.startswith("imp"):
             file_path = os.path.join("data", "output", context.upstream_output.name)
         else:
-            file_path = os.path.join(
-                "data", "output", context.upstream_output.name
-            )
+            file_path = os.path.join("data", "output", context.upstream_output.name)
 
         return pd.read_csv(file_path + ".csv", index_col="id")
 
