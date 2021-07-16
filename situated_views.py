@@ -27,7 +27,7 @@ def situated_views():
             "push_new_data_daily": lambda: push_new_data_daily,
         },
         "sensors": {
-            # "trigger_cumulus": lambda: trigger_cumulus,
+            "trigger_cumulus": lambda: trigger_cumulus,
             "trigger_export": lambda: trigger_export,
             "trigger_metadata": lambda: trigger_metadata,
             "trigger_apis": lambda: trigger_apis,

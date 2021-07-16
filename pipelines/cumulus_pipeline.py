@@ -1,5 +1,5 @@
 import os
-
+from datetime import datetime
 import dagster as dg
 from dotenv import load_dotenv
 from solids.cumulus import *
@@ -51,20 +51,14 @@ def cumulus_pipeline():
 
 @dg.sensor(pipeline_name="cumulus_pipeline")
 def trigger_cumulus(context):
-    last_mtime = float(context.cursor) if context.cursor else 0
-
+    last_mtime = datetime(context.cursor) if context.cursor else 0
     max_mtime = last_mtime
-
-    fstats = os.stat("/mnt/y/projetos/getty/cumulus.xml")
+    fstats = os.stat("data/input/cumulus.xml")
     file_mtime = fstats.st_mtime
+
     if file_mtime <= last_mtime:
-        return
+        run_key = f"cumulus.xml:{str(file_mtime)}"
+        yield dg.RunRequest(run_key=run_key, run_config=preset)
 
-    # the run key should include mtime if we want to kick off new runs based on file modifications
-    run_key = f"cumulus.xml:{str(file_mtime)}"
-    # run_config = {"solids": {"process_file": {"config": {"filename": filename}}}}
-    yield dg.RunRequest(run_key=run_key)
-
-    max_mtime = max(max_mtime, file_mtime)
-
-    context.update_cursor(str(max_mtime))
+        max_mtime = max(max_mtime, file_mtime)
+        context.update_cursor(str(max_mtime))
