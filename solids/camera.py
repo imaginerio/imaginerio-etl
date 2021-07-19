@@ -314,11 +314,11 @@ def create_feature(context, kmls, metadata):
                     if pd.isna(metadata.loc[Id, "last_year"])
                     else str(int(metadata.loc[Id, "last_year"])),
                     "source": "Instituto Moreira Salles",
-                    "longitude": str(KML.PhotoOverlay.Camera.longitude),
-                    "latitude": str(KML.PhotoOverlay.Camera.latitude),
-                    "altitude": str(KML.PhotoOverlay.Camera.altitude),
-                    "heading": str(KML.PhotoOverlay.Camera.heading),
-                    "tilt": str(KML.PhotoOverlay.Camera.tilt),
+                    "longitude": str(round(float(KML.PhotoOverlay.Camera.longitude),5)),
+                    "latitude": str(round(float(KML.PhotoOverlay.Camera.latitude),5)),
+                    "altitude": str(round(float(KML.PhotoOverlay.Camera.altitude),5)),
+                    "heading": str(round(float(KML.PhotoOverlay.Camera.heading),5)),
+                    "tilt": str(round(float(KML.PhotoOverlay.Camera.tilt),5)),
                     "fov": str(
                         abs(float(KML.PhotoOverlay.ViewVolume.leftFov))
                         + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))
