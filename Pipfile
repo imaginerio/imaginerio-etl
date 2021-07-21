@@ -15,6 +15,7 @@ pillow = "*"
 sparqlwrapper = "*"
 bokeh = "*"
 python-dotenv = "*"
+xlrd = "*"
 
 [dev-packages]
 

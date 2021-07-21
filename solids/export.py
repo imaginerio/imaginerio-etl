@@ -19,30 +19,31 @@ from bokeh.models import (
     LinearColorMapper,
     Row,
     HoverTool,
-    Span
+    Span,
 )
 
 
 @dg.solid(input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")])
 def load_metadata(_, metadata):
 
-    metadata["date"] = pd.to_datetime(metadata["date"])
-    metadata["first_year"] = pd.to_datetime(metadata["first_year"])
-    metadata["last_year"] = pd.to_datetime(metadata["last_year"])
+    metadata["Date"] = pd.to_datetime(metadata["Date"])
+    metadata["First Year"] = pd.to_datetime(metadata["First Year"])
+    metadata["Last Year"] = pd.to_datetime(metadata["Last Year"])
     export_df = metadata
 
     return export_df
+
 
 @dg.solid(input_defs=[dg.InputDefinition("smapshot", root_manager_key="smapshot_root")])
 def organize_columns_to_omeka(_, df, smapshot):
     # filter items
     df = df.dropna(
-        subset=["geometry", "first_year", "last_year", "portals_url", "img_hd"]
+        subset=["geometry", "First Year", "Last Year", "Source URL", "Media URL"]
     )
 
     # format data
     omeka_df = df
-    omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
+    omeka_df["Source URL"] = omeka_df["Source URL"] + " Instituto Moreira Salles"
     omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
     omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
@@ -55,110 +56,130 @@ def organize_columns_to_omeka(_, df, smapshot):
     omeka_df["rights"] = ""
     omeka_df["citation"] = ""
     omeka_df["item_sets"] = "all||views"
-    include = omeka_df["id"].isin(smapshot["id"])
+    include = omeka_df["Source ID"].isin(smapshot["Source ID"])
     omeka_df.loc[include, "item_sets"] = omeka_df["item_sets"] + "||smapshot"
     omeka_df["dcterms:available"] = df["date_circa"]
     omeka_df.loc[~(df["date_accuracy"] == "circa"), "dcterms:available"] = (
-        df["first_year"].astype(str) + "/" + df["last_year"].astype(str)
+        df["First Year"].astype(str) + "/" + df["Last Year"].astype(str)
     )
 
     # format data
-    omeka_df["portals_url"] = omeka_df["portals_url"] + " Instituto Moreira Salles"
+    omeka_df["Source URL"] = omeka_df["Source URL"] + " Instituto Moreira Salles"
     omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
     omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
 
-    omeka_df.loc[
-             omeka_df["type"] == "FOTOGRAFIA/ Papel", 
-             ("dcterms:type:pt","dcterms:type:en")
-             ] = "wikidata.org/wiki/Q56055236 Fotografia em papel","wikidata.org/wiki/Q56055236 Photographic print"
-    omeka_df.loc[
-                omeka_df["type"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", 
-                ("dcterms:type:pt","dcterms:type:en")
-                ] = "wikidata.org/wiki/Q100575647 Impressão fotomecânica","wikidata.org/wiki/Q100575647 Photomechanical print"
-    omeka_df.loc[
-                omeka_df["type"] == "NEGATIVO/ Vidro", 
-                ("dcterms:type:pt","dcterms:type:en")
-                ] = "wikidata.org/wiki/Q85621807 Negativo de vidro","wikidata.org/wiki/Q85621807 Glass plate negative"
-    omeka_df.loc[
-                omeka_df["type"] == "DIAPOSITIVO/ Vidro", 
-                ("dcterms:type:pt","dcterms:type:en")
-                ] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro","wikidata.org/wiki/Q97570383 Glass diapositive"
+    # omeka_df.loc[
+    #     omeka_df["Materials"] == "FOTOGRAFIA/ Papel",
+    #     ("dcterms:type:pt", "dcterms:type:en"),
+    # ] = (
+    #     "wikidata.org/wiki/Q56055236 Fotografia em papel",
+    #     "wikidata.org/wiki/Q56055236 Photographic print",
+    # )
+    # omeka_df.loc[
+    #     omeka_df["Materials"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel",
+    #     ("dcterms:type:pt", "dcterms:type:en"),
+    # ] = (
+    #     "wikidata.org/wiki/Q100575647 Impressão fotomecânica",
+    #     "wikidata.org/wiki/Q100575647 Photomechanical print",
+    # )
+    # omeka_df.loc[
+    #     omeka_df["Materials"] == "NEGATIVO/ Vidro",
+    #     ("dcterms:type:pt", "dcterms:type:en"),
+    # ] = (
+    #     "wikidata.org/wiki/Q85621807 Negativo de vidro",
+    #     "wikidata.org/wiki/Q85621807 Glass plate negative",
+    # )
+    # omeka_df.loc[
+    #     omeka_df["Materials"] == "DIAPOSITIVO/ Vidro",
+    #     ("dcterms:type:pt", "dcterms:type:en"),
+    # ] = (
+    #     "wikidata.org/wiki/Q97570383 Diapositivo de vidro",
+    #     "wikidata.org/wiki/Q97570383 Glass diapositive",
+    # )
 
-    filter = (omeka_df["format"] == "Estereoscopia") & (omeka_df["type"] == "DIAPOSITIVO/ Vidro")
-    omeka_df.loc[filter, 
-                ("dcterms:type:pt","dcterms:type:en")
-                ] = "wikidata.org/wiki/Q97570383 Diapositivo de vidro||wikidata.org/wiki/Q35158 Estereoscopia","wikidata.org/wiki/Q97570383 Glass diapositive||wikidata.org/wiki/Q35158 Stereoscopy"
+    # filter = (omeka_df["format"] == "Estereoscopia") & (
+    #     omeka_df["Materials"] == "DIAPOSITIVO/ Vidro"
+    # )
+    # omeka_df.loc[filter, ("dcterms:type:pt", "dcterms:type:en")] = (
+    #     "wikidata.org/wiki/Q97570383 Diapositivo de vidro||wikidata.org/wiki/Q35158 Estereoscopia",
+    #     "wikidata.org/wiki/Q97570383 Glass diapositive||wikidata.org/wiki/Q35158 Stereoscopy",
+    # )
 
-
-    omeka_df.loc[
-                omeka_df["process"] == "AUTOCHROME / Corante e prata",
-                ("dcterms:medium:pt","dcterms:medium:en")
-                ] = "wikidata.org/wiki/Q355674 Autocromo", "wikidata.org/wiki/Q355674 Autochrome"
-    omeka_df.loc[
-                omeka_df["process"] == "ALBUMINA/ Prata",
-                ("dcterms:medium:pt","dcterms:medium:en")
-                ] = "wikidata.org/wiki/Q107387614 Albumina", "wikidata.org/wiki/Q107387614 Albumine"
-    omeka_df.loc[
-                omeka_df["process"] == "GELATINA/ Prata",
-                ("dcterms:medium:pt","dcterms:medium:en")
-                ] = "wikidata.org/wiki/Q172984 Gelatina e prata", "wikidata.org/wiki/Q172984 Silver gelatin"
-    omeka_df.loc[
-                omeka_df["process"] == "COLÓDIO/ Prata",
-                ("dcterms:medium:pt","dcterms:medium:en")
-                ] = "wikidata.org/wiki/Q904614 Colódio", "wikidata.org/wiki/Q904614 Collodion"
-    omeka_df.loc[
-                omeka_df["process"] == "LANTERN SLIDE / Prata",
-                ("dcterms:medium:pt","dcterms:medium:en")
-                ] = "wikidata.org/wiki/Q87714739","wikidata.org/wiki/Q87714739"
+    # omeka_df.loc[
+    #     omeka_df["Fabrication Method"] == "AUTOCHROME / Corante e prata",
+    #     ("dcterms:medium:pt", "dcterms:medium:en"),
+    # ] = ("wikidata.org/wiki/Q355674 Autocromo", "wikidata.org/wiki/Q355674 Autochrome")
+    # omeka_df.loc[
+    #     omeka_df["Fabrication Method"] == "ALBUMINA/ Prata",
+    #     ("dcterms:medium:pt", "dcterms:medium:en"),
+    # ] = (
+    #     "wikidata.org/wiki/Q107387614 Albumina",
+    #     "wikidata.org/wiki/Q107387614 Albumine",
+    # )
+    # omeka_df.loc[
+    #     omeka_df["Fabrication Method"] == "GELATINA/ Prata",
+    #     ("dcterms:medium:pt", "dcterms:medium:en"),
+    # ] = (
+    #     "wikidata.org/wiki/Q172984 Gelatina e prata",
+    #     "wikidata.org/wiki/Q172984 Silver gelatin",
+    # )
+    # omeka_df.loc[
+    #     omeka_df["Fabrication Method"] == "COLÓDIO/ Prata",
+    #     ("dcterms:medium:pt", "dcterms:medium:en"),
+    # ] = ("wikidata.org/wiki/Q904614 Colódio", "wikidata.org/wiki/Q904614 Collodion")
+    # omeka_df.loc[
+    #     omeka_df["Fabrication Method"] == "LANTERN SLIDE / Prata",
+    #     ("dcterms:medium:pt", "dcterms:medium:en"),
+    # ] = ("wikidata.org/wiki/Q87714739", "wikidata.org/wiki/Q87714739")
 
     # rename columns
     omeka_df = omeka_df.rename(
-    columns={
-        "id": "dcterms:identifier",
-        "title": "dcterms:title",
-        "description": "dcterms:description",
-        "creator": "dcterms:creator",
-        "date_created": "dcterms:created",
-        "date_circa": "dcterms:temporal",
-        "image_width": "schema:width",
-        "image_height": "schema:height",
-        "rights": "dcterms:rights",
-        "citation": "dcterms:bibliographicCitation",
-        "portals_url": "dcterms:source",
-        "wikidata_id": "dcterms:hasVersion",
-        "geometry": "schema:polygon",
-        "wikidata_depict": "foaf:depicts",
-        "img_hd": "media"
+        columns={
+            "Source ID": "dcterms:identifier",
+            "Title": "dcterms:Title",
+            "Description (Portuguese)": "dcterms:description",
+            "Creator": "dcterms:creator",
+            "date_created": "dcterms:created",
+            "date_circa": "dcterms:temporal",
+            "image_width": "schema:width",
+            "image_height": "schema:height",
+            "rights": "dcterms:rights",
+            "citation": "dcterms:bibliographicCitation",
+            "Source URL": "dcterms:source",
+            "wikidata_id": "dcterms:hasVersion",
+            "geometry": "schema:polygon",
+            "wikidata_depict": "foaf:depicts",
+            "Media URL": "media",
         }
     )
 
     # select columns
     omeka_df = omeka_df[
-    [
-        "dcterms:identifier",
-        "dcterms:title",
-        "dcterms:description",
-        "dcterms:creator",
-        "dcterms:created",
-        "dcterms:temporal",
-        "dcterms:available",
-        "dcterms:type:pt",
-        "dcterms:type:en",
-        "dcterms:medium:pt",
-        "dcterms:medium:en",
-        "dcterms:rights",
-        "dcterms:bibliographicCitation",
-        "dcterms:source",
-        "dcterms:hasVersion",
-        "latitude",
-        "longitude",
-        "schema:polygon",
-        "foaf:depicts",
-        "schema:width",
-        "schema:height",
-        "media",
-        "item_sets",
+        [
+            "dcterms:identifier",
+            "dcterms:Title",
+            "dcterms:description",
+            "dcterms:creator",
+            "dcterms:created",
+            "dcterms:temporal",
+            "dcterms:available",
+            # "dcterms:type:pt",
+            # "dcterms:type:en",
+            # "dcterms:medium:pt",
+            # "dcterms:medium:en",
+            "dcterms:rights",
+            "dcterms:bibliographicCitation",
+            "dcterms:source",
+            "dcterms:hasVersion",
+            "latitude",
+            "longitude",
+            "schema:polygon",
+            "foaf:depicts",
+            "schema:width",
+            "schema:height",
+            "media",
+            "item_sets",
         ]
     ]
 
@@ -166,7 +187,6 @@ def organize_columns_to_omeka(_, df, smapshot):
 
 
 @dg.solid(
-    input_defs=[dg.InputDefinition("jstor", root_manager_key="jstor_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_omeka")],
 )
 def import_omeka_dataframe(_, df, jstor):
@@ -182,7 +202,7 @@ def make_df_to_wikidata(_, df):
 
     # filter items
     df = df.dropna(
-        subset=["geometry", "first_year", "last_year", "portals_url", "img_hd"]
+        subset=["geometry", "First Year", "Last Year", "Source URL", "Media URL"]
     )
 
     quickstate = pd.DataFrame(
@@ -220,21 +240,21 @@ def make_df_to_wikidata(_, df):
     month = quickstate["date_accuracy"] == "month"
     day = quickstate["date_accuracy"] == "day"
 
-    quickstate["P571"] = df["date"].apply(dt.isoformat)
+    quickstate["P571"] = df["Date"].apply(dt.isoformat)
     quickstate.loc[circa, "P571"] = quickstate["P571"] + "Z/8"
     quickstate.loc[year, "P571"] = quickstate["P571"] + "Z/9"
     quickstate.loc[month, "P571"] = quickstate["P571"] + "Z/10"
     quickstate.loc[day, "P571"] = quickstate["P571"] + "Z/11"
     # earliest date
-    quickstate.loc[circa, "qal1319"] = df["first_year"].apply(dt.isoformat) + "Z/9"
+    quickstate.loc[circa, "qal1319"] = df["First Year"].apply(dt.isoformat) + "Z/9"
     # latest date
-    quickstate.loc[circa, "qal1326"] = df["last_year"].apply(dt.isoformat) + "Z/9"
+    quickstate.loc[circa, "qal1326"] = df["Last Year"].apply(dt.isoformat) + "Z/9"
     # pt-br label
-    quickstate["Lpt-br"] = df["title"]
+    quickstate["Lpt-br"] = df["Title"]
     # pt-br description
-    quickstate["Dpt-br"] = "Fotografia de " + df["creator"]
+    quickstate["Dpt-br"] = "Fotografia de " + df["Creator"]
     # en description
-    quickstate["Den"] = "Photograph by " + df["creator"]
+    quickstate["Den"] = "Photograph by " + df["Creator"]
     # Instance of
     quickstate["P31"] = "Q125191"
     # country
@@ -250,17 +270,17 @@ def make_df_to_wikidata(_, df):
     # tilt
     quickstate["qal8208"] = df["tilt"].astype(str) + "U28390"
     # creator
-    quickstate["P170"] = df["creator"]
+    quickstate["P170"] = df["Creator"]
     # made from material
-    quickstate["P186"] = df["type"]
+    quickstate["P186"] = df["Materials"]
     # format
     quickstate["format"] = df["format"]
     # collection
     quickstate["P195"] = "Q71989864"
     # inventory number
-    quickstate["P217"] = df["id"]
+    quickstate["P217"] = df["Source ID"]
     # fabrication method
-    quickstate["P2079"] = df["process"]
+    quickstate["P2079"] = df["Fabrication Method"]
     # field of view
     quickstate["P4036"] = df["fov"].astype(str) + "U28390"
     # width
@@ -276,18 +296,26 @@ def make_df_to_wikidata(_, df):
 
     # format data P186
     quickstate.loc[quickstate["P186"] == "FOTOGRAFIA/ Papel", "P186"] = "Q56055236"
-    quickstate.loc[quickstate["P186"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", "P186"] = "Q100575647"
+    quickstate.loc[
+        quickstate["P186"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", "P186"
+    ] = "Q100575647"
     quickstate.loc[quickstate["P186"] == "NEGATIVO/ Vidro", "P186"] = "Q85621807"
     quickstate.loc[quickstate["P186"] == "DIAPOSITIVO/ Vidro", "P186"] = "Q97570383"
-    filter = (quickstate["format"] == "Estereoscopia") & (quickstate["P186"] == "Q97570383")
+    filter = (quickstate["format"] == "Estereoscopia") & (
+        quickstate["P186"] == "Q97570383"
+    )
     quickstate.loc[filter, "P186"] = "Q97570383||Q35158"
 
     # format data P2079
-    quickstate.loc[quickstate["P2079"] == "AUTOCHROME / Corante e prata","P2079"] = "Q355674"
-    quickstate.loc[quickstate["P2079"] == "ALBUMINA/ Prata","P2079"] = "Q107387614"
-    quickstate.loc[quickstate["P2079"] == "GELATINA/ Prata","P2079"] = "Q172984"
-    quickstate.loc[quickstate["P2079"] == "COLÓDIO/ Prata","P2079"] = "Q904614"
-    quickstate.loc[quickstate["P2079"] == "LANTERN SLIDE / Prata","P2079"] = "Q87714739"
+    quickstate.loc[
+        quickstate["P2079"] == "AUTOCHROME / Corante e prata", "P2079"
+    ] = "Q355674"
+    quickstate.loc[quickstate["P2079"] == "ALBUMINA/ Prata", "P2079"] = "Q107387614"
+    quickstate.loc[quickstate["P2079"] == "GELATINA/ Prata", "P2079"] = "Q172984"
+    quickstate.loc[quickstate["P2079"] == "COLÓDIO/ Prata", "P2079"] = "Q904614"
+    quickstate.loc[
+        quickstate["P2079"] == "LANTERN SLIDE / Prata", "P2079"
+    ] = "Q87714739"
 
     quickstate = quickstate.drop(["format"], axis=1)
 
@@ -357,24 +385,25 @@ def organise_creator(_, quickstate):
 
     return quickstate.set_index("qid")
 
+
 @dg.solid
 def format_values_chart(context, DF):
 
     values_tiles = DF[
         [
-            "id",
+            "Source ID",
             "img_sd",
-            "img_hd",
+            "Media URL",
             "latitude",
             "longitude",
             "geometry",
             "portals_id",
-            "portals_url",
+            "Source URL",
             "wikidata_id",
             "omeka_url",
-            ]
+        ]
     ]
-    
+
     DF["img_sd"] = DF["img_sd"].str.strip('"')
 
     # create a new df
@@ -388,7 +417,7 @@ def format_values_chart(context, DF):
     val_kml_total = 0
 
     # image finished
-    val_img = len(DF[DF["img_hd"].notna()])
+    val_img = len(DF[DF["Media URL"].notna()])
     DF_AUX["B"] = DF["img_sd"].notna().astype(int)
     # image total
     val_img_total = len(DF[DF["img_sd"].notna()])
@@ -416,20 +445,8 @@ def format_values_chart(context, DF):
     values_tiles["rate"] = DF_AUX.count(axis=1)
 
     values_hbar = {
-        "Done_orange": [ 
-            0,
-            val_wiki, 
-            val_meta,
-            0,
-            0
-            ],
-        "Done_blue": [
-            val_omeka,
-            0,
-            0, 
-            val_img, 
-            val_kml
-            ],
+        "Done_orange": [0, val_wiki, val_meta, 0, 0],
+        "Done_blue": [val_omeka, 0, 0, val_img, val_kml],
         "To do": [
             val_omeka_total,
             val_wiki_total - val_wiki,
@@ -440,23 +457,18 @@ def format_values_chart(context, DF):
         "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
     }
 
-    values_pie = [
-        val_omeka,
-        val_wiki, 
-        val_meta, 
-        val_img, 
-        val_kml
-        ]
+    values_pie = [val_omeka, val_wiki, val_meta, val_img, val_kml]
 
-    values = [values_hbar,values_pie, values_tiles]
-    
-    return values 
+    values = [values_hbar, values_pie, values_tiles]
+
+    return values
+
 
 @dg.solid
 def create_hbar(context, values):
 
     # construct a data source
-    list1 = ["Done_orange","Done_blue", "To do"]
+    list1 = ["Done_orange", "Done_blue", "To do"]
     values_hbar = values[0]
     # deepcopy the data for later use
     values_hbar1 = deepcopy(values_hbar)
@@ -482,7 +494,9 @@ def create_hbar(context, values):
 
     # base dashboard
     for i in range(1, len(list1)):
-        values_hbar[list1[i]] = [sum(x) for x in zip(values_hbar[list1[i]], values_hbar[list1[i - 1]])]
+        values_hbar[list1[i]] = [
+            sum(x) for x in zip(values_hbar[list1[i]], values_hbar[list1[i - 1]])
+        ]
 
     plot_hbar = figure(
         y_range=values_hbar["y"],
@@ -498,7 +512,7 @@ def create_hbar(context, values):
         right=values_hbar["Done_orange"],
         left=0,
         height=0.8,
-        color="orange"
+        color="orange",
     )
     hbar_1.data_source.add(values_hbar1["tooltip_b-o"], "data")
     hbar_1.data_source.add(values_hbar1["Done_orange"], "value")
@@ -508,7 +522,7 @@ def create_hbar(context, values):
         right=values_hbar["Done_blue"],
         left=values_hbar["Done_orange"],
         height=0.8,
-        color="royalblue"
+        color="royalblue",
     )
     hbar_2.data_source.add(values_hbar1["tooltip_b-o"], "data")
     hbar_2.data_source.add(values_hbar1["Done_blue"], "value")
@@ -552,6 +566,7 @@ def create_hbar(context, values):
     plot_hbar.background_fill_color = "ghostwhite"
 
     return plot_hbar
+
 
 @dg.solid
 def create_pie(context, values):
@@ -599,8 +614,9 @@ def create_pie(context, values):
 
     return plot_pie
 
+
 @dg.solid
-def create_tiles(context,values):
+def create_tiles(context, values):
     values_tiles = values[2]
 
     # construct coordinates
@@ -628,7 +644,9 @@ def create_tiles(context,values):
 
     # setting colors
     colors = ["#edf8e9", "#c7e9c0", "#a1d99b", "#74c476", "#31a354", "#006d2c"]
-    mapper = LinearColorMapper(palette=colors, low=values_tiles.rate.min(), high=values_tiles.rate.max())
+    mapper = LinearColorMapper(
+        palette=colors, low=values_tiles.rate.min(), high=values_tiles.rate.max()
+    )
 
     # config tooltip
     TOOLTIPS = """
@@ -643,11 +661,11 @@ def create_tiles(context,values):
         </p>
         <p 
             style='font-size: 10px; font-weight: bold;'>
-            Image: @img_sd @img_hd
+            Image: @img_sd @Media URL
         </p>
         <p 
             style='font-size: 10px; font-weight: bold;'>
-            Portals: @portals_url
+            Portals: @Source URL
         </p>
         <p 
             style='font-size: 10px; font-weight: bold;'>
@@ -703,7 +721,9 @@ def create_tiles(context,values):
 
     # add tooltip in hover
     h1 = HoverTool(renderers=[rect], tooltips=TOOLTIPS, mode="mouse", show_arrow=False)
-    h2 = HoverTool(renderers=[rect_sort], tooltips=TOOLTIPS, mode="mouse", show_arrow=False)
+    h2 = HoverTool(
+        renderers=[rect_sort], tooltips=TOOLTIPS, mode="mouse", show_arrow=False
+    )
 
     callback = CustomJS(
         args={"rect": rect, "rect_sort": rect_sort},
@@ -730,14 +750,12 @@ def create_tiles(context,values):
 
     return plot_tiles
 
+
 @dg.solid(config_schema=dg.StringSource)
-def export_html(context,plot_hbar,plot_pie, plot_tiles):
+def export_html(context, plot_hbar, plot_pie, plot_tiles):
     path = context.solid_config
 
-    output_file(path, title="Situated Views - Progress Dashboard")
-    show(layout(
-        [[plot_hbar,plot_pie],[plot_tiles]],
-        sizing_mode="stretch_both"
-    ))
+    output_file(path, Title="Situated Views - Progress Dashboard")
+    show(layout([[plot_hbar, plot_pie], [plot_tiles]], sizing_mode="stretch_both"))
 
     print("Done!")

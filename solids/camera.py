@@ -73,7 +73,7 @@ def get_radius(kml):
     tilt = KML.PhotoOverlay.Camera.tilt
     df = pd.read_csv(
         os.environ["METADATA"],
-        index_col="id",
+        index_col="Source ID",
     )
     depicts = df.loc[id, "wikidata_depict"]
     if isinstance(depicts, str):
@@ -280,7 +280,7 @@ def correct_altitude_mode(context, kmls):
 def create_feature(context, kmls, metadata):
     new_features = []
     processed_ids = []
-    metadata["upper_ids"] = metadata["id"].str.upper()
+    metadata["upper_ids"] = metadata["Source ID"].str.upper()
     metadata = metadata.set_index("upper_ids")
     # Id = ""
 
@@ -297,28 +297,30 @@ def create_feature(context, kmls, metadata):
                 )
                 accurate = pd.notna(metadata.loc[Id, "date_created"])
                 properties = {
-                    "id": metadata.loc[Id, "id"],
-                    "title": ""
-                    if pd.isna(metadata.loc[Id, "title"])
-                    else str(metadata.loc[Id, "title"]),
-                    "description": ""
-                    if pd.isna(metadata.loc[Id, "description"])
-                    else str(metadata.loc[Id, "description"]),
-                    "creator": ""
-                    if pd.isna(metadata.loc[Id, "creator"])
-                    else str(metadata.loc[Id, "creator"]),
-                    "first_year": ""
-                    if pd.isna(metadata.loc[Id, "first_year"])
-                    else str(int(metadata.loc[Id, "first_year"])),
-                    "last_year": ""
-                    if pd.isna(metadata.loc[Id, "last_year"])
-                    else str(int(metadata.loc[Id, "last_year"])),
+                    "Source ID": metadata.loc[Id, "Source ID"],
+                    "Title": ""
+                    if pd.isna(metadata.loc[Id, "Title"])
+                    else str(metadata.loc[Id, "Title"]),
+                    "Description (Portuguese)": ""
+                    if pd.isna(metadata.loc[Id, "Description (Portuguese)"])
+                    else str(metadata.loc[Id, "Description (Portuguese)"]),
+                    "Creator": ""
+                    if pd.isna(metadata.loc[Id, "Creator"])
+                    else str(metadata.loc[Id, "Creator"]),
+                    "First Year": ""
+                    if pd.isna(metadata.loc[Id, "First Year"])
+                    else str(int(metadata.loc[Id, "First Year"])),
+                    "Last Year": ""
+                    if pd.isna(metadata.loc[Id, "Last Year"])
+                    else str(int(metadata.loc[Id, "Last Year"])),
                     "source": "Instituto Moreira Salles",
-                    "longitude": str(round(float(KML.PhotoOverlay.Camera.longitude),5)),
-                    "latitude": str(round(float(KML.PhotoOverlay.Camera.latitude),5)),
-                    "altitude": str(round(float(KML.PhotoOverlay.Camera.altitude),5)),
-                    "heading": str(round(float(KML.PhotoOverlay.Camera.heading),5)),
-                    "tilt": str(round(float(KML.PhotoOverlay.Camera.tilt),5)),
+                    "longitude": str(
+                        round(float(KML.PhotoOverlay.Camera.longitude), 5)
+                    ),
+                    "latitude": str(round(float(KML.PhotoOverlay.Camera.latitude), 5)),
+                    "altitude": str(round(float(KML.PhotoOverlay.Camera.altitude), 5)),
+                    "heading": str(round(float(KML.PhotoOverlay.Camera.heading), 5)),
+                    "tilt": str(round(float(KML.PhotoOverlay.Camera.tilt), 5)),
                     "fov": str(
                         abs(float(KML.PhotoOverlay.ViewVolume.leftFov))
                         + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))
@@ -349,7 +351,7 @@ def create_feature(context, kmls, metadata):
 
 @dg.solid(config_schema=dg.StringSource)
 def move_files(context, new_features):
-    list_kmls = [feature["properties"]["id"] for feature in new_features]
+    list_kmls = [feature["properties"]["Source ID"] for feature in new_features]
     path_from = "data/input/kmls/new_single"
     path_to = context.solid_config
 
@@ -381,10 +383,12 @@ def create_geojson(context, new_features):
     if new_features:
         if os.path.isfile(camera):
             current_features = (geojson.load(open(camera))).features
-            current_ids = [feature["properties"]["id"] for feature in current_features]
+            current_ids = [
+                feature["properties"]["Source ID"] for feature in current_features
+            ]
 
             for new_feature in new_features:
-                id_new = new_feature["properties"]["id"]
+                id_new = new_feature["properties"]["Source ID"]
 
                 if id_new in current_ids:
                     print("Updated:  ", id_new)

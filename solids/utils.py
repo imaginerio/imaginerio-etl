@@ -17,7 +17,7 @@ class PandasCsvIOManager(dg.IOManager):
         else:
             file_path = os.path.join("data", "output", context.upstream_output.name)
 
-        return pd.read_csv(file_path + ".csv", index_col="id")
+        return pd.read_csv(file_path + ".csv", index_col="Source ID")
 
     def handle_output(self, context, obj):
         obj_name = context.name
@@ -78,10 +78,10 @@ def rename_column(context, df, dic):
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")],
 )
 def update_metadata(_, df, metadata):
-    metadata.set_index("id", inplace=True)
+    metadata.set_index("Source ID", inplace=True)
     metadata.update(df)
-    metadata[["first_year", "last_year"]] = metadata[
-        ["first_year", "last_year"]
+    metadata[["First Year", "Last Year"]] = metadata[
+        ["First Year", "Last Year"]
     ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))
     return metadata
 

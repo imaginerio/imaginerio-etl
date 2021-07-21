@@ -26,7 +26,7 @@ class Image:
 )
 def file_picker(context, camera):
     source = context.solid_config
-    has_kml = list(camera["id"])
+    has_kml = list(camera["Source ID"])
     image_list = [
         Image(os.path.join(root, name))
         for root, dirs, files in os.walk(source)
@@ -134,25 +134,25 @@ def create_images_df(context, files):
 
     for img in files["geolocated"]:
         img_dict = {
-            "id": img.id,
-            "img_hd": os.path.join(hd, img.jpg),
+            "Source ID": img.id,
+            "Media URL": os.path.join(hd, img.jpg),
             "img_sd": os.path.join(sd, img.jpg),
         }
         dicts.append(img_dict)
 
     for img in files["backlog"]:
         img_dict = {
-            "id": img.id,
-            "img_hd": nan,
+            "Source ID": img.id,
+            "Media URL": nan,
             "img_sd": nan,
         }
         dicts.append(img_dict)
 
     images_df = pd.DataFrame(data=dicts)
-    images_df.sort_values(by="id")
+    images_df.sort_values(by="Source ID")
     context.log.info(f"{len(images_df)} images available in hi-res")
 
-    return images_df.set_index("id", inplace=True)
+    return images_df.set_index("Source ID", inplace=True)
 
 
 @dg.solid(
@@ -162,34 +162,18 @@ def create_images_df(context, files):
 def write_metadata(context, metadata, files_to_tag):
 
     metadata.fillna(value="", inplace=True)
-    metadata.set_index("id", inplace=True)
+    metadata.set_index("Source ID", inplace=True)
 
     for i, item in enumerate(files_to_tag):
         if item.endswith(".jpg"):
             basename = os.path.split(item)[1]
             name = basename.split(".")[0]
-            try:
-                if metadata.loc[name, "date_accuracy"] == "circa":
-                    datecreated = (
-                        metadata.loc[name, "first_year"].strftime("%Y")
-                        + "/"
-                        + metadata.loc[name, "last_year"].strftime("%Y")
-                    )
-                elif metadata.loc[name, "date_accuracy"] == "year":
-                    datecreated = metadata.loc[name, "date"].strftime("%Y")
-                elif metadata.loc[name, "date_accuracy"] == "month":
-                    datecreated = metadata.loc[name, "date"].strftime("%Y-%m")
-                elif metadata.loc[name, "date_accuracy"] == "day":
-                    datecreated = metadata.loc[name, "date"].strftime("%Y-%m-%d")
-            except AttributeError:
-                print(f"Review {basename} date")
-                datecreated = ""
-                continue
-            byline = metadata.loc[name, "creator"]
-            headline = metadata.loc[name, "title"]
-            caption = metadata.loc[name, "description"]
-            objecttype = metadata.loc[name, "type"]
-            dimensions = f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
+            # date = metadata.loc[name, "Date"]
+            byline = metadata.loc[name, "Creator"]
+            headline = metadata.loc[name, "Title"]
+            caption = metadata.loc[name, "Description (Portuguese)"]
+            objecttype = metadata.loc[name, "Type"]
+            # dimensions = f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
             keywords = metadata.loc[name, "wikidata_depict"].split("||")
             latitude = metadata.loc[name, "latitude"]
             longitude = metadata.loc[name, "longitude"]
@@ -206,11 +190,13 @@ def write_metadata(context, metadata, files_to_tag):
                 "-GPSLongitudeRef=W",
                 "-GPSAltitudeRef=0",
                 "-GPSImgDirectionRef=T",
+                # f"-IPTC:DateCreated={date}",
                 f"-IPTC:By-line={byline}",
                 f"-IPTC:ObjectName={name}",
                 f"-IPTC:Headline={headline}",
                 f"-IPTC:Caption-Abstract={caption}",
                 f"-IPTC:ObjectTypeReference={objecttype}",
+                # f"-IPTC:Dimensions={dimensions}",
                 f"-IPTC:Keywords={keywords}",
                 f"-GPSLatitude={latitude}",
                 f"-GPSLongitude={longitude}",
