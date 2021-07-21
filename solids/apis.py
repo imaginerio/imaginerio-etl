@@ -44,7 +44,7 @@ def query_omeka(context):
         page += 1
         sleep(0.5)
 
-    results.update({"id": l1, "omeka_url": l2})
+    results.update({"Source ID": l1, "omeka_url": l2})
 
     return results
 
@@ -60,14 +60,14 @@ def omeka_dataframe(context, results):
     else:
         # create dataframes
         omeka_df = pd.DataFrame(results)
-        omeka_duplicated = omeka_df[omeka_df.duplicated(subset="id")]
+        omeka_duplicated = omeka_df[omeka_df.duplicated(subset="Source ID")]
         if len(omeka_duplicated) > 0:
             omeka_duplicated.to_csv("data/output/duplicated-omeka.csv")
-        omeka_df.drop_duplicates(subset="id", inplace=True)
+        omeka_df.drop_duplicates(subset="Source ID", inplace=True)
 
         omeka_df.name = "api_omeka"
 
-        return omeka_df.set_index("id")
+        return omeka_df.set_index("Source ID")
 
 
 # WIKIDATA
@@ -134,7 +134,9 @@ def wikidata_dataframe(context, results):
 
         wikidata_df.drop(columns=["depict", "depictLabel"], inplace=True)
 
-        wikidata_df = wikidata_df.groupby("id", as_index=False).agg(lambda x: set(x))
+        wikidata_df = wikidata_df.groupby("Source ID", as_index=False).agg(
+            lambda x: set(x)
+        )
 
         def concat(a_set):
             list_of_strings = [str(s) for s in a_set]
@@ -147,11 +149,11 @@ def wikidata_dataframe(context, results):
 
         wikidata_df = wikidata_df.applymap(lambda x: x.replace("nan", ""))
 
-        wikidata_df = wikidata_df.drop_duplicates(subset="id")
+        wikidata_df = wikidata_df.drop_duplicates(subset="Source ID")
 
         wikidata_df.name = "api_wikidata"
 
-        return wikidata_df.set_index("id")
+        return wikidata_df.set_index("Source ID")
 
 
 # PORTALS
@@ -204,33 +206,33 @@ def portals_dataframe(context, results):
         dataframe = dataframe.append(results, ignore_index=True)
         dataframe = dataframe.rename(
             columns={
-                "id": "portals_id",
-                "RecordName": "id",
-                "Author.displaystring": "creator",
-                "Title": "title",
-                "Date": "date",
+                "Source ID": "portals_id",
+                "RecordName": "Source ID",
+                "Author.displaystring": "Creator",
+                "Title": "Title",
+                "Date": "Date",
             }
         )
 
-        dataframe["id"] = dataframe["id"].str.split(".", n=1, expand=True)
+        dataframe["Source ID"] = dataframe["Source ID"].str.split(".", n=1, expand=True)
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 
-        dataframe["portals_url"] = prefix + dataframe["portals_id"]
+        dataframe["Source URL"] = prefix + dataframe["portals_id"]
 
         portals_df = dataframe[
             [
-                "id",
+                "Source ID",
                 "portals_id",
-                "portals_url",
+                "Source URL",
             ]
         ]
 
-        portals_df = portals_df.drop_duplicates(subset="id")
+        portals_df = portals_df.drop_duplicates(subset="Source ID")
 
         portals_df.name = "api_portals"
 
-        return portals_df.set_index("id")
+        return portals_df.set_index("Source ID")
 
     else:
         context.log.info("Couldn't update")

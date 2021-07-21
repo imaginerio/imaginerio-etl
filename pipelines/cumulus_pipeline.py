@@ -10,9 +10,8 @@ load_dotenv(override=True)
 
 preset = {
     "resources": {
-        "metadata_root": {"config": {"env": "METADATA"}},
-        "xml_root": {"config": {"env": "CUMULUS_XML"}},
-        # "current_df_root": {"config": {"env": "CUMULUS"}},
+        "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
+        "jstor_root": {"config": {"env": "JSTOR_XLS"}},
     }
 }
 
@@ -23,8 +22,8 @@ preset = {
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "metadata_root": root_input_csv,
-                "xml_root": root_input_xml,
+                "jstor_root": root_input_xls,
+                "cumulus_root": root_input_xml,
                 # "current_df_root": root_input_csv,
             },
         )
