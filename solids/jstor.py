@@ -27,7 +27,7 @@ def rename_columns(context, jstor):
 
     jstor = jstor.rename(
         columns={
-            "SSID": "identifier",
+            "Source ID": "identifier",
             "Title[19462]": "Title",
             "Creator[19460]": "Creator",
             "Description in English[19481]": "description:en",
