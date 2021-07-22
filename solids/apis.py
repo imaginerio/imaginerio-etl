@@ -12,7 +12,6 @@ from urllib3.util import Retry
 @dg.solid(config_schema=dg.StringSource)
 def query_omeka(context):
     endpoint = context.solid_config
-    print(endpoint)
 
     # start session
     retry_strategy = Retry(
@@ -77,7 +76,7 @@ def query_wikidata(context):
 
     query = None
     if query == None:
-        query = """SELECT DISTINCT (?inventoryNumber as ?id) (?item as ?wikidata_id) (?imsid as ?wikidata_ims_id) (?image as ?wikidata_image) ?depict ?depictLabel
+        query = """SELECT DISTINCT (?inventoryNumber as ?id) (?item as ?wikidata_id_url) (?imsid as ?wikidata_ims_id) (?image as ?wikidata_image) ?depict ?depictLabel
     WHERE {
     BIND(wdt:P31 AS ?instanceOf) .
     ?item wdt:P195* wd:Q71989864 .
@@ -128,30 +127,34 @@ def wikidata_dataframe(context, results):
 
         wikidata_df = pd.DataFrame(ls)
 
-        wikidata_df["wikidata_depict"] = (
+        wikidata_df["Depicts"] = (
             wikidata_df["depict"] + " " + wikidata_df["depictLabel"]
         )
 
         wikidata_df.drop(columns=["depict", "depictLabel"], inplace=True)
 
-        wikidata_df = wikidata_df.groupby("Source ID", as_index=False).agg(
-            lambda x: set(x)
-        )
+        wikidata_df = wikidata_df.groupby("id", as_index=False).agg(lambda x: set(x))
 
         def concat(a_set):
             list_of_strings = [str(s) for s in a_set]
             joined_string = "||".join(list_of_strings)
             return joined_string
 
-        wikidata_df["wikidata_depict"] = wikidata_df["wikidata_depict"].apply(concat)
+        wikidata_df["Depicts"] = wikidata_df["Depicts"].apply(concat)
 
         wikidata_df = wikidata_df.applymap(lambda x: str(x).strip("{'}"))
 
         wikidata_df = wikidata_df.applymap(lambda x: x.replace("nan", ""))
 
-        wikidata_df = wikidata_df.drop_duplicates(subset="Source ID")
+        wikidata_df = wikidata_df.drop_duplicates(subset="id")
 
         wikidata_df.name = "api_wikidata"
+
+        wikidata_df["Wikidata ID"] = (
+            wikidata_df["wikidata_id_url"].str.split("/").str[-1]
+        )
+
+        wikidata_df = wikidata_df.rename(columns={"id": "Source ID"})
 
         return wikidata_df.set_index("Source ID")
 
@@ -190,8 +193,6 @@ def query_portals(context):
         results = pd.json_normalize(data["items"])
         dataframe = dataframe.append(results, ignore_index=True)
 
-    print(len(dataframe.shape))
-
     return dataframe
 
 
@@ -206,7 +207,7 @@ def portals_dataframe(context, results):
         dataframe = dataframe.append(results, ignore_index=True)
         dataframe = dataframe.rename(
             columns={
-                "Source ID": "portals_id",
+                "id": "portals_id",
                 "RecordName": "Source ID",
                 "Author.displaystring": "Creator",
                 "Title": "Title",

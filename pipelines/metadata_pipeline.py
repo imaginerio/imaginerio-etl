@@ -38,16 +38,20 @@ def create_metadata(context, cumulus, wikidata, portals, camera, images, jstor):
     jstor = jstor.rename(columns=lambda x: re.sub("\[[0-9]{5,7}\]", "", x))
     camera_new = camera[
         [
+            "Source ID",
             "longitude",
-            "altitude",
+            "latitude",
         ]
     ]
+    camera = camera_new.rename(
+        columns={"longitude": "Longitude", "latitude": "Latitude"}
+    )
 
     cumulus[["First Year", "Last Year"]] = cumulus[
         ["First Year", "Last Year"]
     ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))
 
-    dataframes_outer = [cumulus, camera_new, images]
+    dataframes_outer = [cumulus, camera, images]
     dataframe_left = [portals, wikidata]
     metadata = pd.DataFrame(columns=["Source ID"])
     # print("CUMULUS:", cumulus["First Year"][10], type(cumulus["First Year"][10]))
@@ -69,7 +73,7 @@ def create_metadata(context, cumulus, wikidata, portals, camera, images, jstor):
             "First Year",
             "Last Year",
             "Type",
-            "Item Set (text field)",
+            "Item Set",
             "Source",
             "Source URL",  # url do portals
             "Materials",
@@ -79,7 +83,6 @@ def create_metadata(context, cumulus, wikidata, portals, camera, images, jstor):
             "Attribution",  # vazio ou string fixa feito no cumulus ok
             "Width (mm)",
             "Height (mm)",
-            "Item Set",  # vazio ou string fixa feito no cumulus ok
             "Latitude",  # camera
             "Longitude",  # camera
             "Depicts",  # wikidata

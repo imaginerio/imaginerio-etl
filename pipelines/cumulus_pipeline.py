@@ -11,7 +11,7 @@ load_dotenv(override=True)
 preset = {
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
-        "jstor_root": {"config": {"env": "JSTOR_XLS"}},
+        # "metadata_root": {"config": {"env": "METADATA"}},
     }
 }
 
@@ -22,9 +22,8 @@ preset = {
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "jstor_root": root_input_xls,
                 "cumulus_root": root_input_xml,
-                # "current_df_root": root_input_csv,
+                # "metadata_root": root_input_csv,
             },
         )
     ],
@@ -41,8 +40,10 @@ def cumulus_pipeline():
     cumulus_df = organize_columns(cumulus_df)
     cumulus_df = extract_dimensions(cumulus_df)
     listed_creators = creators_list(cumulus_df)
-    cumulus_df = dates_accuracy(cumulus_df)
-    update_metadata(df=cumulus_df)
+    cumulus_df = format_date(cumulus_df)
+    cumulus_df = create_columns(cumulus_df)
+    select_columns(cumulus_df)
+    # update_metadata(df=cumulus_df)
 
 
 ################   SENSORS   ##################

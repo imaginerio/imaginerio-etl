@@ -75,7 +75,7 @@ def get_radius(kml):
         os.environ["METADATA"],
         index_col="Source ID",
     )
-    depicts = df.loc[id, "wikidata_depict"]
+    depicts = df.loc[id, "Depicts"]
     if isinstance(depicts, str):
         depicts = depicts.split("||")
         distances = []

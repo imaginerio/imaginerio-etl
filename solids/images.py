@@ -174,7 +174,7 @@ def write_metadata(context, metadata, files_to_tag):
             caption = metadata.loc[name, "Description (Portuguese)"]
             objecttype = metadata.loc[name, "Type"]
             # dimensions = f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
-            keywords = metadata.loc[name, "wikidata_depict"].split("||")
+            keywords = metadata.loc[name, "Depicts"].split("||")
             latitude = metadata.loc[name, "latitude"]
             longitude = metadata.loc[name, "longitude"]
             altitude = metadata.loc[name, "height"]

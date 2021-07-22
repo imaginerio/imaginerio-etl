@@ -44,7 +44,7 @@ def organize_columns_to_omeka(_, df, smapshot):
     # format data
     omeka_df = df
     omeka_df["Source URL"] = omeka_df["Source URL"] + " Instituto Moreira Salles"
-    omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
+    omeka_df["Wikidata ID"] = omeka_df["Wikidata ID"] + " Wikidata"
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
     omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
 
@@ -65,7 +65,7 @@ def organize_columns_to_omeka(_, df, smapshot):
 
     # format data
     omeka_df["Source URL"] = omeka_df["Source URL"] + " Instituto Moreira Salles"
-    omeka_df["wikidata_id"] = omeka_df["wikidata_id"] + " Wikidata"
+    omeka_df["Wikidata ID"] = omeka_df["Wikidata ID"] + " Wikidata"
     omeka_df["image_width"] = omeka_df["image_width"].str.replace(",", ".")
     omeka_df["image_height"] = omeka_df["image_height"].str.replace(",", ".")
 
@@ -147,9 +147,9 @@ def organize_columns_to_omeka(_, df, smapshot):
             "rights": "dcterms:rights",
             "citation": "dcterms:bibliographicCitation",
             "Source URL": "dcterms:source",
-            "wikidata_id": "dcterms:hasVersion",
+            "Wikidata ID": "dcterms:hasVersion",
             "geometry": "schema:polygon",
-            "wikidata_depict": "foaf:depicts",
+            "Depicts": "foaf:depicts",
             "Media URL": "media",
         }
     )
@@ -290,7 +290,7 @@ def make_df_to_wikidata(_, df):
     # IMS ID
     quickstate["P7835"] = df["portals_id"].astype(int)
     # qid
-    quickstate["qid"] = df["wikidata_id"].str.split("/").str[-1]
+    quickstate["qid"] = df["Wikidata ID"]
     # Copyright status
     # quickstate["P6216"]
 
@@ -399,7 +399,7 @@ def format_values_chart(context, DF):
             "geometry",
             "portals_id",
             "Source URL",
-            "wikidata_id",
+            "Wikidata ID",
             "omeka_url",
         ]
     ]
@@ -431,8 +431,8 @@ def format_values_chart(context, DF):
     # wiki published
     val_wiki = len(DF[DF["wikidata_image"].notna()])
     # wiki total
-    val_wiki_total = len(DF[DF["wikidata_id"].notna()])
-    DF_AUX["D"] = DF["wikidata_id"].notna().astype(int)
+    val_wiki_total = len(DF[DF["Wikidata ID"].notna()])
+    DF_AUX["D"] = DF["Wikidata ID"].notna().astype(int)
 
     # omeka published
     val_omeka = len(DF[DF["omeka_url"].notna()])
