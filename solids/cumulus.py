@@ -1,4 +1,5 @@
 import dagster as dg
+from numpy.core.numeric import True_
 import pandas as pd
 from pandas._libs.tslibs import NaT
 
@@ -133,86 +134,118 @@ def extract_dimensions(context, df):
 @dg.solid
 def format_date(context, df):
     # fill dates
-    circa = df["Date"].str.contains(r"[a-z]", na=False)
-    year = df["Date"].str.count(r"[-\/^a-z]") == 0
-    month = df["Date"].str.count(r"[\/-]") == 1
-    day = df["Date"].str.count(r"[\/-]") == 2
 
-    df.loc[year, "date_accuracy"] = "year"
-    df.loc[month, "date_accuracy"] = "month"
-    df.loc[day, "date_accuracy"] = "day"
-    df.loc[circa, "date_accuracy"] = "circa"
+    df.loc[df["Date"].str.count(r"[-\/^a-z]") == 0, "date_accuracy"] = "year"
+    df.loc[df["Date"].str.count(r"[\/-]") == 1, "date_accuracy"] = "month"
+    df.loc[df["Date"].str.count(r"[\/-]") == 2, "date_accuracy"] = "day"
+    df.loc[df["Date"].str.contains(r"[a-z]", na=False), "date_accuracy"] = "circa"
 
     # format date
-    df["Date"] = df["Date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
     df["First Year"] = df["First Year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
     df["Last Year"] = df["Last Year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
 
-    df[["Date", "First Year", "Last Year"]] = df[
-        ["Date", "First Year", "Last Year"]
+    df["datetime"] = df["Date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    df[["First Year", "Last Year", "datetime"]] = df[
+        ["First Year", "Last Year", "datetime"]
     ].astype("str")
 
-    df[["Date", "First Year", "Last Year"]] = df[
-        ["Date", "First Year", "Last Year"]
+    df[["First Year", "Last Year", "datetime"]] = df[
+        ["First Year", "Last Year", "datetime"]
     ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
     circa = df["date_accuracy"] == "circa"
-    year = df["date_accuracy"] == "year"
-    month = df["date_accuracy"] == "month"
-    day = df["date_accuracy"] == "day"
 
     firstna = df["First Year"].isna()
     lastna = df["Last Year"].isna()
 
-    df.loc[circa & firstna, "First Year"] = df["Date"] - pd.DateOffset(years=5)
-    df.loc[circa & lastna, "Last Year"] = df["Date"] + pd.DateOffset(years=5)
-    df.loc[firstna, "First Year"] = df["Date"]
-    df.loc[lastna, "Last Year"] = df["Date"]
+    df.loc[circa & df["First Year"].isna(), "First Year"] = df["datetime"] - pd.DateOffset(years=5)
+    df.loc[circa & df["Last Year"].isna(), "Last Year"] = df["datetime"] + pd.DateOffset(years=5)
 
-    # isna = df["Date"].isna()
-    # df.loc[isna, "Date"] = "NA"
+    df.loc[df["First Year"].isna(), "First Year"] = df["datetime"]
+    df.loc[df["Last Year"].isna(), "Last Year"] = df["datetime"]
 
     # datetime to string according to date accuracy
     df["First Year"] = df["First Year"].dt.strftime("%Y")
-
     df["Last Year"] = df["Last Year"].dt.strftime("%Y")
 
-    df["Date"] = df["Date"].dt.strftime("%d-%m-%Y")
-
-    # df.loc[year, "Date"] = df["Date"].str.split("-")[2]
-    df.loc[year, "Date"] = df.loc[year, "Date"].apply(lambda x: x.split("-")[-1])
-    df.loc[month, "Date"] = df.loc[month, "Date"].apply(
-        lambda x: "-".join(x.split("-")[1:])
-    )
-    # df.loc[circa, "Date"] = (
-    #     df.loc[circa, "Date"].astype(str).apply(lambda x: x.split("-")[-1]) + " circa"
-    # )
-
-    # df.loc[month, "Date"] = df["Date"].str.split("-")[1:]
-    # df.loc[circa, "Date"] = df["Date"].str.split("-")[2] + " circa"
-
-    # df.loc[circa, "Date"] = df["Date"].dt.strftime("%Y") + " circa"
-    # df.loc[year, "Date"] = df["Date"].dt.strftime("%Y")
-    # df.loc[month, "Date"] = df["Date"].dt.strftime("%m-%Y")
-    # df.loc[day, "Date"] = df["Date"].dt.strftime("%d-%m-%Y")
-
-    # print(df["Date"].dtype)
-
-    # def date_to_string(row):
-    #     if row["date_accuracy"] == "circa":
-    #         return row["Date"].strftime("%Y") + " circa"
-    #     elif row["date_accuracy"] == "year":
-
-    #         return row["Date"].strftime("%Y")
-    #     elif row["date_accuracy"] == "month":
-    #         return row["Date"].strftime("%m-%Y")
-    #     elif row["date_accuracy"] == "day":
-    #         return row["Date"].strftime("%d-%m-%Y")
-
-    # df["Date"] = df.apply(lambda row: date_to_string(row), axis=1)
+    df.loc[df["Date"].str.contains(r"[a-z]", na=False) & df["Date"].notna(), "Date"] = (
+        df["datetime"].dt.strftime("%Y") + " circa"
+    )  # circa
+    df.loc[df["Date"].str.fullmatch(r"\d{4}") & df["Date"].notna(), "Date"] = df[
+        "datetime"
+    ].dt.strftime(
+        "%Y"
+    )  # year
+    df.loc[df["Date"].str.fullmatch(r"\d+[\/-]\d+") & df["Date"].notna(), "Date"] = df[
+        "datetime"
+    ].dt.strftime(
+        "%b %Y"
+    )  # month
+    df.loc[
+        df["Date"].str.fullmatch(r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
+    ] = df["datetime"].dt.strftime("%d %b %Y")
 
     cumulus = df
     cumulus.name = "cumulus"
+
+    return cumulus
+
+
+@dg.solid
+def create_columns(context, df_cumulus):
+
+    df_cumulus.loc[
+        df_cumulus["Materials"] == "FOTOGRAFIA/ Papel", "Materials"
+    ] = "Photographic print"
+
+    df_cumulus.loc[
+        df_cumulus["Materials"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", "Materials"
+    ] = "Photomechanical print"
+
+    df_cumulus.loc[
+        df_cumulus["Materials"] == "NEGATIVO/ Vidro", "Materials"
+    ] = "Glass plate negative"
+
+    df_cumulus.loc[
+        df_cumulus["Materials"] == "DIAPOSITIVO/ Vidro", "Materials"
+    ] = "Glass diapositive"
+
+    df_cumulus.loc[df_cumulus["format"] == "Estereoscopia", "Materials"] = (
+        df_cumulus["Materials"] + "||Stereoscopy"
+    )
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "AUTOCHROME / Corante e prata",
+        "Fabrication Method",
+    ] = "Autochrome"
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "ALBUMINA/ Prata", "Fabrication Method"
+    ] = "Albumine"
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "GELATINA/ Prata", "Fabrication Method"
+    ] = "Silver gelatin"
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "COLÓDIO/ Prata", "Fabrication Method"
+    ] = "Collodion"
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "LANTERN SLIDE / Prata",
+        "Fabrication Method",
+    ] = "Lantern slide"
+
+    df_cumulus["Description (English)"] = ""
+    df_cumulus["Type"] = "Photograph"
+    df_cumulus["Item Set"] = "all||views"
+    df_cumulus["Source"] = "Instituto Moreira Salles"
+    df_cumulus["License"] = ""
+    df_cumulus["Rights"] = ""
+    df_cumulus["Attribution"] = ""
+    df_cumulus["Smapshot ID"] = ""
+
+    return df_cumulus
 
     return cumulus
 
@@ -287,6 +320,7 @@ def select_columns(context, df_cumulus):
             "Description (English)",
             "Description (Portuguese)",
             "Date",
+            "date_accuracy",
             "First Year",
             "Last Year",
             "Type",
