@@ -168,17 +168,17 @@ def write_metadata(context, metadata, files_to_tag):
         if item.endswith(".jpg"):
             basename = os.path.split(item)[1]
             name = basename.split(".")[0]
-            # date = metadata.loc[name, "Date"]
+            date = metadata.loc[name, "Date"]
             byline = metadata.loc[name, "Creator"]
             headline = metadata.loc[name, "Title"]
             caption = metadata.loc[name, "Description (Portuguese)"]
             objecttype = metadata.loc[name, "Type"]
-            # dimensions = f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
+            #dimensions = f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
             keywords = metadata.loc[name, "Depicts"].split("||")
-            latitude = metadata.loc[name, "latitude"]
-            longitude = metadata.loc[name, "longitude"]
-            altitude = metadata.loc[name, "height"]
-            imgdirection = metadata.loc[name, "heading"]
+            latitude = metadata.loc[name, "Latitude"]
+            longitude = metadata.loc[name, "Longitude"]
+            #altitude = metadata.loc[name, "Altitude"]
+            #imgdirection = metadata.loc[name, "heading"]
 
             params = [
                 "-IPTC:Source=Instituto Moreira Salles/IMS",
@@ -190,7 +190,7 @@ def write_metadata(context, metadata, files_to_tag):
                 "-GPSLongitudeRef=W",
                 "-GPSAltitudeRef=0",
                 "-GPSImgDirectionRef=T",
-                # f"-IPTC:DateCreated={date}",
+                f"-IPTC:DateCreated={date}",
                 f"-IPTC:By-line={byline}",
                 f"-IPTC:ObjectName={name}",
                 f"-IPTC:Headline={headline}",
@@ -200,8 +200,8 @@ def write_metadata(context, metadata, files_to_tag):
                 f"-IPTC:Keywords={keywords}",
                 f"-GPSLatitude={latitude}",
                 f"-GPSLongitude={longitude}",
-                f"-GPSAltitude={altitude}",
-                f"-GPSImgDirection={imgdirection}",
+                #f"-GPSAltitude={altitude}",
+                #f"-GPSImgDirection={imgdirection}",
             ]
             with ExifTool(executable_=context.solid_config) as et:
                 for param in params:
