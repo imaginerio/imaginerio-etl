@@ -16,6 +16,7 @@ sparqlwrapper = "*"
 bokeh = "*"
 python-dotenv = "*"
 xlrd = "*"
+turfpy = "*"
 
 [dev-packages]
 
