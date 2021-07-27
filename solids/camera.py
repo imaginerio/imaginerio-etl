@@ -2,10 +2,7 @@ import math
 import os
 import re
 import shutil
-from solids.utils import df_csv_io_manager
 import sys
-from typing import List
-from dotenv import load_dotenv
 
 import dagster as dg
 import geojson
@@ -13,12 +10,13 @@ import mercantile
 import numpy as np
 import pandas as pd
 import requests
-from dagster.config.config_type import String
+from dotenv import load_dotenv
 from PIL import Image
 from pykml import parser
 from pyproj import Proj
-from shapely.geometry import Point, Polygon
+from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
+from turfpy.misc import sector
 
 load_dotenv(override=True)
 
@@ -67,8 +65,8 @@ def query_wikidata(Q):
 
 def get_radius(kml):
     with open(kml, "r") as f:
-
         KML = parser.parse(f).getroot()
+
     id = str(KML.PhotoOverlay.name)
     tilt = KML.PhotoOverlay.Camera.tilt
     df = pd.read_csv(
@@ -123,50 +121,26 @@ def get_radius(kml):
     return radius
 
 
-def draw_cone(kml, radius=400, steps=200):
-
+def draw_feature(kml, properties, radius=.2):
+    
     with open(kml, "r") as f:
-        KML = parser.parse(f).getroot()
-
+      KML = parser.parse(f).getroot()
+      
     camera = KML.PhotoOverlay.Camera
-    viewvolume = KML.PhotoOverlay.ViewVolume
-    center = Point(reproject((camera.longitude, camera.latitude)))
+    viewvolume = KML.PhotoOverlay.ViewVolume 
+    point = Point(camera.longitude, camera.latitude)    
+    center = geojson.Feature(geometry=point)    
     start_angle = camera.heading - viewvolume.rightFov
-    end_angle = camera.heading - viewvolume.leftFov
-
-    def polar_point(origin_point, angle, distance):
-        return [
-            origin_point.x + math.sin(math.radians(angle)) * distance,
-            origin_point.y + math.cos(math.radians(angle)) * distance,
-        ]
+    end_angle = camera.heading  - viewvolume.leftFov    
 
     if start_angle > end_angle:
-        start_angle = start_angle - 360
+            start_angle = start_angle - 360
     else:
         pass
-    step_angle_width = (end_angle - start_angle) / steps
-    sector_width = end_angle - start_angle
-    segment_vertices = []
-    segment_vertices.append(reproject(polar_point(center, 0, 0), inverse=True))
-    segment_vertices.append(
-        reproject(polar_point(center, start_angle, radius), inverse=True)
-    )
-    for z in range(1, steps):
-        segment_vertices.append(
-            (
-                reproject(
-                    polar_point(center, start_angle + z * step_angle_width, radius),
-                    inverse=True,
-                )
-            )
-        )
-    segment_vertices.append(
-        reproject(polar_point(center, start_angle + sector_width, radius), inverse=True)
-    )
-    segment_vertices.append(reproject(polar_point(center, 0, 0), inverse=True))
 
-    return Polygon(segment_vertices)
-
+    cone = sector(center, radius, start_angle, end_angle, options={"properties":properties, "steps":200})
+    return cone
+   
 
 @dg.solid(config_schema=dg.StringSource)
 def get_list(context):
@@ -289,63 +263,65 @@ def create_feature(context, kmls, metadata):
             with open(kml, "r") as f:
                 KML = parser.parse(f).getroot()
                 Id = (str(KML.PhotoOverlay.name)).upper()
-                created = metadata.loc[Id, "date_created"]
-                circa = (
-                    ""
-                    if pd.isna(metadata.loc[Id, "date_circa"])
-                    else str(metadata.loc[Id, "date_circa"])
-                )
-                accurate = pd.notna(metadata.loc[Id, "date_created"])
                 properties = {
                     "Source ID": metadata.loc[Id, "Source ID"],
+
                     "Title": ""
                     if pd.isna(metadata.loc[Id, "Title"])
                     else str(metadata.loc[Id, "Title"]),
+
+                    "Date": ""
+                    if pd.isna(metadata.loc[Id, "Date"])
+                    else str(metadata.loc[Id, "Date"]),
+                    
                     "Description (Portuguese)": ""
                     if pd.isna(metadata.loc[Id, "Description (Portuguese)"])
                     else str(metadata.loc[Id, "Description (Portuguese)"]),
+
                     "Creator": ""
                     if pd.isna(metadata.loc[Id, "Creator"])
                     else str(metadata.loc[Id, "Creator"]),
+
                     "First Year": ""
                     if pd.isna(metadata.loc[Id, "First Year"])
                     else str(int(metadata.loc[Id, "First Year"])),
+
                     "Last Year": ""
                     if pd.isna(metadata.loc[Id, "Last Year"])
                     else str(int(metadata.loc[Id, "Last Year"])),
-                    "source": "Instituto Moreira Salles",
-                    "longitude": str(
+
+                    "Source": "Instituto Moreira Salles",
+                    "Longitude": str(
                         round(float(KML.PhotoOverlay.Camera.longitude), 5)
                     ),
-                    "latitude": str(round(float(KML.PhotoOverlay.Camera.latitude), 5)),
+
+                    "Latitude": str(round(float(KML.PhotoOverlay.Camera.latitude), 5)),
+
                     "altitude": str(round(float(KML.PhotoOverlay.Camera.altitude), 5)),
+
                     "heading": str(round(float(KML.PhotoOverlay.Camera.heading), 5)),
+
                     "tilt": str(round(float(KML.PhotoOverlay.Camera.tilt), 5)),
+
                     "fov": str(
                         abs(float(KML.PhotoOverlay.ViewVolume.leftFov))
                         + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))
                     ),
-                }
-
-                if accurate:
-                    properties["date_created"] = created
-                else:
-                    properties["date_circa"] = circa
+                }             
 
                 radius = get_radius(kml)
                 print(f"OK: {Id}")
                 if radius:
-                    viewcone = draw_cone(kml, radius=radius)
+                    feature = draw_feature(kml, radius=radius/1000, properties=properties)                    
                 else:
-                    viewcone = draw_cone(kml)
-                new_features.append(
-                    geojson.Feature(geometry=viewcone, properties=properties)
-                )
+                    feature = draw_feature(kml, properties=properties)
+                #print(feature)
+                new_features.append(feature)
                 processed_ids.append(Id)
 
         except Exception as E:
             print(f"ERROR: {E} no ID: {Id}")
-
+    
     return new_features
 
 

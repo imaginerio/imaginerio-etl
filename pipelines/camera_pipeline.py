@@ -22,6 +22,7 @@ preset = {
 @dg.pipeline(
     mode_defs=[
         dg.ModeDefinition(
+            name="default",
             resource_defs={
                 "geojson": geojson_io_manager,
                 "pandas_csv": df_csv_io_manager,
