@@ -179,11 +179,11 @@ def format_date(context, df):
     df.loc[df["Date"].str.fullmatch(r"\d+[\/-]\d+") & df["Date"].notna(), "Date"] = df[
         "datetime"
     ].dt.strftime(
-        "%b %Y"
+        "%m %Y"
     )  # month
     df.loc[
         df["Date"].str.fullmatch(r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
-    ] = df["datetime"].dt.strftime("%d %b %Y")
+    ] = df["datetime"].dt.strftime("%d %m %Y")
 
     cumulus = df
     cumulus.name = "cumulus"
@@ -320,7 +320,7 @@ def select_columns(context, df_cumulus):
             "Description (English)",
             "Description (Portuguese)",
             "Date",
-            "date_accuracy",
+            "datetime",           
             "First Year",
             "Last Year",
             "Type",

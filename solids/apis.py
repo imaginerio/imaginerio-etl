@@ -1,4 +1,5 @@
 import urllib
+import os
 from time import sleep
 
 import dagster as dg
@@ -48,10 +49,12 @@ def query_omeka(context):
     return results
 
 
-@dg.solid(
+@dg.solid(config_schema=dg.StringSource,
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_omeka")]
 )
 def omeka_dataframe(context, results):
+    path_output = context.solid_config
+    path = os.path.join(path_output,"duplicated-omeka.csv")
     if results == None:
         context.log.info("Couldn't update")
         return None
@@ -61,7 +64,7 @@ def omeka_dataframe(context, results):
         omeka_df = pd.DataFrame(results)
         omeka_duplicated = omeka_df[omeka_df.duplicated(subset="Source ID")]
         if len(omeka_duplicated) > 0:
-            omeka_duplicated.to_csv("data/output/duplicated-omeka.csv")
+            omeka_duplicated.to_csv(path)
         omeka_df.drop_duplicates(subset="Source ID", inplace=True)
 
         omeka_df.name = "api_omeka"

@@ -29,39 +29,32 @@ preset = {
         dg.InputDefinition("wikidata", root_manager_key="wikidata_root"),
         dg.InputDefinition("portals", root_manager_key="portals_root"),
         dg.InputDefinition("camera", root_manager_key="camera_root"),
-        dg.InputDefinition("images", root_manager_key="images_root"),
-        dg.InputDefinition("jstor", root_manager_key="jstor_root"),
-    ],
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")],
+        dg.InputDefinition("images", root_manager_key="images_root"),        
+    ]
 )
-def create_metadata(context, cumulus, wikidata, portals, camera, images, jstor):
-    jstor = jstor.rename(columns=lambda x: re.sub("\[[0-9]{5,7}\]", "", x))
+def create_metadata(context, cumulus, wikidata, portals, camera, images):    
     camera_new = camera[
         [
             "Source ID",
-            "longitude",
-            "latitude",
+            "Longitude",
+            "Latitude",            
         ]
     ]
-    camera = camera_new.rename(
-        columns={"longitude": "Longitude", "latitude": "Latitude"}
-    )
 
     cumulus[["First Year", "Last Year"]] = cumulus[
         ["First Year", "Last Year"]
     ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))
 
-    dataframes_outer = [cumulus, camera, images]
+    dataframes_outer = [cumulus, camera_new, images]
     dataframe_left = [portals, wikidata]
-    metadata = pd.DataFrame(columns=["Source ID"])
-    # print("CUMULUS:", cumulus["First Year"][10], type(cumulus["First Year"][10]))
+    metadata = pd.DataFrame(columns=["Source ID"])   
 
     for df in dataframes_outer:
         metadata = metadata.merge(df, how="outer", on="Source ID")
 
     for df in dataframe_left:
         metadata = metadata.merge(df, how="left", on="Source ID")
-
+    
     metadata_new = metadata[
         [
             "Source ID",
@@ -92,9 +85,52 @@ def create_metadata(context, cumulus, wikidata, portals, camera, images, jstor):
         ]
     ]
 
-    metadata.name = "metadata"
-    # metadata_new.set_index("Source ID", inplace=True)
-    return metadata_new.set_index("Source ID")
+    metadata.name = "metadata" 
+    return metadata_new
+
+@dg.solid(
+    input_defs=[dg.InputDefinition("jstor", root_manager_key="jstor_root")],
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")])
+def metadata_jstor(context, jstor, metadata):
+        jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]','',x)) 
+        jstor["Source ID"] = jstor["SSID"]  
+        metadata = metadata.append(jstor)
+
+        metadata_new = metadata[
+        [
+            "Source ID",
+            "SSID",
+            "Title",
+            "Creator",
+            "Description (English)",  # vazio ou string fixa feito no cumulus ok
+            "Description (Portuguese)",
+            "Date",
+            "First Year",
+            "Last Year",
+            "Type",
+            "Item Set",
+            "Source",
+            "Source URL",  # url do portals
+            "Materials",
+            "Fabrication Method",
+            "Rights",  # vazio ou string fixa feito no cumulus ok
+            "License",  # vazio ou string fixa feito no cumulus ok
+            "Attribution",  # vazio ou string fixa feito no cumulus ok
+            "Width (mm)",
+            "Height (mm)",
+            "Latitude",  # camera
+            "Longitude",  # camera           
+            "Depicts",  # wikidata
+            "Wikidata ID",  # id do wikiddata
+            "Smapshot ID",  # vazio
+            "Media URL",  # Media URL do images
+        ]
+    ]
+    
+        metadata_new.name = "metadata"
+        return metadata_new.set_index("Source ID")
+
+
 
 
 ################   PIPELINE   ##################
@@ -124,7 +160,8 @@ def create_metadata(context, cumulus, wikidata, portals, camera, images, jstor):
     ],
 )
 def metadata_pipeline():
-    create_metadata()
+    metadata = create_metadata()
+    metadata_jstor(metadata=metadata)
 
 
 ################   SENSORS   ##################
