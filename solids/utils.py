@@ -127,6 +127,7 @@ def push_new_data(context):
     submodule_push = [
         "pwd",
         "git checkout main",
+        "git add .",
         "git commit -a -m ':card_file_box: Update data'",
         "git push",
     ]
@@ -143,7 +144,6 @@ def push_new_data(context):
         output, errors = git_cli_sub.communicate()
         if "nothing" in output:
             break
-            print(f"command: {command} \noutput: {output} \nERRO: {errors}")
 
     etl_push = [
         "pwd",
@@ -164,4 +164,4 @@ def push_new_data(context):
         )
 
         output, errors = git_cli_etl.communicate()
-        print(f"command: {command} \noutput: {output} \nERRO: {errors}")
+        context.log.info(f"command: {command} \noutput: {output} \nERRO: {errors}")
