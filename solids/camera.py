@@ -145,19 +145,21 @@ def draw_feature(kml, properties, radius=.2):
 @dg.solid(config_schema=dg.StringSource)
 def get_list(context):
     path = context.solid_config
+    path_gitkeep = os.path.join(path, ".gitkeep")
     list_kmls = os.listdir(path)
     kmls = []
     for kml in list_kmls:
         full_path = os.path.join(path, kml)
         kmls.append(full_path)
-    list_kmls = [x for x in kmls if x != "data/input/kmls/new_raw/.gitkeep"]
+    list_kmls = [x for x in kmls if x != path_gitkeep]
 
     return list_kmls
 
 
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema={"new_single": dg.StringSource,"processed_raw": dg.StringSource})
 def split_photooverlays(context, kmls, delete_original=False):
-    path = context.solid_config
+    path_new_single = context.solid_config["new_single"]
+    path_processed_raw=context.solid_config["processed_raw"]
     splited_kmls = []
     photooverlays = ""
 
@@ -172,22 +174,23 @@ def split_photooverlays(context, kmls, delete_original=False):
 
         for po in photooverlays:
             filename = find_with_re("name", po)
-            with open(os.path.join(path, filename + ".kml"), "w") as k:
+            with open(os.path.join(path_new_single, filename + ".kml"), "w") as k:
                 k.write(f"{header}\n{po}</kml>")
         if delete_original:
             os.remove(os.path.abspath(kml))
-        shutil.move(kml, "data/input/kmls/processed_raw")
+        shutil.move(kml, path_processed_raw)
 
 
 @dg.solid(config_schema=dg.StringSource)
 def change_img_href(context):
     path = context.solid_config
+    path_gitkeep = os.path.join(path, ".gitkeep")
     kmls = [
         os.path.join(path, file)
         for file in os.listdir(path)
         if os.path.isfile(os.path.join(path, file))
     ]
-    list_kmls = [x for x in kmls if x != "data/input/kmls/new_single/.gitkeep"]
+    list_kmls = [x for x in kmls if x != path_gitkeep]
 
     for kml in list_kmls:
         with open(kml, "r+") as f:
@@ -310,39 +313,39 @@ def create_feature(context, kmls, metadata):
                 }             
 
                 radius = get_radius(kml)
-                print(f"OK: {Id}")
+                context.log.info(f"OK: {Id}")
                 if radius:
                     feature = draw_feature(kml, radius=radius/1000, properties=properties)                    
                 else:
-                    feature = draw_feature(kml, properties=properties)
-                #print(feature)
+                    feature = draw_feature(kml, properties=properties)              
                 new_features.append(feature)
                 processed_ids.append(Id)
 
         except Exception as E:
-            print(f"ERROR: {E} no ID: {Id}")
+            context.log.info(f"ERROR: {E} no ID: {Id}")
     
     return new_features
 
 
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema={"new_single":dg.StringSource,"processed_single":dg.StringSource})
 def move_files(context, new_features):
+    
+    path_new_single = context.solid_config["new_single"]
+    path_processed_single = context.solid_config["processed_single"]
     list_kmls = [feature["properties"]["Source ID"] for feature in new_features]
-    path_from = "data/input/kmls/new_single"
-    path_to = context.solid_config
 
     for kml in list_kmls:
         try:
-            kml_from = os.path.join(path_from, kml + ".kml")
-            kml_to = os.path.join(path_to, kml + ".kml")
+            kml_from = os.path.join(path_new_single, kml + ".kml")
+            kml_to = os.path.join(path_processed_single, kml + ".kml")
             if os.path.exists(kml_to):
                 os.remove(os.path.abspath(kml_to))
-                shutil.move(kml_from, path_to)
+                shutil.move(kml_from, path_processed_single)
             else:
-                shutil.move(kml_from, path_to)
+                shutil.move(kml_from, path_processed_single)
 
         except Exception as e:
-            print(e)
+            context.log.info(e)
 
     return list
 
@@ -367,12 +370,12 @@ def create_geojson(context, new_features):
                 id_new = new_feature["properties"]["Source ID"]
 
                 if id_new in current_ids:
-                    print("Updated:  ", id_new)
+                    context.log.info("Updated:  ", id_new)
                     index = current_ids.index(id_new)
                     current_features[index] = new_feature
 
                 else:
-                    print("Appended: ", id_new)
+                    context.log.info("Appended: ", id_new)
                     current_features.append(new_feature)
 
             feature_collection = geojson.FeatureCollection(features=current_features)
@@ -382,5 +385,5 @@ def create_geojson(context, new_features):
             feature_collection = geojson.FeatureCollection(features=new_features)
             return feature_collection
     else:
-        print("Nothing's to updated on import_viewcones")
+        context.log.info("Nothing's to updated on import_viewcones")
         pass

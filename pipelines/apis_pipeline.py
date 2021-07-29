@@ -3,20 +3,14 @@ from datetime import datetime
 
 import dagster as dg
 from dotenv import load_dotenv
-from solids.apis import (
-    omeka_dataframe,
-    portals_dataframe,
-    query_omeka,
-    query_portals,
-    query_wikidata,
-    wikidata_dataframe,
-)
-from solids.utils import df_csv_io_manager, root_input_csv, update_metadata
+from solids.apis import *
+from solids.utils import *
 
 load_dotenv(override=True)
 
 preset = {
     "solids": {
+        "omeka_dataframe": {"config": {"env": "OUTPUT"}},
         "query_omeka": {"config": {"env": "OMEKA_API"}},
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
         "query_portals": {"config": {"env": "PORTALS_API"}},
