@@ -96,7 +96,7 @@ def organize_columns(context, df):
     ]
 
     # remove file extension
-    cumulus_df["Source ID"] = cumulus_df["Source ID"].str.split(".", n=1, expand=True)
+    cumulus_df["Source ID"] = cumulus_df["Source ID"].str.split(".", n=1, expand=True)[0]
 
     # remove duplicates
     cumulus_df = cumulus_df.drop_duplicates(subset="Source ID", keep="last")
