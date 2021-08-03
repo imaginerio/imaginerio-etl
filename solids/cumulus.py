@@ -1,3 +1,4 @@
+
 import dagster as dg
 from numpy.core.numeric import True_
 import pandas as pd
@@ -320,7 +321,8 @@ def select_columns(context, df_cumulus):
             "Description (English)",
             "Description (Portuguese)",
             "Date",
-            "datetime",           
+            "datetime",
+            "date_accuracy" ,          
             "First Year",
             "Last Year",
             "Type",
