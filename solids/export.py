@@ -91,7 +91,7 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
     # format data
     omeka_df["Source URL"] = omeka_df["Source URL"] +" "+ omeka_df["Source"]
     omeka_df["Wikidata ID"] = "www.wikidata.org/wiki/" + omeka_df["Wikidata ID"] + " Wikidata"
-    include = omeka_df["Source ID"].isin(smapshot["Source ID"])
+    include = omeka_df["Source ID"].isin(smapshot["id"])
     omeka_df.loc[include, "Item Set"] = omeka_df["Item Set"] + "||smapshot"
     omeka_df["dcterms:type:en"] = omeka_df["Type"]
 
