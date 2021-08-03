@@ -1,7 +1,7 @@
 import dagster as dg
 from dotenv import load_dotenv
 from solids.export import *
-from solids.utils import df_csv_io_manager, geojson_io_manager, root_input_csv
+from solids.utils import *
 
 load_dotenv(override=True)
 
@@ -9,8 +9,13 @@ load_dotenv(override=True)
 preset = {
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
-        "jstor_root": {"config": {"env": "JSTOR"}},
         "smapshot_root": {"config": {"env": "SMAPSHOT"}},
+        "camera_root":{"config":{"env": "CAMERA"}},
+        "cumulus_root":{"config":{"env": "CUMULUS"}},
+        "images_root":{"config":{"env": "IMAGES"}},
+        "omeka_root":{"config":{"env": "OMEKA"}},
+        "wikidata_root":{"config":{"env": "WIKIDATA"}},
+        "mapping_root":{"config":{"env": "MAPPING"}}
     },
     "solids": {
         "export_html": {"config": {"env": "INDEX"}},
@@ -24,9 +29,14 @@ preset = {
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "jstor_root": root_input_csv,
                 "metadata_root": root_input_csv,
                 "smapshot_root": root_input_csv,
+                "cumulus_root": root_input_csv,
+                "wikidata_root": root_input_csv,
+                "camera_root": root_input_geojson,
+                "images_root": root_input_csv,
+                "omeka_root": root_input_csv,
+                "mapping_root": root_input_csv,
             },
         )
     ],
@@ -55,8 +65,7 @@ def export_pipeline():
     values = format_values_chart(export_df)
     plot_hbar = create_hbar(values)
     plot_pie = create_pie(values)
-    plot_tiles = create_tiles(values)
-    graph_html = export_html(plot_hbar, plot_pie, plot_tiles)
+    graph_html = export_html(plot_hbar, plot_pie)
 
 
 ################   SENSORS   ##################
