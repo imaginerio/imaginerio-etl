@@ -215,7 +215,7 @@ def portals_dataframe(context, results):
             }
         )
 
-        dataframe["Source ID"] = dataframe["Source ID"].str.split(".", n=1, expand=True)
+        dataframe["Source ID"] = dataframe["Source ID"].str.split(".", n=1, expand=True)[0]
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 
