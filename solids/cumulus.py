@@ -296,6 +296,26 @@ def create_columns(context, df_cumulus):
         "Fabrication Method",
     ] = "Lantern slide"
 
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "AMBROTIPIA/ Prata",
+        "Fabrication Method",
+    ] = "Ambrotype"
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "COLOTIPIA/ Pigmento",
+        "Fabrication Method",
+    ] = "Collotype print"
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "FOTOGRAVURA/ Pigmento",
+        "Fabrication Method",
+    ] = "Photogravure"
+
+    df_cumulus.loc[
+        df_cumulus["Fabrication Method"] == "MEIO-TOM/ Pigmento",
+        "Fabrication Method",
+    ] = "Photogravure"
+
     df_cumulus["Description (English)"] = ""
     df_cumulus["Type"] = "Photograph"
     df_cumulus["Item Set"] = "all||views"

@@ -43,7 +43,6 @@ def load_metadata(_,metadata,camera,cumulus,images,omeka,wikidata):
     for df in datas:
         export_df = export_df.merge(df, how="outer", on="Source ID")
 
-
     return export_df
 
 @dg.solid(input_defs=[
@@ -80,6 +79,7 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
     )
     mapping.set_index("Label:en",inplace=True)
     omeka_df = df
+    omeka_df[["First Year","Last Year"]] = omeka_df[["First Year","Last Year"]].applymap(np.int64, na_action="ignore")
 
     # create columns
     omeka_df["dcterms:available"] = df["First Year"].astype(str) + "/" + df["Last Year"].astype(str)
@@ -373,7 +373,8 @@ def format_values_chart(context, DF):
     val_wiki_total = len(DF[DF["Wikidata ID"].notna()])
 
     # omeka published
-    val_omeka = len(DF[DF["omeka_url"].notna()])
+    val_ims = DF.loc[DF["Source"] == "Instituto Moreira Salles"]
+    val_omeka = len(val_ims[val_ims["omeka_url"].notna()])
     # omeka total
     val_omeka_total = 0
 
