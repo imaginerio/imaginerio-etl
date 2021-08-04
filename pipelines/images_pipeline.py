@@ -1,7 +1,12 @@
 import dagster as dg
 from dotenv import load_dotenv
 from solids.images import *
-from solids.utils import df_csv_io_manager, root_input_csv, update_metadata
+from solids.utils import (
+    df_csv_io_manager,
+    root_input_csv,
+    root_input_geojson,
+    update_metadata,
+)
 
 load_dotenv(override=True)
 
@@ -12,24 +17,22 @@ preset = {
         },
         "file_dispatcher": {
             "config": {
-                "env": {
-                    "tiff": "TIFF",
-                    "jpeg_hd": "JPEG_HD",
-                    "jpeg_sd": "JPEG_SD",
-                    "backlog": "IMG_BACKLOG",
-                }
+                "backlog": {"env": "IMG_BACKLOG"},
+                "jpeg_hd": {"env": "JPEG_HD"},
+                "jpeg_sd": {"env": "JPEG_SD"},
+                "tiff": {"env": "TIFF"},
+                "review": {"env": "REVIEW"}
             }
         },
-        "create_images_df": {"config": {"env:" "CLOUD"}},
+        "create_images_df": {"config": {"env": "CLOUD"}},
         "write_metadata": {
             "config": {
-                "env": "EXIFTOLL",
+                "env": "EXIFTOOL",
             }
         },
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
-        "camera_root": {"config": {"env": "CAMERA"}},
     },
 }
 
@@ -40,15 +43,21 @@ preset = {
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": root_input_csv,
-                "camera_root": root_input_csv,
             }
         )
-    ]
+    ],
+    preset_defs=[
+        dg.PresetDefinition(
+            "default",
+            run_config=preset,
+            mode="default",
+        )
+    ],
 )
 def images_pipeline():
     files = file_picker()
-    to_tag = file_dispatcher(files)
-    images_df = create_images_df(files)
+    to_tag = file_dispatcher(files=files)
+    images_df = create_images_df(files=files)
     update_metadata(df=images_df)
     write_metadata(files_to_tag=to_tag)
     # upload_to_cloud()
