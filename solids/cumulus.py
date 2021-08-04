@@ -1,5 +1,6 @@
 
 import dagster as dg
+import dagster_pandas as dp
 from numpy.core.numeric import True_
 import pandas as pd
 from pandas._libs.tslibs import NaT
@@ -9,7 +10,7 @@ from pandas._libs.tslibs import NaT
 @dg.solid(
     input_defs=[dg.InputDefinition("root", root_manager_key="cumulus_root")],
 )
-def xml_to_df(context, root):
+def xml_to_df(context, root) -> dp.DataFrame:
     # Find the uids
 
     uids = {}
@@ -96,19 +97,22 @@ def organize_columns(context, df):
     ]
 
     # remove file extension
-    cumulus_df["Source ID"] = cumulus_df["Source ID"].str.split(".", n=1, expand=True)[0]
+    cumulus_df["Source ID"] = cumulus_df["Source ID"].str.split(
+        ".", n=1, expand=True)[0]
 
     # remove duplicates
     cumulus_df = cumulus_df.drop_duplicates(subset="Source ID", keep="last")
 
     # reverse cretor name
-    cumulus_df["Creator"] = cumulus_df["Creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
+    cumulus_df["Creator"] = cumulus_df["Creator"].str.replace(
+        r"(.+),\s+(.+)", r"\2 \1")
 
     return cumulus_df
 
 
 @dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="creators")]
+    output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="creators")]
 )  # save list of Creatorss for rights assessment
 def creators_list(context, df):
     creators_df = df["Creator"].unique()
@@ -126,8 +130,10 @@ def extract_dimensions(context, df):
         r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
     )
 
-    df["Width (mm)"] = dimensions["width"].str.replace(",", ".").astype(float) * 10
-    df["Height (mm)"] = dimensions["height"].str.replace(",", ".").astype(float) * 10
+    df["Width (mm)"] = dimensions["width"].str.replace(
+        ",", ".").astype(float) * 10
+    df["Height (mm)"] = dimensions["height"].str.replace(
+        ",", ".").astype(float) * 10
 
     return df
 
@@ -139,7 +145,8 @@ def format_date(context, df):
     df.loc[df["Date"].str.count(r"[-\/^a-z]") == 0, "date_accuracy"] = "year"
     df.loc[df["Date"].str.count(r"[\/-]") == 1, "date_accuracy"] = "month"
     df.loc[df["Date"].str.count(r"[\/-]") == 2, "date_accuracy"] = "day"
-    df.loc[df["Date"].str.contains(r"[a-z]", na=False), "date_accuracy"] = "circa"
+    df.loc[df["Date"].str.contains(
+        r"[a-z]", na=False), "date_accuracy"] = "circa"
 
     # format date
     df["First Year"] = df["First Year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
@@ -159,8 +166,10 @@ def format_date(context, df):
     firstna = df["First Year"].isna()
     lastna = df["Last Year"].isna()
 
-    df.loc[circa & df["First Year"].isna(), "First Year"] = df["datetime"] - pd.DateOffset(years=5)
-    df.loc[circa & df["Last Year"].isna(), "Last Year"] = df["datetime"] + pd.DateOffset(years=5)
+    df.loc[circa & df["First Year"].isna(), "First Year"] = df["datetime"] - \
+        pd.DateOffset(years=5)
+    df.loc[circa & df["Last Year"].isna(), "Last Year"] = df["datetime"] + \
+        pd.DateOffset(years=5)
 
     df.loc[df["First Year"].isna(), "First Year"] = df["datetime"]
     df.loc[df["Last Year"].isna(), "Last Year"] = df["datetime"]
@@ -183,7 +192,8 @@ def format_date(context, df):
         "%m %Y"
     )  # month
     df.loc[
-        df["Date"].str.fullmatch(r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
+        df["Date"].str.fullmatch(
+            r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
     ] = df["datetime"].dt.strftime("%d %m %Y")
 
     cumulus = df
@@ -309,7 +319,8 @@ def create_columns(context, df_cumulus):
 
 
 @dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="cumulus")]
+    output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="cumulus")]
 )
 def select_columns(context, df_cumulus):
 
@@ -322,7 +333,7 @@ def select_columns(context, df_cumulus):
             "Description (Portuguese)",
             "Date",
             "datetime",
-            "date_accuracy" ,          
+            "date_accuracy",
             "First Year",
             "Last Year",
             "Type",
