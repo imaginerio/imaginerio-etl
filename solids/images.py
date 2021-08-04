@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 
 import dagster as dg
@@ -22,69 +23,83 @@ class Image:
 
 @dg.solid(
     config_schema=dg.StringSource,
-    input_defs=[dg.InputDefinition("camera", root_manager_key="camera_root")],
+    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
 )
-def file_picker(context, camera):
+def file_picker(context, metadata):
     source = context.solid_config
-    has_kml = list(camera["Source ID"])
+    metadata["Source ID"] = metadata["Source ID"].str.upper()
+    has_kml = list(metadata.loc[metadata["Latitude"].notna(), "Source ID"])
+    catalog = list(metadata["Source ID"])
     image_list = [
         Image(os.path.join(root, name))
         for root, dirs, files in os.walk(source)
         for name in files
         if "FINALIZADAS" in root
         and name.endswith((".tif"))
-        and not name.endswith(("v.tif"))
-        and not name.endswith("a.tif")
+        and not re.search("[a-z]\.tif$", name)
     ]
-
-    geolocated = [img for img in image_list if img.id in has_kml]
-    backlog = [img for img in image_list if img.id not in has_kml]
+    
+    geolocated = [img for img in image_list if img.id.upper() in has_kml]
+    backlog = [img for img in image_list if img.id.upper() in catalog and img.id.upper() not in has_kml]
+    review = [img for img in image_list if img.id.upper() not in catalog]
 
     context.log.info(
-        f"Geolocated: {len(geolocated)} images; Backlog: {len(backlog)} images"
+        f"Geolocated: {len(set([img.id for img in geolocated]))} images; Backlog: {len(set([img.id for img in backlog]))} images"
     )
 
-    return {"geolocated": geolocated, "backlog": backlog}
+    return {"geolocated": geolocated, "backlog": backlog, "review": review}
 
 
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema={
+    "tiff": dg.StringSource, 
+    "jpeg_hd": dg.StringSource, 
+    "jpeg_sd": dg.StringSource, 
+    "backlog": dg.StringSource,
+    "review": dg.StringSource,
+    }
+    )
 def file_dispatcher(context, files):
 
-    geolocated = files["geolocated"]
-    TIFF = context.solid_config["env"]["tiff"]
-    JPEG_HD = context.solid_config["env"]["jpeg_hd"]
-    JPEG_SD = context.solid_config["env"]["jpeg_sd"]
-    IMG_BACKLOG = context.solid_config["env"]["backlog"]
+    TIFF = context.solid_config["tiff"]
+    JPEG_HD = context.solid_config["jpeg_hd"]
+    JPEG_SD = context.solid_config["jpeg_sd"]
+    IMG_BACKLOG = context.solid_config["backlog"]
+    REVIEW = context.solid_config["review"]
 
     def handle_geolocated(infiles):
         for infile in infiles:
             if not os.path.exists(os.path.join(TIFF, infile.tif)):
                 shutil.copy2(infile.path, TIFF)
 
-            hdout = os.path.join(JPEG_HD, infile.jpg)
-            sdout = os.path.join(JPEG_SD, infile.jpg)
+            hd_path = os.path.join(JPEG_HD, infile.jpg)
+            sd_path = os.path.join(JPEG_SD, infile.jpg)
+            review_path = os.path.join(REVIEW, infile.jpg)
             size = (1000, 1000)
 
-            if not os.path.exists(hdout):
+            if not os.path.exists(hd_path):
                 try:
                     with PILImage.open(os.path.join(TIFF, infile.tif)) as im:
-                        im.save(hdout)
+                        im.save(hd_path)
                 except OSError:
                     context.log.info(f"Cannot convert {infile.tif}")
 
-            if not os.path.exists(sdout):
+            if not os.path.exists(sd_path):
                 try:
                     with PILImage.open(os.path.join(TIFF, infile.tif)) as im:
                         im.thumbnail(size)
-                        im.save(sdout)
+                        im.save(sd_path)
                 except OSError:
                     context.log.info(f"Cannot create thumbnail for {infile.tif}")
+
+            if os.path.exists(review_path):
+                os.remove(review_path)
 
     def handle_backlog(infiles):
         for infile in infiles:
             if not os.path.exists(os.path.join(TIFF, infile.tif)):
                 shutil.copy2(infile.path, TIFF)
             backlog_path = os.path.join(IMG_BACKLOG, infile.jpg)
+            review_path = os.path.join(REVIEW, infile.jpg)
             size = (1000, 1000)
             if not os.path.exists(backlog_path):
                 try:
@@ -95,9 +110,11 @@ def file_dispatcher(context, files):
                     context.log.info(
                         f"Cannot create backlog thumbnail for {infile.tif}"
                     )
-        current = os.listdir(IMG_BACKLOG)
-        for image in current:
-            if image.split(".")[0] in geolocated:
+            if os.path.exists(review_path):
+                os.remove(review_path)
+        current_backlog = os.listdir(IMG_BACKLOG)
+        for image in current_backlog:
+            if image in [img.jpg for img in files["geolocated"]]:
                 if not os.path.exists(os.path.join(JPEG_SD, image)):
                     os.rename(
                         os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image)
@@ -107,8 +124,25 @@ def file_dispatcher(context, files):
             else:
                 continue
 
+    def handle_review(infiles):
+        #current_hd = [os.path.join(JPEG_HD, img) for img in os.listdir(JPEG_HD) if img.split(".")[0] in files["review"]]
+        for infile in infiles:
+            review_path = os.path.join(REVIEW, infile.jpg)
+            tiff_path = os.path.join(TIFF, infile.tif)
+            if not os.path.exists(review_path):
+                try:
+                    with PILImage.open(infile.path) as im:
+                        im.save(review_path)
+                except OSError:
+                    context.log.info(f"Cannot convert {infile.tif}")
+            else:
+                continue
+            if os.path.exists(tiff_path):
+                os.remove(tiff_path)
+
     handle_geolocated(files["geolocated"])
     handle_backlog(files["backlog"])
+    handle_review(files["review"])
 
     to_tag = [
         os.path.join(JPEG_HD, file)
@@ -117,7 +151,7 @@ def file_dispatcher(context, files):
         and not file.endswith("_original")
     ]
 
-    context.log.info(f"Passed {len(to_tag)} images to be tagged")
+    context.log.info(f"Passed {len(to_tag)} images to be tagged. Path example: {to_tag[0]}")
     return to_tag
 
 
@@ -149,10 +183,11 @@ def create_images_df(context, files):
         dicts.append(img_dict)
 
     images_df = pd.DataFrame(data=dicts)
+    images_df.drop_duplicates(inplace=True)
     images_df.sort_values(by="Source ID")
     context.log.info(f"{len(images_df)} images available in hi-res")
 
-    return images_df.set_index("Source ID", inplace=True)
+    return images_df.set_index("Source ID")
 
 
 @dg.solid(
@@ -162,23 +197,24 @@ def create_images_df(context, files):
 def write_metadata(context, metadata, files_to_tag):
 
     metadata.fillna(value="", inplace=True)
+    metadata["Source ID"] = metadata["Source ID"].str.upper()
     metadata.set_index("Source ID", inplace=True)
 
     for i, item in enumerate(files_to_tag):
         if item.endswith(".jpg"):
             basename = os.path.split(item)[1]
             name = basename.split(".")[0]
-            date = metadata.loc[name, "Date"]
-            byline = metadata.loc[name, "Creator"]
-            headline = metadata.loc[name, "Title"]
-            caption = metadata.loc[name, "Description (Portuguese)"]
-            objecttype = metadata.loc[name, "Type"]
-            #dimensions = f'{metadata.loc[name, "image_width"]}cm x {metadata.loc[name, "image_height"]}cm'
-            keywords = metadata.loc[name, "Depicts"].split("||")
-            latitude = metadata.loc[name, "Latitude"]
-            longitude = metadata.loc[name, "Longitude"]
-            #altitude = metadata.loc[name, "Altitude"]
-            #imgdirection = metadata.loc[name, "heading"]
+            date = metadata.loc[name.upper(), "Date"]
+            byline = metadata.loc[name.upper(), "Creator"]
+            headline = metadata.loc[name.upper(), "Title"]
+            caption = metadata.loc[name.upper(), "Description (Portuguese)"]
+            objecttype = metadata.loc[name.upper(), "Type"]
+            #dimensions = f'{metadata.loc[name.upper(), "image_width"]}cm x {metadata.loc[name.upper(), "image_height"]}cm'
+            keywords = metadata.loc[name.upper(), "Depicts"].split("||")
+            latitude = metadata.loc[name.upper(), "Latitude"]
+            longitude = metadata.loc[name.upper(), "Longitude"]
+            #altitude = metadata.loc[name.upper(), "Altitude"]
+            #imgdirection = metadata.loc[name.upper(), "heading"]
 
             params = [
                 "-IPTC:Source=Instituto Moreira Salles/IMS",
@@ -209,7 +245,7 @@ def write_metadata(context, metadata, files_to_tag):
                     dest = item.encode(encoding="utf-8")
                     et.execute(param, dest)
             context.log.info(
-                f"{basename}\n{metadata.loc[name, 'date']}\nTagged {i+1} of {len(files_to_tag)} images"
+                f"{basename}\n{metadata.loc[name, 'Date']}\nTagged {i+1} of {len(files_to_tag)} images"
             )
 
 
