@@ -150,8 +150,8 @@ def file_dispatcher(context, files):
         if not os.path.exists(os.path.join(JPEG_HD, f"{file}_original"))
         and not file.endswith("_original")
     ]
-
-    context.log.info(f"Passed {len(to_tag)} images to be tagged. Path example: {to_tag[0]}")
+    if to_tag:
+        context.log.info(f"Passed {len(to_tag)} images to be tagged. Path example: {to_tag[0]}")
     return to_tag
 
 
