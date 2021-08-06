@@ -6,6 +6,7 @@ import dagster as dg
 import geojson
 import geopandas as gpd
 import pandas as pd
+import dagster_pandas as dp
 
 
 class PandasCsvIOManager(dg.IOManager):
@@ -13,9 +14,11 @@ class PandasCsvIOManager(dg.IOManager):
         obj_name = context.upstream_output.name
 
         if obj_name.startswith("imp"):
-            file_path = os.path.join("data", "output", context.upstream_output.name)
+            file_path = os.path.join(
+                "data", "output", context.upstream_output.name)
         else:
-            file_path = os.path.join("data", "output", context.upstream_output.name)
+            file_path = os.path.join(
+                "data", "output", context.upstream_output.name)
 
         return pd.read_csv(file_path + ".csv", index_col="Source ID")
 
@@ -34,11 +37,8 @@ class PandasCsvIOManager(dg.IOManager):
         yield dg.AssetMaterialization(
             asset_key=dg.AssetKey(obj_name),
             description=f" {obj_name.upper()} was saved <----------------------",
-            # metadata={"number of rows": dg.EventMetadata.int(len(obj))},
+
         )
-        # yield dg.EventMetadataEntry.text(obj.shape[0], label="number of rows")
-        # metadata={"head": dg.EventMetadata.md(obj.head(5).to_markdown())}
-        # EventMetadataEntry.md(obj.head(5).to_markdown(), "head(5)")
 
 
 @dg.io_manager
@@ -48,7 +48,8 @@ def df_csv_io_manager(init_context):
 
 class GeojsonIOManager(dg.IOManager):
     def load_input(self, context):
-        file_path = os.path.join("data", "output", context.upstream_output.name)
+        file_path = os.path.join(
+            "data", "output", context.upstream_output.name)
         return gpd.read_file(file_path + ".geojson")  # retorno um df
 
     def handle_output(self, context, feature_collection):
@@ -67,17 +68,13 @@ def geojson_io_manager(init_context):
     return GeojsonIOManager()
 
 
-@dg.solid
-def rename_column(context, df, dic):
-    df = df.rename(columns=dic)
-    return df
-
-
 @dg.solid(
-    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")],
+    input_defs=[dg.InputDefinition(
+        "metadata", root_manager_key="metadata_root")],
+    output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="metadata", dagster_type=dp.DataFrame)],
 )
-def update_metadata(_, df, metadata):
+def update_metadata(_, df: dp.DataFrame, metadata: dp.DataFrame):
     metadata.set_index("Source ID", inplace=True)
     metadata.update(df)
     metadata[["First Year", "Last Year"]] = metadata[
@@ -99,7 +96,7 @@ def root_input_xls(context):
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_csv(context):
-    return pd.read_csv(context.resource_config)
+    return pd.read_csv(context.resource_config, error_bad_lines=False)
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
@@ -164,4 +161,5 @@ def push_new_data(context):
         )
 
         output, errors = git_cli_etl.communicate()
-        context.log.info(f"command: {command} \noutput: {output} \nERRO: {errors}")
+        context.log.info(
+            f"command: {command} \noutput: {output} \nERRO: {errors}")
