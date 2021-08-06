@@ -180,11 +180,11 @@ def format_date(context, df):
     df.loc[df["Date"].str.fullmatch(r"\d+[\/-]\d+") & df["Date"].notna(), "Date"] = df[
         "datetime"
     ].dt.strftime(
-        "%m %Y"
+        "%m/%Y"
     )  # month
     df.loc[
         df["Date"].str.fullmatch(r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
-    ] = df["datetime"].dt.strftime("%d %m %Y")
+    ] = df["datetime"].dt.strftime("%d/%m/%Y")
 
     cumulus = df
     cumulus.name = "cumulus"
