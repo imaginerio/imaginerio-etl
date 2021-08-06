@@ -23,13 +23,16 @@ from bokeh.models import (
 )
 
 
-@dg.solid(input_defs=[
-    dg.InputDefinition("metadata", root_manager_key="metadata_root"),
-    dg.InputDefinition("camera", root_manager_key="camera_root"),
-    dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
-    dg.InputDefinition("images", root_manager_key="images_root"),
-    dg.InputDefinition("omeka", root_manager_key="omeka_root"),
-    dg.InputDefinition("wikidata", root_manager_key="wikidata_root")])
+@dg.solid(
+    input_defs=[
+        dg.InputDefinition("metadata", root_manager_key="metadata_root"),
+        dg.InputDefinition("camera", root_manager_key="camera_root"),
+        dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
+        dg.InputDefinition("images", root_manager_key="images_root"),
+        dg.InputDefinition("omeka", root_manager_key="omeka_root"),
+        dg.InputDefinition("wikidata", root_manager_key="wikidata_root")
+    ]
+)
 def load_metadata(_,metadata,camera,cumulus,images,omeka,wikidata):
     images_df = images[["Source ID","img_sd"]]
     camera_df = camera[["Source ID","geometry","heading","tilt","altitude","fov"]]
@@ -54,14 +57,14 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
         if "||Stereoscopy" in string:
             string = string.split("||")[0]
             QID = mapping.loc[string, "Wiki ID"]
-            return f"www.wikidata.org/wiki/{QID} {string}"+"||wikidata.org/wiki/Q35158 Stereoscopy"
+            return f"http://wikidata.org/wiki/{QID} {string}"+"||http://wikidata.org/wiki/Q35158 Stereoscopy"
         elif "||Estereoscopia" in string:
             string = string.split("||")[0]
             QID = mapping.loc[string, "Wiki ID"]
-            return f"www.wikidata.org/wiki/{QID} {string}"+"||wikidata.org/wiki/Q35158 Estereoscopia"
+            return f"http://wikidata.org/wiki/{QID} {string}"+"||http://wikidata.org/wiki/Q35158 Estereoscopia"
         else:
             QID = mapping.loc[string, "Wiki ID"]
-            return f"www.wikidata.org/wiki/{QID} {string}"
+            return f"http://wikidata.org/wiki/{QID} {string}"
     
     def translateString (string):
         if "||Stereoscopy" in string:
@@ -87,19 +90,23 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
     omeka_df["dcterms:format:pt"] = df["Materials"]
     omeka_df["dcterms:medium:en"] = df["Fabrication Method"]
     omeka_df["dcterms:medium:pt"] = df["Fabrication Method"]
+    omeka_df["dcterms:type:en"] = omeka_df["Type"]
+    omeka_df["dcterms:type:pt"] = omeka_df["Type"]
 
     # format data
     omeka_df["Source URL"] = omeka_df["Source URL"] +" "+ omeka_df["Source"]
     omeka_df["Wikidata ID"] = "www.wikidata.org/wiki/" + omeka_df["Wikidata ID"] + " Wikidata"
     include = omeka_df["Source ID"].isin(smapshot["id"])
     omeka_df.loc[include, "Item Set"] = omeka_df["Item Set"] + "||smapshot"
-    omeka_df["dcterms:type:en"] = omeka_df["Type"]
 
-    omeka_df[["dcterms:format:en","dcterms:medium:en"]] = omeka_df[["dcterms:format:en","dcterms:medium:en"]].applymap(string2url,na_action="ignore")
-    omeka_df[["dcterms:format:pt","dcterms:medium:pt"]] = omeka_df[["dcterms:format:pt","dcterms:medium:pt"]].applymap(translateString,na_action = "ignore")
+    omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]] = omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]].applymap(
+        string2url,na_action="ignore")
+    omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]] = omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]].applymap(
+        translateString,na_action = "ignore")
     mapping = mapping.reset_index()
     mapping.set_index("Label:pt",inplace=True)
-    omeka_df[["dcterms:format:pt","dcterms:medium:pt"]] = omeka_df[["dcterms:format:pt","dcterms:medium:pt"]].applymap(string2url,na_action = "ignore")
+    omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]] = omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]].applymap(
+        string2url,na_action = "ignore")
     
     # rename columns
     omeka_df = omeka_df.rename(
@@ -134,6 +141,7 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
             "dcterms:date",
             "dcterms:available",
             "dcterms:type:en",
+            "dcterms:type:pt",
             "dcterms:medium:pt",
             "dcterms:medium:en",
             "dcterms:format:pt",
