@@ -16,6 +16,7 @@ from pykml import parser
 from pyproj import Proj
 from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
+from tests.types import *
 from turfpy.misc import sector
 
 load_dotenv(override=True)
@@ -122,27 +123,28 @@ def get_radius(kml):
 
 
 def draw_feature(kml, properties, radius=.2):
-    
+
     with open(kml, "r") as f:
-      KML = parser.parse(f).getroot()
-      
+        KML = parser.parse(f).getroot()
+
     camera = KML.PhotoOverlay.Camera
-    viewvolume = KML.PhotoOverlay.ViewVolume 
-    point = Point(camera.longitude, camera.latitude)    
-    center = geojson.Feature(geometry=point)    
+    viewvolume = KML.PhotoOverlay.ViewVolume
+    point = Point(camera.longitude, camera.latitude)
+    center = geojson.Feature(geometry=point)
     start_angle = camera.heading - viewvolume.rightFov
-    end_angle = camera.heading  - viewvolume.leftFov    
+    end_angle = camera.heading - viewvolume.leftFov
 
     if start_angle > end_angle:
-            start_angle = start_angle - 360
+        start_angle = start_angle - 360
     else:
         pass
 
-    cone = sector(center, radius, start_angle, end_angle, options={"properties":properties, "steps":200})
+    cone = sector(center, radius, start_angle, end_angle, options={
+                  "properties": properties, "steps": 200})
     return cone
-   
 
-@dg.solid(config_schema=dg.StringSource)
+
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)])
 def get_list(context):
     path = context.solid_config
     path_gitkeep = os.path.join(path, ".gitkeep")
@@ -156,10 +158,10 @@ def get_list(context):
     return list_kmls
 
 
-@dg.solid(config_schema={"new_single": dg.StringSource,"processed_raw": dg.StringSource})
-def split_photooverlays(context, kmls, delete_original=False):
+@dg.solid(config_schema={"new_single": dg.StringSource, "processed_raw": dg.StringSource})
+def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False):
     path_new_single = context.solid_config["new_single"]
-    path_processed_raw=context.solid_config["processed_raw"]
+    path_processed_raw = context.solid_config["processed_raw"]
     splited_kmls = []
     photooverlays = ""
 
@@ -170,7 +172,8 @@ def split_photooverlays(context, kmls, delete_original=False):
             if re.search("<Folder>", txt):
                 header = "\n".join(txt.split("\n")[:2])
                 photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
-                photooverlays[-1] = re.sub("</Folder>\n</kml>", "", photooverlays[-1])
+                photooverlays[-1] = re.sub("</Folder>\n</kml>",
+                                           "", photooverlays[-1])
 
         for po in photooverlays:
             filename = find_with_re("name", po)
@@ -181,7 +184,7 @@ def split_photooverlays(context, kmls, delete_original=False):
         shutil.move(kml, path_processed_raw)
 
 
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)])
 def change_img_href(context):
     path = context.solid_config
     path_gitkeep = os.path.join(path, ".gitkeep")
@@ -208,8 +211,8 @@ def change_img_href(context):
     return list_kmls
 
 
-@dg.solid
-def correct_altitude_mode(context, kmls):
+@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)])
+def correct_altitude_mode(context, kmls: type_list_of_kmls):
 
     for kml in kmls:
         with open(kml, "r+") as f:
@@ -220,7 +223,8 @@ def correct_altitude_mode(context, kmls):
                 alt = round(float(find_with_re("altitude", txt)), 5)
                 z = 15
                 tile = mercantile.tile(lng, lat, z)
-                westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
+                westmost, southmost, eastmost, northmost = mercantile.bounds(
+                    tile)
                 pixel_column = np.interp(lng, [westmost, eastmost], [0, 256])
                 pixel_row = np.interp(lat, [southmost, northmost], [256, 0])
                 tile_img = Image.open(
@@ -236,7 +240,8 @@ def correct_altitude_mode(context, kmls):
                 txt = re.sub(
                     "(?<=<altitudeMode>).+(?=<\/altitudeMode>)", "absolute", txt
                 )
-                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)", f"{new_height}", txt)
+                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)",
+                             f"{new_height}", txt)
                 txt = re.sub(
                     "(?<=<coordinates>).+(?=<\/coordinates>)",
                     f"{lng},{lat},{new_height}",
@@ -252,9 +257,10 @@ def correct_altitude_mode(context, kmls):
 
 
 @dg.solid(
-    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
+    input_defs=[dg.InputDefinition(
+        "metadata", root_manager_key="metadata_root")], output_defs=[dg.OutputDefinition(dagster_type=type_list_of_features)]
 )
-def create_feature(context, kmls, metadata):
+def create_feature(context, kmls: type_list_of_features, metadata: dp.DataFrame):
     new_features = []
     processed_ids = []
     metadata["upper_ids"] = metadata["Source ID"].str.upper()
@@ -276,7 +282,7 @@ def create_feature(context, kmls, metadata):
                     "Date": ""
                     if pd.isna(metadata.loc[Id, "Date"])
                     else str(metadata.loc[Id, "Date"]),
-                    
+
                     "Description (Portuguese)": ""
                     if pd.isna(metadata.loc[Id, "Description (Portuguese)"])
                     else str(metadata.loc[Id, "Description (Portuguese)"]),
@@ -310,29 +316,31 @@ def create_feature(context, kmls, metadata):
                         abs(float(KML.PhotoOverlay.ViewVolume.leftFov))
                         + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))
                     ),
-                }             
+                }
 
                 radius = get_radius(kml)
                 context.log.info(f"OK: {Id}")
                 if radius:
-                    feature = draw_feature(kml, radius=radius/1000, properties=properties)                    
+                    feature = draw_feature(
+                        kml, radius=radius/1000, properties=properties)
                 else:
-                    feature = draw_feature(kml, properties=properties)              
+                    feature = draw_feature(kml, properties=properties)
                 new_features.append(feature)
                 processed_ids.append(Id)
 
         except Exception as E:
             context.log.info(f"ERROR: {E} no ID: {Id}")
-    
+
     return new_features
 
 
-@dg.solid(config_schema={"new_single":dg.StringSource,"processed_single":dg.StringSource})
-def move_files(context, new_features):
-    
+@dg.solid(config_schema={"new_single": dg.StringSource, "processed_single": dg.StringSource})
+def move_files(context, new_features: type_list_of_features):
+
     path_new_single = context.solid_config["new_single"]
     path_processed_single = context.solid_config["processed_single"]
-    list_kmls = [feature["properties"]["Source ID"] for feature in new_features]
+    list_kmls = [feature["properties"]["Source ID"]
+                 for feature in new_features]
 
     for kml in list_kmls:
         try:
@@ -353,10 +361,11 @@ def move_files(context, new_features):
 @dg.solid(
     config_schema=dg.StringSource,
     output_defs=[
-        dg.OutputDefinition(io_manager_key="geojson", name="import_viewcones")
+        dg.OutputDefinition(io_manager_key="geojson",
+                            name="import_viewcones", dagster_type=type_geojson)
     ],
 )
-def create_geojson(context, new_features):
+def create_geojson(context, new_features: type_list_of_features):
     camera = context.solid_config
 
     if new_features:
@@ -378,11 +387,13 @@ def create_geojson(context, new_features):
                     context.log.info("Appended: ", id_new)
                     current_features.append(new_feature)
 
-            feature_collection = geojson.FeatureCollection(features=current_features)
+            feature_collection = geojson.FeatureCollection(
+                features=current_features)
             return feature_collection
 
         else:
-            feature_collection = geojson.FeatureCollection(features=new_features)
+            feature_collection = geojson.FeatureCollection(
+                features=new_features)
             return feature_collection
     else:
         context.log.info("Nothing's to updated on import_viewcones")
