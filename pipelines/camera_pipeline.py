@@ -12,22 +12,22 @@ preset = {
         "get_list": {"config": {"env": "NEW_RAW"}},
         "split_photooverlays": {
             "config": {
-                "new_single":{
+                "new_single": {
                     "env": "NEW_SINGLE"
-                    },
-                "processed_raw":{
+                },
+                "processed_raw": {
                     "env": "PROCESSED_SINGLE"}}},
 
         "change_img_href": {
             "config": {"env": "NEW_SINGLE"}},
         "move_files": {
             "config": {
-                "new_single":{
+                "new_single": {
                     "env": "NEW_SINGLE"
-                    },
-                "processed_single":{
+                },
+                "processed_single": {
                     "env": "PROCESSED_SINGLE"}}},
-  
+
         "create_geojson": {"config": {"env": "CAMERA"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},

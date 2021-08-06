@@ -39,9 +39,9 @@ preset = {
         dg.InputDefinition("portals", root_manager_key="portals_root"),
         dg.InputDefinition("camera", root_manager_key="camera_root"),
         dg.InputDefinition("images", root_manager_key="images_root"),
-    ]
+    ], output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)]
 )
-def create_metadata(context, cumulus, wikidata, portals, camera, images) -> dp.DataFrame:
+def create_metadata(context, cumulus: dp.DataFrame, wikidata: dp.DataFrame, portals: dp.DataFrame, camera: gpd.GeoDataFrame, images: dp.DataFrame):
     camera_new = camera[
         [
             "Source ID",
@@ -102,7 +102,7 @@ def create_metadata(context, cumulus, wikidata, portals, camera, images) -> dp.D
 @ dg.solid(
     input_defs=[dg.InputDefinition("jstor", root_manager_key="jstor_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata",
-                                     dagster_type=metadata
+                                     # dagster_type=metadata
                                      )])
 def metadata_jstor(context, jstor, metadata):
     jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]', '', x))
