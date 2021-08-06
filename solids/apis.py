@@ -29,7 +29,7 @@ def query_omeka(context):
 
     # loop over pages until response is blank
     results = {}
-    l1,l2 = []
+    l1,l2 = [],[]
     page = 1
     while response != []:
         response = http.get(endpoint, params={"page": page, "per_page": 250}).json()

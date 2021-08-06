@@ -237,65 +237,6 @@ def create_columns(context, df_cumulus):
         "Fabrication Method",
     ] = "Lantern slide"
 
-    df_cumulus["Description (English)"] = ""
-    df_cumulus["Type"] = "Photograph"
-    df_cumulus["Item Set"] = "all||views"
-    df_cumulus["Source"] = "Instituto Moreira Salles"
-    df_cumulus["License"] = ""
-    df_cumulus["Rights"] = ""
-    df_cumulus["Attribution"] = ""
-    df_cumulus["Smapshot ID"] = ""
-
-    return df_cumulus
-
-    return cumulus
-
-
-@dg.solid
-def create_columns(context, df_cumulus):
-
-    df_cumulus.loc[
-        df_cumulus["Materials"] == "FOTOGRAFIA/ Papel", "Materials"
-    ] = "Photographic print"
-
-    df_cumulus.loc[
-        df_cumulus["Materials"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", "Materials"
-    ] = "Photomechanical print"
-
-    df_cumulus.loc[
-        df_cumulus["Materials"] == "NEGATIVO/ Vidro", "Materials"
-    ] = "Glass plate negative"
-
-    df_cumulus.loc[
-        df_cumulus["Materials"] == "DIAPOSITIVO/ Vidro", "Materials"
-    ] = "Glass diapositive"
-
-    df_cumulus.loc[df_cumulus["format"] == "Estereoscopia", "Materials"] = (
-        df_cumulus["Materials"] + "||Stereoscopy"
-    )
-
-    df_cumulus.loc[
-        df_cumulus["Fabrication Method"] == "AUTOCHROME / Corante e prata",
-        "Fabrication Method",
-    ] = "Autochrome"
-
-    df_cumulus.loc[
-        df_cumulus["Fabrication Method"] == "ALBUMINA/ Prata", "Fabrication Method"
-    ] = "Albumine"
-
-    df_cumulus.loc[
-        df_cumulus["Fabrication Method"] == "GELATINA/ Prata", "Fabrication Method"
-    ] = "Silver gelatin"
-
-    df_cumulus.loc[
-        df_cumulus["Fabrication Method"] == "COLÓDIO/ Prata", "Fabrication Method"
-    ] = "Collodion"
-
-    df_cumulus.loc[
-        df_cumulus["Fabrication Method"] == "LANTERN SLIDE / Prata",
-        "Fabrication Method",
-    ] = "Lantern slide"
-
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "AMBROTIPIA/ Prata",
         "Fabrication Method",
