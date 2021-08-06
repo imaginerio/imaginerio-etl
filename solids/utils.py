@@ -23,19 +23,51 @@ class PandasCsvIOManager(dg.IOManager):
         obj_name = context.name
         obj.index = obj.index.astype(str)
         obj.sort_index(inplace=True)
-
-        if obj_name.startswith("imp"):
-            file_path = os.path.join("data", "output", obj_name)
-        else:
-            file_path = os.path.join("data", "output", obj_name)
-
+        file_path = os.path.join("data", "output", obj_name)
         obj.to_csv(file_path + ".csv")
 
-        yield dg.AssetMaterialization(
-            asset_key=dg.AssetKey(obj_name),
-            description=f" {obj_name.upper()} was saved <----------------------",
-            # metadata={"number of rows": dg.EventMetadata.int(len(obj))},
-        )
+        if obj_name == "metadata":
+            yield dg.AssetMaterialization(
+                asset_key=dg.AssetKey(obj_name),
+                description=f" {obj_name.upper()} was saved <----------------------",
+                metadata_entries=[dg.EventMetadataEntry.json(label="CSV",data={
+                    "total items": len(obj),
+                    "creators": len(obj[obj["Creator"].notna()]),
+                    "title": len(obj[obj["Title"].notna()]),
+                    "date": len(obj[obj["Date"].notna()]),
+                    "first year/last year": len(obj[obj["First Year"].notna()]),
+                    "geolocated": len(obj[obj["Latitude"].notna()]),
+                    "published on wikidata": len(obj[obj["Wikidata ID"].notna()])
+                })],
+            )
+        
+        elif obj_name == "cumulus":
+            yield dg.AssetMaterialization(
+                asset_key=dg.AssetKey(obj_name),
+                description=f" {obj_name.upper()} was saved <----------------------",
+                metadata_entries=[dg.EventMetadataEntry.json(label="CSV",data={
+                    "total items": len(obj),
+                    "creators": len(obj[obj["Creator"].notna()]),
+                    "title": len(obj[obj["Title"].notna()]),
+                    "date": len(obj[obj["Date"].notna()]),
+                    "first year/last year": len(obj[obj["First Year"].notna()]),
+                })],
+            )
+        
+        else:
+            yield dg.AssetMaterialization(
+                asset_key=dg.AssetKey(obj_name),
+                description=f" {obj_name.upper()} was saved <----------------------",
+                metadata_entries=[dg.EventMetadataEntry.json(label="CSV",data={
+                    "total items": len(obj)})],
+            )
+            
+
+        # yield dg.AssetMaterialization(
+        #     asset_key=dg.AssetKey(obj_name),
+        #     description=f" {obj_name.upper()} was saved <----------------------",
+        #     metadata_entries=[EventMetadataEntry.int(len(obj), "number of rows")],
+        # )
         # yield dg.EventMetadataEntry.text(obj.shape[0], label="number of rows")
         # metadata={"head": dg.EventMetadata.md(obj.head(5).to_markdown())}
         # EventMetadataEntry.md(obj.head(5).to_markdown(), "head(5)")
