@@ -1,6 +1,10 @@
+from typing import Dict
 import urllib
 import os
 from time import sleep
+import dagster_pandas as dp
+from tests.dataframe_types import *
+from tests.objects_types import *
 
 import dagster as dg
 import pandas as pd
@@ -10,7 +14,7 @@ from urllib3.util import Retry
 
 
 # OMEKA
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=dict)])
 def query_omeka(context):
     endpoint = context.solid_config
 
@@ -33,7 +37,8 @@ def query_omeka(context):
     l2 = []
     page = 1
     while response != []:
-        response = http.get(endpoint, params={"page": page, "per_page": 250}).json()
+        response = http.get(
+            endpoint, params={"page": page, "per_page": 250}).json()
 
         for item in response:
             try:
@@ -50,11 +55,13 @@ def query_omeka(context):
 
 
 @dg.solid(config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_omeka")]
-)
-def omeka_dataframe(context, results):
+          output_defs=[dg.OutputDefinition(
+              io_manager_key="pandas_csv", name="api_omeka", dagster_type=dp.DataFrame)]
+          )
+def omeka_dataframe(context, results: dict):
+    print(type(results))
     path_output = context.solid_config
-    path = os.path.join(path_output,"duplicated-omeka.csv")
+    path = os.path.join(path_output, "duplicated-omeka.csv")
     if results == None:
         context.log.info("Couldn't update")
         return None
@@ -73,7 +80,7 @@ def omeka_dataframe(context, results):
 
 
 # WIKIDATA
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=type_json)])
 def query_wikidata(context):
     endpoint = context.solid_config
 
@@ -103,8 +110,10 @@ def query_wikidata(context):
         http.mount("https://", adapter)
         http.mount("http://", adapter)
 
-        response = http.get(endpoint, params={"format": "json", "query": query})
+        response = http.get(
+            endpoint, params={"format": "json", "query": query})
         data = response.json()
+        print(type(data))
         return data
 
     except Exception:
@@ -113,9 +122,10 @@ def query_wikidata(context):
 
 
 @dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_wikidata")]
+    output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="api_wikidata", dagster_type=dp.DataFrame)]
 )
-def wikidata_dataframe(context, results):
+def wikidata_dataframe(context, results: type_json):
     if results == None:
         context.log.info("Couldn't update")
         return None
@@ -136,7 +146,8 @@ def wikidata_dataframe(context, results):
 
         wikidata_df.drop(columns=["depict", "depictLabel"], inplace=True)
 
-        wikidata_df = wikidata_df.groupby("id", as_index=False).agg(lambda x: set(x))
+        wikidata_df = wikidata_df.groupby(
+            "id", as_index=False).agg(lambda x: set(x))
 
         def concat(a_set):
             list_of_strings = [str(s) for s in a_set]
@@ -163,7 +174,7 @@ def wikidata_dataframe(context, results):
 
 
 # PORTALS
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
 def query_portals(context):
     endpoint = context.solid_config
 
@@ -195,15 +206,17 @@ def query_portals(context):
         data = response.json()
         results = pd.json_normalize(data["items"])
         dataframe = dataframe.append(results, ignore_index=True)
+        print("query_portals", type(dataframe))
 
     return dataframe
 
 
 @dg.solid(
     config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_portals")],
+    output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="api_portals", dagster_type=dp.DataFrame)],
 )
-def portals_dataframe(context, results):
+def portals_dataframe(context, results: dp.DataFrame):
     if isinstance(results, pd.DataFrame):
         prefix = context.solid_config
         dataframe = pd.DataFrame()
@@ -218,7 +231,8 @@ def portals_dataframe(context, results):
             }
         )
 
-        dataframe["Source ID"] = dataframe["Source ID"].str.split(".", n=1, expand=True)[0]
+        dataframe["Source ID"] = dataframe["Source ID"].str.split(
+            ".", n=1, expand=True)[0]
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 

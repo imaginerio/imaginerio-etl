@@ -1,16 +1,19 @@
 
 import dagster as dg
 import dagster_pandas as dp
+from dagster_pandas.data_frame import DataFrame
 from numpy.core.numeric import True_
 import pandas as pd
 from pandas._libs.tslibs import NaT
+from tests.dataframe_types import *
+from tests.objects_types import *
 
 
 # solids cumulus
 @dg.solid(
-    input_defs=[dg.InputDefinition("root", root_manager_key="cumulus_root")],
+    input_defs=[dg.InputDefinition("root", root_manager_key="cumulus_root")], output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)]
 )
-def xml_to_df(context, root) -> dp.DataFrame:
+def xml_to_df(context, root):
     # Find the uids
 
     uids = {}
@@ -61,8 +64,8 @@ def xml_to_df(context, root) -> dp.DataFrame:
     return cumulus_df
 
 
-@dg.solid
-def organize_columns(context, df):
+@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def organize_columns(context, df: dp.DataFrame):
     # rename columns
     cumulus_df = df.rename(
         columns={
@@ -112,9 +115,9 @@ def organize_columns(context, df):
 
 @dg.solid(
     output_defs=[dg.OutputDefinition(
-        io_manager_key="pandas_csv", name="creators")]
+        io_manager_key="pandas_csv", name="creators", dagster_type=dp.DataFrame)]
 )  # save list of Creatorss for rights assessment
-def creators_list(context, df):
+def creators_list(context, df: dp.DataFrame):
     creators_df = df["Creator"].unique()
     listed_creators = pd.DataFrame(creators_df)
     listed_creators.set_index(0, inplace=True)
@@ -124,8 +127,9 @@ def creators_list(context, df):
     return listed_creators
 
 
-@dg.solid  # extract dimensions
-def extract_dimensions(context, df):
+# extract dimensions
+@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def extract_dimensions(context, df: dp.DataFrame):
     dimensions = df["dimensions"].str.extract(
         r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
     )
@@ -138,8 +142,8 @@ def extract_dimensions(context, df):
     return df
 
 
-@dg.solid
-def format_date(context, df):
+@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def format_date(context, df: dp.DataFrame):
     # fill dates
 
     df.loc[df["Date"].str.count(r"[-\/^a-z]") == 0, "date_accuracy"] = "year"
@@ -189,12 +193,12 @@ def format_date(context, df):
     df.loc[df["Date"].str.fullmatch(r"\d+[\/-]\d+") & df["Date"].notna(), "Date"] = df[
         "datetime"
     ].dt.strftime(
-        "%m %Y"
+        "%m/%Y"
     )  # month
     df.loc[
         df["Date"].str.fullmatch(
             r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
-    ] = df["datetime"].dt.strftime("%d %m %Y")
+    ] = df["datetime"].dt.strftime("%d/%m/%Y")
 
     cumulus = df
     cumulus.name = "cumulus"
@@ -202,8 +206,8 @@ def format_date(context, df):
     return cumulus
 
 
-@dg.solid
-def create_columns(context, df_cumulus):
+@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def create_columns(context, df_cumulus: dp.DataFrame):
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "FOTOGRAFIA/ Papel", "Materials"
@@ -261,8 +265,8 @@ def create_columns(context, df_cumulus):
     return cumulus
 
 
-@dg.solid
-def create_columns(context, df_cumulus):
+@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def create_columns(context, df_cumulus: dp.DataFrame):
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "FOTOGRAFIA/ Papel", "Materials"
@@ -320,9 +324,9 @@ def create_columns(context, df_cumulus):
 
 @dg.solid(
     output_defs=[dg.OutputDefinition(
-        io_manager_key="pandas_csv", name="cumulus")]
+        io_manager_key="pandas_csv", name="cumulus", dagster_type=dp.DataFrame)]
 )
-def select_columns(context, df_cumulus):
+def select_columns(context, df_cumulus: dp.DataFrame):
 
     df = df_cumulus[
         [
