@@ -18,4 +18,4 @@ dagster pipeline execute -f pipelines/some_pipeline.py --preset default
 dagster sensor preview my_sensor_name
 
 # cloning submodule
-git submodule update --init --recursive
+git submodule update --init --recursivedagit

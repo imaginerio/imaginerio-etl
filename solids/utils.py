@@ -1,6 +1,8 @@
 import os
 import subprocess
 from xml.etree import ElementTree
+from tests.dataframe_types import *
+from tests.objects_types import *
 
 import dagster as dg
 import geojson

@@ -16,7 +16,8 @@ from pykml import parser
 from pyproj import Proj
 from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
-from tests.types import *
+from tests.dataframe_types import *
+from tests.objects_types import *
 from turfpy.misc import sector
 
 load_dotenv(override=True)

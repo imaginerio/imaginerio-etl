@@ -7,7 +7,6 @@ from solids.utils import *
 
 load_dotenv(override=True)
 
-
 preset = {
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
