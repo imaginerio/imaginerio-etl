@@ -17,6 +17,7 @@ bokeh = "*"
 python-dotenv = "*"
 xlrd = "*"
 turfpy = "*"
+tqdm = "*"
 
 [dev-packages]
 
