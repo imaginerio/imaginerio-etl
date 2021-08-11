@@ -66,6 +66,7 @@ def organize_columns(context, df):
     cumulus_df = df.rename(
         columns={
             "Record Name": "Source ID",
+            "CÓDIGO DE IDENTIFICAÇÃO PRELIMINAR":"preliminary id",
             "TÍTULO": "Title",
             "RESUMO": "Description (Portuguese)",
             "AUTORIA": "Creator",
@@ -92,6 +93,7 @@ def organize_columns(context, df):
             "Fabrication Method",
             "format",
             "dimensions",
+            "preliminary id"
         ]
     ]
 
@@ -191,7 +193,6 @@ def format_date(context, df):
 
     return cumulus
 
-
 @dg.solid
 def create_columns(context, df_cumulus):
 
@@ -259,7 +260,7 @@ def create_columns(context, df_cumulus):
 
     df_cumulus["Description (English)"] = ""
     df_cumulus["Type"] = "Photograph"
-    df_cumulus["Item Set"] = "all||views"
+    df_cumulus["Item Set"] = "All||Views"
     df_cumulus["Source"] = "Instituto Moreira Salles"
     df_cumulus["License"] = ""
     df_cumulus["Rights"] = ""
@@ -297,6 +298,7 @@ def select_columns(context, df_cumulus):
             "Width (mm)",
             "Height (mm)",
             "Smapshot ID",
+            "preliminary id",
         ]
     ]
 
