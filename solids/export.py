@@ -39,7 +39,6 @@ def load_metadata(_,metadata,camera,cumulus,images,omeka,wikidata):
     wikidata_df = wikidata[["Source ID","wikidata_image"]]
     cumulus_df = cumulus[["Source ID","datetime","date_accuracy"]]
     cumulus_df["datetime"] = pd.to_datetime(cumulus_df["datetime"])
-    pd.set_option("display.max_columns", None)
     datas = [cumulus_df,camera_df,images_df,omeka,wikidata_df]
     export_df = metadata
 
@@ -77,19 +76,21 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
 
 
     # filter items
-    df = df.dropna(
-        subset=["geometry","First Year","Last Year","Source URL", "Media URL"]
-    )
+    omeka_df = df.loc[
+        (df["Source"]!= "Instituto Moreira Salles") | (df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna())]  
+    omeka_df = omeka_df.dropna(subset=["Item Set"])
     mapping.set_index("Label:en",inplace=True)
-    omeka_df = df
-    omeka_df[["First Year","Last Year"]] = omeka_df[["First Year","Last Year"]].applymap(np.int64, na_action="ignore")
+    omeka_df[["First Year", "Last Year"]] = omeka_df[
+        ["First Year", "Last Year"]
+    ].applymap(lambda x: str(int(x)), na_action="ignore")
+    #omeka_df[["First Year","Last Year"]] = omeka_df[["First Year","Last Year"]].applymap(np.int64, na_action="ignore")
 
     # create columns
-    omeka_df["dcterms:available"] = df["First Year"].astype(str) + "/" + df["Last Year"].astype(str)
-    omeka_df["dcterms:format:en"] = df["Materials"]
-    omeka_df["dcterms:format:pt"] = df["Materials"]
-    omeka_df["dcterms:medium:en"] = df["Fabrication Method"]
-    omeka_df["dcterms:medium:pt"] = df["Fabrication Method"]
+    omeka_df.loc[omeka_df["First Year"].notna(),"dcterms:available"] = omeka_df["First Year"].astype(str) + "/" + omeka_df["Last Year"].astype(str)
+    omeka_df["dcterms:format:en"] = omeka_df["Materials"]
+    omeka_df["dcterms:format:pt"] = omeka_df["Materials"]
+    omeka_df["dcterms:medium:en"] = omeka_df["Fabrication Method"]
+    omeka_df["dcterms:medium:pt"] = omeka_df["Fabrication Method"]
     omeka_df["dcterms:type:en"] = omeka_df["Type"]
     omeka_df["dcterms:type:pt"] = omeka_df["Type"]
 
@@ -188,7 +189,7 @@ def make_df_to_wikidata(_, df,mapping):
 
     # filter items
     df = df.dropna(
-        subset=["geometry","First Year","Last Year","Source URL", "Media URL"]
+        subset=["First Year","Last Year","Source URL", "Media URL"]
     )
 
     mapping.set_index("Label:en",inplace=True)
