@@ -174,6 +174,9 @@ def split_photooverlays(context, kmls, delete_original=False):
 
         for po in photooverlays:
             filename = find_with_re("name", po)
+            # if filename not in cumulus["Source ID"]:
+            #     if filename in cumulus["Codigo Preliminar"]:
+            #         filename = cumulus.loc[cumulus["Codigo Preliminar"].str.contains(filename),"Source ID"]
             with open(os.path.join(path_new_single, filename + ".kml"), "w") as k:
                 k.write(f"{header}\n{po}</kml>")
         if delete_original:
