@@ -4,6 +4,7 @@ import shutil
 
 import dagster as dg
 import pandas as pd
+from tqdm import tqdm
 from numpy import nan
 from PIL import Image as PILImage
 
@@ -67,7 +68,7 @@ def file_dispatcher(context, files):
     REVIEW = context.solid_config["review"]
 
     def handle_geolocated(infiles):
-        for infile in infiles:
+        for infile in tqdm(infiles, "Handling geolocated..."):
             if not os.path.exists(os.path.join(TIFF, infile.tif)):
                 shutil.copy2(infile.path, TIFF)
 
@@ -95,7 +96,7 @@ def file_dispatcher(context, files):
                 os.remove(review_path)
 
     def handle_backlog(infiles):
-        for infile in infiles:
+        for infile in tqdm(infiles, "Handling backlog..."):
             if not os.path.exists(os.path.join(TIFF, infile.tif)):
                 shutil.copy2(infile.path, TIFF)
             backlog_path = os.path.join(IMG_BACKLOG, infile.jpg)
@@ -126,7 +127,7 @@ def file_dispatcher(context, files):
 
     def handle_review(infiles):
         #current_hd = [os.path.join(JPEG_HD, img) for img in os.listdir(JPEG_HD) if img.split(".")[0] in files["review"]]
-        for infile in infiles:
+        for infile in tqdm(infiles, "Handling review..."):
             review_path = os.path.join(REVIEW, infile.jpg)
             tiff_path = os.path.join(TIFF, infile.tif)
             if not os.path.exists(review_path):
@@ -200,7 +201,7 @@ def write_metadata(context, metadata, files_to_tag):
     metadata["Source ID"] = metadata["Source ID"].str.upper()
     metadata.set_index("Source ID", inplace=True)
 
-    for i, item in enumerate(files_to_tag):
+    for item in tqdm(files_to_tag, "Embedding metadata in files..."):
         if item.endswith(".jpg"):
             basename = os.path.split(item)[1]
             name = basename.split(".")[0]
@@ -244,9 +245,7 @@ def write_metadata(context, metadata, files_to_tag):
                     param = param.encode(encoding="utf-8")
                     dest = item.encode(encoding="utf-8")
                     et.execute(param, dest)
-            context.log.info(
-                f"{basename}\n{metadata.loc[name, 'Date']}\nTagged {i+1} of {len(files_to_tag)} images"
-            )
+            
 
 
 @dg.solid
