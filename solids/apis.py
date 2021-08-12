@@ -1,15 +1,16 @@
-from typing import Dict
-import urllib
 import os
+import urllib
 from time import sleep
-import dagster_pandas as dp
-from tests.dataframe_types import *
-from tests.objects_types import *
+from typing import Dict
 
 import dagster as dg
+import dagster_pandas as dp
 import pandas as pd
 import requests
 from requests.adapters import HTTPAdapter
+from tests.dataframe_types import *
+from tests.objects_types import *
+from tqdm import tqdm
 from urllib3.util import Retry
 
 
@@ -56,7 +57,7 @@ def query_omeka(context):
 
 @dg.solid(config_schema=dg.StringSource,
           output_defs=[dg.OutputDefinition(
-              io_manager_key="pandas_csv", name="api_omeka", dagster_type=dp.DataFrame)]
+              io_manager_key="pandas_csv", name="api_omeka", dagster_type=api_omeka_dataframe_types)]
           )
 def omeka_dataframe(context, results: dict):
     print(type(results))
@@ -80,7 +81,7 @@ def omeka_dataframe(context, results: dict):
 
 
 # WIKIDATA
-@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=type_json)])
+@dg.solid(config_schema=dg.StringSource)
 def query_wikidata(context):
     endpoint = context.solid_config
 
@@ -113,7 +114,6 @@ def query_wikidata(context):
         response = http.get(
             endpoint, params={"format": "json", "query": query})
         data = response.json()
-        print(type(data))
         return data
 
     except Exception:
@@ -125,7 +125,7 @@ def query_wikidata(context):
     output_defs=[dg.OutputDefinition(
         io_manager_key="pandas_csv", name="api_wikidata", dagster_type=dp.DataFrame)]
 )
-def wikidata_dataframe(context, results: type_json):
+def wikidata_dataframe(context, results):
     if results == None:
         context.log.info("Couldn't update")
         return None
@@ -192,7 +192,7 @@ def query_portals(context):
 
     dataframe = pd.DataFrame()
 
-    for i in API_STEPS:
+    for i in tqdm(API_STEPS, desc="Steps"):
 
         payload = {
             "table": "AssetRecords",
@@ -206,15 +206,12 @@ def query_portals(context):
         data = response.json()
         results = pd.json_normalize(data["items"])
         dataframe = dataframe.append(results, ignore_index=True)
-        print("query_portals", type(dataframe))
 
     return dataframe
 
 
 @dg.solid(
-    config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(
-        io_manager_key="pandas_csv", name="api_portals", dagster_type=dp.DataFrame)],
+    config_schema=dg.StringSource
 )
 def portals_dataframe(context, results: dp.DataFrame):
     if isinstance(results, pd.DataFrame):
@@ -255,3 +252,10 @@ def portals_dataframe(context, results: dp.DataFrame):
     else:
         context.log.info("Couldn't update")
         return None
+
+
+@dg.solid(output_defs=[dg.OutputDefinition(
+    io_manager_key="pandas_csv", name="api_portals")])
+def validate_portals(context, df: api_portals_dataframe_types):
+    print("Valid df")
+    return df
