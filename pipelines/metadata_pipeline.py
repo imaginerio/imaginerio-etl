@@ -1,20 +1,16 @@
-from datetime import datetime
-import re
-import dagster_pandas as dp
-from dagster_pandas.constraints import ColumnConstraint
-
-import validators
 import datetime
-
+import re
+from datetime import datetime
 
 import dagster as dg
+import dagster_pandas as dp
 import pandas as pd
 from dotenv import load_dotenv
 from solids.utils import *
 from tests.dataframe_types import *
 from tests.objects_types import *
 
-
+from functools import reduce
 load_dotenv(override=True)
 
 
@@ -42,7 +38,7 @@ preset = {
         dg.InputDefinition("images", root_manager_key="images_root"),
     ], output_defs=[dg.OutputDefinition(dagster_type=metadata_dataframe_types)]
 )
-def create_metadata(context, cumulus: dp.DataFrame, wikidata: dp.DataFrame, portals: dp.DataFrame, camera: gpd.GeoDataFrame, images: images_dataframe_types):
+def create_metadata(context, cumulus: dp.DataFrame, wikidata: dp.DataFrame, portals: api_portals_dataframe_types, camera: gpd.GeoDataFrame, images: dp.DataFrame):
     camera_new = camera[
         [
             "Source ID",
@@ -55,15 +51,35 @@ def create_metadata(context, cumulus: dp.DataFrame, wikidata: dp.DataFrame, port
         ["First Year", "Last Year"]
     ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))
 
-    dataframes_outer = [cumulus, camera_new, images]
-    dataframe_left = [portals, wikidata]
-    metadata = pd.DataFrame(columns=["Source ID"])
+    # dataframes_outer = [cumulus, camera_new, images]
+    # dataframe_left = [portals, wikidata]
+    # metadata = pd.DataFrame(columns=["Source ID"])
 
-    for df in dataframes_outer:
-        metadata = metadata.merge(df, how="outer", on="Source ID")
+    # for df in dataframes_outer:
+    #     metadata = metadata.merge(df, how="outer", on="Source ID")
 
-    for df in dataframe_left:
-        metadata = metadata.merge(df, how="left", on="Source ID")
+    # for df in dataframe_left:
+    #     metadata = metadata.merge(df, how="left", on="Source ID")
+
+    def review_itens(df1, df2):
+        filter = df1["Source ID"].isin(df2["Source ID"])
+        review = list(df1["Source ID"].loc[~filter])
+        l = []
+        if review:
+            for item in review:
+                l.append(item)
+        else:
+            pass
+        df = df1.merge(df2, on="Source ID")
+        return df
+
+    review_itens(cumulus, camera_new)
+    review_itens(cumulus, images)
+
+    # merge all dataframes
+    dfs = [cumulus, camera_new, images, portals, wikidata]
+    metadata = reduce(lambda left, right: pd.merge(
+        left, right, on='Source ID'), dfs)
 
     metadata_new = metadata[
         [
@@ -102,10 +118,10 @@ def create_metadata(context, cumulus: dp.DataFrame, wikidata: dp.DataFrame, port
 
 @ dg.solid(
     input_defs=[dg.InputDefinition("jstor", root_manager_key="jstor_root")],
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata",
-                                     dagster_type=metadata_dataframe_types
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata"
+
                                      )])
-def metadata_jstor(context, jstor, metadata):
+def metadata_jstor(context, jstor, metadata) -> metadata_dataframe_types:
     jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]', '', x))
     print(list(jstor.colunms))
     jstor["Source ID"] = jstor["SSID"]
@@ -176,7 +192,7 @@ def metadata_jstor(context, jstor, metadata):
 )
 def metadata_pipeline():
     metadata = create_metadata()
-    metadata_jstor(metadata=metadata)
+   # metadata_jstor(metadata=metadata)
 
 
 ################   SENSORS   ##################
