@@ -17,6 +17,8 @@ bokeh = "*"
 python-dotenv = "*"
 xlrd = "*"
 turfpy = "*"
+validator-collection = "*"
+tqdm = "*"
 
 [dev-packages]
 autopep8 = "*"

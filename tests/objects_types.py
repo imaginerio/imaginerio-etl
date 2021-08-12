@@ -6,14 +6,16 @@ import validators
 import datetime
 import geojson
 import json
+import pandas as pd
+from urllib.request import urlopen, URLError
 
 
-def validate_JSON(jsonData):
-    try:
-        json.loads(jsonData)
-    except ValueError as err:
-        return False
-    return True
+# def validate_JSON(jsonData):
+#     try:
+#         json.loads(jsonData)
+#     except ValueError as err:
+#         return False
+#     return True
 
 
 def validate_list_of_features(list_object):
@@ -33,6 +35,37 @@ def validate_geojson(geojson_object):
     return True
 
 
+def validate_str_url(url):
+    try:
+        if pd.notna(url):
+            urlopen(url)
+            print("sim:", url)
+        else:
+            pass
+        return True
+    except URLError:
+        print("não:", url)
+        return False
+
+
+def validate_url(url):
+    try:
+        if pd.notna(url):
+            urlopen(url)
+            print("sim:", url)
+        else:
+            pass
+        return True
+    except URLError:
+        print("não:", url)
+        return False
+
+
+def validate_kml(kml):
+
+    return False
+
+
 type_list_of_kmls = dg.DagsterType(
     name="type_list_of_kmls",
     type_check_fn=lambda _, value: all(
@@ -42,7 +75,8 @@ type_list_of_kmls = dg.DagsterType(
 
 type_list_of_features = dg.DagsterType(
     name="type_list_of_features",
-    type_check_fn=lambda _, value: validate_list_of_features(value))
+    type_check_fn=lambda _, value: validate_list_of_features(value)
+)
 
 
 type_geojson = dg.DagsterType(
@@ -51,8 +85,8 @@ type_geojson = dg.DagsterType(
 )
 
 
-type_json = dg.DagsterType(
-    name="type_json",
-    type_check_fn=lambda _, value: validate_JSON(value)
+# type_json = dg.DagsterType(
+#     name="type_json",
+#     type_check_fn=lambda _, value: validate_JSON(value)
 
-)
+# )

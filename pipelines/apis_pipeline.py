@@ -18,7 +18,26 @@ preset = {
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
-
+preset_omeka = {
+    "solids": {
+        "omeka_dataframe": {"config": {"env": "OUTPUT"}},
+        "query_omeka": {"config": {"env": "OMEKA_API"}},
+    },
+    "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
+}
+preset_wikidata = {
+    "solids": {
+        "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
+    },
+    "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
+}
+preset_portals = {
+    "solids": {
+        "query_portals": {"config": {"env": "PORTALS_API"}},
+        "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
+    },
+    "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
+}
 
 ################   PIPELINE   ##################
 
@@ -31,16 +50,35 @@ preset = {
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": root_input_csv,
             },
-        )
+        ),
     ],
     preset_defs=[
         dg.PresetDefinition(
             "default",
             run_config=preset,
             mode="default",
-        )
-    ],
-)
+        ),
+        dg.PresetDefinition(
+            "preset_omeka",
+            run_config=preset_omeka,
+            solid_selection=["query_omeka",
+                             "omeka_dataframe"],
+            mode="default",
+        ),
+        dg.PresetDefinition(
+            "preset_wikidata",
+            run_config=preset_wikidata,
+            solid_selection=["query_wikidata",
+                             "wikidata_dataframe"],
+            mode="default",
+        ),
+        dg.PresetDefinition(
+            "preset_portals",
+            run_config=preset_portals,
+            solid_selection=["query_portals",
+                             "portals_dataframe", "validate_portals"],
+            mode="default",
+        )])
 def apis_pipeline():
 
     omeka_results = query_omeka()
@@ -53,13 +91,14 @@ def apis_pipeline():
 
     portals_results = query_portals()
     portals_df = portals_dataframe(portals_results)
+    portals_df = validate_portals(df=portals_df)
     update_metadata(df=portals_df)
 
 
 ################   SENSORS   ##################
 
 
-@dg.sensor(pipeline_name="apis_pipeline", minimum_interval_seconds=120)
+@ dg.sensor(pipeline_name="apis_pipeline", minimum_interval_seconds=120)
 def trigger_apis(context):
     api_wikidata = "data/output/api_wikidata.csv"
     api_portals = "data/output/api_portals.csv"
@@ -77,13 +116,14 @@ def trigger_apis(context):
 
 def test_sensor():
     for run_request in trigger_apis(None):
-        assert dg.validate_run_config(dg.log_file_pipeline, run_request.run_config)
+        assert dg.validate_run_config(
+            dg.log_file_pipeline, run_request.run_config)
 
 
 ################   SCHEDULES   ##################
 
 
-@dg.schedule(
+@ dg.schedule(
     cron_schedule="0 0 * * 0",
     pipeline_name="apis_pipeline",
     execution_timezone="America/Sao_Paulo",
