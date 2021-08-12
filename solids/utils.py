@@ -1,6 +1,10 @@
 import os
 import subprocess
 from xml.etree import ElementTree
+from dagster import config
+
+from dagster.core.definitions import output
+from numpy.lib.arraysetops import isin
 from tests.dataframe_types import *
 from tests.objects_types import *
 
@@ -76,9 +80,21 @@ def geojson_io_manager(init_context):
     output_defs=[dg.OutputDefinition(
         io_manager_key="pandas_csv", name="metadata", dagster_type=dp.DataFrame)],
 )
-def update_metadata(_, df: dp.DataFrame, metadata: dp.DataFrame):
+def update_metadata(context, df: dp.DataFrame, metadata: dp.DataFrame):
+
+    # find itens how not are found on metadata
+    filter = df["Source ID"].isin(metadata["Source ID"])
+    review = list(df["Source ID"].loc[~filter])
+    if review:
+        for item in review:
+            context.info.log("Itens for review", item)
+    else:
+        pass
+
     metadata.set_index("Source ID", inplace=True)
     metadata.update(df)
+
+    # fix float values
     metadata[["First Year", "Last Year"]] = metadata[
         ["First Year", "Last Year"]
     ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))

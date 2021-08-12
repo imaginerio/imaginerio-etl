@@ -411,7 +411,7 @@ def format_values_chart(context, DF: dp.DataFrame):
 
 
 @dg.solid
-def create_hbar(context, values):
+def create_hbar(context, values: list):
 
     # construct a data source
     list1 = ["Done_orange", "Done_blue", "To do"]
