@@ -80,7 +80,7 @@ def geojson_io_manager(init_context):
     output_defs=[dg.OutputDefinition(
         io_manager_key="pandas_csv", name="metadata", dagster_type=dp.DataFrame)],
 )
-def update_metadata(context, df: dp.DataFrame, metadata: dp.DataFrame):
+def update_metadata(context, df: main_dataframe_types, metadata: dp.DataFrame):
 
     # find itens how not are found on metadata
     filter = df["Source ID"].isin(metadata["Source ID"])
