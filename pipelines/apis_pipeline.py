@@ -3,6 +3,7 @@ from datetime import datetime
 
 import dagster as dg
 from dotenv import load_dotenv
+from pandas.core.frame import DataFrame
 from solids.apis import *
 from solids.utils import *
 
@@ -62,36 +63,38 @@ preset_portals = {
             "preset_omeka",
             run_config=preset_omeka,
             solid_selection=["query_omeka",
-                             "omeka_dataframe"],
+                             "omeka_dataframe", "update_metadata"],
             mode="default",
         ),
         dg.PresetDefinition(
             "preset_wikidata",
             run_config=preset_wikidata,
             solid_selection=["query_wikidata",
-                             "wikidata_dataframe"],
+                             "wikidata_dataframe", "update_metadata"],
             mode="default",
         ),
         dg.PresetDefinition(
             "preset_portals",
             run_config=preset_portals,
             solid_selection=["query_portals",
-                             "portals_dataframe", "validate_portals"],
+                             "portals_dataframe", "update_metadata"],
             mode="default",
         )])
 def apis_pipeline():
 
     omeka_results = query_omeka()
     omeka_df = omeka_dataframe(omeka_results)
+    omeka_df = validate_omeka(omeka_df)
     update_metadata(df=omeka_df)
 
     wikidata_results = query_wikidata()
     wikidata_df = wikidata_dataframe(wikidata_results)
+    wikidata_df = validate_wikidata(wikidata_df)
     update_metadata(df=wikidata_df)
 
     portals_results = query_portals()
     portals_df = portals_dataframe(portals_results)
-    portals_df = validate_portals(df=portals_df)
+    #portals_df = validate_portals(portals_df)
     update_metadata(df=portals_df)
 
 
