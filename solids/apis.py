@@ -55,10 +55,7 @@ def query_omeka(context):
     return results
 
 
-@dg.solid(config_schema=dg.StringSource,
-          output_defs=[dg.OutputDefinition(
-              io_manager_key="pandas_csv", name="api_omeka", dagster_type=api_omeka_dataframe_types)]
-          )
+@dg.solid(config_schema=dg.StringSource)
 def omeka_dataframe(context, results: dict):
     print(type(results))
     path_output = context.solid_config
@@ -77,10 +74,19 @@ def omeka_dataframe(context, results: dict):
 
         omeka_df.name = "api_omeka"
 
-        return omeka_df.set_index("Source ID")
+        return omeka_df
 
+
+@dg.solid(output_defs=[dg.OutputDefinition(
+    io_manager_key="pandas_csv", name="api_omeka")])
+def validate_omeka(context, df: api_omeka_dataframe_types):
+    name = context.name
+    print(name.upper(), " valid")
+    return df.set_index("Source ID")
 
 # WIKIDATA
+
+
 @dg.solid(config_schema=dg.StringSource)
 def query_wikidata(context):
     endpoint = context.solid_config
@@ -121,10 +127,7 @@ def query_wikidata(context):
         return None
 
 
-@dg.solid(
-    output_defs=[dg.OutputDefinition(
-        io_manager_key="pandas_csv", name="api_wikidata", dagster_type=dp.DataFrame)]
-)
+@dg.solid
 def wikidata_dataframe(context, results):
     if results == None:
         context.log.info("Couldn't update")
@@ -132,7 +135,7 @@ def wikidata_dataframe(context, results):
 
     else:
         ls = []
-        for result in results["results"]["bindings"]:
+        for result in tqdm(results["results"]["bindings"], desc="Results"):
             dic = {}
             for key in result:
                 dic[f"{key}"] = result[f"{key}"]["value"]
@@ -170,7 +173,15 @@ def wikidata_dataframe(context, results):
 
         wikidata_df = wikidata_df.rename(columns={"id": "Source ID"})
 
-        return wikidata_df.set_index("Source ID")
+        return wikidata_df
+
+
+@dg.solid(output_defs=[dg.OutputDefinition(
+    io_manager_key="pandas_csv", name="api_wikidata")])
+def validate_wikidata(context, df: api_wikidata_dataframe_types):
+    name = context.name
+    print(name.upper(), " valid")
+    return df.set_index("Source ID")
 
 
 # PORTALS
@@ -211,7 +222,8 @@ def query_portals(context):
 
 
 @dg.solid(
-    config_schema=dg.StringSource
+    config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="api_portals")]
 )
 def portals_dataframe(context, results: dp.DataFrame):
     if isinstance(results, pd.DataFrame):
@@ -245,8 +257,6 @@ def portals_dataframe(context, results: dp.DataFrame):
 
         portals_df = portals_df.drop_duplicates(subset="Source ID")
 
-        portals_df.name = "api_portals"
-
         return portals_df.set_index("Source ID")
 
     else:
@@ -254,8 +264,8 @@ def portals_dataframe(context, results: dp.DataFrame):
         return None
 
 
-@dg.solid(output_defs=[dg.OutputDefinition(
-    io_manager_key="pandas_csv", name="api_portals")])
-def validate_portals(context, df: api_portals_dataframe_types):
-    print("Valid df")
-    return df
+# @dg.solid(output_defs=[dg.OutputDefinition(
+#     io_manager_key="pandas_csv")])
+# def validate_portals(context, df: main_dataframe_types):
+
+#     return df.set_index("Source ID")
