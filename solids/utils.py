@@ -61,16 +61,6 @@ class PandasCsvIOManager(dg.IOManager):
                 metadata_entries=[dg.EventMetadataEntry.json(label="CSV",data={
                     "total items": len(obj)})],
             )
-            
-
-        # yield dg.AssetMaterialization(
-        #     asset_key=dg.AssetKey(obj_name),
-        #     description=f" {obj_name.upper()} was saved <----------------------",
-        #     metadata_entries=[EventMetadataEntry.int(len(obj), "number of rows")],
-        # )
-        # yield dg.EventMetadataEntry.text(obj.shape[0], label="number of rows")
-        # metadata={"head": dg.EventMetadata.md(obj.head(5).to_markdown())}
-        # EventMetadataEntry.md(obj.head(5).to_markdown(), "head(5)")
 
 
 @dg.io_manager
