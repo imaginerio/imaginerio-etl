@@ -18,7 +18,7 @@ preset = {
                 "processed_raw":{
                     "env": "PROCESSED_SINGLE"}}},
 
-        "change_img_href": {
+        "rename_single": {
             "config": {"env": "NEW_SINGLE"}},
         "move_files": {
             "config": {
@@ -30,7 +30,9 @@ preset = {
   
         "create_geojson": {"config": {"env": "CAMERA"}},
     },
-    "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
+    "resources": {
+        "metadata_root": {"config": {"env": "METADATA"}},
+        "cumulus_root": {"config": {"env": "CUMULUS"}}},
 }
 
 
@@ -42,6 +44,7 @@ preset = {
                 "geojson": geojson_io_manager,
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": root_input_csv,
+                "cumulus_root": root_input_csv
             }
         )
     ],
@@ -58,7 +61,8 @@ def camera_pipeline():
     kmls = get_list()
     kmls = split_photooverlays(kmls)
 
-    kmls = change_img_href()
+    kmls = rename_single()
+    kmls = change_img_href(kmls)
     kmls = correct_altitude_mode(kmls)
     new_features = create_feature(kmls=kmls)
     move_files(new_features)
