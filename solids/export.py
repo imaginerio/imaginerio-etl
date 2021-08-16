@@ -27,19 +27,14 @@ from bokeh.models import (
     input_defs=[
         dg.InputDefinition("metadata", root_manager_key="metadata_root"),
         dg.InputDefinition("camera", root_manager_key="camera_root"),
-        dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
-        dg.InputDefinition("images", root_manager_key="images_root"),
-        dg.InputDefinition("omeka", root_manager_key="omeka_root"),
-        dg.InputDefinition("wikidata", root_manager_key="wikidata_root")
+        dg.InputDefinition("cumulus", root_manager_key="cumulus_root")
     ]
 )
-def load_metadata(_,metadata,camera,cumulus,images,omeka,wikidata):
-    images_df = images[["Source ID","img_sd"]]
-    camera_df = camera[["Source ID","geometry","heading","tilt","altitude","fov"]]
-    wikidata_df = wikidata[["Source ID","wikidata_image"]]
+def load_metadata(_,metadata,camera,cumulus):
+    camera_df = camera[["Source ID","heading","tilt","altitude","fov"]]
     cumulus_df = cumulus[["Source ID","datetime","date_accuracy"]]
     cumulus_df["datetime"] = pd.to_datetime(cumulus_df["datetime"])
-    datas = [cumulus_df,camera_df,images_df,omeka,wikidata_df]
+    datas = [cumulus_df,camera_df]
     export_df = metadata
 
     for df in datas:
@@ -83,7 +78,6 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
     omeka_df[["First Year", "Last Year"]] = omeka_df[
         ["First Year", "Last Year"]
     ].applymap(lambda x: str(int(x)), na_action="ignore")
-    #omeka_df[["First Year","Last Year"]] = omeka_df[["First Year","Last Year"]].applymap(np.int64, na_action="ignore")
 
     # create columns
     omeka_df.loc[omeka_df["First Year"].notna(),"dcterms:available"] = omeka_df["First Year"].astype(str) + "/" + omeka_df["Last Year"].astype(str)
@@ -123,7 +117,6 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
             "Attribution": "dcterms:bibliographicCitation",
             "Source URL": "dcterms:source",
             "Wikidata ID": "dcterms:hasVersion",
-            "geometry": "schema:polygon",
             "Depicts": "foaf:depicts",
             "Media URL": "media",
             "Latitude":"latitude",
@@ -153,7 +146,6 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
             "dcterms:hasVersion",
             "latitude",
             "longitude",
-            "schema:polygon",
             "foaf:depicts",
             "schema:width",
             "schema:height",
@@ -188,9 +180,10 @@ def make_df_to_wikidata(_, df,mapping):
             return QID
 
     # filter items
-    df = df.dropna(
-        subset=["First Year","Last Year","Source URL", "Media URL"]
-    )
+    df = df.loc[
+        (df["Source"] == "Instituto Moreira Salles") & df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna()]  
+    df = df.dropna(subset=["Item Set"])
+    df[["First Year", "Last Year"]] = df[["First Year", "Last Year"]].applymap(lambda x: str(int(x)), na_action="ignore")
 
     mapping.set_index("Label:en",inplace=True)
     
@@ -350,40 +343,46 @@ def organise_creator(_, quickstate):
 
     quickstate["P170"] = quickstate["P170"].apply(name2qid)
     quickstate = quickstate.drop(columns="date_accuracy")
-    quickstate.name = "mport_wikidata"
+    quickstate.name = "import_wikidata"
 
     return quickstate.set_index("qid")
 
 
-@dg.solid
-def format_values_chart(context, DF):
+@dg.solid(input_defs=[
+    dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
+    dg.InputDefinition("camera", root_manager_key="camera_root"),
+    dg.InputDefinition("images", root_manager_key="images_root"),
+    dg.InputDefinition("omeka", root_manager_key="omeka_root"),
+    dg.InputDefinition("wikidata", root_manager_key="wikidata_root")])
 
-    DF["img_sd"] = DF["img_sd"].str.strip('"')
+def format_values_chart(context, cumulus,camera,images,omeka,wikidata):
 
-    # add items in global variables and new dataframe
     # kml finished
-    val_kml = len(DF[DF["geometry"].notna()])
+    val_kml = len(camera[camera["geometry"].notna()])
     # kml total
     val_kml_total = 0
 
     # image finished
-    val_img = len(DF[DF["Media URL"].notna()])
+    val_img = len(images[images["Media URL"].notna()])
     # image total
-    val_img_total = len(DF["Media URL"])
+    val_img_total = len(images["Media URL"])
 
     # cumulus published
-    val_meta = len(DF[DF["Source URL"].notna()])
+    val_meta = len(cumulus[cumulus["Source URL"].notna()])
     # cumulus total
-    val_meta_total = len(DF)
+    val_meta_total = len(cumulus)
 
     # wiki published
-    val_wiki = len(DF[DF["wikidata_image"].notna()])
+    wiki = wikidata["Source ID"].isin(cumulus["Source ID"])
+    wikidata = wikidata[wiki]
+    val_wiki = len(wikidata[wikidata["wikidata_image"].notna()])
     # wiki total
-    val_wiki_total = len(DF[DF["Wikidata ID"].notna()])
+    val_wiki_total = len(wikidata[wikidata["Wikidata ID"].notna()])
 
     # omeka published
-    val_ims = DF.loc[DF["Source"] == "Instituto Moreira Salles"]
-    val_omeka = len(val_ims[val_ims["omeka_url"].notna()])
+    omk = omeka["Source ID"].isin(cumulus["Source ID"])
+    omeka = omeka[omk]
+    val_omeka = len(omeka[omeka["omeka_url"].notna()])
     # omeka total
     val_omeka_total = 0
 
