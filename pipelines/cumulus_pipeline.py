@@ -10,7 +10,7 @@ load_dotenv(override=True)
 preset = {
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
-        # "metadata_root": {"config": {"env": "METADATA"}},
+        "metadata_root": {"config": {"env": "METADATA"}},
     }
 }
 
@@ -22,7 +22,7 @@ preset = {
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
                 "cumulus_root": root_input_xml,
-                # "metadata_root": root_input_csv,
+                "metadata_root": root_input_csv,
             },
         )
     ],
@@ -42,7 +42,7 @@ def cumulus_pipeline():
     cumulus_df = format_date(cumulus_df)
     cumulus_df = create_columns(cumulus_df)
     select_columns(cumulus_df)
-    # update_metadata(df=cumulus_df)
+    update_metadata(df=cumulus_df)
 
 
 ################   SENSORS   ##################
