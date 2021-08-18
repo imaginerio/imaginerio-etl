@@ -310,13 +310,13 @@ def create_columns(context, df_cumulus: dp.DataFrame):
         "Fabrication Method",
     ] = "Lantern slide"
 
-    df_cumulus["Description (English)"] = ""
+    df_cumulus["Description (English)"] = "-"
     df_cumulus["Type"] = "Photograph"
     df_cumulus["Item Set"] = "all||views"
     df_cumulus["Source"] = "Instituto Moreira Salles"
-    df_cumulus["License"] = ""
-    df_cumulus["Rights"] = ""
-    df_cumulus["Attribution"] = ""
+    df_cumulus["License"] = "-"
+    df_cumulus["Rights"] = "-"
+    df_cumulus["Attribution"] = "-"
     df_cumulus["Smapshot ID"] = ""
 
     return df_cumulus

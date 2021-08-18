@@ -84,12 +84,12 @@ def apis_pipeline():
 
     omeka_results = query_omeka()
     omeka_df = omeka_dataframe(omeka_results)
-    omeka_df = validate_omeka(omeka_df)
+    #omeka_df = validate_omeka(omeka_df)
     update_metadata(df=omeka_df)
 
     wikidata_results = query_wikidata()
     wikidata_df = wikidata_dataframe(wikidata_results)
-    wikidata_df = validate_wikidata(wikidata_df)
+    #wikidata_df = validate_wikidata(wikidata_df)
     update_metadata(df=wikidata_df)
 
     portals_results = query_portals()

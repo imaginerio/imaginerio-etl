@@ -55,7 +55,8 @@ def query_omeka(context):
     return results
 
 
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(
+    io_manager_key="pandas_csv", name="api_omeka")])
 def omeka_dataframe(context, results: dict):
     print(type(results))
     path_output = context.solid_config
@@ -74,15 +75,15 @@ def omeka_dataframe(context, results: dict):
 
         omeka_df.name = "api_omeka"
 
-        return omeka_df
+        return omeka_df.set_index("Source ID")
 
 
-@dg.solid(output_defs=[dg.OutputDefinition(
-    io_manager_key="pandas_csv", name="api_omeka")])
-def validate_omeka(context, df: api_omeka_dataframe_types):
-    name = context.name
-    print(name.upper(), " valid")
-    return df.set_index("Source ID")
+# @dg.solid(output_defs=[dg.OutputDefinition(
+#     io_manager_key="pandas_csv", name="api_omeka")])
+# def validate_omeka(context, df: api_omeka_dataframe_types):
+#     name = context.name
+#     print(name.upper(), " valid")
+#     return df.set_index("Source ID")
 
 # WIKIDATA
 
@@ -127,7 +128,8 @@ def query_wikidata(context):
         return None
 
 
-@dg.solid
+@dg.solid(output_defs=[dg.OutputDefinition(
+    io_manager_key="pandas_csv", name="api_wikidata")])
 def wikidata_dataframe(context, results):
     if results == None:
         context.log.info("Couldn't update")
@@ -174,14 +176,6 @@ def wikidata_dataframe(context, results):
         wikidata_df = wikidata_df.rename(columns={"id": "Source ID"})
 
         return wikidata_df
-
-
-@dg.solid(output_defs=[dg.OutputDefinition(
-    io_manager_key="pandas_csv", name="api_wikidata")])
-def validate_wikidata(context, df: api_wikidata_dataframe_types):
-    name = context.name
-    print(name.upper(), " valid")
-    return df.set_index("Source ID")
 
 
 # PORTALS
@@ -262,10 +256,3 @@ def portals_dataframe(context, results: dp.DataFrame):
     else:
         context.log.info("Couldn't update")
         return None
-
-
-# @dg.solid(output_defs=[dg.OutputDefinition(
-#     io_manager_key="pandas_csv")])
-# def validate_portals(context, df: main_dataframe_types):
-
-#     return df.set_index("Source ID")
