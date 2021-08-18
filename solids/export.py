@@ -181,7 +181,7 @@ def make_df_to_wikidata(_, df,mapping):
 
     # filter items
     df = df.loc[
-        (df["Source"] == "Instituto Moreira Salles") & df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna()]  
+        (df["Source"] == "Instituto Moreira Salles") & df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna() & df["Width (mm)"].notna() & df["Height (mm)"]]  
     df = df.dropna(subset=["Item Set"])
     df[["First Year", "Last Year"]] = df[["First Year", "Last Year"]].applymap(lambda x: str(int(x)), na_action="ignore")
 
@@ -192,7 +192,7 @@ def make_df_to_wikidata(_, df,mapping):
 
     quickstate = pd.DataFrame(
         columns=[
-            "Qid",
+            "qid",
             "P31",
             "Lpt-br",
             "Dpt-br",
@@ -207,7 +207,6 @@ def make_df_to_wikidata(_, df,mapping):
             "qal8208",
             "P170",
             "P186",
-            "format",
             "P195",
             "P217",
             "P2079",
@@ -272,7 +271,7 @@ def make_df_to_wikidata(_, df,mapping):
     # height
     quickstate["P2048"] = df["Height (mm)"].astype(str) + "U174728"
     # IMS ID
-    quickstate["P7835"] = df["Source URL"].str.extract(r"([0-9])").astype(int)
+    quickstate["P7835"] = df["Source URL"].str.extract(r"(\d+)").astype(int)
     # qid
     quickstate["qid"] = df["Wikidata ID"]
     # Copyright status
