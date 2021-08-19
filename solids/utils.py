@@ -94,7 +94,7 @@ def update_metadata(context, df: main_dataframe_types, metadata: metadata_datafr
     # find itens how not are found on metadata
     filter = df["Source ID"].isin(metadata["Source ID"])
     review = list(df["Source ID"].loc[~filter])
-    print(f"{len(review)} Itens for review: {review}")
+    context.log.info(f"{len(review)} Itens to review: {review}")
 
     metadata.set_index("Source ID", inplace=True)
     metadata.update(df)

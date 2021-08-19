@@ -62,11 +62,11 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
     metadata = reduce(lambda left, right: pd.merge(left,
                                                    right, how="left", on='Source ID'), dfs)
 
-    # find itens how not are found on metadata
+    # find itens who are not in metadata
     def review_itens(df1, df2):
         filter = df2["Source ID"].isin(df1["Source ID"])
         review = list(df2["Source ID"].loc[~filter])
-        print(f"{len(review)} Itens for review on :  {review}")
+        context.log.info(f"{len(review)} Itens to review on :  {review}")
 
     review_itens(metadata, camera_new)
     review_itens(metadata, images)
