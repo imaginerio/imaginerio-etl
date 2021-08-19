@@ -360,23 +360,28 @@ def organise_creator(_, quickstate: dp.DataFrame):
     dg.InputDefinition("camera", root_manager_key="camera_root"),
     dg.InputDefinition("images", root_manager_key="images_root"),
     dg.InputDefinition("omeka", root_manager_key="omeka_root"),
-    dg.InputDefinition("wikidata", root_manager_key="wikidata_root")],
+    dg.InputDefinition("wikidata", root_manager_key="wikidata_root"),
+    dg.InputDefinition("portals", root_manager_key="portals_root")],
     output_defs=[dg.OutputDefinition(dagster_type=list)])
 
-def format_values_chart(context, cumulus: main_dataframe_types,camera: main_dataframe_types,images: main_dataframe_types,omeka: main_dataframe_types,wikidata:main_dataframe_types):
+def format_values_chart(context, cumulus: main_dataframe_types,portals: main_dataframe_types,camera: main_dataframe_types,images: main_dataframe_types,omeka: main_dataframe_types,wikidata:main_dataframe_types):
 
     # kml finished
+    print(camera.columns)
     val_kml = len(camera[camera["geometry"].notna()])
     # kml total
     val_kml_total = 0
 
     # image finished
+    print(images.columns)
     val_img = len(images[images["Media URL"].notna()])
     # image total
     val_img_total = len(images["Media URL"])
 
     # cumulus published
-    val_meta = len(cumulus[cumulus["Source URL"].notna()])
+    api_p = portals["Source ID"].isin(cumulus["Source ID"])
+    portals = portals[api_p]
+    val_meta = len(portals[portals["Source URL"].notna()])
     # cumulus total
     val_meta_total = len(cumulus)
 

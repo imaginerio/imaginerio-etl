@@ -15,7 +15,22 @@ preset = {
         "images_root":{"config":{"env": "IMAGES"}},
         "omeka_root":{"config":{"env": "OMEKA"}},
         "wikidata_root":{"config":{"env": "WIKIDATA"}},
-        "mapping_root":{"config":{"env": "MAPPING"}}
+        "mapping_root":{"config":{"env": "MAPPING"}},
+        "portals_root": {"config": {"env": "PORTALS"}},
+    },
+    "solids": {
+        "export_html": {"config": {"env": "INDEX"}},
+    },
+}
+
+preset_html = {
+    "resources": {
+        "camera_root":{"config":{"env": "CAMERA"}},
+        "portals_root": {"config": {"env": "PORTALS"}},
+        "cumulus_root":{"config":{"env": "CUMULUS"}},
+        "images_root":{"config":{"env": "IMAGES"}},
+        "omeka_root":{"config":{"env": "OMEKA"}},
+        "wikidata_root":{"config":{"env": "WIKIDATA"}}
     },
     "solids": {
         "export_html": {"config": {"env": "INDEX"}},
@@ -37,6 +52,7 @@ preset = {
                 "images_root": root_input_csv,
                 "omeka_root": root_input_csv,
                 "mapping_root": root_input_csv,
+                "portals_root": root_input_csv
             },
         )
     ],
@@ -45,9 +61,14 @@ preset = {
             "default",
             run_config=preset,
             mode="default",
+        ),
+        dg.PresetDefinition(
+            "preset_html",
+            run_config=preset_html,
+            solid_selection=["format_values_chart","create_hbar","create_pie","export_html"],
+            mode="default",
         )
-    ],
-)
+    ])
 def export_pipeline():
 
     export_df = load_metadata()
@@ -62,7 +83,7 @@ def export_pipeline():
     wikidata_df = organise_creator(quickstate=wikidata_df)
 
     # index.html
-    values = format_values_chart(export_df)
+    values = format_values_chart()
     plot_hbar = create_hbar(values)
     plot_pie = create_pie(values)
     graph_html = export_html(plot_hbar, plot_pie)

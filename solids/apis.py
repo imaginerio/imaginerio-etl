@@ -77,13 +77,6 @@ def omeka_dataframe(context, results: dict):
         return omeka_df.set_index("Source ID")
 
 
-# @dg.solid(output_defs=[dg.OutputDefinition(
-#     io_manager_key="pandas_csv", name="api_omeka")])
-# def validate_omeka(context, df: api_omeka_dataframe_types):
-#     name = context.name
-#     print(name.upper(), " valid")
-#     return df.set_index("Source ID")
-
 # WIKIDATA
 
 
@@ -174,7 +167,7 @@ def wikidata_dataframe(context, results):
 
         wikidata_df = wikidata_df.rename(columns={"id": "Source ID"})
 
-        return wikidata_df
+        return wikidata_df.set_index("Source ID")
 
 
 # PORTALS

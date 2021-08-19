@@ -19,6 +19,8 @@ xlrd = "*"
 turfpy = "*"
 validator-collection = "*"
 tqdm = "*"
+dagster-pandas = "*"
+validators = "*"
 
 [dev-packages]
 autopep8 = "*"
