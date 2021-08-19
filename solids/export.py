@@ -3,11 +3,14 @@ import shutil
 from datetime import datetime as dt
 from pathlib import Path
 from copy import deepcopy
+import dagster_pandas as dp
 
 import dagster as dg
 import geojson
 import numpy as np
 import pandas as pd
+from tests.dataframe_types import *
+from tests.objects_types import *
 
 from dagster.core.definitions import solid
 from bokeh.layouts import layout
@@ -28,9 +31,10 @@ from bokeh.models import (
         dg.InputDefinition("metadata", root_manager_key="metadata_root"),
         dg.InputDefinition("camera", root_manager_key="camera_root"),
         dg.InputDefinition("cumulus", root_manager_key="cumulus_root")
-    ]
+    ],
+    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)]
 )
-def load_metadata(_,metadata,camera,cumulus):
+def load_metadata(_,metadata: dp.DataFrame,camera: main_dataframe_types,cumulus: main_dataframe_types):
     camera_df = camera[["Source ID","heading","tilt","altitude","fov"]]
     cumulus_df = cumulus[["Source ID","datetime","date_accuracy"]]
     cumulus_df["datetime"] = pd.to_datetime(cumulus_df["datetime"])
@@ -42,10 +46,11 @@ def load_metadata(_,metadata,camera,cumulus):
 
     return export_df
 
+
 @dg.solid(input_defs=[
     dg.InputDefinition("smapshot", root_manager_key="smapshot_root"),
-    dg.InputDefinition("mapping", root_manager_key="mapping_root")])
-def organize_columns_to_omeka(_, df, smapshot, mapping):
+    dg.InputDefinition("mapping", root_manager_key="mapping_root")], output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mapping: dp.DataFrame):
 
     def string2url(string):
         if "||Stereoscopy" in string:
@@ -63,12 +68,11 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
     def translateString (string):
         if "||Stereoscopy" in string:
             string = string.split("||")[0]
-            kw = mapping.loc[string,"Label:pt"]
+            kw = mapping.loc[string, "Label:pt"]
             return kw + "||Estereoscopia"
         else:
-            kw = mapping.loc[string,"Label:pt"]
+            kw = mapping.loc[string, "Label:pt"]
             return kw
-
 
     # filter items
     omeka_df = df.loc[
@@ -89,8 +93,9 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
     omeka_df["dcterms:type:pt"] = omeka_df["Type"]
 
     # format data
-    omeka_df["Source URL"] = omeka_df["Source URL"] +" "+ omeka_df["Source"]
-    omeka_df["Wikidata ID"] = "www.wikidata.org/wiki/" + omeka_df["Wikidata ID"] + " Wikidata"
+    omeka_df["Source URL"] = omeka_df["Source URL"] + " " + omeka_df["Source"]
+    omeka_df["Wikidata ID"] = "www.wikidata.org/wiki/" + \
+        omeka_df["Wikidata ID"] + " Wikidata"
     include = omeka_df["Source ID"].isin(smapshot["id"])
     omeka_df.loc[include, "Item Set"] = omeka_df["Item Set"] + "||smapshot"
 
@@ -119,9 +124,9 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
             "Wikidata ID": "dcterms:hasVersion",
             "Depicts": "foaf:depicts",
             "Media URL": "media",
-            "Latitude":"latitude",
-            "Longitude":"longitude",
-            "Item Set":"item_sets"
+            "Latitude": "latitude",
+            "Longitude": "longitude",
+            "Item Set": "item_sets"
         }
     )
 
@@ -158,23 +163,24 @@ def organize_columns_to_omeka(_, df, smapshot, mapping):
 
 
 @dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="import_omeka")],
+    output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="import_omeka", dagster_type=dp.DataFrame)],
 )
-def import_omeka_dataframe(_, df):
+def import_omeka_dataframe(_, df: dp.DataFrame):
     omeka_df = df
     omeka_df.name = "import_omeka"
 
     return omeka_df.set_index("dcterms:identifier")
 
 
-@dg.solid(input_defs=[dg.InputDefinition("mapping", root_manager_key="mapping_root")])
-def make_df_to_wikidata(_, df,mapping):
+@dg.solid(input_defs=[dg.InputDefinition("mapping", root_manager_key="mapping_root")], output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
 
     def string2qid(string):
         if "||Stereoscopy" or "||Estereoscopia" in string:
             string = string.split("||")[0]
             QID = mapping.loc[string, "Wiki ID"]
-            return QID +"||Q35158"
+            return QID + "||Q35158"
         else:
             QID = mapping.loc[string, "Wiki ID"]
             return QID
@@ -185,8 +191,8 @@ def make_df_to_wikidata(_, df,mapping):
     df = df.dropna(subset=["Item Set"])
     df[["First Year", "Last Year"]] = df[["First Year", "Last Year"]].applymap(lambda x: str(int(x)), na_action="ignore")
 
-    mapping.set_index("Label:en",inplace=True)
-    
+    mapping.set_index("Label:en", inplace=True)
+
     df["First Year"] = pd.to_datetime(df["First Year"])
     df["Last Year"] = pd.to_datetime(df["Last Year"])
 
@@ -278,17 +284,19 @@ def make_df_to_wikidata(_, df,mapping):
     # quickstate["P6216"]
 
     # format data P186 and P2079
-    quickstate[["P186","P2079"]] = quickstate[["P186","P2079"]].applymap(string2qid,na_action="ignore")
+    quickstate[["P186", "P2079"]] = quickstate[["P186", "P2079"]
+                                               ].applymap(string2qid, na_action="ignore")
 
     return quickstate
 
 
 @dg.solid(
     output_defs=[
-        dg.OutputDefinition(io_manager_key="pandas_csv", name="import_wikidata")
+        dg.OutputDefinition(io_manager_key="pandas_csv",
+                            name="import_wikidata", dagster_type=dp.DataFrame)
     ]
 )
-def organise_creator(_, quickstate):
+def organise_creator(_, quickstate: dp.DataFrame):
     creators = {
         "Augusto Malta": "Q16495239",
         "Anônimo": "Q4233718",
@@ -352,9 +360,10 @@ def organise_creator(_, quickstate):
     dg.InputDefinition("camera", root_manager_key="camera_root"),
     dg.InputDefinition("images", root_manager_key="images_root"),
     dg.InputDefinition("omeka", root_manager_key="omeka_root"),
-    dg.InputDefinition("wikidata", root_manager_key="wikidata_root")])
+    dg.InputDefinition("wikidata", root_manager_key="wikidata_root")],
+    output_defs=[dg.OutputDefinition(dagster_type=list)])
 
-def format_values_chart(context, cumulus,camera,images,omeka,wikidata):
+def format_values_chart(context, cumulus: main_dataframe_types,camera: main_dataframe_types,images: main_dataframe_types,omeka: main_dataframe_types,wikidata:main_dataframe_types):
 
     # kml finished
     val_kml = len(camera[camera["geometry"].notna()])
@@ -406,7 +415,7 @@ def format_values_chart(context, cumulus,camera,images,omeka,wikidata):
 
 
 @dg.solid
-def create_hbar(context, values):
+def create_hbar(context, values: list):
 
     # construct a data source
     list1 = ["Done_orange", "Done_blue", "To do"]
@@ -510,7 +519,7 @@ def create_hbar(context, values):
 
 
 @dg.solid
-def create_pie(context, values):
+def create_pie(context, values: list):
     # construct a data source
     values_pie = values[1]
     total = 20000
@@ -519,7 +528,8 @@ def create_pie(context, values):
 
     a = {"To do": 100 - x, "Done": x}
 
-    datas = pd.Series(a).reset_index(name="value").rename(columns={"index": "data"})
+    datas = pd.Series(a).reset_index(
+        name="value").rename(columns={"index": "data"})
     datas["angle"] = (360 * datas["value"]) / 100
     datas["color"] = ["lightgrey", "orange"]
 
