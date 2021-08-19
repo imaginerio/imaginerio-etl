@@ -1,16 +1,21 @@
-import urllib
 import os
+import urllib
 from time import sleep
+from typing import Dict
 
 import dagster as dg
+import dagster_pandas as dp
 import pandas as pd
 import requests
 from requests.adapters import HTTPAdapter
+from tests.dataframe_types import *
+from tests.objects_types import *
+from tqdm import tqdm
 from urllib3.util import Retry
 
 
 # OMEKA
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=dict)])
 def query_omeka(context):
     endpoint = context.solid_config
 
@@ -32,7 +37,8 @@ def query_omeka(context):
     l1,l2 = [],[]
     page = 1
     while response != []:
-        response = http.get(endpoint, params={"page": page, "per_page": 250}).json()
+        response = http.get(
+            endpoint, params={"page": page, "per_page": 250}).json()
 
         for item in response:
             try:
@@ -48,12 +54,12 @@ def query_omeka(context):
     return results
 
 
-@dg.solid(config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_omeka")]
-)
-def omeka_dataframe(context, results):
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(
+    io_manager_key="pandas_csv", name="api_omeka")])
+def omeka_dataframe(context, results: dict):
+    print(type(results))
     path_output = context.solid_config
-    path = os.path.join(path_output,"duplicated-omeka.csv")
+    path = os.path.join(path_output, "duplicated-omeka.csv")
     if results == None:
         context.log.info("Couldn't update")
         return None
@@ -71,7 +77,16 @@ def omeka_dataframe(context, results):
         return omeka_df.set_index("Source ID")
 
 
+# @dg.solid(output_defs=[dg.OutputDefinition(
+#     io_manager_key="pandas_csv", name="api_omeka")])
+# def validate_omeka(context, df: api_omeka_dataframe_types):
+#     name = context.name
+#     print(name.upper(), " valid")
+#     return df.set_index("Source ID")
+
 # WIKIDATA
+
+
 @dg.solid(config_schema=dg.StringSource)
 def query_wikidata(context):
     endpoint = context.solid_config
@@ -102,7 +117,8 @@ def query_wikidata(context):
         http.mount("https://", adapter)
         http.mount("http://", adapter)
 
-        response = http.get(endpoint, params={"format": "json", "query": query})
+        response = http.get(
+            endpoint, params={"format": "json", "query": query})
         data = response.json()
         return data
 
@@ -111,9 +127,8 @@ def query_wikidata(context):
         return None
 
 
-@dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_wikidata")]
-)
+@dg.solid(output_defs=[dg.OutputDefinition(
+    io_manager_key="pandas_csv", name="api_wikidata")])
 def wikidata_dataframe(context, results):
     if results == None:
         context.log.info("Couldn't update")
@@ -121,7 +136,7 @@ def wikidata_dataframe(context, results):
 
     else:
         ls = []
-        for result in results["results"]["bindings"]:
+        for result in tqdm(results["results"]["bindings"], desc="Results"):
             dic = {}
             for key in result:
                 dic[f"{key}"] = result[f"{key}"]["value"]
@@ -135,7 +150,8 @@ def wikidata_dataframe(context, results):
 
         wikidata_df.drop(columns=["depict", "depictLabel"], inplace=True)
 
-        wikidata_df = wikidata_df.groupby("id", as_index=False).agg(lambda x: set(x))
+        wikidata_df = wikidata_df.groupby(
+            "id", as_index=False).agg(lambda x: set(x))
 
         def concat(a_set):
             list_of_strings = [str(s) for s in a_set]
@@ -158,11 +174,11 @@ def wikidata_dataframe(context, results):
 
         wikidata_df = wikidata_df.rename(columns={"id": "Source ID"})
 
-        return wikidata_df.set_index("Source ID")
+        return wikidata_df
 
 
 # PORTALS
-@dg.solid(config_schema=dg.StringSource)
+@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
 def query_portals(context):
     endpoint = context.solid_config
 
@@ -180,7 +196,7 @@ def query_portals(context):
 
     dataframe = pd.DataFrame()
 
-    for i in API_STEPS:
+    for i in tqdm(API_STEPS, desc="Steps"):
 
         payload = {
             "table": "AssetRecords",
@@ -199,10 +215,10 @@ def query_portals(context):
 
 
 @dg.solid(
-    config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_portals")],
+    config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="api_portals")]
 )
-def portals_dataframe(context, results):
+def portals_dataframe(context, results: dp.DataFrame):
     if isinstance(results, pd.DataFrame):
         prefix = context.solid_config
         dataframe = pd.DataFrame()
@@ -217,7 +233,8 @@ def portals_dataframe(context, results):
             }
         )
 
-        dataframe["Source ID"] = dataframe["Source ID"].str.split(".", n=1, expand=True)[0]
+        dataframe["Source ID"] = dataframe["Source ID"].str.split(
+            ".", n=1, expand=True)[0]
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 
@@ -232,8 +249,6 @@ def portals_dataframe(context, results):
         ]
 
         portals_df = portals_df.drop_duplicates(subset="Source ID")
-
-        portals_df.name = "api_portals"
 
         return portals_df.set_index("Source ID")
 

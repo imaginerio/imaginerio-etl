@@ -3,21 +3,42 @@ import subprocess
 from xml.etree import ElementTree
 
 import dagster as dg
+import dagster_pandas as dp
 import geojson
 import geopandas as gpd
+import numpy as np
 import pandas as pd
+from dagster import config
+from dagster.core.definitions import output
+from numpy.core.numeric import NaN
+from numpy.lib.arraysetops import isin
+from tests.dataframe_types import *
+from tests.objects_types import *
 
 
 class PandasCsvIOManager(dg.IOManager):
     def load_input(self, context):
-        obj_name = context.upstream_output.name
+        file_path = os.path.join(
+            "data", "output", context.upstream_output.name)
+        df = pd.read_csv(file_path + ".csv", error_bad_lines=False)
 
-        if obj_name.startswith("imp"):
-            file_path = os.path.join("data", "output", context.upstream_output.name)
-        else:
-            file_path = os.path.join("data", "output", context.upstream_output.name)
+        to_convert = {
+            "SSID": function_int,
+            "First Year": function_int,
+            "Last Year": function_int,
+            "Smapshot ID": function_int,
+            "Width (mm)": function_int,
+            "Height (mm)": function_int,
+        }
+        conversion = {}
+        for column in df.columns:
+            if column in to_convert.keys():
+                conversion[column] = to_convert[column]
+            else:
+                pass
 
-        return pd.read_csv(file_path + ".csv", index_col="Source ID")
+        return pd.read_csv(
+            file_path + ".csv", error_bad_lines=False, converters=conversion, index_col="Source ID")
 
     def handle_output(self, context, obj):
         obj_name = context.name
@@ -70,7 +91,8 @@ def df_csv_io_manager(init_context):
 
 class GeojsonIOManager(dg.IOManager):
     def load_input(self, context):
-        file_path = os.path.join("data", "output", context.upstream_output.name)
+        file_path = os.path.join(
+            "data", "output", context.upstream_output.name)
         return gpd.read_file(file_path + ".geojson")  # retorno um df
 
     def handle_output(self, context, feature_collection):
@@ -89,22 +111,21 @@ def geojson_io_manager(init_context):
     return GeojsonIOManager()
 
 
-@dg.solid
-def rename_column(context, df, dic):
-    df = df.rename(columns=dic)
-    return df
-
-
 @dg.solid(
-    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")],
+    input_defs=[dg.InputDefinition(
+        "metadata", root_manager_key="metadata_root")],
+    output_defs=[dg.OutputDefinition(
+        io_manager_key="pandas_csv", name="metadata", dagster_type=dp.DataFrame)],
 )
-def update_metadata(_, df, metadata):
+def update_metadata(context, df: main_dataframe_types, metadata: metadata_dataframe_types):
+
+    # find itens how not are found on metadata
+    filter = df["Source ID"].isin(metadata["Source ID"])
+    review = list(df["Source ID"].loc[~filter])
+    context.log.info(f"{len(review)} Itens to review: {review}")
+
     metadata.set_index("Source ID", inplace=True)
     metadata.update(df)
-    metadata[["First Year", "Last Year"]] = metadata[
-        ["First Year", "Last Year"]
-    ].applymap(lambda x: x if pd.isnull(x) else str(int(x)))
     return metadata
 
 
@@ -113,15 +134,36 @@ def df_csv_io_manager(init_context):
     return PandasCsvIOManager()
 
 
+def function_int(x): return str(str(x).split(".")[0]) if x else np.nan
+
+
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_xls(context):
     path = context.resource_config
-    return pd.read_excel(path)
+    return pd.read_excel(path, converters={"First Year[19466]": function_int, "Last Year[19467]": function_int})
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_csv(context):
-    return pd.read_csv(context.resource_config)
+    df = pd.read_csv(context.resource_config, error_bad_lines=False)
+
+    to_convert = {
+        "SSID": function_int,
+        "First Year": function_int,
+        "Last Year": function_int,
+        "Smapshot ID": function_int,
+        "Width (mm)": function_int,
+        "Height (mm)": function_int,
+    }
+    conversion = {}
+    for column in df.columns:
+        if column in to_convert.keys():
+            conversion[column] = to_convert[column]
+        else:
+            pass
+
+    return pd.read_csv(
+        context.resource_config, error_bad_lines=False, converters=conversion)
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
@@ -186,4 +228,5 @@ def push_new_data(context):
         )
 
         output, errors = git_cli_etl.communicate()
-        context.log.info(f"command: {command} \noutput: {output} \nERRO: {errors}")
+        context.log.info(
+            f"command: {command} \noutput: {output} \nERRO: {errors}")
