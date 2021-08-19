@@ -291,7 +291,7 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
     input_defs=[dg.InputDefinition(
         "metadata", root_manager_key="metadata_root")], output_defs=[dg.OutputDefinition(dagster_type=type_list_of_features)]
 )
-def create_feature(context, kmls: type_list_of_features, metadata: metadata_dataframe_types):
+def create_feature(context, kmls: type_list_of_kmls, metadata: metadata_dataframe_types):
     new_features = []
     processed_ids = []
     metadata["upper_ids"] = metadata["Source ID"].str.upper()

@@ -52,13 +52,13 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
                                                    right, how="left", on='Source ID'), dfs)
 
     # find itens who are not in metadata
-    def review_itens(df1, df2):
+    def review_items(df1, df2):
         filter = df2["Source ID"].isin(df1["Source ID"])
         review = list(df2["Source ID"].loc[~filter])
-        context.log.info(f"{len(review)} Itens to review on :  {review}")
+        context.log.info(f"{len(review)} Items to review on :  {review}")
 
-    review_itens(metadata, camera_new)
-    review_itens(metadata, images)
+    review_items(metadata, camera_new)
+    review_items(metadata, images)
 
     metadata_new = metadata[
         [
@@ -96,17 +96,14 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
 
 
 @ dg.solid(
-    input_defs=[dg.InputDefinition(
-        "jstor", root_manager_key="jstor_root", dagster_type=pd.DataFrame)],
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata"
-
-                                     )])
+    input_defs=[dg.InputDefinition( "jstor", root_manager_key="jstor_root", dagster_type=pd.DataFrame)],
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")])
 def metadata_jstor(context, jstor, metadata):
-        jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]','',x)) 
-        jstor["Source ID"] = jstor["SSID"]
-        jstor["Item Set"] = jstor["Item Set"].fillna("All")
-        jstor.loc[~jstor["Item Set"].str.contains("All"),"Item Set"] = jstor["Item Set"].astype(str) + "||All"
-        metadata = metadata.append(jstor)
+    jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]','',x)) 
+    jstor["Source ID"] = jstor["SSID"]
+    jstor["Item Set"] = jstor["Item Set"].fillna("All")
+    jstor.loc[~jstor["Item Set"].str.contains("All"),"Item Set"] = jstor["Item Set"].astype(str) + "||All"
+    metadata = metadata.append(jstor)
 
     metadata_new = metadata[
         [
