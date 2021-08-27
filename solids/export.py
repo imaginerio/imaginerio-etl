@@ -76,7 +76,7 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
 
     # filter items
     omeka_df = df.loc[
-        (df["Source"]!= "Instituto Moreira Salles") | (df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna())]  
+        (df["Source"]== "Instituto Moreira Salles") & (df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna())]  
     omeka_df = omeka_df.dropna(subset=["Item Set"])
     mapping.set_index("Label:en",inplace=True)
     omeka_df[["First Year", "Last Year"]] = omeka_df[
@@ -97,7 +97,7 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
     omeka_df["Wikidata ID"] = "www.wikidata.org/wiki/" + \
         omeka_df["Wikidata ID"] + " Wikidata"
     include = omeka_df["Source ID"].isin(smapshot["id"])
-    omeka_df.loc[include, "Item Set"] = omeka_df["Item Set"] + "||smapshot"
+    omeka_df.loc[include, "Item Set"] = omeka_df["Item Set"] + "||Smapshot"
 
     omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]] = omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]].applymap(
         string2url,na_action="ignore")
