@@ -23,6 +23,7 @@ from bokeh.models import (
     Row,
     HoverTool,
     Span,
+    Title,
 )
 
 
@@ -409,7 +410,7 @@ def format_values_chart(context, cumulus: main_dataframe_types,portals: main_dat
             val_img_total - val_img,
             val_kml_total,
         ],
-        "y": ["Omeka-S", "Wikimedia", "Cumulus", "HiRes Images", "KML"],
+        "y": ["Omeka-S", "Wiki", "Cumulus", "HiRes Images", "KML"],
     }
 
     values_pie = [val_omeka, val_wiki, val_meta, val_img, val_kml]
@@ -438,7 +439,7 @@ def create_hbar(context, values: list):
                 "Not geolocated",
             ],
             "tooltip_b-o": [
-                "Published",
+                "IMS items published",
                 "Commons and Wikidata",
                 "On IMS' Cumulus Portals",
                 "Geolocated",
@@ -454,12 +455,17 @@ def create_hbar(context, values: list):
         ]
 
     plot_hbar = figure(
+        title="Situated Views of Rio de Janeiro",
         y_range=values_hbar["y"],
         x_range=(0, 6000),
         plot_height=300,
         plot_width=900,
         toolbar_location=None,
     )
+
+    plot_hbar.title.text_font_size="25px"
+    plot_hbar.title.text_font_style="bold"
+    plot_hbar.add_layout(Title(text="Project Progress",align="left", text_font_size="15px",text_font_style="bold"),"above")
 
     # construct bars with differents colors
     hbar_1 = plot_hbar.hbar(
