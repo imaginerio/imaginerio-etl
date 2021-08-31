@@ -36,6 +36,10 @@ from bokeh.models import (
     output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)]
 )
 def load_metadata(_,metadata: dp.DataFrame,camera: main_dataframe_types,cumulus: main_dataframe_types):
+    """
+    Merge relevant dataframes to access objects
+    status and properties
+    """
     camera_df = camera[["Source ID","heading","tilt","altitude","fov"]]
     cumulus_df = cumulus[["Source ID","datetime","date_accuracy"]]
     cumulus_df["datetime"] = pd.to_datetime(cumulus_df["datetime"])
@@ -343,6 +347,10 @@ def organise_creator(_, quickstate: dp.DataFrame):
     }
 
     def name2qid(name):
+        """
+        Takes a string and returns the
+        corresponding Wikidata QID
+        """
         try:
             qid = creators[f"{name}"]
         except KeyError:
@@ -422,6 +430,10 @@ def format_values_chart(context, cumulus: main_dataframe_types,portals: main_dat
 
 @dg.solid
 def create_hbar(context, values: list):
+    """
+    Build bar graph stating progress
+    in each area
+    """
 
     # construct a data source
     list1 = ["Done_orange", "Done_blue", "To do"]
@@ -531,6 +543,10 @@ def create_hbar(context, values: list):
 
 @dg.solid
 def create_pie(context, values: list):
+    """
+    Build pie chart stating project's progress
+    """
+
     # construct a data source
     values_pie = values[1]
     total = 20000
@@ -579,6 +595,9 @@ def create_pie(context, values: list):
 
 @dg.solid(config_schema=dg.StringSource)
 def export_html(context, plot_hbar, plot_pie):
+    """
+    Create dashboard HTML page
+    """
     path = context.solid_config
 
     output_file(path, title="Situated Views - Progress Dashboard")

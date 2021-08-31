@@ -17,7 +17,9 @@ from solids.exiftool import ExifTool
 
 class Image:
 
-    """Original image path. Attributes return id, jpg or tif extension."""
+    """
+    Original image path. Attributes return id, jpg or tif extension.
+    """
 
     def __init__(self, path):
         self.path = path
@@ -28,10 +30,15 @@ class Image:
 
 @dg.solid(
     config_schema=dg.StringSource,
-    input_defs=[dg.InputDefinition(
-        "metadata", root_manager_key="metadata_root")], output_defs=[dg.OutputDefinition(dagster_type=dict)]
+    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
+    output_defs=[dg.OutputDefinition(dagster_type=dict)],
 )
 def file_picker(context, metadata: dp.DataFrame):
+    """
+    Walks directory tree and glob relevant files.
+    Returns dictionary with geolocated, backlog
+    and files for review
+    """
     source = context.solid_config
     metadata["Source ID"] = metadata["Source ID"].str.upper()
     has_kml = list(metadata.loc[metadata["Latitude"].notna(), "Source ID"])
@@ -46,8 +53,11 @@ def file_picker(context, metadata: dp.DataFrame):
     ]
 
     geolocated = [img for img in image_list if img.id.upper() in has_kml]
-    backlog = [img for img in image_list if img.id.upper(
-    ) in catalog and img.id.upper() not in has_kml]
+    backlog = [
+        img
+        for img in image_list
+        if img.id.upper() in catalog and img.id.upper() not in has_kml
+    ]
     review = [img for img in image_list if img.id.upper() not in catalog]
 
     context.log.info(
@@ -57,14 +67,20 @@ def file_picker(context, metadata: dp.DataFrame):
     return {"geolocated": geolocated, "backlog": backlog, "review": review}
 
 
-@dg.solid(config_schema={
-    "tiff": dg.StringSource,
-    "jpeg_hd": dg.StringSource,
-    "jpeg_sd": dg.StringSource,
-    "backlog": dg.StringSource,
-    "review": dg.StringSource,
-})
+@dg.solid(
+    config_schema={
+        "tiff": dg.StringSource,
+        "jpeg_hd": dg.StringSource,
+        "jpeg_sd": dg.StringSource,
+        "backlog": dg.StringSource,
+        "review": dg.StringSource,
+    }
+)
 def file_dispatcher(context, files: dict):
+    """
+    Copy failsafe TIFFs, generate high and low
+    res JPEGs, and separate files for review
+    """
 
     TIFF = context.solid_config["tiff"]
     JPEG_HD = context.solid_config["jpeg_hd"]
@@ -95,8 +111,7 @@ def file_dispatcher(context, files: dict):
                         im.thumbnail(size)
                         im.save(sd_path)
                 except OSError:
-                    context.log.info(
-                        f"Cannot create thumbnail for {infile.tif}")
+                    context.log.info(f"Cannot create thumbnail for {infile.tif}")
 
             if os.path.exists(review_path):
                 os.remove(review_path)
@@ -124,8 +139,7 @@ def file_dispatcher(context, files: dict):
             if image in [img.jpg for img in files["geolocated"]]:
                 if not os.path.exists(os.path.join(JPEG_SD, image)):
                     os.rename(
-                        os.path.join(IMG_BACKLOG, image), os.path.join(
-                            JPEG_SD, image)
+                        os.path.join(IMG_BACKLOG, image), os.path.join(JPEG_SD, image)
                     )
                 else:
                     os.remove(os.path.join(IMG_BACKLOG, image))
@@ -133,7 +147,7 @@ def file_dispatcher(context, files: dict):
                 continue
 
     def handle_review(infiles):
-        #current_hd = [os.path.join(JPEG_HD, img) for img in os.listdir(JPEG_HD) if img.split(".")[0] in files["review"]]
+        # current_hd = [os.path.join(JPEG_HD, img) for img in os.listdir(JPEG_HD) if img.split(".")[0] in files["review"]]
         for infile in tqdm(infiles, "Handling review..."):
             review_path = os.path.join(REVIEW, infile.jpg)
             tiff_path = os.path.join(TIFF, infile.tif)
@@ -158,20 +172,27 @@ def file_dispatcher(context, files: dict):
         if not os.path.exists(os.path.join(JPEG_HD, f"{file}_original"))
         and not file.endswith("_original")
     ]
-    #print("to_tag", type(to_tag))
+    # print("to_tag", type(to_tag))
     if to_tag:
         context.log.info(
-            f"Passed {len(to_tag)} images to be tagged. Path example: {to_tag[0]}")
+            f"Passed {len(to_tag)} images to be tagged. Path example: {to_tag[0]}"
+        )
     return to_tag
 
 
 @dg.solid(
     config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(
-        io_manager_key="pandas_csv", name="images", dagster_type=pd.DataFrame)],
+    output_defs=[
+        dg.OutputDefinition(
+            io_manager_key="pandas_csv", name="images", dagster_type=pd.DataFrame
+        )
+    ],
 )
 def create_images_df(context, files: dict):
-    """Creates a dataframe with every image available and links to full size and thumbnail"""
+
+    """
+    Creates a dataframe with every image available and links to full size and thumbnail
+    """
 
     hd = context.solid_config
     sd = hd + "sd/"
@@ -203,11 +224,13 @@ def create_images_df(context, files: dict):
 
 @dg.solid(
     config_schema=dg.StringSource,
-    input_defs=[dg.InputDefinition(
-        "metadata", root_manager_key="metadata_root")],
+    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
 )
 def write_metadata(context, metadata: dp.DataFrame, files_to_tag):
-
+    """
+    Write available metadata, including GPS tags,
+    to high-res JPEGs
+    """
     metadata.fillna(value="", inplace=True)
     metadata["Source ID"] = metadata["Source ID"].str.upper()
     metadata.set_index("Source ID", inplace=True)
@@ -221,12 +244,12 @@ def write_metadata(context, metadata: dp.DataFrame, files_to_tag):
             headline = metadata.loc[name.upper(), "Title"]
             caption = metadata.loc[name.upper(), "Description (Portuguese)"]
             objecttype = metadata.loc[name.upper(), "Type"]
-            #dimensions = f'{metadata.loc[name.upper(), "image_width"]}cm x {metadata.loc[name.upper(), "image_height"]}cm'
+            # dimensions = f'{metadata.loc[name.upper(), "image_width"]}cm x {metadata.loc[name.upper(), "image_height"]}cm'
             keywords = metadata.loc[name.upper(), "Depicts"].split("||")
             latitude = metadata.loc[name.upper(), "Latitude"]
             longitude = metadata.loc[name.upper(), "Longitude"]
-            #altitude = metadata.loc[name.upper(), "Altitude"]
-            #imgdirection = metadata.loc[name.upper(), "heading"]
+            # altitude = metadata.loc[name.upper(), "Altitude"]
+            # imgdirection = metadata.loc[name.upper(), "heading"]
 
             params = [
                 "-IPTC:Source=Instituto Moreira Salles/IMS",
@@ -256,7 +279,6 @@ def write_metadata(context, metadata: dp.DataFrame, files_to_tag):
                     param = param.encode(encoding="utf-8")
                     dest = item.encode(encoding="utf-8")
                     et.execute(param, dest)
-            
 
 
 @dg.solid

@@ -16,12 +16,23 @@ from tests.dataframe_types import *
 from tests.objects_types import *
 
 
+def function_int(x):
+    return str(str(x).split(".")[0]) if x else np.nan
+
+
 class PandasCsvIOManager(dg.IOManager):
+    """
+    CSV Input/Output Manager
+    """
+
     def load_input(self, context):
-        file_path = os.path.join(
-            "data", "output", context.upstream_output.name)
+        """
+        Loads DataFrame from CSV file
+        """
+        file_path = os.path.join("data", "output", context.upstream_output.name)
         df = pd.read_csv(file_path + ".csv", error_bad_lines=False)
 
+        # by default pandas converts int+nan columns to float
         to_convert = {
             "SSID": function_int,
             "First Year": function_int,
@@ -38,49 +49,72 @@ class PandasCsvIOManager(dg.IOManager):
                 pass
 
         return pd.read_csv(
-            file_path + ".csv", error_bad_lines=False, converters=conversion, index_col="Source ID")
+            file_path + ".csv",
+            error_bad_lines=False,
+            converters=conversion,
+            index_col="Source ID",
+        )
 
     def handle_output(self, context, obj):
+        """
+        Writes CSV from DataFrame
+        """
         obj_name = context.name
         obj.index = obj.index.astype(str)
         obj.sort_index(inplace=True)
         file_path = os.path.join("data", "output", obj_name)
         obj.to_csv(file_path + ".csv")
 
+        # emmit AssetMaterialization when saving metadata.csv
         if obj_name == "metadata":
             yield dg.AssetMaterialization(
                 asset_key=dg.AssetKey(obj_name),
                 description=f" {obj_name.upper()} was saved <----------------------",
-                metadata_entries=[dg.EventMetadataEntry.json(label="CSV",data={
-                    "total items": len(obj),
-                    "creators": len(obj[obj["Creator"].notna()]),
-                    "title": len(obj[obj["Title"].notna()]),
-                    "date": len(obj[obj["Date"].notna()]),
-                    "first year/last year": len(obj[obj["First Year"].notna()]),
-                    "geolocated": len(obj[obj["Latitude"].notna()]),
-                    "published on wikidata": len(obj[obj["Wikidata ID"].notna()])
-                })],
+                metadata_entries=[
+                    dg.EventMetadataEntry.json(
+                        label="CSV",
+                        data={
+                            "total items": len(obj),
+                            "creators": len(obj[obj["Creator"].notna()]),
+                            "title": len(obj[obj["Title"].notna()]),
+                            "date": len(obj[obj["Date"].notna()]),
+                            "first year/last year": len(obj[obj["First Year"].notna()]),
+                            "geolocated": len(obj[obj["Latitude"].notna()]),
+                            "published on wikidata": len(
+                                obj[obj["Wikidata ID"].notna()]
+                            ),
+                        },
+                    )
+                ],
             )
-        
+
         elif obj_name == "cumulus":
             yield dg.AssetMaterialization(
                 asset_key=dg.AssetKey(obj_name),
                 description=f" {obj_name.upper()} was saved <----------------------",
-                metadata_entries=[dg.EventMetadataEntry.json(label="CSV",data={
-                    "total items": len(obj),
-                    "creators": len(obj[obj["Creator"].notna()]),
-                    "title": len(obj[obj["Title"].notna()]),
-                    "date": len(obj[obj["Date"].notna()]),
-                    "first year/last year": len(obj[obj["First Year"].notna()]),
-                })],
+                metadata_entries=[
+                    dg.EventMetadataEntry.json(
+                        label="CSV",
+                        data={
+                            "total items": len(obj),
+                            "creators": len(obj[obj["Creator"].notna()]),
+                            "title": len(obj[obj["Title"].notna()]),
+                            "date": len(obj[obj["Date"].notna()]),
+                            "first year/last year": len(obj[obj["First Year"].notna()]),
+                        },
+                    )
+                ],
             )
-        
+
         else:
             yield dg.AssetMaterialization(
                 asset_key=dg.AssetKey(obj_name),
                 description=f" {obj_name.upper()} was saved <----------------------",
-                metadata_entries=[dg.EventMetadataEntry.json(label="CSV",data={
-                    "total items": len(obj)})],
+                metadata_entries=[
+                    dg.EventMetadataEntry.json(
+                        label="CSV", data={"total items": len(obj)}
+                    )
+                ],
             )
 
 
@@ -90,9 +124,12 @@ def df_csv_io_manager(init_context):
 
 
 class GeojsonIOManager(dg.IOManager):
+    """
+    GEOJSON Input/Output Manager
+    """
+
     def load_input(self, context):
-        file_path = os.path.join(
-            "data", "output", context.upstream_output.name)
+        file_path = os.path.join("data", "output", context.upstream_output.name)
         return gpd.read_file(file_path + ".geojson")  # retorno um df
 
     def handle_output(self, context, feature_collection):
@@ -112,42 +149,55 @@ def geojson_io_manager(init_context):
 
 
 @dg.solid(
-    input_defs=[dg.InputDefinition(
-        "metadata", root_manager_key="metadata_root")],
-    output_defs=[dg.OutputDefinition(
-        io_manager_key="pandas_csv", name="metadata", dagster_type=dp.DataFrame)],
+    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
+    output_defs=[
+        dg.OutputDefinition(
+            io_manager_key="pandas_csv", name="metadata", dagster_type=dp.DataFrame
+        )
+    ],
 )
-def update_metadata(context, df: main_dataframe_types, metadata: metadata_dataframe_types):
+def update_metadata(
+    context, df: main_dataframe_types, metadata: metadata_dataframe_types
+):
+    """
+    Overwrite metadata.csv with newly processed data
+    """
     df.reset_index(inplace=True)
     # find items how not are found on metadata
     filter = df["Source ID"].isin(metadata["Source ID"])
     review = list(df["Source ID"].loc[~filter])
     context.log.info(f"{len(review)} Items to review: {review}")
 
-    df.set_index("Source ID",inplace=True)
+    df.set_index("Source ID", inplace=True)
 
     metadata.set_index("Source ID", inplace=True)
     metadata.update(df)
-    
+
     return metadata
-
-
-@dg.io_manager
-def df_csv_io_manager(init_context):
-    return PandasCsvIOManager()
-
-
-def function_int(x): return str(str(x).split(".")[0]) if x else np.nan
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_xls(context):
+    """
+    Reads XLS file from project directory
+    instead of upstream solid
+    """
     path = context.resource_config
-    return pd.read_excel(path, converters={"First Year[19466]": function_int, "Last Year[19467]": function_int})
+    return pd.read_excel(
+        path,
+        converters={
+            "First Year[19466]": function_int,
+            "Last Year[19467]": function_int,
+        },
+    )
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_csv(context):
+    """
+    Reads CSV file from project directory
+    instead of upstream solid
+    """
     df = pd.read_csv(context.resource_config, error_bad_lines=False)
 
     to_convert = {
@@ -166,11 +216,16 @@ def root_input_csv(context):
             pass
 
     return pd.read_csv(
-        context.resource_config, error_bad_lines=False, converters=conversion)
+        context.resource_config, error_bad_lines=False, converters=conversion
+    )
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_xml(context):
+    """
+    Reads XML file from project directory
+    instead of upstream solid
+    """
     path = context.resource_config
     with open(path, encoding="utf8") as f:
         tree = ElementTree.parse(f)
@@ -180,17 +235,29 @@ def root_input_xml(context):
 
 @dg.root_input_manager(config_schema=dg.StringSource)
 def root_input_geojson(context):
+    """
+    Reads GEOJSON file from project directory
+    instead of upstream solid
+    """
     return gpd.read_file(context.resource_config)  # retorn geopandas
 
 
 @dg.solid
 def pull_new_data(context):
+    """
+    Update Git submodule
+    """
     comands = ["git", "submodule", "update", "--init", "--recursive"]
     pull = subprocess.Popen(comands)
 
 
 @dg.solid
 def push_new_data(context):
+    """
+    Push data to Git submodule
+    and commit changes to main
+    repository
+    """
     submodule_push = [
         "pwd",
         "git checkout main",
@@ -231,5 +298,4 @@ def push_new_data(context):
         )
 
         output, errors = git_cli_etl.communicate()
-        context.log.info(
-            f"command: {command} \noutput: {output} \nERRO: {errors}")
+        context.log.info(f"command: {command} \noutput: {output} \nERRO: {errors}")
