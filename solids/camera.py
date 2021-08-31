@@ -24,10 +24,17 @@ load_dotenv(override=True)
 
 
 def find_with_re(property, kml):
+    """
+    Utility function to find KML properties using regex
+    """
     return re.search(f"(?<=<{property}>).+(?=<\/{property}>)", kml).group(0)
 
 
 def reproject(coordinates, inverse=False):
+    """
+    Transform Rio's geographic to world
+    coordinates or vice-versa with inverse=True
+    """
     rj = Proj("EPSG:32722")
     origin = Point(coordinates)
     origin_proj = rj(origin.x, origin.y, inverse=inverse)
@@ -36,6 +43,9 @@ def reproject(coordinates, inverse=False):
 
 
 def query_wikidata(Q):
+    """
+    Query Wikidata's SPARQL endpoint for entities' coordinates
+    """
     endpoint_url = "https://query.wikidata.org/sparql"
 
     query = """SELECT ?coordinate
@@ -66,6 +76,10 @@ def query_wikidata(Q):
 
 
 def get_radius(kml):
+    """
+    Calculate viewcone radius using Wikidata depicts
+    or trigonometry if not available
+    """
     with open(kml, "r") as f:
         KML = parser.parse(f).getroot()
 
@@ -123,8 +137,11 @@ def get_radius(kml):
     return radius
 
 
-def draw_feature(kml, properties, radius=.2):
-
+def draw_feature(kml, properties, radius=0.2):
+    """
+    Use pre-obtained radius to draw circular sector
+    (viewcone) for each image
+    """
     with open(kml, "r") as f:
         KML = parser.parse(f).getroot()
 
@@ -140,13 +157,24 @@ def draw_feature(kml, properties, radius=.2):
     else:
         pass
 
-    cone = sector(center, radius, start_angle, end_angle, options={
-                  "properties": properties, "steps": 200})
+    cone = sector(
+        center,
+        radius,
+        start_angle,
+        end_angle,
+        options={"properties": properties, "steps": 200},
+    )
     return cone
 
 
-@dg.solid(config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)])
+@dg.solid(
+    config_schema=dg.StringSource,
+    output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)],
+)
 def get_list(context):
+    """
+    List KML files to be processed
+    """
     path = context.solid_config
     path_gitkeep = os.path.join(path, ".gitkeep")
     list_kmls = os.listdir(path)
@@ -159,8 +187,13 @@ def get_list(context):
     return list_kmls
 
 
-@dg.solid(config_schema={"new_single": dg.StringSource, "processed_raw": dg.StringSource})
+@dg.solid(
+    config_schema={"new_single": dg.StringSource, "processed_raw": dg.StringSource}
+)
 def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False):
+    """
+    Split <folder> KMLs into individual ones
+    """
     path_new_single = context.solid_config["new_single"]
     path_processed_raw = context.solid_config["processed_raw"]
     splited_kmls = []
@@ -173,8 +206,7 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
             if re.search("<Folder>", txt):
                 header = "\n".join(txt.split("\n")[:2])
                 photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
-                photooverlays[-1] = re.sub("</Folder>\n</kml>",
-                                           "", photooverlays[-1])
+                photooverlays[-1] = re.sub("</Folder>\n</kml>", "", photooverlays[-1])
 
         for po in photooverlays:
             filename = find_with_re("name", po)
@@ -184,11 +216,16 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
             os.remove(os.path.abspath(kml))
         shutil.move(kml, path_processed_raw)
 
+
 @dg.solid(
     config_schema=dg.StringSource,
     input_defs=[dg.InputDefinition("cumulus", root_manager_key="cumulus_root")],
-    output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)])
-def rename_single(context,cumulus:main_dataframe_types):
+    output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)],
+)
+def rename_single(context, cumulus: main_dataframe_types):
+    """
+    Check for changes in identifiers and correct filename
+    """
     path = context.solid_config
     path_gitkeep = os.path.join(path, ".gitkeep")
     kmls = [
@@ -203,15 +240,18 @@ def rename_single(context,cumulus:main_dataframe_types):
             txt = f.read()
             filename = find_with_re("name", txt)
             if filename not in cumulus["Source ID"]:
-                loc = cumulus.loc[cumulus["preliminary id"].str.contains(filename,na=False),"Source ID"]
+                loc = cumulus.loc[
+                    cumulus["preliminary id"].str.contains(filename, na=False),
+                    "Source ID",
+                ]
                 if not loc.empty:
                     new_filename = loc.item()
-                    txt = re.sub("(?<=<name>).+(?=<\/name>)",new_filename, txt)
-                    with open(os.path.join(path,new_filename + ".kml"),"w") as k:
+                    txt = re.sub("(?<=<name>).+(?=<\/name>)", new_filename, txt)
+                    with open(os.path.join(path, new_filename + ".kml"), "w") as k:
                         k.write(txt)
                     context.log.info(f"Renamed: {filename} > {new_filename}")
-                    if os.path.exists(os.path.join(path,filename + ".kml")):
-                        os.remove(os.path.join(path,filename + ".kml"))
+                    if os.path.exists(os.path.join(path, filename + ".kml")):
+                        os.remove(os.path.join(path, filename + ".kml"))
                 else:
                     context.log.info(f"Not renamed: {filename}")
 
@@ -224,8 +264,13 @@ def rename_single(context,cumulus:main_dataframe_types):
 
     return list_kmls
 
+
 @dg.solid(output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)])
 def change_img_href(context, list_kmls: type_list_of_kmls):
+    """
+    Substitute local image file link used for
+    geolocating by public IIIF Image API
+    """
     for kml in list_kmls:
         with open(kml, "r+") as f:
             txt = f.read()
@@ -244,7 +289,11 @@ def change_img_href(context, list_kmls: type_list_of_kmls):
 
 @dg.solid(output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)])
 def correct_altitude_mode(context, kmls: type_list_of_kmls):
-
+    """
+    Check for KMLs with altitude relative to ground,
+    query Mapbox-terrain-rgb and change for relative
+    to sea level (absolute)
+    """
     for kml in kmls:
         with open(kml, "r+") as f:
             txt = f.read()
@@ -254,8 +303,7 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
                 alt = round(float(find_with_re("altitude", txt)), 5)
                 z = 15
                 tile = mercantile.tile(lng, lat, z)
-                westmost, southmost, eastmost, northmost = mercantile.bounds(
-                    tile)
+                westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
                 pixel_column = np.interp(lng, [westmost, eastmost], [0, 256])
                 pixel_row = np.interp(lat, [southmost, northmost], [256, 0])
                 tile_img = Image.open(
@@ -271,8 +319,7 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
                 txt = re.sub(
                     "(?<=<altitudeMode>).+(?=<\/altitudeMode>)", "absolute", txt
                 )
-                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)",
-                             f"{new_height}", txt)
+                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)", f"{new_height}", txt)
                 txt = re.sub(
                     "(?<=<coordinates>).+(?=<\/coordinates>)",
                     f"{lng},{lat},{new_height}",
@@ -288,10 +335,15 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
 
 
 @dg.solid(
-    input_defs=[dg.InputDefinition(
-        "metadata", root_manager_key="metadata_root")], output_defs=[dg.OutputDefinition(dagster_type=type_list_of_features)]
+    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
+    output_defs=[dg.OutputDefinition(dagster_type=type_list_of_features)],
 )
-def create_feature(context, kmls: type_list_of_kmls, metadata: metadata_dataframe_types):
+def create_feature(
+    context, kmls: type_list_of_kmls, metadata: metadata_dataframe_types
+):
+    """
+    Build GEOJSON Feature with metadata and viewcone polygon
+    """
     new_features = []
     processed_ids = []
     metadata["upper_ids"] = metadata["Source ID"].str.upper()
@@ -305,44 +357,32 @@ def create_feature(context, kmls: type_list_of_kmls, metadata: metadata_datafram
                 Id = (str(KML.PhotoOverlay.name)).upper()
                 properties = {
                     "Source ID": metadata.loc[Id, "Source ID"],
-
                     "Title": ""
                     if pd.isna(metadata.loc[Id, "Title"])
                     else str(metadata.loc[Id, "Title"]),
-
                     "Date": ""
                     if pd.isna(metadata.loc[Id, "Date"])
                     else str(metadata.loc[Id, "Date"]),
-
                     "Description (Portuguese)": ""
                     if pd.isna(metadata.loc[Id, "Description (Portuguese)"])
                     else str(metadata.loc[Id, "Description (Portuguese)"]),
-
                     "Creator": ""
                     if pd.isna(metadata.loc[Id, "Creator"])
                     else str(metadata.loc[Id, "Creator"]),
-
                     "First Year": ""
                     if pd.isna(metadata.loc[Id, "First Year"])
                     else str(int(metadata.loc[Id, "First Year"])),
-
                     "Last Year": ""
                     if pd.isna(metadata.loc[Id, "Last Year"])
                     else str(int(metadata.loc[Id, "Last Year"])),
-
                     "Source": "Instituto Moreira Salles",
                     "Longitude": str(
                         round(float(KML.PhotoOverlay.Camera.longitude), 5)
                     ),
-
                     "Latitude": str(round(float(KML.PhotoOverlay.Camera.latitude), 5)),
-
                     "altitude": str(round(float(KML.PhotoOverlay.Camera.altitude), 5)),
-
                     "heading": str(round(float(KML.PhotoOverlay.Camera.heading), 5)),
-
                     "tilt": str(round(float(KML.PhotoOverlay.Camera.tilt), 5)),
-
                     "fov": str(
                         abs(float(KML.PhotoOverlay.ViewVolume.leftFov))
                         + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))
@@ -353,7 +393,8 @@ def create_feature(context, kmls: type_list_of_kmls, metadata: metadata_datafram
                 context.log.info(f"OK: {Id}")
                 if radius:
                     feature = draw_feature(
-                        kml, radius=radius/1000, properties=properties)
+                        kml, radius=radius / 1000, properties=properties
+                    )
                 else:
                     feature = draw_feature(kml, properties=properties)
                 new_features.append(feature)
@@ -365,13 +406,17 @@ def create_feature(context, kmls: type_list_of_kmls, metadata: metadata_datafram
     return new_features
 
 
-@dg.solid(config_schema={"new_single": dg.StringSource, "processed_single": dg.StringSource})
+@dg.solid(
+    config_schema={"new_single": dg.StringSource, "processed_single": dg.StringSource}
+)
 def move_files(context, new_features: type_list_of_features):
+    """
+    Manage processed files
+    """
 
     path_new_single = context.solid_config["new_single"]
     path_processed_single = context.solid_config["processed_single"]
-    list_kmls = [feature["properties"]["Source ID"]
-                 for feature in new_features]
+    list_kmls = [feature["properties"]["Source ID"] for feature in new_features]
 
     for kml in list_kmls:
         try:
@@ -392,11 +437,15 @@ def move_files(context, new_features: type_list_of_features):
 @dg.solid(
     config_schema=dg.StringSource,
     output_defs=[
-        dg.OutputDefinition(io_manager_key="geojson",
-                            name="import_viewcones", dagster_type=type_geojson)
+        dg.OutputDefinition(
+            io_manager_key="geojson", name="import_viewcones", dagster_type=type_geojson
+        )
     ],
 )
 def create_geojson(context, new_features: type_list_of_features):
+    """
+    Build GEOJSON from FeatureCollection
+    """
     camera = context.solid_config
 
     if new_features:
@@ -410,23 +459,21 @@ def create_geojson(context, new_features: type_list_of_features):
                 id_new = new_feature["properties"]["Source ID"]
 
                 if id_new in current_ids:
-                    #context.log.info(id_new)
+                    # context.log.info(id_new)
                     print("New: " + id_new)
                     index = current_ids.index(id_new)
                     current_features[index] = new_feature
 
                 else:
                     print("Appended: " + id_new)
-                    #context.log.info("Appended: ", id_new)
+                    # context.log.info("Appended: ", id_new)
                     current_features.append(new_feature)
 
-            feature_collection = geojson.FeatureCollection(
-                features=current_features)
+            feature_collection = geojson.FeatureCollection(features=current_features)
             return feature_collection
 
         else:
-            feature_collection = geojson.FeatureCollection(
-                features=new_features)
+            feature_collection = geojson.FeatureCollection(features=new_features)
             return feature_collection
     else:
         context.log.info("Nothing's to updated on import_viewcones")
