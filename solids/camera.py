@@ -243,19 +243,25 @@ def rename_single(context, cumulus: main_dataframe_types):
             txt = f.read()
             filename = find_with_re("name", txt)
             if filename not in cumulus["Source ID"]:
-                loc = cumulus.loc[
-                    cumulus["preliminary id"].str.contains(filename, na=False),
-                    "Source ID",
-                ]
+                try:
+                    loc = cumulus.loc[
+                        cumulus["preliminary id"].str.contains(filename, na=False),
+                        "Source ID",
+                    ]
+                except:
+                    print(f"{filename} error")
                 if not loc.empty:
-                    new_filename = loc.item()
-                    txt = re.sub("(?<=<name>).+(?=<\/name>)",
-                                 new_filename, txt)
-                    with open(os.path.join(path, new_filename + ".kml"), "w") as k:
-                        k.write(txt)
-                    context.log.info(f"Renamed: {filename} > {new_filename}")
-                    if os.path.exists(os.path.join(path, filename + ".kml")):
-                        os.remove(os.path.join(path, filename + ".kml"))
+                    try:
+                        new_filename = loc.item()
+                        txt = re.sub("(?<=<name>).+(?=<\/name>)",
+                                    new_filename, txt)
+                        with open(os.path.join(path, new_filename + ".kml"), "w") as k:
+                            k.write(txt)
+                        context.log.info(f"Renamed: {filename} > {new_filename}")
+                        if os.path.exists(os.path.join(path, filename + ".kml")):
+                            os.remove(os.path.join(path, filename + ".kml"))
+                    except:
+                        print(f"{filename} error")
                 else:
                     context.log.info(f"Not renamed: {filename}")
 
