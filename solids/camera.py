@@ -19,7 +19,7 @@ from SPARQLWrapper import JSON, SPARQLWrapper
 from tests.dataframe_types import *
 from tests.objects_types import *
 from turfpy.misc import sector
-
+from tqdm import tqdm
 load_dotenv(override=True)
 
 
@@ -188,7 +188,8 @@ def get_list(context):
 
 
 @dg.solid(
-    config_schema={"new_single": dg.StringSource, "processed_raw": dg.StringSource}
+    config_schema={"new_single": dg.StringSource,
+                   "processed_raw": dg.StringSource}
 )
 def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False):
     """
@@ -199,14 +200,15 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
     splited_kmls = []
     photooverlays = ""
 
-    for kml in kmls:
+    for kml in tqdm(kmls, desc="KMLS"):
         splited_kmls.append(kml)
         with open(kml, "r") as f:
             txt = f.read()
             if re.search("<Folder>", txt):
                 header = "\n".join(txt.split("\n")[:2])
                 photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
-                photooverlays[-1] = re.sub("</Folder>\n</kml>", "", photooverlays[-1])
+                photooverlays[-1] = re.sub("</Folder>\n</kml>",
+                                           "", photooverlays[-1])
 
         for po in photooverlays:
             filename = find_with_re("name", po)
@@ -219,7 +221,8 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
 
 @dg.solid(
     config_schema=dg.StringSource,
-    input_defs=[dg.InputDefinition("cumulus", root_manager_key="cumulus_root")],
+    input_defs=[dg.InputDefinition(
+        "cumulus", root_manager_key="cumulus_root")],
     output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)],
 )
 def rename_single(context, cumulus: main_dataframe_types):
@@ -246,7 +249,8 @@ def rename_single(context, cumulus: main_dataframe_types):
                 ]
                 if not loc.empty:
                     new_filename = loc.item()
-                    txt = re.sub("(?<=<name>).+(?=<\/name>)", new_filename, txt)
+                    txt = re.sub("(?<=<name>).+(?=<\/name>)",
+                                 new_filename, txt)
                     with open(os.path.join(path, new_filename + ".kml"), "w") as k:
                         k.write(txt)
                     context.log.info(f"Renamed: {filename} > {new_filename}")
@@ -257,7 +261,7 @@ def rename_single(context, cumulus: main_dataframe_types):
 
     new_kmls = [
         os.path.join(path, file)
-        for file in os.listdir(path)
+        for file in tqdm(os.listdir(path), desc="KMLS")
         if os.path.isfile(os.path.join(path, file))
     ]
     list_kmls = [x for x in new_kmls if x != path_gitkeep]
@@ -271,7 +275,7 @@ def change_img_href(context, list_kmls: type_list_of_kmls):
     Substitute local image file link used for
     geolocating by public IIIF Image API
     """
-    for kml in list_kmls:
+    for kml in tqdm(list_kmls, desc="KMLS"):
         with open(kml, "r+") as f:
             txt = f.read()
             filename = find_with_re("name", txt)
@@ -294,7 +298,7 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
     query Mapbox-terrain-rgb and change for relative
     to sea level (absolute)
     """
-    for kml in kmls:
+    for kml in tqdm(kmls, desc="KMLS"):
         with open(kml, "r+") as f:
             txt = f.read()
             if re.search("(?<=altitudeMode>)relative(.+)?(?=\/altitudeMode>)", txt):
@@ -303,7 +307,8 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
                 alt = round(float(find_with_re("altitude", txt)), 5)
                 z = 15
                 tile = mercantile.tile(lng, lat, z)
-                westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
+                westmost, southmost, eastmost, northmost = mercantile.bounds(
+                    tile)
                 pixel_column = np.interp(lng, [westmost, eastmost], [0, 256])
                 pixel_row = np.interp(lat, [southmost, northmost], [256, 0])
                 tile_img = Image.open(
@@ -319,7 +324,8 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
                 txt = re.sub(
                     "(?<=<altitudeMode>).+(?=<\/altitudeMode>)", "absolute", txt
                 )
-                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)", f"{new_height}", txt)
+                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)",
+                             f"{new_height}", txt)
                 txt = re.sub(
                     "(?<=<coordinates>).+(?=<\/coordinates>)",
                     f"{lng},{lat},{new_height}",
@@ -335,7 +341,8 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
 
 
 @dg.solid(
-    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
+    input_defs=[dg.InputDefinition(
+        "metadata", root_manager_key="metadata_root")],
     output_defs=[dg.OutputDefinition(dagster_type=type_list_of_features)],
 )
 def create_feature(
@@ -350,7 +357,7 @@ def create_feature(
     metadata = metadata.set_index("upper_ids")
     # Id = ""
 
-    for kml in kmls:
+    for kml in tqdm(kmls, desc="KMLS"):
         try:
             with open(kml, "r") as f:
                 KML = parser.parse(f).getroot()
@@ -407,7 +414,8 @@ def create_feature(
 
 
 @dg.solid(
-    config_schema={"new_single": dg.StringSource, "processed_single": dg.StringSource}
+    config_schema={"new_single": dg.StringSource,
+                   "processed_single": dg.StringSource}
 )
 def move_files(context, new_features: type_list_of_features):
     """
@@ -416,9 +424,10 @@ def move_files(context, new_features: type_list_of_features):
 
     path_new_single = context.solid_config["new_single"]
     path_processed_single = context.solid_config["processed_single"]
-    list_kmls = [feature["properties"]["Source ID"] for feature in new_features]
+    list_kmls = [feature["properties"]["Source ID"]
+                 for feature in new_features]
 
-    for kml in list_kmls:
+    for kml in tqdm(list_kmls, desc="KMLS"):
         try:
             kml_from = os.path.join(path_new_single, kml + ".kml")
             kml_to = os.path.join(path_processed_single, kml + ".kml")
@@ -455,7 +464,7 @@ def create_geojson(context, new_features: type_list_of_features):
                 feature["properties"]["Source ID"] for feature in current_features
             ]
 
-            for new_feature in new_features:
+            for new_feature in tqdm(new_features, desc="FEATURES"):
                 id_new = new_feature["properties"]["Source ID"]
 
                 if id_new in current_ids:
@@ -469,11 +478,13 @@ def create_geojson(context, new_features: type_list_of_features):
                     # context.log.info("Appended: ", id_new)
                     current_features.append(new_feature)
 
-            feature_collection = geojson.FeatureCollection(features=current_features)
+            feature_collection = geojson.FeatureCollection(
+                features=current_features)
             return feature_collection
 
         else:
-            feature_collection = geojson.FeatureCollection(features=new_features)
+            feature_collection = geojson.FeatureCollection(
+                features=new_features)
             return feature_collection
     else:
         context.log.info("Nothing's to updated on import_viewcones")
