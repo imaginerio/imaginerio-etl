@@ -12,22 +12,22 @@ preset = {
         "get_list": {"config": {"env": "NEW_RAW"}},
         "split_photooverlays": {
             "config": {
-                "new_single":{
+                "new_single": {
                     "env": "NEW_SINGLE"
-                    },
-                "processed_raw":{
-                    "env": "PROCESSED_SINGLE"}}},
+                },
+                "processed_raw": {
+                    "env": "PROCESSED_RAW"}}},
 
         "rename_single": {
             "config": {"env": "NEW_SINGLE"}},
         "move_files": {
             "config": {
-                "new_single":{
+                "new_single": {
                     "env": "NEW_SINGLE"
-                    },
-                "processed_single":{
+                },
+                "processed_single": {
                     "env": "PROCESSED_SINGLE"}}},
-  
+
         "create_geojson": {"config": {"env": "CAMERA"}},
     },
     "resources": {
@@ -83,7 +83,7 @@ def trigger_camera_step1(context):
     kmls = os.listdir(path)
     list_kmls = [x for x in kmls if x != ".gitkeep"]
 
-    now = datetime.now().strftime("%d/%m/%Y%H%M%S")
+    now = datetime.datetime.now().strftime("%d/%m/%Y%H%M%S")
     run_key = f"step1_{now}"
 
     if list_kmls:
@@ -92,14 +92,14 @@ def trigger_camera_step1(context):
 
 @dg.sensor(
     pipeline_name="camera_pipeline",
-    solid_selection=["change_img_href++++"],
+    solid_selection=["rename_single+++++"],
     minimum_interval_seconds=7200,
 )
 def trigger_camera_step2(context):
     path = "data/input/kmls/new_single"
     kmls = os.listdir(path)
     list_kmls = [x for x in kmls if x != ".gitkeep"]
-    now = datetime.now().strftime("%d/%m/%Y%H%M%S")
+    now = datetime.datetime.now().strftime("%d/%m/%Y%H%M%S")
     run_key = f"step2_{now}"
 
     if list_kmls != []:
