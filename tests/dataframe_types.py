@@ -43,8 +43,8 @@ metadata_dataframe_types = dp.create_dagster_pandas_dataframe_type(
             "Rights", ignore_missing_vals=True),
         dp.PandasColumn.string_column(
             "License", ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "Attribution", ignore_missing_vals=True),
+        # dp.PandasColumn.string_column(
+        #    "Attribution", ignore_missing_vals=True),
         dp.PandasColumn(
             "Width (mm)", constraints=[
                 int_column()]),
@@ -113,7 +113,7 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
             "Rights", is_required=False, ignore_missing_vals=True),
         dp.PandasColumn.string_column(
             "License", is_required=False, ignore_missing_vals=True),
-        dp.PandasColumn.string_column("Attribution", is_required=False),
+        #dp.PandasColumn.string_column("Attribution", is_required=False),
         dp.PandasColumn(
             "Width (mm)", constraints=[
                 float_column()], is_required=False),
