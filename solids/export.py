@@ -376,13 +376,12 @@ def organise_creator(_, quickstate: dp.DataFrame):
 def format_values_chart(context, cumulus: main_dataframe_types,portals: main_dataframe_types,camera: main_dataframe_types,images: main_dataframe_types,omeka: main_dataframe_types,wikidata:main_dataframe_types):
 
     # kml finished
-    print(camera.columns)
-    val_kml = len(camera[camera["geometry"].notna()])
+    kml_ims = camera.loc[camera["Source"] == "Instituto Moreira Salles"]
+    val_kml = len(kml_ims[kml_ims["geometry"].notna()])
     # kml total
     val_kml_total = 0
 
     # image finished
-    print(images.columns)
     val_img = len(images[images["Media URL"].notna()])
     # image total
     val_img_total = len(images["Media URL"])
