@@ -242,32 +242,22 @@ def rename_single(context, cumulus: main_dataframe_types):
         with open(kml, "r") as f:
             txt = f.read()
             filename = find_with_re("name", txt)
-            if filename not in cumulus["Source ID"]:
-                try:
-                    loc = cumulus.loc[
-                        cumulus["preliminary id"].str.contains(filename, na=False),
-                        "Source ID",
-                    ]
-                except:
-                    print(f"{filename} error")
+            if filename not in list(cumulus["Source ID"]):
+                loc = cumulus.loc[cumulus["preliminary id"].str.contains(filename, na=False),"Source ID"]
                 if not loc.empty:
                     try:
                         new_filename = loc.item()
                         txt = re.sub("(?<=<name>).+(?=<\/name>)",
                                     new_filename, txt)
-                        with open(os.path.join(path, new_filename + ".kml"), "w") as k:
-                            k.write(txt)
-                        context.log.info(f"Renamed: {filename} > {new_filename}")
-                        if os.path.exists(os.path.join(path, filename + ".kml")):
-                            os.remove(os.path.join(path, filename + ".kml"))
+                        os.rename(kml,os.path.join(path, new_filename +".kml"))
+                        print(f"Renamed: {filename} > {new_filename}")
                     except:
                         print(f"{filename} error")
-                else:
-                    context.log.info(f"Not renamed: {filename}")
+        
 
     new_kmls = [
         os.path.join(path, file)
-        for file in tqdm(os.listdir(path), desc="KMLS")
+        for file in os.listdir(path)
         if os.path.isfile(os.path.join(path, file))
     ]
     list_kmls = [x for x in new_kmls if x != path_gitkeep]
@@ -451,13 +441,15 @@ def move_files(context, new_features: type_list_of_features):
 
 @dg.solid(
     config_schema=dg.StringSource,
+    input_defs=[dg.InputDefinition(
+        "cumulus", root_manager_key="cumulus_root")],
     output_defs=[
         dg.OutputDefinition(
             io_manager_key="geojson", name="import_viewcones", dagster_type=type_geojson
         )
     ],
 )
-def create_geojson(context, new_features: type_list_of_features):
+def create_geojson(context, new_features: type_list_of_features, cumulus: main_dataframe_types):
     """
     Build GEOJSON from FeatureCollection
     """
@@ -469,13 +461,24 @@ def create_geojson(context, new_features: type_list_of_features):
             current_ids = [
                 feature["properties"]["Source ID"] for feature in current_features
             ]
+            for identifier in current_ids:
+                if identifier not in list(cumulus["Source ID"]):
+                    loc_feature = cumulus.loc[cumulus["preliminary id"].str.contains(identifier, na=False),"Source ID"]
+                    if not loc_feature.empty:
+                        try:
+                            new_identifier = loc_feature.item()
+                            index = current_ids.index(identifier)
+                            current_features[index]["properties"]["Source ID"] = new_identifier  
+                            print(f"Renamed: {identifier} > {new_identifier}")
+                        except:
+                            print(f"{identifier} error")  
 
             for new_feature in tqdm(new_features, desc="FEATURES"):
                 id_new = new_feature["properties"]["Source ID"]
 
                 if id_new in current_ids:
                     # context.log.info(id_new)
-                    print("New: " + id_new)
+                    print("Updated: " + id_new)
                     index = current_ids.index(id_new)
                     current_features[index] = new_feature
 
