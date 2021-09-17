@@ -378,7 +378,7 @@ def create_feature(
                     "Last Year": ""
                     if pd.isna(metadata.loc[Id, "Last Year"])
                     else str(int(metadata.loc[Id, "Last Year"])),
-                    "Source": "Instituto Moreira Salles",
+                    "Source": str(metadata.loc[Id, "Source"]),
                     "Longitude": str(
                         round(float(KML.PhotoOverlay.Camera.longitude), 5)
                     ),
