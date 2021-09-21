@@ -104,6 +104,10 @@ Rx = "==1.6.1"
 Shapely = "==1.7.1"
 SQLAlchemy = "==1.4.21"
 Werkzeug = "==1.0.1"
+pip = "*"
+install = "*"
+pyiiifpres = {git = "https://github.com/giacomomarchioro/pyIIIFpres"}
+iiif = "*"
 
 [dev-packages]
 black = "*"
