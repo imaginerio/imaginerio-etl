@@ -4,6 +4,7 @@ import shutil
 from dagster.builtins import Nothing
 import dagster_pandas as dp
 
+import boto3
 import dagster as dg
 import pandas as pd
 from tqdm import tqdm
@@ -226,7 +227,7 @@ def create_images_df(context, files: dict):
     config_schema=dg.StringSource,
     input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
 )
-def write_metadata(context, metadata: dp.DataFrame, files_to_tag):
+def write_metadata(context, metadata: dp.DataFrame, to_tag):
     """
     Write available metadata, including GPS tags,
     to high-res JPEGs
@@ -235,7 +236,7 @@ def write_metadata(context, metadata: dp.DataFrame, files_to_tag):
     metadata["Source ID"] = metadata["Source ID"].str.upper()
     metadata.set_index("Source ID", inplace=True)
 
-    for item in tqdm(files_to_tag, "Embedding metadata in files..."):
+    for item in tqdm(to_tag, "Embedding metadata in files..."):
         if item.endswith(".jpg"):
             basename = os.path.split(item)[1]
             name = basename.split(".")[0]
@@ -279,8 +280,22 @@ def write_metadata(context, metadata: dp.DataFrame, files_to_tag):
                     param = param.encode(encoding="utf-8")
                     dest = item.encode(encoding="utf-8")
                     et.execute(param, dest)
+    to_upload = to_tag
+    return to_upload
 
 
-@dg.solid
-def upload_to_cloud(_, jpeg_hd):
-    return
+@dg.solid(
+    config_schema={
+        "jpeg_hd": dg.StringSource,
+    },
+)
+def upload_to_cloud(context, to_upload):
+    S3 = boto3.client("s3")
+    BUCKET = "imaginerio-images"
+    for image_path in tqdm(to_upload, "Uploading files..."):
+        id = os.path.basename(image_path)[1].split(".")[0]
+        key_name = "{0}/full/max/0/default.jpg".format(id)
+        try:
+            S3.upload_file(image_path, BUCKET, key_name)
+        except:
+            print("Couldn't upload image {0}, skipping".format(id))
