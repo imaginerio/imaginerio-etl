@@ -21,7 +21,7 @@ preset = {
                 "jpeg_hd": {"env": "JPEG_HD"},
                 "jpeg_sd": {"env": "JPEG_SD"},
                 "tiff": {"env": "TIFF"},
-                "review": {"env": "REVIEW"}
+                "review": {"env": "REVIEW"},
             }
         },
         "create_images_df": {"config": {"env": "CLOUD"}},
@@ -59,8 +59,8 @@ def images_pipeline():
     to_tag = file_dispatcher(files=files)
     images_df = create_images_df(files=files)
     update_metadata(df=images_df)
-    write_metadata(files_to_tag=to_tag)
-    # upload_to_cloud()
+    to_upload = write_metadata(to_tag=to_tag)
+    upload_to_cloud(to_upload)
 
 
 ################   SCHEDULES   ##################
