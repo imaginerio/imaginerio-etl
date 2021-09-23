@@ -1,23 +1,26 @@
 import os
+import shutil
 import urllib
 
+import boto3
 import dagster as dg
-from dagster.builtins import Nothing
 import pandas as pd
 import requests
+from dagster.builtins import Nothing
 from dotenv import load_dotenv
 from IIIFpres import iiifpapi3
+from requests.adapters import HTTPAdapter
 from tqdm import tqdm
 from tqdm.notebook import tqdm
-import requests
-import IIIF
-from solids.export import *
-from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
+import IIIF
+from solids.export import *
+from math import *
+import subprocess
 
 load_dotenv(override=True)
-iiifpapi3.BASE_URL = "https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/"
+iiifpapi3.BASE_URL = "hthttps://imaginerio-images.s3.us-east-1.amazonaws.com"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 
 
@@ -27,48 +30,50 @@ iiifpapi3.LANGUAGES = ["pt-BR", "en"]
         dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
     ],
 )
-def load_metadata(context, omeka, metadata):
-    has_manifest = omeka["dcterms:identifier"].to_list()
-    metadata.fillna(value="", inplace=True)
-    metadata = metadata[~metadata["Source ID"].isin(has_manifest)]
-
-    has_info = []
-    for id in metadata["Source ID"].to_list():
-        url = "https://imaginerio-images.s3.us-east-1.amazonaws.com/tiles/{id}/info.json"
-        response = requests.get(url).status_code
-        if response==200:
-            has_info.append(id)      
-
-    metadata = metadata[~metadata["Source ID"].isin(has_info)]
-    return metadata
+def list_of_items(context, import_omeka):
+    to_do = import_omeka["dcterms:identifier"].to_list()
+    return to_do
 
 
-
-@dg.solid
+@dg.solid(config_schema=dg.StringSource)
 def image_tiling(context, image):
+    tmp_path = context.solid_config
+
     img_data = requests.get(
-        "https://imaginerio-images.s3.us-east-1.amazonaws.com/originals/{0}.jpg".format(
+        "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}.jpg".format(
             image
         )
     ).content
-    img_path = "/content/tmp/{image}.jpg"
-
-    if not (os.path.exists("/content/tmp")):
-        os.mkdir("/content/tmp")
+    img_path = f"{tmp_path}/{image}.jpg"
+    if not (os.path.exists(tmp_path)):
+        os.mkdir(tmp_path)
     with open(img_path, "wb") as handler:
         handler.write(img_data)
 
-    # iiif_static.main()
-    os.remove(img_path)
+    command = f"python iiif/iiif_static.py -d '{tmp_path}/tiles' -t 256 -a 3.0 --osd-version 1.0.0 -e '/full/!600,600/0/default.jpg' -p 'https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img' {img_path}"
+    process = subprocess.Popen(
+        command,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+)
+    output, errors = process.communicate()
+    print(f"command: {command} \noutput: {output} \nERRO: {errors}")
+        # exec(/mnt/d/situated-views-etl/tmp/iiif/iiif_static.py -d "{tmp_path}/tiles" -t 256 -a 3.0 --osd-version 1.0.0 -e "/full/!600,600/0/default.jpg" -p "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img" $img_path)
+        os.remove(img_path)
 
-    info = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{IDENTIFICADOR}/info.json"
-    return info
+        return (f"{tmp_folder}info.json").json()
 
 
-@dg.solid
-def write_manifest(context, info, df):
-    metadata = df
-    manifests_folder = context.
+@dg.solid(
+    config_schema=dg.StringSource,
+    input_defs=[
+        dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
+    ],
+)
+def write_manifest(context, info, import_omeka):
+    tmp_folder = context.solid_config
+    metadata = import_omeka
 
     # Logo
     logo = iiifpapi3.logo()
@@ -303,15 +308,8 @@ def write_manifest(context, info, df):
         manifest.add_provider(item_provider)
 
         # Get image sizes
-        iiifimageurl = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/info.json".format(
-            index
-        )
-        
-        
-        imageinfo = requests.get(iiifimageurl)
-        jsoninfo = imageinfo.json()
-        imgwidth = jsoninfo["width"]
-        imgheight = jsoninfo["height"]
+        imgwidth = info["width"]
+        imgheight = info["height"]
 
         # Canvas
         canvas = manifest.add_canvas_to_items()
@@ -339,14 +337,42 @@ def write_manifest(context, info, df):
 
         # Save manifest
         # manifest.inspect()
-        if not os.path.exists(manifests_folder):
-            os.mkdir(manifests_folder)
-        manifest.json_save("{manifests_folder}{0}.json".format(index))
+        if not os.path.exists(tmp_folder):
+            os.mkdir(tmp_folder)
+        manifest.json_save("{tmp_folder}/{0}.json".format(index))
+        
         collection.add_manifest_to_items(manifest)
+
+    return collection
+
+@dg.solid(config_schema=dg.StringSource)
+def upload_to_cloud(context, to_upload):
+    tmp_folder = context.solid_config
+    item_path = [f"{tmp_folder}/{item}" for item in to_upload] 
+
+    S3 = boto3.client("s3")
+    BUCKET = "imaginerio-images"
+    for image_path in tqdm(item_path, "Uploading files..."):
+        for root,dirs,files in os.walk(item_path):
+            for file in files:      
+                try:
+                    S3.upload_file(os.path.join(root,file),BUCKET,file)
+                    shutil.rmtree(tmp_folder)
+                except:
+                    print("Couldn't upload image {0}, skipping".format(id))    
 
 
 @dg.composite_solid
-def create_manifest(context, df):
-    to_do = df["Source ID"].to_list()
-    for item in tqdm(to_do):
-        write_manifest(image_tiling(item))
+def create_manifest(context, list):
+    for item in tqdm(list):
+        collection = write_manifest(image_tiling(item))
+        upload_to_cloud(item)
+    return collection
+    
+
+@dg.solid(config_schema=dg.StringSource)
+def create_collection(context,collection):
+    #collection_path = context.solid_config
+    collection_path ="data/output/tmp/iiif/collection"
+    collection.json_save("{0}/imaginerio.json".format(collection_path))
+    return 
