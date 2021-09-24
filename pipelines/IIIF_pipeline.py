@@ -13,6 +13,19 @@ preset = {
         "image_tiling": {"config": {"env": "TMP"}},
         "write_manifest": {"config": {"env": "TMP"}},
         "upload_to_cloud": {"config": {"env": "TMP"}},
+        "create_collection": {"config": {"env": "COLLECTION"}},
+    },
+    "resources": {
+        "metadata_root": {"config": {"env": "METADATA"}},
+        "import_omeka_root": {"config": {"env": "IMPORT_OMEKA"}},
+    },
+}
+
+preset_debbug = {
+    "solids": {
+        "image_tiling": {"config": {"env": "TMP"}},
+        "write_manifest": {"config": {"env": "TMP"}},
+        "create_collection": {"config": {"env": "COLLECTION"}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -32,19 +45,20 @@ preset = {
         )
     ],
     preset_defs=[
-        dg.PresetDefinition(
-            "default",
-            run_config=preset,
-            solid_selection=["create_manifest"],
-            mode="default",
-        ),
+        # dg.PresetDefinition(
+        #     "default",
+        #     run_config=preset,
+        #     solid_selection=["create_manifest"],
+        #     mode="default",
+        # ),
         dg.PresetDefinition(
             "Debbug",
-            run_config=preset,
+            run_config=preset_debbug,
             solid_selection=[
                 "list_of_items",
                 "image_tiling",
                 "write_manifest",
+                "create_collection",
             ],
             mode="default",
         ),
@@ -52,8 +66,8 @@ preset = {
 )
 def IIIF_pipeline():
     list = list_of_items()
-    manifest = create_manifest(list)
+    # manifest = create_manifest(list)
 
     info = image_tiling(list)
     manifest = write_manifest(info)
-    upload_to_cloud(manifest)
+    create_collection(manifest)
