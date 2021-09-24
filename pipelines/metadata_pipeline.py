@@ -99,7 +99,8 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
     input_defs=[dg.InputDefinition( "jstor", root_manager_key="jstor_root", dagster_type=pd.DataFrame)],
     output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")])
 def metadata_jstor(context, jstor, metadata):
-    jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]','',x)) 
+    jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]','',x))
+    jstor = jstor.rename(columns={"Title original Language":"Title"})
     jstor["Source ID"] = jstor["SSID"]
     jstor["Item Set"] = jstor["Item Set"].fillna("All")
     jstor.loc[~jstor["Item Set"].str.contains("All"),"Item Set"] = jstor["Item Set"].astype(str) + "||All"
