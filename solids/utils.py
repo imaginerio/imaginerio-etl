@@ -251,18 +251,21 @@ def pull_new_data(context):
     pull = subprocess.Popen(comands)
 
 
-@dg.solid
+@dg.solid(config_schema=dg.StringSource)
 def push_new_data(context):
     """
     Push data to Git submodule
     and commit changes to main
     repository
     """
+
+    string = context.solid_config
+
     submodule_push = [
         "pwd",
         "git checkout main",
         "git add .",
-        "git commit -a -m ':card_file_box: Update data'",
+        f"git commit -a -m ':card_file_box: Update {string} data'",
         "git push",
     ]
 
@@ -281,7 +284,7 @@ def push_new_data(context):
 
     etl_push = [
         "pwd",
-        "git checkout feature/dagster-submodule",
+        "git checkout dev",
         "git add data",
         "git commit -m ':card_file_box: Update submodule'",
         "git push",
