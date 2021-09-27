@@ -7,6 +7,7 @@ from pipelines.metadata_pipeline import *
 from pipelines.images_pipeline import *
 from pipelines.camera_pipeline import *
 from pipelines.git_pipeline import *
+from pipelines.IIIF_pipeline import *
 
 
 @dg.repository
@@ -20,6 +21,7 @@ def situated_views():
             "metadata_pipeline": lambda: metadata_pipeline,
             "camera_pipeline": lambda: camera_pipeline,
             "git_pipeline": lambda: git_pipeline,
+            "IIIF_pipeline": lambda: IIIF_pipeline,
         },
         "schedules": {
             "apis_pipeline_weekly": lambda: apis_pipeline_weekly,
