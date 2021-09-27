@@ -13,7 +13,6 @@ preset = {
         "image_tiling": {"config": {"env": "TMP"}},
         "write_manifest": {"config": {"env": "TMP"}},
         "upload_to_cloud": {"config": {"env": "TMP"}},
-        "create_collection": {"config": {"env": "COLLECTION"}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -21,11 +20,10 @@ preset = {
     },
 }
 
-preset_debbug = {
+preset_debug = {
     "solids": {
         "image_tiling": {"config": {"env": "TMP"}},
         "write_manifest": {"config": {"env": "TMP"}},
-        "create_collection": {"config": {"env": "COLLECTION"}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -53,12 +51,11 @@ preset_debbug = {
         # ),
         dg.PresetDefinition(
             "Debbug",
-            run_config=preset_debbug,
+            run_config=preset_debug,
             solid_selection=[
                 "list_of_items",
                 "image_tiling",
                 "write_manifest",
-                "create_collection",
             ],
             mode="default",
         ),
@@ -70,4 +67,3 @@ def IIIF_pipeline():
 
     info = image_tiling(list)
     manifest = write_manifest(info)
-    create_collection(manifest)
