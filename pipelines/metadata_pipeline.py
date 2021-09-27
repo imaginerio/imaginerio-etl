@@ -23,6 +23,7 @@ preset = {
         "images_root": {"config": {"env": "IMAGES"}},
         "jstor_root": {"config": {"env": "JSTOR_XLS"}},
     },
+    "solids":{"push_new_data":{"config":"Metadata"},}
 }
 
 
@@ -172,6 +173,7 @@ def metadata_jstor(context, jstor, metadata):
 def metadata_pipeline():
     metadata = create_metadata()
     metadata_jstor(metadata=metadata)
+    push_new_data()
 
 
 ################   SENSORS   ##################

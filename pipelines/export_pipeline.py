@@ -20,6 +20,7 @@ preset = {
     },
     "solids": {
         "export_html": {"config": {"env": "INDEX"}},
+        "push_new_data":{"config":"Import and html"},
     },
 }
 
@@ -34,6 +35,7 @@ preset_html = {
     },
     "solids": {
         "export_html": {"config": {"env": "INDEX"}},
+        "push_new_data":{"config":"html"},
     },
 }
 
@@ -65,7 +67,7 @@ preset_html = {
         dg.PresetDefinition(
             "preset_html",
             run_config=preset_html,
-            solid_selection=["format_values_chart","create_hbar","create_pie","export_html"],
+            solid_selection=["format_values_chart","create_hbar","create_pie","export_html","push_new_data"],
             mode="default",
         )
     ])
@@ -87,6 +89,8 @@ def export_pipeline():
     plot_hbar = create_hbar(values)
     plot_pie = create_pie(values)
     graph_html = export_html(plot_hbar, plot_pie)
+
+    push_new_data()
 
 
 ################   SENSORS   ##################
