@@ -1,5 +1,6 @@
 import collections
 import json
+
 import os
 import shutil
 import subprocess
@@ -16,7 +17,7 @@ from IIIFpres import iiifpapi3
 from IIIFpres.utilities import read_API3_json
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
-
+from tqdm import tqdm
 from solids.export import *
 
 load_dotenv(override=True)
@@ -25,40 +26,8 @@ iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 # iiifpapi3.BASE_URL = "http://127.0.0.1:8000/"
 
 
-@dg.solid(
-    input_defs=[
-        dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
-    ],
-)
-def list_of_items(_, import_omeka):
-    items = import_omeka["dcterms:identifier"].to_list()[10:13]
-    to_do = []
-    for item in items:
-        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/info.json".format(
-            item
-        )
-        retry_strategy = Retry(
-            total=3,
-            status_forcelist=[429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "OPTIONS"],
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        http = requests.Session()
-        http.mount("https://", adapter)
-        http.mount("http://", adapter)
-        response = http.get(endpoint)
-
-        if not response.status_code == 200:
-            to_do.append(item)
-
-    return to_do[1]
-
-
-@dg.solid(config_schema=dg.StringSource)
-def image_tiling(context, image):
-    print(image)
-    tmp_path = context.solid_config
-    print(tmp_path)
+def image_tiling(image, tmp_path):
+    print("image_tiling...")
     img_data = requests.get(
         "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/full/max/0/default.jpg".format(
             image
@@ -66,11 +35,10 @@ def image_tiling(context, image):
     ).content
 
     img_path = f"{tmp_path}/{image}.jpg"
-    print(img_path)
-    if not (os.path.exists(tmp_path)):
-        os.mkdir(tmp_path)
+
+    if not os.path.exists("{0}/iiif-img/{1}".format(tmp_path, id)):
+        os.mkdir("{0}/iiif-img/{1}".format(tmp_path, id))
     with open(img_path, "wb") as handler:
-        print("writing...")
         handler.write(img_data)
 
     info_path = "{0}/iiif-img/{1}/info.json".format(
@@ -90,23 +58,17 @@ def image_tiling(context, image):
             stderr=subprocess.PIPE,
         )
         errors = process.communicate()
-        print(errors)
+        print("ERROS FROM SUBPROCESSING: ", errors)
 
+    os.remove(img_path)
     info = json.load(open(info_path))
     return info
 
 
-@dg.solid(
-    config_schema=dg.StringSource,
-    input_defs=[
-        dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
-    ],
-)
-def write_manifest(context, info, import_omeka):
-    tmp_path = context.solid_config
-
+def write_manifest(info, import_omeka, tmp_path):
+    print("write_manifest...")
     id = info["id"].split("iiif-img/")[-1]
-    import_omeka.set_index("dcterms:identifier", inplace=True)
+    import_omeka = import_omeka.set_index("dcterms:identifier")
     metadata_df = import_omeka.loc[id]
 
     # Logo
@@ -292,7 +254,7 @@ def write_manifest(context, info, import_omeka):
     item_provider.add_homepage(item_homepage)
     manifest.add_provider(item_provider)
 
-    # Get image sizes
+    # Get image sizeslist
 
     imgwidth = info["width"]
     imgheight = info["height"]
@@ -329,13 +291,11 @@ def write_manifest(context, info, import_omeka):
 
     file = "{0}/iiif/{1}/manifest.json".format(tmp_path, id)
     manifest.json_save(file)
-
     return manifest
 
 
-@dg.solid(config_schema=dg.StringSource)
-def write_collection(context, manifest):
-    tmp_path = context.solid_config
+def write_collection(manifest, tmp_path):
+    print("write_collection...")
     collection_path = "{0}/iiif/collection/imaginerio.json".format(tmp_path)
 
     # Logo
@@ -345,7 +305,7 @@ def write_collection(context, manifest):
     )
     logo.set_format("image/png")
     logo.set_hightwidth(164, 708)
-
+    print("write_collection...")
     if not os.path.exists(collection_path):
         # Homepage
         collection_homepage = iiifpapi3.homepage()
@@ -395,37 +355,97 @@ def write_collection(context, manifest):
     else:
         collection = read_API3_json(collection_path)
 
+    print("write_collection...")
     collection.add_manifest_to_items(manifest)
     collection.json_save(collection_path)
-    return collection
+    return collection_path
 
 
-@dg.solid(config_schema=dg.StringSource)
-def upload_to_cloud2(context, collection):
-    tmp_path = context.solid_config
-
+def upload_to_cloud(tmp_path):
+    print("Uploading...")
     S3 = boto3.client("s3")
     BUCKET = "imaginerio-images"
-    upload_log = [upload_to_cloud2]
+    upload_log = []
     for root, dirs, files in os.walk(tmp_path):
         for file in files:
             path = root.split("tmp/")[-1] + "/" + file
+            content = (
+                "image/jpeg" if path.split(".")[-1] == "jpg" else "application/json"
+            )
+
             try:
-                upload = S3.upload_file(os.path.join(root, file), BUCKET, path)
-                upload_log.append(upload)
+                upload = S3.upload_file(
+                    os.path.join(root, file),
+                    BUCKET,
+                    path,
+                    ExtraArgs={"ContentType": content},
+                )
+                print(
+                    os.path.join(root, file),
+                    BUCKET,
+                    path,
+                    "ExtraArgs={'ContentType': {content}}",
+                )
             except:
+                upload_log.append(path)
                 print("Couldn't upload image {0}, skipping".format(id))
 
-    # Delete uploaded files
-    if all(upload_log):
-        for root, dirs, files in os.walk(tmp_path):
-            for file in files:
-                os.unlink("{0}/{1}".format(root, file))
+
+@dg.solid(
+    input_defs=[
+        dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
+    ],
+)
+def list_of_items(_, import_omeka):
+    items = import_omeka["dcterms:identifier"].to_list()
+    to_do = []
+
+    for item in items:
+        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/info.json".format(
+            item
+        )
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "OPTIONS"],
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        http = requests.Session()
+        http.mount("https://", adapter)
+        http.mount("http://", adapter)
+        response = http.get(endpoint)
+
+        if not response.status_code == 200:
+            to_do.append(item)
+
+    return to_do
 
 
-@dg.composite_solid
-def create_manifest(list):
-    info = image_tiling(list)
-    manifest = write_manifest(info)
-    collection = write_collection(manifest)
-    upload_to_cloud2(collection)
+@dg.solid(
+    config_schema={"tmp_path": dg.StringSource, "upload": dg.BoolSource},
+    input_defs=[
+        dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
+    ],
+)
+def create_manifest(
+    context,
+    to_do,
+    import_omeka,
+):
+    tmp_path = context.solid_config["tmp_path"]
+    upload = context.solid_config["upload"]
+
+    for item in to_do:
+        print("CREATING:", item)
+        info = image_tiling(item, tmp_path)
+        manifest = write_manifest(info, import_omeka, tmp_path)
+        write_collection(manifest, tmp_path)
+
+        if upload:
+            upload_log = upload_to_cloud(tmp_path)
+            # Delete uploaded files
+            if not upload_log:
+                shutil.rmtree(os.path.join(tmp_path, "iiif", item))
+                shutil.rmtree(os.path.join(tmp_path, "iiif-img", item))
+            else:
+                print("Files: ", upload_log)
