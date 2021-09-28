@@ -10,14 +10,7 @@ load_dotenv(override=True)
 
 preset = {
     "solids": {
-        "create_manifest": {
-            "solids": {
-                "image_tiling": {"config": {"env": "TMP"}},
-                "write_manifest": {"config": {"env": "TMP"}},
-                "write_collection": {"config": {"env": "TMP"}},
-                "upload_to_cloud2": {"config": {"env": "TMP"}},
-            }
-        }
+        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": True}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -27,9 +20,7 @@ preset = {
 
 preset_debug = {
     "solids": {
-        "image_tiling": {"config": {"env": "TMP"}},
-        "write_manifest": {"config": {"env": "TMP"}},
-        "write_collection": {"config": {"env": "TMP"}},
+        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": False}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -52,26 +43,17 @@ preset_debug = {
         dg.PresetDefinition(
             "default",
             run_config=preset,
-            solid_selection=["create_manifest"],
+            solid_selection=["list_of_items", "create_manifest"],
             mode="default",
         ),
         dg.PresetDefinition(
             "Debbug",
             run_config=preset_debug,
-            solid_selection=[
-                "list_of_items",
-                "image_tiling",
-                "write_manifest",
-                "write_collection",
-            ],
+            solid_selection=["list_of_items", "create_manifest"],
             mode="default",
         ),
     ],
 )
 def IIIF_pipeline():
-    list = list_of_items()
-    create_manifest(list)
-
-    info = image_tiling(list)
-    manifest = write_manifest(info)
-    write_collection(manifest)
+    to_do = list_of_items()
+    manifest = create_manifest(to_do=to_do)
