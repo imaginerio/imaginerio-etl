@@ -10,9 +10,17 @@ load_dotenv(override=True)
 
 preset = {
     "solids": {
-        "image_tiling": {"config": {"env": "TMP"}},
-        "write_manifest": {"config": {"env": "TMP"}},
-        "upload_to_cloud": {"config": {"env": "TMP"}},
+        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": True}},
+    },
+    "resources": {
+        "metadata_root": {"config": {"env": "METADATA"}},
+        "import_omeka_root": {"config": {"env": "IMPORT_OMEKA"}},
+    },
+}
+
+preset_debug = {
+    "solids": {
+        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": False}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -35,25 +43,17 @@ preset = {
         dg.PresetDefinition(
             "default",
             run_config=preset,
-            solid_selection=["create_manifest"],
+            solid_selection=["list_of_items", "create_manifest"],
             mode="default",
         ),
         dg.PresetDefinition(
             "Debbug",
-            run_config=preset,
-            solid_selection=[
-                "list_of_items",
-                "image_tiling",
-                "write_manifest",
-            ],
+            run_config=preset_debug,
+            solid_selection=["list_of_items", "create_manifest"],
             mode="default",
         ),
     ],
 )
 def IIIF_pipeline():
-    list = list_of_items()
-    manifest = create_manifest(list)
-
-    info = image_tiling(list)
-    manifest = write_manifest(info)
-    upload_to_cloud(manifest)
+    to_do = list_of_items()
+    manifest = create_manifest(to_do=to_do)
