@@ -60,10 +60,10 @@ def images_pipeline():
     files = file_picker()
     to_tag = file_dispatcher(files=files)
     images_df = create_images_df(files=files)
-    update_metadata(df=images_df)
+    ok = update_metadata(df=images_df)
     to_upload = write_metadata(to_tag=to_tag)
     upload_to_cloud(to_upload)
-    push_new_data()
+    push_new_data(ok)
 
 ################   SCHEDULES   ##################
 

@@ -172,8 +172,8 @@ def metadata_jstor(context, jstor, metadata):
 )
 def metadata_pipeline():
     metadata = create_metadata()
-    metadata_jstor(metadata=metadata)
-    push_new_data()
+    ok = metadata_jstor(metadata=metadata)
+    push_new_data(ok)
 
 
 ################   SENSORS   ##################

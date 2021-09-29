@@ -18,6 +18,8 @@ preset = {
         "query_portals": {"config": {"env": "PORTALS_API"}},
         "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
         "push_new_data":{"config":"APIs"},
+        "push_new_data_2":{"config":"APIs"},
+        "push_new_data_3":{"config":"APIs"},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -92,18 +94,20 @@ def apis_pipeline():
     omeka_results = query_omeka()
     omeka_df = omeka_dataframe(omeka_results)
     # omeka_df = validate_omeka(omeka_df)
-    update_metadata(df=omeka_df)
+    ok_omeka = update_metadata(df=omeka_df)
+    push_new_data(ok_omeka)
 
     wikidata_results = query_wikidata()
     wikidata_df = wikidata_dataframe(wikidata_results)
     # wikidata_df = validate_wikidata(wikidata_df)
-    update_metadata(df=wikidata_df)
+    ok_wikidata = update_metadata(df=wikidata_df)
+    push_new_data(ok_wikidata)
 
     portals_results = query_portals()
     portals_df = portals_dataframe(portals_results)
     # portals_df = validate_portals(portals_df)
-    update_metadata(df=portals_df)
-    push_new_data()
+    ok_portals = update_metadata(df=portals_df)
+    push_new_data(ok_portals)
 
 
 ################   SENSORS   ##################
