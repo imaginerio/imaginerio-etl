@@ -1,0 +1,80 @@
+previewsEnabled: true
+services:
+  - type: web
+    name: dagster
+    region: oregon
+    env: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: dagit -p 10000 -h 0.0.0.0
+    envVars:
+      - fromGroup: tile-generator
+      - key: CUMULUS_XML
+        value: data/input/cumulus.xml
+      - key: METADATA
+        value: data/output/metadata.csv
+      - key: JSTOR
+        value: data/input/jstor.csv
+      - key: JSTOR_XLS
+        value: data/input/jstor.xls
+      - key: MAPPING
+        value: data/input/mapping.csv
+      - key: NEW_RAW
+        value: data/input/kmls/new_raw
+      - key: PROCESSED_RAW
+        value: = data/input/kmls/processed_raw
+      - key: NEW_SINGLE
+        value: = data/input/kmls/new_single
+      - key: PROCESSED_SINGLE
+        value: = data/input/kmls/processed_single
+      - key: KML_FOLDER
+        value: data/input/kmls
+      - key: OUTPUT
+        value: data/output
+      - key: PORTALS
+        value: data/output/api_portals.csv
+      - key: WIKIDATA
+        value: data/output/api_wikidata.csv
+      - key: OMEKA
+        value: data/output/api_omeka.csv
+      - key: CUMULUS
+        value: = data/output/cumulus.csv
+      - key: CAMERA
+        value: data/output/import_viewcones.geojson
+      - key: IMAGES
+        value: data/output/images.csv
+      - key: CREATORS
+        value: data/output/creators.csv
+      - key: IMPORT_OMEKA
+        value: data/output/import_omeka.csv
+      - key: IMPORT_WIKI
+        value: data/output/import_wiki.csv
+      - key: IMPORT_VIKUS
+        value: data/output/import_vikus.csv
+      - key: THUMB
+        value: https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/sd/
+      - key: CLOUD
+        value: https://rioiconography.sfo2.digitaloceanspaces.com/situatedviews/
+      - key: SOURCE
+        value: path/to/folder
+      - key: TIFF
+        value: images/tiff
+      - key: JPEG_HD
+        value: images/jpeg-hd
+      - key: JPEG_SD
+        value: images/jpeg-sd
+      - key: IMG_BACKLOG
+        value: images/jpeg-sd/backlog
+      - key: EXIFTOOL
+        value: path/to/exiftool.exe
+      - key: INDEX
+        value: data/index.html
+      - key: PORTALS_API
+        value: https://acervos.ims.com.br/CIP/metadata/search/portals-general-access/situatedviews
+      - key: WIKIDATA_API
+        value: https://query.wikidata.org/sparql
+      - key: OMEKA_API
+        value: https://images.imaginerio.org/api/items
+      - key: PORTALS_PREFIX
+        value: http://acervos.ims.com.br/portals/#/detailpage/
+      - key: SMAPSHOT
+        value: data/output/smapshot.csv
