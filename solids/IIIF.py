@@ -1,4 +1,3 @@
-import collections
 import json
 
 import os
@@ -8,13 +7,14 @@ from math import *
 from typing import Collection, List
 
 import boto3
+from botocore import endpoint
 import dagster as dg
 import pandas as pd
 import requests
 from dagster.builtins import Nothing, String
 from dotenv import load_dotenv
 from IIIFpres import iiifpapi3
-from IIIFpres.utilities import read_API3_json
+from IIIFpres.utilities import *
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 from tqdm import tqdm
@@ -35,9 +35,6 @@ def image_tiling(image, tmp_path):
     ).content
 
     img_path = f"{tmp_path}/{image}.jpg"
-
-    if not os.path.exists("{0}/iiif-img/{1}".format(tmp_path, id)):
-        os.mkdir("{0}/iiif-img/{1}".format(tmp_path, id))
     with open(img_path, "wb") as handler:
         handler.write(img_data)
 
@@ -47,7 +44,7 @@ def image_tiling(image, tmp_path):
     )
     if not (os.path.exists(info_path)):
         print("Tiling...")
-        command = "python iiif/iiif_static.py -d 'data/output/tmp/iiif-img' -t 256 -a 3.0 --osd-version 1.0.0 -e '/full/!400,400/0/default.jpg' -p 'https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img' '{0}'".format(
+        command = "python tiler/iiif_static.py -d 'data/output/tmp/iiif-img' -t 256 -a 3.0 --osd-version 1.0.0 -e '/full/!400,400/0/default.jpg' -p 'https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img' '{0}'".format(
             img_path
         )
 
@@ -284,20 +281,16 @@ def write_manifest(info, import_omeka, tmp_path):
     s.set_profile("level0")
 
     # Save manifest
-    # manifest.inspect()
-
     if not os.path.exists("{0}/iiif/{1}".format(tmp_path, id)):
         os.mkdir("{0}/iiif/{1}".format(tmp_path, id))
-
     file = "{0}/iiif/{1}/manifest.json".format(tmp_path, id)
     manifest.json_save(file)
     return manifest
 
 
 def write_collection(manifest, tmp_path):
-    print("write_collection...")
+    print("Adding item in collection...")
     collection_path = "{0}/iiif/collection/imaginerio.json".format(tmp_path)
-
     # Logo
     logo = iiifpapi3.logo()
     logo.set_id(
@@ -305,59 +298,77 @@ def write_collection(manifest, tmp_path):
     )
     logo.set_format("image/png")
     logo.set_hightwidth(164, 708)
-    print("write_collection...")
     if not os.path.exists(collection_path):
-        # Homepage
-        collection_homepage = iiifpapi3.homepage()
-        collection_homepage.set_id("https://imaginerio.org")
-        collection_homepage.set_type("Text")
-        collection_homepage.add_label("none", "imagineRio")
-        collection_homepage.set_format("text/html")
+        try:
+            endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/collection/imaginerio.json"
+            retry_strategy = Retry(
+                total=3,
+                status_forcelist=[429, 500, 502, 503, 504],
+                method_whitelist=["HEAD", "GET", "OPTIONS"],
+            )
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+            http = requests.Session()
+            http.mount("https://", adapter)
+            http.mount("http://", adapter)
+            collection_data = http.get(endpoint).json()
+            collection = read_API3_json_dict(collection_data)
+            collection.json_save(collection_path)
+            print("Collection downloaded!")
 
-        # Provider
-        collection_provider = iiifpapi3.provider()
-        collection_provider.set_id("https://imaginerio.org")
-        collection_provider.add_label("en", "imagineRio")
-        collection_provider.add_label("pt-BR", "imagineRio")
-        collection_provider.add_logo(logo)
-        collection_provider.add_homepage(collection_homepage)
+        except Exception as e:
+            print(e)
+            print("Couldn't find collection. Writing...")
+            # Homepage
+            collection_homepage = iiifpapi3.homepage()
+            collection_homepage.set_id("https://imaginerio.org")
+            collection_homepage.set_type("Text")
+            collection_homepage.add_label("none", "imagineRio")
+            collection_homepage.set_format("text/html")
 
-        # Collection manifest
-        collection = iiifpapi3.Collection()
-        collection.set_id(extendbase_url="iiif/collection/imaginerio")
-        collection.add_label("en", "imagineRio")
-        collection.add_label("pt-BR", "imagineRio")
-        collection.add_requiredStatement(
-            label="Attribution",
-            value="Hosted by imagineRio",
-            language_l="en",
-            language_v="en",
-        )
-        collection.add_requiredStatement(
-            label="Attribution",
-            value="Hospedado por imagineRio",
-            language_l="pt-BR",
-            language_v="pt-BR",
-        )
-        collection.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
+            # Provider
+            collection_provider = iiifpapi3.provider()
+            collection_provider.set_id("https://imaginerio.org")
+            collection_provider.add_label("en", "imagineRio")
+            collection_provider.add_label("pt-BR", "imagineRio")
+            collection_provider.add_logo(logo)
+            collection_provider.add_homepage(collection_homepage)
 
-        thumbnailobj = iiifpapi3.thumbnail()
-        thumbnailobj.set_id(
-            extendbase_url="iiif-img/tiles/0071824cx001-01/full/144,95/0/default.jpg"
-        )
-        thumbnailobj.set_hightwidth(95, 144)
-        collection.add_thumbnail(thumbnailobj=thumbnailobj)
+            # Collection manifest
+            collection = iiifpapi3.Collection()
+            collection.set_id(extendbase_url="iiif/collection/imaginerio")
+            collection.add_label("en", "imagineRio")
+            collection.add_label("pt-BR", "imagineRio")
+            collection.add_requiredStatement(
+                label="Attribution",
+                value="Hosted by imagineRio",
+                language_l="en",
+                language_v="en",
+            )
+            collection.add_requiredStatement(
+                label="Attribution",
+                value="Hospedado por imagineRio",
+                language_l="pt-BR",
+                language_v="pt-BR",
+            )
+            collection.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
 
-        collection.add_provider(collection_provider)
+            thumbnailobj = iiifpapi3.thumbnail()
+            thumbnailobj.set_id(
+                extendbase_url="iiif-img/tiles/0071824cx001-01/full/144,95/0/default.jpg"
+            )
+            thumbnailobj.set_hightwidth(95, 144)
+            collection.add_thumbnail(thumbnailobj=thumbnailobj)
 
-        if not os.path.exists("{0}/iiif/collection".format(tmp_path)):
-            os.mkdir("{0}/iiif/collection".format(tmp_path))
+            collection.add_provider(collection_provider)
+
+            if not os.path.exists("{0}/iiif/collection".format(tmp_path)):
+                os.mkdir("{0}/iiif/collection".format(tmp_path))
     else:
         collection = read_API3_json(collection_path)
 
-    print("write_collection...")
     collection.add_manifest_to_items(manifest)
     collection.json_save(collection_path)
+    print("Collection updated!")
     return collection_path
 
 
@@ -384,22 +395,43 @@ def upload_to_cloud(tmp_path):
                     os.path.join(root, file),
                     BUCKET,
                     path,
-                    "ExtraArgs={'ContentType': {content}}",
+                    content,
                 )
             except:
                 upload_log.append(path)
                 print("Couldn't upload image {0}, skipping".format(id))
 
 
+@dg.solid(config_schema={"tmp_path": dg.StringSource})
+def set_up(context):
+    tmp_path = context.solid_config["tmp_path"]
+    collection_path = "{0}/iiif/collection/imaginerio.json".format(tmp_path)
+    if not os.path.exists(tmp_path):
+        iiif_folder = os.path.join(tmp_path, "iiif")
+        iiif_img_folder = os.path.join(tmp_path, "iiif-img")
+        os.mkdir(tmp_path)
+        os.mkdir(iiif_folder)
+        os.mkdir(iiif_img_folder)
+
+    return "ok"
+
+
 @dg.solid(
+    config_schema={"slice_debug": dg.BoolSource},
     input_defs=[
         dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
     ],
 )
-def list_of_items(_, import_omeka):
+def list_of_items(context, import_omeka, ok):
     items = import_omeka["dcterms:identifier"].to_list()
     to_do = []
+    slice_debug = context.solid_config["slice_debug"]
 
+    # slice_debug = True
+    if slice_debug:
+        items = items[0:1]
+    else:
+        pass
     for item in items:
         endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/info.json".format(
             item
@@ -422,7 +454,10 @@ def list_of_items(_, import_omeka):
 
 
 @dg.solid(
-    config_schema={"tmp_path": dg.StringSource, "upload": dg.BoolSource},
+    config_schema={
+        "tmp_path": dg.StringSource,
+        "upload": dg.BoolSource,
+    },
     input_defs=[
         dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
     ],
@@ -435,17 +470,14 @@ def create_manifest(
     tmp_path = context.solid_config["tmp_path"]
     upload = context.solid_config["upload"]
 
+    print(to_do)
     for item in to_do:
         print("CREATING:", item)
         info = image_tiling(item, tmp_path)
         manifest = write_manifest(info, import_omeka, tmp_path)
         write_collection(manifest, tmp_path)
 
+        # Delete uploaded files
         if upload:
             upload_log = upload_to_cloud(tmp_path)
-            # Delete uploaded files
-            if not upload_log:
-                shutil.rmtree(os.path.join(tmp_path, "iiif", item))
-                shutil.rmtree(os.path.join(tmp_path, "iiif-img", item))
-            else:
-                print("Files: ", upload_log)
+            shutil.rmtree(os.path.join(tmp_path))
