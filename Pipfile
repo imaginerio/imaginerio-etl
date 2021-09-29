@@ -21,6 +21,7 @@ tqdm = "*"
 dagster-pandas = "*"
 validators = "*"
 boto3 = "*"
+pyiiifpres = {git = "https://github.com/giacomomarchioro/pyIIIFpres"}
 
 [dev-packages]
 black = "*"
