@@ -3,7 +3,7 @@ services:
   - type: web
     name: dagster
     region: oregon
-    env: python3
+    env: python
     buildCommand: pip install -r requirements.txt
     startCommand: dagit -p 10000 -h 0.0.0.0
     envVars:
