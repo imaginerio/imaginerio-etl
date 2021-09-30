@@ -10,9 +10,8 @@ load_dotenv(override=True)
 
 preset = {
     "solids": {
-        "set_up": {"config": {"tmp_path": {"env": "TMP"}}},
         "list_of_items": {"config": {"slice_debug": False}},
-        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": True}},
+        "create_manifest": {"config": {"upload": True}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -22,9 +21,8 @@ preset = {
 
 preset_debug = {
     "solids": {
-        "set_up": {"config": {"tmp_path": {"env": "TMP"}}},
         "list_of_items": {"config": {"slice_debug": True}},
-        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": False}},
+        "create_manifest": {"config": {"upload": False}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
