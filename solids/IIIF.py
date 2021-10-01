@@ -27,7 +27,6 @@ iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 
 
 def image_tiling(image):
-    print("image_tiling...")
     img_data = requests.get(
         "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/full/max/0/default.jpg".format(
             image
@@ -77,7 +76,8 @@ def write_manifest(info, import_omeka):
     # Header
     manifest = iiifpapi3.Manifest()
     manifest.set_id(
-        extendbase_url="iiif/{0}/manifest.json".format(str(id).replace(" ", "_"))
+        extendbase_url="iiif/{0}/manifest.json".format(
+            str(id).replace(" ", "_"))
     )
     manifest.add_label("pt-BR", "{0}".format(metadata_df["dcterms:title"]))
 
@@ -162,8 +162,10 @@ def write_manifest(info, import_omeka):
             },
         }
     )
-    FABMETHOD_EN = tuple(metadata_df["dcterms:medium:en"].split(" ", maxsplit=1))
-    FABMETHOD_PT = tuple(metadata_df["dcterms:medium:pt"].split(" ", maxsplit=1))
+    FABMETHOD_EN = tuple(
+        metadata_df["dcterms:medium:en"].split(" ", maxsplit=1))
+    FABMETHOD_PT = tuple(
+        metadata_df["dcterms:medium:pt"].split(" ", maxsplit=1))
     manifest.add_metadata(
         entry={
             "label": {
@@ -230,7 +232,8 @@ def write_manifest(info, import_omeka):
 
     # Homepage
     item_homepage = iiifpapi3.homepage()
-    homepage_id, homepage_label = metadata_df["dcterms:source"].split(" ", maxsplit=1)
+    homepage_id, homepage_label = metadata_df["dcterms:source"].split(
+        " ", maxsplit=1)
     try:
         item_homepage.set_id(objid=homepage_id)
         item_homepage.add_label(language="none", text=homepage_label)
@@ -380,7 +383,8 @@ def upload_to_cloud():
         for file in files:
             path = root.split("tmp/")[-1] + "/" + file
             content = (
-                "image/jpeg" if file.split(".")[-1] == "jpg" else "application/json"
+                "image/jpeg" if file.split(
+                    ".")[-1] == "jpg" else "application/json"
             )
             try:
                 upload = S3.upload_file(
@@ -418,7 +422,8 @@ def set_up(context):
 @dg.solid(
     config_schema={"slice_debug": dg.BoolSource},
     input_defs=[
-        dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
+        dg.InputDefinition(
+            "import_omeka", root_manager_key="import_omeka_root")
     ],
 )
 def list_of_items(context, import_omeka, ok):
@@ -457,7 +462,8 @@ def list_of_items(context, import_omeka, ok):
         "upload": dg.BoolSource,
     },
     input_defs=[
-        dg.InputDefinition("import_omeka", root_manager_key="import_omeka_root")
+        dg.InputDefinition(
+            "import_omeka", root_manager_key="import_omeka_root")
     ],
 )
 def create_manifest(
