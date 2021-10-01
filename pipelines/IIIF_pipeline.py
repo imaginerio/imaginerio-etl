@@ -10,7 +10,8 @@ load_dotenv(override=True)
 
 preset = {
     "solids": {
-        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": True}},
+        "list_of_items": {"config": {"slice_debug": False}},
+        "create_manifest": {"config": {"upload": True}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -20,7 +21,8 @@ preset = {
 
 preset_debug = {
     "solids": {
-        "create_manifest": {"config": {"tmp_path": {"env": "TMP"}, "upload": False}},
+        "list_of_items": {"config": {"slice_debug": True}},
+        "create_manifest": {"config": {"upload": False}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -43,17 +45,17 @@ preset_debug = {
         dg.PresetDefinition(
             "default",
             run_config=preset,
-            solid_selection=["list_of_items", "create_manifest"],
+            solid_selection=["set_up", "list_of_items", "create_manifest"],
             mode="default",
         ),
         dg.PresetDefinition(
-            "Debbug",
+            "debug",
             run_config=preset_debug,
-            solid_selection=["list_of_items", "create_manifest"],
+            solid_selection=["set_up", "list_of_items", "create_manifest"],
             mode="default",
         ),
     ],
 )
 def IIIF_pipeline():
-    to_do = list_of_items()
+    to_do = list_of_items(ok=set_up())
     manifest = create_manifest(to_do=to_do)
