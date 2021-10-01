@@ -26,7 +26,11 @@ iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 # iiifpapi3.BASE_URL = "http://127.0.0.1:8000/"
 
 
-def image_tiling(image):
+def tile_image(image):
+
+    if not os.path.exists:
+        os.mkdir("tmp")
+
     img_data = requests.get(
         "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/full/max/0/default.jpg".format(
             image
@@ -34,28 +38,30 @@ def image_tiling(image):
     ).content
 
     img_path = f"tmp/{image}.jpg"
+
     with open(img_path, "wb") as handler:
         handler.write(img_data)
 
-    info_path = "tmp/iiif-img/{0}/info.json".format(
-        image,
-    )
-    if not (os.path.exists(info_path)):
-        print("Tiling...")
-        command = "python tiler/iiif_static.py -d 'tmp/iiif-img' -t 256 -a 3.0 --osd-version 1.0.0 -e '/full/!400,400/0/default.jpg' -p 'https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img' '{0}'".format(
-            img_path
-        )
+    # info_path = "tmp/iiif-img/{0}/info.json".format(
+    #    image,
+    # )
+    # if not (os.path.exists(info_path)):
+    print("Tiling...")
 
-        process = subprocess.Popen(
-            command,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        process.communicate()
+    command = "python tiler/iiif_static.py -d 'tmp/iiif-img' -t 256 -a 3.0 --osd-version 1.0.0 -e '/full/!400,400/0/default.jpg' -p 'https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img' '{0}'".format(
+        img_path
+    )
+
+    process = subprocess.Popen(
+        command,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    process.communicate()
 
     os.remove(img_path)
-    info = json.load(open(info_path))
+    info = json.load(open("tmp/iiif-img/{0}/info.json".format(image)))
     return info
 
 
@@ -410,7 +416,6 @@ def upload_to_cloud():
 
 @dg.solid
 def set_up(context):
-    collection_path = "tmp/iiif/collection/imaginerio.json"
     if not os.path.exists("tmp"):
         os.mkdir("tmp")
         os.mkdir("tmp/iiif")
@@ -426,15 +431,13 @@ def set_up(context):
             "import_omeka", root_manager_key="import_omeka_root")
     ],
 )
-def list_of_items(context, import_omeka, ok):
+def list_items(context, import_omeka, ok):
     items = import_omeka["dcterms:identifier"].to_list()
     to_do = []
-    slice_debug = context.solid_config["slice_debug"]
 
-    # slice_debug = True
-    slice_debug = context.solid_config["slice_debug"]
-    if slice_debug:
-        items = items[30:33]
+    if context.solid_config["slice_debug"]:
+        items = items[:2]
+
     else:
         pass
     for item in items:
@@ -473,10 +476,10 @@ def create_manifest(
 ):
     upload = context.solid_config["upload"]
     for item in to_do:
-        print("CREATING:", item)
-        info = image_tiling(item)
+        context.log.info("Processing: {0}".format(str(item)))
+        info = tile_image(item)
         manifest = write_manifest(info, import_omeka)
         write_collection(manifest)
 
         if upload:
-            upload_log = upload_to_cloud()
+            upload_to_cloud()

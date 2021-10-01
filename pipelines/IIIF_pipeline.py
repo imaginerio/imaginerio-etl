@@ -8,9 +8,9 @@ from solids.utils import *
 load_dotenv(override=True)
 
 
-preset = {
+default = {
     "solids": {
-        "list_of_items": {"config": {"slice_debug": False}},
+        "list_items": {"config": {"slice_debug": False}},
         "create_manifest": {"config": {"upload": True}},
     },
     "resources": {
@@ -19,9 +19,9 @@ preset = {
     },
 }
 
-preset_debug = {
+debug = {
     "solids": {
-        "list_of_items": {"config": {"slice_debug": True}},
+        "list_items": {"config": {"slice_debug": True}},
         "create_manifest": {"config": {"upload": False}},
     },
     "resources": {
@@ -44,18 +44,18 @@ preset_debug = {
     preset_defs=[
         dg.PresetDefinition(
             "default",
-            run_config=preset,
-            solid_selection=["set_up", "list_of_items", "create_manifest"],
+            run_config=default,
+            solid_selection=["set_up", "list_items", "create_manifest"],
             mode="default",
         ),
         dg.PresetDefinition(
             "debug",
-            run_config=preset_debug,
-            solid_selection=["set_up", "list_of_items", "create_manifest"],
+            run_config=debug,
+            solid_selection=["set_up", "list_items", "create_manifest"],
             mode="default",
         ),
     ],
 )
 def IIIF_pipeline():
-    to_do = list_of_items(ok=set_up())
-    manifest = create_manifest(to_do=to_do)
+    to_do = list_items(ok=set_up())
+    create_manifest(to_do=to_do)
