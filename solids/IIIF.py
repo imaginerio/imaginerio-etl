@@ -289,7 +289,7 @@ def write_manifest(info, import_omeka):
 
     # Save manifest
     if not os.path.exists("tmp/iiif/{0}".format(id)):
-        os.mkdir("tmp/iiif/{0}".format(id))
+        os.makedirs("tmp/iiif/{0}".format(id))
     file = "tmp/iiif/{0}/manifest.json".format((id))
     manifest.json_save(file)
     return manifest
@@ -370,7 +370,7 @@ def write_collection(manifest):
             collection.add_provider(collection_provider)
 
             if not os.path.exists("tmp/iiif/collection"):
-                os.mkdir("tmp/iiif/collection")
+                os.makedirs("tmp/iiif/collection")
     else:
         collection = read_API3_json(collection_path)
 
