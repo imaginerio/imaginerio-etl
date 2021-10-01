@@ -28,7 +28,7 @@ iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 
 def tile_image(image):
 
-    if not os.path.exists:
+    if not os.path.exists("tmp"):
         os.mkdir("tmp")
 
     img_data = requests.get(
