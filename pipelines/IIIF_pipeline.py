@@ -49,7 +49,7 @@ preset_debug = {
             mode="default",
         ),
         dg.PresetDefinition(
-            "Debug",
+            "debug",
             run_config=preset_debug,
             solid_selection=["set_up", "list_of_items", "create_manifest"],
             mode="default",
