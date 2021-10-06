@@ -11,6 +11,7 @@ preset = {
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
         "metadata_root": {"config": {"env": "METADATA"}},
+        "push_new_data":{"config":"Cumulus"},
     }
 }
 
@@ -42,7 +43,8 @@ def cumulus_pipeline():
     cumulus_df = format_date(cumulus_df)
     cumulus_df = create_columns(cumulus_df)
     select_columns(cumulus_df)
-    update_metadata(df=cumulus_df)
+    ok = update_metadata(df=cumulus_df)
+    push_new_data(ok)
 
 
 ################   SENSORS   ##################

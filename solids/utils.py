@@ -251,7 +251,7 @@ def pull_new_data(context):
     pull = subprocess.Popen(comands)
 
 
-@dg.solid
+@dg.solid(config_schema=dg.Field(dg.String),input_defs=[dg.InputDefinition("commit",dagster_type=dg.Nothing)])
 def push_new_data(context):
     """
     Push data to Git submodule
@@ -262,7 +262,7 @@ def push_new_data(context):
         "pwd",
         "git checkout main",
         "git add .",
-        "git commit -a -m ':card_file_box: Update data'",
+        "git commit -a -m ':card_file_box: Update {commit} data'".format(commit=context.solid_config),
         "git push",
     ]
 
@@ -281,7 +281,7 @@ def push_new_data(context):
 
     etl_push = [
         "pwd",
-        "git checkout feature/dagster-submodule",
+        "git checkout feature/dagster-git",
         "git add data",
         "git commit -m ':card_file_box: Update submodule'",
         "git push",
@@ -298,4 +298,8 @@ def push_new_data(context):
         )
 
         output, errors = git_cli_etl.communicate()
-        context.log.info(f"command: {command} \noutput: {output} \nERRO: {errors}")
+        if errors:
+            context.log.info(f"command: {command} \noutput: {output} \nERROR: {errors}")
+        else:
+            context.log.info(f"command: {command} \noutput: {output}")
+

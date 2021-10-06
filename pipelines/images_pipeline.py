@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from solids.images import *
 from solids.utils import (
     df_csv_io_manager,
+    push_new_data,
     root_input_csv,
     root_input_geojson,
     update_metadata,
@@ -30,6 +31,7 @@ preset = {
                 "env": "EXIFTOOL",
             }
         },
+        "push_new_data":{"config":"Images"},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -58,10 +60,10 @@ def images_pipeline():
     files = file_picker()
     to_tag = file_dispatcher(files=files)
     images_df = create_images_df(files=files)
-    update_metadata(df=images_df)
+    ok = update_metadata(df=images_df)
     to_upload = write_metadata(to_tag=to_tag)
     upload_to_cloud(to_upload)
-
+    push_new_data(ok)
 
 ################   SCHEDULES   ##################
 
