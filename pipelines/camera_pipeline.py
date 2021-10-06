@@ -29,6 +29,7 @@ preset = {
                     "env": "PROCESSED_SINGLE"}}},
 
         "create_geojson": {"config": {"env": "CAMERA"}},
+        "push_new_data":{"config":"Geojson"},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -67,7 +68,8 @@ def camera_pipeline():
     new_features = create_feature(kmls=kmls)
     move_files(new_features)
     geojson = create_geojson(new_features=new_features)
-    update_metadata(df=geojson)
+    ok = update_metadata(df=geojson)
+    push_new_data(ok)
 
 
 ################   SENSORS   ##################
