@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>002037AAK5074</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17203263796788</longitude>
+			<latitude>-22.90265875417813</latitude>
+			<altitude>7.526169656867701</altitude>
+			<heading>84.56998837603203</heading>
+			<tilt>87.11315166561273</tilt>
+			<roll>-0.0002419293473159842</roll>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Volumes/GoogleDrive/My Drive/_IMS/backlog/002037AAK5074.jpg</href>
+		</Icon>
+		<rotation>-3.92</rotation>
+		<ViewVolume>
+			<leftFov>-23.595</leftFov>
+			<rightFov>23.595</rightFov>
+			<bottomFov>-15.85</bottomFov>
+			<topFov>15.85</topFov>
+			<near>1.57505</near>
+		</ViewVolume>
+		<Point>
+			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			<coordinates>-43.17203263796788,-22.90265875417813,7.526169656867701</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

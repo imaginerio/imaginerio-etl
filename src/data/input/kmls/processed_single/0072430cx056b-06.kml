@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>0072430cx056b-06</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17564643399998</longitude>
+			<latitude>-22.91057073999991</latitude>
+			<altitude>10.48543233887172</altitude>
+			<heading>-2.961271390631959</heading>
+			<tilt>95.45656912008673</tilt>
+			<roll>1.275565271666561e-08</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Cinelândia/0072430cx056b-06.jpg</href>
+		</Icon>
+		<rotation>-0.81</rotation>
+		<ViewVolume>
+			<leftFov>-27.275</leftFov>
+			<rightFov>27.275</rightFov>
+			<bottomFov>-22.365</bottomFov>
+			<topFov>22.365</topFov>
+			<near>0.538589</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17564643399998,-22.91057073999992,10.48543233887172</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

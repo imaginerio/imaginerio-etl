@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>002095RJ001014</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.18487648859779</longitude>
+			<latitude>-22.97222192888796</latitude>
+			<altitude>9.00176635455197</altitude>
+			<heading>51.07739468883745</heading>
+			<tilt>79.95559360786639</tilt>
+			<roll>4.797563153043369e-08</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Copacabana/002095RJ001014.jpg</href>
+		</Icon>
+		<rotation>-1.72</rotation>
+		<ViewVolume>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-23.245</bottomFov>
+			<topFov>23.245</topFov>
+			<near>0.846247</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18487648859779,-22.97222192888796,9.00176635455197</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

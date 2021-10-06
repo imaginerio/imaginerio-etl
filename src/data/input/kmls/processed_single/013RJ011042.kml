@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>013RJ011042</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.18740935594494</longitude>
+			<latitude>-22.91955015926975</latitude>
+			<altitude>117.0541151752696</altitude>
+			<heading>-160.4156440075408</heading>
+			<tilt>87.89272575295819</tilt>
+			<roll>-1.144999685326866e-13</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Pictures/Screenshots/Screen Shot 2021-06-29 at 10.27.18.png</href>
+		</Icon>
+		<rotation>-0.74</rotation>
+		<ViewVolume>
+			<leftFov>-33.25</leftFov>
+			<rightFov>33.25</rightFov>
+			<bottomFov>-25.9</bottomFov>
+			<topFov>25.9</topFov>
+			<near>3.74018</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.18740935594494,-22.91955015926975,117.0541151752696</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

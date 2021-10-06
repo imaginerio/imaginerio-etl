@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>013RJ012003</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17979881167162</longitude>
+			<latitude>-22.91815593424391</latitude>
+			<altitude>81.20397096956651</altitude>
+			<heading>146.0663092472904</heading>
+			<tilt>85.86054944876739</tilt>
+			<roll>5.72499842663433e-14</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Santa_Teresa/013RJ012003.jpg</href>
+		</Icon>
+		<rotation>1.24</rotation>
+		<ViewVolume>
+			<leftFov>-24.7</leftFov>
+			<rightFov>24.7</rightFov>
+			<bottomFov>-18.655</bottomFov>
+			<topFov>18.655</topFov>
+			<near>2.79027</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17979881167162,-22.91815593424391,81.20397096956651</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

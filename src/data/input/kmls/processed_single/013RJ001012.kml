@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>013RJ001012</name>
+		<Camera>
+			<longitude>-43.17822383989029</longitude>
+			<latitude>-22.90385966847617</latitude>
+			<altitude>10.16942144758475</altitude>
+			<heading>-16.44386705163316</heading>
+			<tilt>97.29466759359623</tilt>
+			<roll>3.889624958673765</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>C:/Users/Cobrintia/Documents/geolocation/geolocated/013RJ001012.jpg</href>
+		</Icon>
+		<rotation>-2.64</rotation>
+		<ViewVolume>
+			<leftFov>-30</leftFov>
+			<rightFov>30</rightFov>
+			<bottomFov>-23.745</bottomFov>
+			<topFov>23.745</topFov>
+			<near>1.20981</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17822383989029,-22.90385966847617,10.16942144758475</coordinates>
+		</Point>
+	</PhotoOverlay>
+
+</kml>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>0072430cx044a-02</name>
+		<visibility>0</visibility>
+		<open>1</open>
+		<Camera>
+			<longitude>-43.17460368900001</longitude>
+			<latitude>-22.90271617100002</latitude>
+			<altitude>17.81999999717379</altitude>
+			<heading>177.0608068319389</heading>
+			<tilt>85.29999999999998</tilt>
+			<roll>6.419027263676484e-10</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Praça_XV/0072430cx044a-02.jpg</href>
+		</Icon>
+		<rotation>-1.96</rotation>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-20.435</bottomFov>
+			<topFov>20.435</topFov>
+			<near>0.40251</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17460368900001,-22.90271617100002,17.81999999717379</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

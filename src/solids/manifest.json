@@ -1,0 +1,297 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/014MF014017/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "pt-BR": [
+      "Bonde sob os arcos da Lapa"
+    ]
+  },
+  "metadata": [
+    {
+      "label": {
+        "en": [
+          "Identifier"
+        ],
+        "pt-BR": [
+          "Identificador"
+        ]
+      },
+      "value": {
+        "en": [
+          "014MF014017"
+        ],
+        "pt-BR": [
+          "014MF014017"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Title"
+        ],
+        "pt-BR": [
+          "Título"
+        ]
+      },
+      "value": {
+        "en": [
+          "Bonde sob os arcos da Lapa"
+        ],
+        "pt-BR": [
+          "Bonde sob os arcos da Lapa"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Description"
+        ],
+        "pt-BR": [
+          "Descrição"
+        ]
+      },
+      "value": {
+        "en": [
+          "nan"
+        ],
+        "pt-BR": [
+          "nan"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Creator"
+        ],
+        "pt-BR": [
+          "Autor"
+        ]
+      },
+      "value": {
+        "en": [
+          "Marc Ferrez"
+        ],
+        "pt-BR": [
+          "Marc Ferrez"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Date"
+        ],
+        "pt-BR": [
+          "Data"
+        ]
+      },
+      "value": {
+        "en": [
+          "1890 circa"
+        ],
+        "pt-BR": [
+          "1890 circa"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Type"
+        ],
+        "pt-BR": [
+          "Tipo"
+        ]
+      },
+      "value": {
+        "en": [
+          "<a class=\"uri-value-link\" target=\"_blank\" href=\"http://wikidata.org/wiki/Q125191\">Photograph</a>"
+        ],
+        "pt-BR": [
+          "<a class=\"uri-value-link\" target=\"_blank\" href=\"http://wikidata.org/wiki/Q125191\">Fotografia</a>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Format"
+        ],
+        "pt-BR": [
+          "Formato"
+        ]
+      },
+      "value": {
+        "en": [
+          "<a class=\"uri-value-link\" target=\"_blank\" href=\"http://wikidata.org/wiki/Q56055236\">Photographic print</a>"
+        ],
+        "pt-BR": [
+          "<a class=\"uri-value-link\" target=\"_blank\" href=\"http://wikidata.org/wiki/Q56055236\">Fotografia em papel</a>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Fabrication Method"
+        ],
+        "pt-BR": [
+          "Método de Fabricação"
+        ]
+      },
+      "value": {
+        "en": [
+          "<a class=\"uri-value-link\" target=\"_blank\" href=\"http://wikidata.org/wiki/Q107387614\">Albumine</a>"
+        ],
+        "pt-BR": [
+          "<a class=\"uri-value-link\" target=\"_blank\" href=\"http://wikidata.org/wiki/Q107387614\">Albumina</a>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Width (mm)"
+        ],
+        "pt-BR": [
+          "Largura (mm)"
+        ]
+      },
+      "value": {
+        "en": [
+          "215.0"
+        ],
+        "pt-BR": [
+          "215.0"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Height (mm)"
+        ],
+        "pt-BR": [
+          "Altura (mm)"
+        ]
+      },
+      "value": {
+        "en": [
+          "155.0"
+        ],
+        "pt-BR": [
+          "155.0"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "en": [
+      "nan"
+    ],
+    "pt-BR": [
+      "nan"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "en": [
+        "Hosted by imagineRio"
+      ]
+    }
+  },
+  "rights": "http://rightsstatements.org/vocab/CNE/1.0/",
+  "thumbnail": [
+    {
+      "id": "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/014MF014017/full/289,218/0/default.jpg",
+      "type": "thumbnail",
+      "set_width": 200,
+      "set_height": 150
+    }
+  ],
+  "provider": [
+    {
+      "id": "https://imaginerio.org/",
+      "type": "Agent",
+      "label": {
+        "en": [
+          "imagineRio"
+        ],
+        "pt-BR": [
+          "imagineRio"
+        ]
+      },
+      "homepage": [
+        {
+          "id": "http://acervos.ims.com.br/portals/#/detailpage/82447",
+          "type": "Text",
+          "label": {
+            "none": [
+              "Instituto Moreira Salles"
+            ]
+          },
+          "format": "text/html"
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://aws1.discourse-cdn.com/free1/uploads/imaginerio/original/1X/8c4f71106b4c8191ffdcafb4edeedb6f6f58b482.png",
+          "type": "Image",
+          "format": "image/png",
+          "set_width": 708,
+          "set_height": 164
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "https://imaginerio-images.s3.us-east-1.amazonaws.com/canvas/p1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Recto"
+        ]
+      },
+      "height": 9239,
+      "width": 6954,
+      "items": [
+        {
+          "id": "https://imaginerio-images.s3.us-east-1.amazonaws.com/annotation-page/p1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://imaginerio-images.s3.us-east-1.amazonaws.com/annotation/p1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/014MF014017/full/144,95/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "height": 6954,
+                "width": 9239,
+                "service": [
+                  {
+                    "id": "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/014MF014017/",
+                    "type": "ImageService3",
+                    "profile": "level0"
+                  }
+                ]
+              },
+              "target": "https://imaginerio-images.s3.us-east-1.amazonaws.com/canvas/p1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

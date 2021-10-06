@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>014GLAS022</name>
+		<Camera>
+			<longitude>-43.19639930830898</longitude>
+			<latitude>-22.90072154506575</latitude>
+			<altitude>123.9718486689746</altitude>
+			<heading>-153.5906669885115</heading>
+			<tilt>87.49741592543852</tilt>
+			<roll>1.024138607431252e-12</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/014GLAS022.jpg</href>
+		</Icon>
+		<rotation>1.38</rotation>
+		<ViewVolume>
+			<leftFov>-21.5</leftFov>
+			<rightFov>21.5</rightFov>
+			<bottomFov>-17.225</bottomFov>
+			<topFov>17.225</topFov>
+			<near>0.742309</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19639930830898,-22.90072154506575,123.9718486689746</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

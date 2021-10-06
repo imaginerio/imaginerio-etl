@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>002095RJ001019</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.17392662700622</longitude>
+			<latitude>-22.92826068542055</latitude>
+			<altitude>10.60826253122892</altitude>
+			<heading>165.6946367491117</heading>
+			<tilt>93.36537086260209</tilt>
+			<roll>3.940707250333297e-12</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Glória/002095RJ001019.jpg</href>
+		</Icon>
+		<rotation>1.52</rotation>
+		<ViewVolume>
+			<leftFov>-27.59</leftFov>
+			<rightFov>27.59</rightFov>
+			<bottomFov>-21.74</bottomFov>
+			<topFov>21.74</topFov>
+			<near>1.3682</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17392662700622,-22.92826068542056,10.60826253122892</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

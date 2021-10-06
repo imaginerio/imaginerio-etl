@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>013RJ012044</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.21470780968124</longitude>
+			<latitude>-22.98521645423529</latitude>
+			<altitude>14.37160334593686</altitude>
+			<heading>-107.4126552318454</heading>
+			<tilt>83.08653083276073</tilt>
+			<roll>-2.083285779026041e-08</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Ipanema:Leblon:Lagoa/013RJ012044.jpg</href>
+		</Icon>
+		<rotation>1.47</rotation>
+		<ViewVolume>
+			<leftFov>-27.505</leftFov>
+			<rightFov>27.505</rightFov>
+			<bottomFov>-21.51</bottomFov>
+			<topFov>21.51</topFov>
+			<near>2.5008</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21470780968124,-22.98521645423529,14.37160334593686</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

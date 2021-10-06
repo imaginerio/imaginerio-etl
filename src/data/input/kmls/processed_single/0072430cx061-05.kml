@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>0072430cx061-05</name>
+		<Camera>
+			<longitude>-43.22363932426669</longitude>
+			<latitude>-22.90353999364663</latitude>
+			<altitude>48.65950155651155</altitude>
+			<heading>-136.5992718762266</heading>
+			<tilt>91.15966834519494</tilt>
+			<roll>3.282332431270349e-12</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/São_Cristóvão/0072430cx061-05.jpg</href>
+		</Icon>
+		<rotation>-0.39</rotation>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-20.435</bottomFov>
+			<topFov>20.435</topFov>
+			<near>3.82578</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.22363932426669,-22.90353999364663,48.65950155651155</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>013RJ012023</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.19666693597134</longitude>
+			<latitude>-22.95575104072129</latitude>
+			<altitude>12.50630269122342</altitude>
+			<heading>-78.84311987819395</heading>
+			<tilt>95.82920145290966</tilt>
+			<roll>1.323322572430608e-08</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Botafogo/013RJ012023.jpg</href>
+		</Icon>
+		<rotation>0.47</rotation>
+		<ViewVolume>
+			<leftFov>-30.63</leftFov>
+			<rightFov>30.63</rightFov>
+			<bottomFov>-23.745</bottomFov>
+			<topFov>23.745</topFov>
+			<near>0.327495</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.19666693597134,-22.95575104072129,12.50630269122342</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

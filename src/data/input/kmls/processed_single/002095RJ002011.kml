@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>002095RJ002011</name>
+		<Camera>
+			<longitude>-43.17187129224241</longitude>
+			<latitude>-22.90440296691362</latitude>
+			<altitude>49.60955068125148</altitude>
+			<heading>-121.2246493478509</heading>
+			<tilt>89.8259190352565</tilt>
+			<roll>-3.581105559887012e-05</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Castelo/002095RJ002011.jpg</href>
+		</Icon>
+		<rotation>1.96</rotation>
+		<ViewVolume>
+			<leftFov>-25.65</leftFov>
+			<rightFov>25.65</rightFov>
+			<bottomFov>-18.58</bottomFov>
+			<topFov>18.58</topFov>
+			<near>14.6232</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.17187129224241,-22.90440296691362,49.60955068125148</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>0071824cx038-07</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.22428709404243</longitude>
+			<latitude>-22.96749138040039</latitude>
+			<altitude>10.23131022769884</altitude>
+			<heading>130.6078098869722</heading>
+			<tilt>98.7118180050915</tilt>
+			<roll>-0.0001391561090466882</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Jardim Botânico/0071824cx038-07.jpg</href>
+		</Icon>
+		<rotation>0.68</rotation>
+		<ViewVolume>
+			<leftFov>-21.5</leftFov>
+			<rightFov>21.5</rightFov>
+			<bottomFov>-27.77</bottomFov>
+			<topFov>27.77</topFov>
+			<near>0.712017</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.22428709404243,-22.96749138040039,10.23131022769884</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>

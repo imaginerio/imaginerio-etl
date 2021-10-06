@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<PhotoOverlay>
+		<name>013RJ016012</name>
+		<visibility>0</visibility>
+		<Camera>
+			<longitude>-43.21860707586692</longitude>
+			<latitude>-22.88376385613778</latitude>
+			<altitude>8.975277148085903</altitude>
+			<heading>11.49443497728981</heading>
+			<tilt>85.80921695413802</tilt>
+			<roll>1.590277340731758e-13</roll>
+			<altitudeMode>absolute</altitudeMode>
+		</Camera>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>:/camera_mode.png</href>
+				</Icon>
+			</IconStyle>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed error fetching0 fetching1 fetching2</state>
+					<href>http://maps.google.com/mapfiles/kml/shapes/camera-lv.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Icon>
+			<href>/Users/martimpassos/Desktop/backlog/Canal_do_Mangue/013RJ016012.jpg</href>
+		</Icon>
+		<rotation>-1.28</rotation>
+		<ViewVolume>
+			<leftFov>-25</leftFov>
+			<rightFov>25</rightFov>
+			<bottomFov>-19.23</bottomFov>
+			<topFov>19.23</topFov>
+			<near>0.105</near>
+		</ViewVolume>
+		<Point>
+			<altitudeMode>absolute</altitudeMode>
+			<coordinates>-43.21860707586692,-22.88376385613778,8.975277148085903</coordinates>
+		</Point>
+	</PhotoOverlay>
+</kml>
