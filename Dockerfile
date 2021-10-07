@@ -7,7 +7,8 @@ RUN mkdir /dagster
 # Change working dirtory
 WORKDIR /dagster
 
-# ENV DAGSTER_HOME=/dagster/.dagster
+ENV DAGSTER_HOME=/dagster/.dagster
+RUN mkdir $DAGSTER_HOME
 
 RUN apt-get update && apt-get install -y git
 
@@ -29,4 +30,5 @@ EXPOSE 10000
 # Launch dagit, but we need to use workspace_docker.yaml
 # instead of the default workspace.yaml since we are using the python
 # executable from the container image, not the local Python executable
-#ENTRYPOINT ["dagit", "-w", "workspace.yaml", "-h", "0.0.0.0", "-p", "10000"]
+# ENTRYPOINT ["dagit", "-w", "workspace.yaml", "-h", "0.0.0.0", "-p", "10000"]
+ENTRYPOINT ["dagster", "pipeline", "execute", "-f", "pipelines/IIIF_pipeline.py", "--preset", "default"]
