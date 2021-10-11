@@ -3,7 +3,7 @@ import geopandas as gpd
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)
-def root_input_geojson(context):
+def geojson_root_input(context):
     """
     Reads GEOJSON file from project directory
     instead of upstream solid

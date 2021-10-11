@@ -1,7 +1,7 @@
 from os import write
 import dagster as dg
 from dotenv import load_dotenv
-from solids.IIIF import *
+from solids.iiif import *
 from utils.csv_root_input import csv_root_input
 
 
@@ -10,52 +10,59 @@ load_dotenv(override=True)
 
 default = {
     "solids": {
-        "list_items": {"config": {"slice_debug": False}},
-        "create_manifest": {"config": {"upload": True}},
+        "iiify": {"config": {"manifest_only": False}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
-        "import_omeka_root": {"config": {"env": "IMPORT_OMEKA"}},
+        "mapping_root": {"config": {"env": "MAPPING"}},
     },
 }
 
-debug = {
+manifest_only = {
     "solids": {
-        "list_items": {"config": {"slice_debug": True}},
-        "create_manifest": {"config": {"upload": False}},
+        "iiify": {"config": {"manifest_only": True}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
-        "import_omeka_root": {"config": {"env": "IMPORT_OMEKA"}},
+        "mapping_root": {"config": {"env": "MAPPING"}},
     },
 }
 
-
+#TO-DO implement S3 and Local IO/file managers according to Mode
 @dg.pipeline(
     mode_defs=[
         dg.ModeDefinition(
-            name="default",
+            name="prod",
             resource_defs={
                 "metadata_root": csv_root_input,
-                "import_omeka_root": csv_root_input,
+                "mapping_root": csv_root_input,
             },
-        )
+        ),
+        dg.ModeDefinition(
+            name="test",
+            resource_defs={
+                "metadata_root": csv_root_input,
+                "mapping_root": csv_root_input,
+            },
+        ),
     ],
     preset_defs=[
         dg.PresetDefinition(
-            "default",
+            name="prod",
             run_config=default,
-            #solid_selection=["list_items", "create_manifest"],
-            mode="default",
+            mode="prod",
         ),
         dg.PresetDefinition(
-            "debug",
-            run_config=debug,
-            #solid_selection=["list_items", "create_manifest"],
-            mode="default",
+            name="manifest_only",
+            run_config=manifest_only,
+            mode="prod",
         ),
-    ],
+        dg.PresetDefinition(
+            name="test",
+            run_config=default,
+            mode="test",
+        ),
+    ]
 )
 def IIIF_pipeline():
-    to_do = list_items()
-    create_manifest(to_do=to_do)
+    iiify()

@@ -284,18 +284,21 @@ def write_metadata(context, metadata: dp.DataFrame, to_tag):
     return to_upload
 
 
-@dg.solid(
-    config_schema={
-        "jpeg_hd": dg.StringSource,
-    },
-)
+@dg.solid
 def upload_to_cloud(context, to_upload):
+
     S3 = boto3.client("s3")
     BUCKET = "imaginerio-images"
+
     for image_path in tqdm(to_upload, "Uploading files..."):
-        id = os.path.basename(image_path)[1].split(".")[0]
-        key_name = "{0}/full/max/0/default.jpg".format(id)
+        id = os.path.basename(image_path).split(".")[0]
+        key_name = "iiif/{0}/full/max/0/default.jpg".format(id)
         try:
-            S3.upload_file(image_path, BUCKET, key_name)
+            S3.upload_file(
+                image_path,
+                BUCKET,
+                key_name,
+                ExtraArgs={"ACL": "public-read", "ContentType": "image/jpeg"},
+            )
         except:
             print("Couldn't upload image {0}, skipping".format(id))

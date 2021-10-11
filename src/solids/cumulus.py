@@ -297,12 +297,12 @@ def create_columns(context, df_cumulus: main_dataframe_types):
         "Fabrication Method",
     ] = "Photogravure"
 
-    df_cumulus["Description (English)"] = "-"
+    df_cumulus["Description (English)"] = ""
     df_cumulus["Type"] = "Photograph"
     df_cumulus["Item Set"] = "All||Views"
     df_cumulus["Source"] = "Instituto Moreira Salles"
-    df_cumulus["License"] = "-"
-    df_cumulus["Rights"] = "-"
+    df_cumulus["License"] = ""
+    df_cumulus["Rights"] = ""
     df_cumulus["Attribution"] = ""
     df_cumulus["Smapshot ID"] = ""
 

@@ -13,6 +13,7 @@ import pandas as pd
 import requests
 from dagster.builtins import Nothing, String
 from dotenv import load_dotenv
+from requests.api import get
 from IIIFpres import iiifpapi3
 from IIIFpres.utilities import *
 from requests.adapters import HTTPAdapter
@@ -26,23 +27,47 @@ iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 # iiifpapi3.BASE_URL = "http://127.0.0.1:8000/"
 
 
-def tile_image(image):
+def info_json_exists(identifier):
+
+    endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/{0}/info.json".format(
+        identifier
+    )
+
+    retry_strategy = Retry(
+        total=3,
+        status_forcelist=[429, 500, 502, 503, 504],
+        method_whitelist=["HEAD", "GET", "OPTIONS"],
+    )
+
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount("https://", adapter)
+    http.mount("http://", adapter)
+    response = http.get(endpoint)
+
+    if response.status_code == 200:
+        return True
+    else:
+        return False
+
+
+def tile_image(identifier):
 
     img_data = requests.get(
-        "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/full/max/0/default.jpg".format(
-            image
+        "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/{0}/full/max/0/default.jpg".format(
+            identifier
         )
     ).content
+
+    img_path = f"tmp/{identifier}.jpg"
 
     if not os.path.exists("tmp"):
         os.mkdir("tmp")
 
-    with open(f"tmp/{image}.jpg", "wb") as handler:
+    with open(img_path, "wb") as handler:
         handler.write(img_data)
 
-    print(os.listdir("tmp"))
-
-    command = ["java", "-jar", "utils/mod-tiler.jar", f"tmp/{image}.jpg"]
+    command = ["java", "-jar", "utils/mod-tiler.jar", img_path]
 
     process = subprocess.Popen(
         command,
@@ -53,16 +78,31 @@ def tile_image(image):
     )
     process.communicate()
 
-    os.remove(f"tmp/{image}.jpg")
-    info = json.load(open("tmp/iiif-img/{0}/info.json".format(image)))
+    os.remove(img_path)
+    info = json.load(open("tmp/iiif/{0}/info.json".format(identifier)))
     return info
 
 
-def write_manifest(info, import_omeka):
-    print("Write_manifest...")
-    id = info["id"].split("iiif-img/")[-1]
-    import_omeka = import_omeka.set_index("dcterms:identifier")
-    metadata_df = import_omeka.loc[id]
+def write_manifest(info, identifier, item, mapping):
+
+    def get_multilingual_values(en):
+        url = "http://wikidata.org/wiki/{0}".format(mapping.loc[en, "Wiki ID"])
+        pt = mapping.loc[en, "Label:pt"]
+        return{"url":url,"en":str(en),"pt":str(pt)}
+
+    #Values
+    title = str(item["Title"])
+    description_en = str(item["Description (English)"]) if pd.notna(item["Description (English)"]) else item["Description (Portuguese)"]
+    description_pt = str(item["Description (Portuguese)"]) if pd.notna(item["Description (Portuguese)"]) else item["Description (English)"]
+    creator = str(item["Creator"])
+    date = str(item["Date"])
+    type = get_multilingual_values(item["Type"])
+    materials = get_multilingual_values(item["Materials"])
+    fabrication_method = get_multilingual_values(item["Fabrication Method"])
+    width = str(item["Width (mm)"])
+    height = str(item["Height (mm)"])
+    source = str(item["Source"])
+    source_url = str(item["Source URL"])
 
     # Logo
     logo = iiifpapi3.logo()
@@ -76,23 +116,23 @@ def write_manifest(info, import_omeka):
     manifest = iiifpapi3.Manifest()
     manifest.set_id(
         extendbase_url="iiif/{0}/manifest.json".format(
-            str(id).replace(" ", "_"))
+            str(identifier).replace(" ", "_"))
     )
-    manifest.add_label("pt-BR", "{0}".format(metadata_df["dcterms:title"]))
+    manifest.add_label("pt-BR", title)
 
     # Metadata
     manifest.add_metadata(
         entry={
             "label": {"en": ["Identifier"], "pt-BR": ["Identificador"]},
-            "value": {"en": ["{0}".format(id)], "pt-BR": ["{0}".format(id)]},
+            "value": {"en": [identifier], "pt-BR": [identifier]},
         }
     )
     manifest.add_metadata(
         entry={
             "label": {"en": ["Title"], "pt-BR": ["Título"]},
             "value": {
-                "en": ["{0}".format(metadata_df["dcterms:title"])],
-                "pt-BR": ["{0}".format(metadata_df["dcterms:title"])],
+                "en": [title],
+                "pt-BR": [title],
             },
         }
     )
@@ -100,8 +140,8 @@ def write_manifest(info, import_omeka):
         entry={
             "label": {"en": ["Description"], "pt-BR": ["Descrição"]},
             "value": {
-                "en": ["{0}".format(metadata_df["dcterms:description"])],
-                "pt-BR": ["{0}".format(metadata_df["dcterms:description"])],
+                "en": [description_en],
+                "pt-BR": [description_pt],
             },
         }
     )
@@ -109,8 +149,8 @@ def write_manifest(info, import_omeka):
         entry={
             "label": {"en": ["Creator"], "pt-BR": ["Autor"]},
             "value": {
-                "en": ["{0}".format(metadata_df["dcterms:creator"])],
-                "pt-BR": ["{0}".format(metadata_df["dcterms:creator"])],
+                "en": [creator],
+                "pt-BR": [creator],
             },
         }
     )
@@ -118,53 +158,45 @@ def write_manifest(info, import_omeka):
         entry={
             "label": {"en": ["Date"], "pt-BR": ["Data"]},
             "value": {
-                "en": ["{0}".format(metadata_df["dcterms:date"])],
-                "pt-BR": ["{0}".format(metadata_df["dcterms:date"])],
+                "en": [date],
+                "pt-BR": [date],
             },
         }
     )
-    TYPE_EN = tuple(metadata_df["dcterms:type:en"].split(" ", maxsplit=1))
-    TYPE_PT = tuple(metadata_df["dcterms:type:pt"].split(" ", maxsplit=1))
     manifest.add_metadata(
         entry={
             "label": {"en": ["Type"], "pt-BR": ["Tipo"]},
             "value": {
                 "en": [
                     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        *TYPE_EN
+                        type["url"], type["en"]
                     )
                 ],
                 "pt-BR": [
                     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        *TYPE_PT
+                        type["url"], type["pt"]
                     )
                 ],
             },
         }
     )
-    FORMAT_EN = tuple(metadata_df["dcterms:format:en"].split(" ", maxsplit=1))
-    FORMAT_PT = tuple(metadata_df["dcterms:format:pt"].split(" ", maxsplit=1))
     manifest.add_metadata(
         entry={
-            "label": {"en": ["Format"], "pt-BR": ["Formato"]},
+            "label": {"en": ["Materials"], "pt-BR": ["Materiais"]},
             "value": {
                 "en": [
                     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        *FORMAT_EN
+                        materials["url"], materials["en"]
                     )
                 ],
                 "pt-BR": [
                     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        *FORMAT_PT
+                        materials["url"],materials["pt"]
                     )
                 ],
             },
         }
     )
-    FABMETHOD_EN = tuple(
-        metadata_df["dcterms:medium:en"].split(" ", maxsplit=1))
-    FABMETHOD_PT = tuple(
-        metadata_df["dcterms:medium:pt"].split(" ", maxsplit=1))
     manifest.add_metadata(
         entry={
             "label": {
@@ -174,12 +206,12 @@ def write_manifest(info, import_omeka):
             "value": {
                 "en": [
                     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        *FABMETHOD_EN
+                        fabrication_method["url"], fabrication_method["en"]
                     )
                 ],
                 "pt-BR": [
                     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        *FABMETHOD_PT
+                        fabrication_method["url"], fabrication_method["pt"]
                     )
                 ],
             },
@@ -189,8 +221,8 @@ def write_manifest(info, import_omeka):
         entry={
             "label": {"en": ["Width (mm)"], "pt-BR": ["Largura (mm)"]},
             "value": {
-                "en": ["{0}".format(metadata_df["schema:width"])],
-                "pt-BR": ["{0}".format(metadata_df["schema:width"])],
+                "en": [width],
+                "pt-BR": [width],
             },
         }
     )
@@ -198,19 +230,17 @@ def write_manifest(info, import_omeka):
         entry={
             "label": {"en": ["Height (mm)"], "pt-BR": ["Altura (mm)"]},
             "value": {
-                "en": ["{0}".format(metadata_df["schema:height"])],
-                "pt-BR": ["{0}".format(metadata_df["schema:height"])],
+                "en": [height],
+                "pt-BR": [height],
             },
         }
     )
 
     # Rights & Attribution
     manifest.add_summary(
-        language="en", text="{0}".format(metadata_df["dcterms:description"])
-    )
+        language="en", text=description_en)
     manifest.add_summary(
-        language="pt-BR", text="{0}".format(metadata_df["dcterms:description"])
-    )
+        language="pt-BR", text=description_pt)
     manifest.add_requiredStatement(
         label="Attribution",
         value="Hosted by imagineRio",
@@ -224,8 +254,8 @@ def write_manifest(info, import_omeka):
     thumb_width = info["sizes"][0]["width"]
     thumb_height = info["sizes"][0]["height"]
     thumbnail.set_id(
-        extendbase_url="iiif-img/{0}/full/{1},{2}/0/default.jpg".format(
-            str(id).replace(" ", "_"), thumb_width, thumb_height
+        extendbase_url="iiif/{0}/full/{1},{2}/0/default.jpg".format(
+            str(identifier).replace(" ", "_"), thumb_width, thumb_height
         )
     )
     thumbnail.set_hightwidth(150, 200)
@@ -233,8 +263,8 @@ def write_manifest(info, import_omeka):
 
     # Homepage
     item_homepage = iiifpapi3.homepage()
-    homepage_id, homepage_label = metadata_df["dcterms:source"].split(
-        " ", maxsplit=1)
+    homepage_id = source_url
+    homepage_label = source
     try:
         item_homepage.set_id(objid=homepage_id)
         item_homepage.add_label(language="none", text=homepage_label)
@@ -253,8 +283,7 @@ def write_manifest(info, import_omeka):
     item_provider.add_homepage(item_homepage)
     manifest.add_provider(item_provider)
 
-    # Get image sizeslist
-
+    # Get image sizes list
     imgwidth = info["width"]
     imgheight = info["height"]
 
@@ -271,28 +300,27 @@ def write_manifest(info, import_omeka):
     annotation.set_id(extendbase_url="annotation/p1")
     annotation.set_motivation("painting")
     annotation.body.set_id(
-        extendbase_url="iiif-img/{0}/full/144,95/0/default.jpg".format(id)
+        extendbase_url="iiif/{0}/full/max/0/default.jpg".format(identifier)
     )
     annotation.body.set_type("Image")
     annotation.body.set_format("image/jpeg")
     annotation.body.set_width(imgwidth)
     annotation.body.set_height(imgheight)
     s = annotation.body.add_service()
-    s.set_id(extendbase_url="iiif-img/{0}/".format(id))
+    s.set_id(extendbase_url="iiif/{0}/".format(identifier))
     s.set_type("ImageService3")
     s.set_profile("level0")
 
     # Save manifest
-    if not os.path.exists("tmp/iiif/{0}".format(id)):
-        os.makedirs("tmp/iiif/{0}".format(id))
-    file = "tmp/iiif/{0}/manifest.json".format((id))
+    if not os.path.exists("tmp/iiif/{0}".format(identifier)):
+        os.makedirs("tmp/iiif/{0}".format(identifier))
+    file = "tmp/iiif/{0}/manifest.json".format((identifier))
     manifest.json_save(file)
     return manifest
 
 
-def write_collection(manifest):
-    print("Collection...")
-    collection_path = "tmp/iiif/collection/imaginerio.json"
+def append_to_collection(manifest, collection_name):
+    collection_path = "tmp/iiif/collection/{0}.json".format(collection_name)
     # Logo
     logo = iiifpapi3.logo()
     logo.set_id(
@@ -300,79 +328,71 @@ def write_collection(manifest):
     )
     logo.set_format("image/png")
     logo.set_hightwidth(164, 708)
-    if not os.path.exists(collection_path):
-        try:
-            endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/collection/imaginerio.json"
-            retry_strategy = Retry(
-                total=3,
-                status_forcelist=[429, 500, 502, 503, 504],
-                method_whitelist=["HEAD", "GET", "OPTIONS"],
-            )
-            adapter = HTTPAdapter(max_retries=retry_strategy)
-            http = requests.Session()
-            http.mount("https://", adapter)
-            http.mount("http://", adapter)
-            collection_data = http.get(endpoint).json()
-            os.mkdir("tmp/iiif/collection")
-            collection = read_API3_json_dict(collection_data)
-            collection.json_save(collection_path)
-            print("Collection downloaded!")
+    try:
+        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/collection/{0}.json".format(collection_name)
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "OPTIONS"],
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        http = requests.Session()
+        http.mount("https://", adapter)
+        http.mount("http://", adapter)
+        collection_data = http.get(endpoint).json()
+        collection = read_API3_json_dict(collection_data)
+    #TO-DO don't wait for json_save to throw exception, check for response code instead
+    except Exception as e:
+        print(e)
+        print("Couldn't find collection. Creating...")
+        # Homepage
+        collection_homepage = iiifpapi3.homepage()
+        collection_homepage.set_id("https://imaginerio.org")
+        collection_homepage.set_type("Text")
+        collection_homepage.add_label("none", "imagineRio")
+        collection_homepage.set_format("text/html")
 
-        except Exception as e:
-            print(e)
-            print("Couldn't find collection. Writing...")
-            # Homepage
-            collection_homepage = iiifpapi3.homepage()
-            collection_homepage.set_id("https://imaginerio.org")
-            collection_homepage.set_type("Text")
-            collection_homepage.add_label("none", "imagineRio")
-            collection_homepage.set_format("text/html")
+        # Provider
+        collection_provider = iiifpapi3.provider()
+        collection_provider.set_id("https://imaginerio.org")
+        collection_provider.add_label("en", "imagineRio")
+        collection_provider.add_label("pt-BR", "imagineRio")
+        collection_provider.add_logo(logo)
+        collection_provider.add_homepage(collection_homepage)
 
-            # Provider
-            collection_provider = iiifpapi3.provider()
-            collection_provider.set_id("https://imaginerio.org")
-            collection_provider.add_label("en", "imagineRio")
-            collection_provider.add_label("pt-BR", "imagineRio")
-            collection_provider.add_logo(logo)
-            collection_provider.add_homepage(collection_homepage)
+        # Collection manifest
+        collection = iiifpapi3.Collection()
+        collection.set_id(extendbase_url="iiif/collection/{0}".format(collection_name))
+        collection.add_label("en", collection_name)
+        collection.add_label("pt-BR", collection_name)
+        collection.add_requiredStatement(
+            label="Attribution",
+            value="Hosted by imagineRio",
+            language_l="en",
+            language_v="en",
+        )
+        collection.add_requiredStatement(
+            label="Attribution",
+            value="Hospedado por imagineRio",
+            language_l="pt-BR",
+            language_v="pt-BR",
+        )
+        collection.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
 
-            # Collection manifest
-            collection = iiifpapi3.Collection()
-            collection.set_id(extendbase_url="iiif/collection/imaginerio")
-            collection.add_label("en", "imagineRio")
-            collection.add_label("pt-BR", "imagineRio")
-            collection.add_requiredStatement(
-                label="Attribution",
-                value="Hosted by imagineRio",
-                language_l="en",
-                language_v="en",
-            )
-            collection.add_requiredStatement(
-                label="Attribution",
-                value="Hospedado por imagineRio",
-                language_l="pt-BR",
-                language_v="pt-BR",
-            )
-            collection.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
+        thumbnailobj = iiifpapi3.thumbnail()
+        thumbnailobj.set_id(
+            extendbase_url="iiif/0071824cx001-01/full/144,95/0/default.jpg"
+        )
+        thumbnailobj.set_hightwidth(95, 144)
+        collection.add_thumbnail(thumbnailobj=thumbnailobj)
 
-            thumbnailobj = iiifpapi3.thumbnail()
-            thumbnailobj.set_id(
-                extendbase_url="iiif-img/0071824cx001-01/full/144,95/0/default.jpg"
-            )
-            thumbnailobj.set_hightwidth(95, 144)
-            collection.add_thumbnail(thumbnailobj=thumbnailobj)
+        collection.add_provider(collection_provider)
 
-            collection.add_provider(collection_provider)
-
-            if not os.path.exists("tmp/iiif/collection"):
-                os.mkdir("tmp/iiif/collection")
-    else:
-        collection = read_API3_json(collection_path)
-
+    if not os.path.exists("tmp/iiif/collection"):
+        os.mkdir("tmp/iiif/collection")
     collection.add_manifest_to_items(manifest)
     collection.json_save(collection_path)
     print("Collection updated!")
-    return collection_path
 
 
 def upload_to_cloud():
@@ -410,61 +430,38 @@ def upload_to_cloud():
 
 
 @dg.solid(
-    config_schema={"slice_debug": dg.BoolSource},
+    # config_schema={
+    #     "debug": dg.BoolSource,
+    # },
     input_defs=[
         dg.InputDefinition(
-            "import_omeka", root_manager_key="import_omeka_root")
-    ],
-)
-def list_items(context, import_omeka):
-    items = import_omeka["dcterms:identifier"].to_list()
-    to_do = []
-
-    if context.solid_config["slice_debug"]:
-        items = items[-2:]
-
-    else:
-        pass
-    for item in items:
-        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif-img/{0}/info.json".format(
-            item
-        )
-        retry_strategy = Retry(
-            total=3,
-            status_forcelist=[429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "OPTIONS"],
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        http = requests.Session()
-        http.mount("https://", adapter)
-        http.mount("http://", adapter)
-        response = http.get(endpoint)
-
-        if not response.status_code == 200:
-            to_do.append(item)
-    return to_do
-
-
-@dg.solid(
-    config_schema={
-        "upload": dg.BoolSource,
-    },
-    input_defs=[
+            "metadata", root_manager_key="metadata_root"),
         dg.InputDefinition(
-            "import_omeka", root_manager_key="import_omeka_root")
+            "mapping", root_manager_key="mapping_root"
+        )
     ],
 )
-def create_manifest(
+def iiify(
     context,
-    to_do,
-    import_omeka,
+    metadata,
+    mapping
 ):
-    upload = context.solid_config["upload"]
-    for item in to_do:
-        context.log.info("Processing: {0}".format(str(item)))
-        info = tile_image(item)
-        manifest = write_manifest(info, import_omeka)
-        write_collection(manifest)
-
-        if upload:
-            upload_to_cloud()
+    metadata.set_index("Source ID", inplace=True)
+    mapping.set_index("Label:en", inplace=True)
+    metadata.dropna(subset=["Source", "Latitude", "Source URL", "Media URL", "First Year", "Last Year"], inplace=True)
+    metadata = metadata.loc[metadata["Source"]=="Instituto Moreira Salles"]
+    if context.mode_def.name == "test":
+        metadata = metadata[-2:]
+    for identifier, item in metadata.iterrows():
+        if info_json_exists(identifier) or context.solid_config["manifest_only"]:
+            context.log.info("Skipping: {0}".format(str(identifier)))
+            continue
+        else:
+            context.log.info("Processing: {0}".format(str(identifier)))
+            info = tile_image(identifier)
+            manifest = write_manifest(info, identifier, item, mapping)
+            for collection_name in item["Item Set"].lower().split("||"):
+                append_to_collection(manifest, collection_name)
+            #if not context.solid_config["debug"]:
+            if context.mode_def.name == "prod":
+                upload_to_cloud()

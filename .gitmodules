@@ -1,6 +1,3 @@
 [submodule "data"]
 	path = src/data
 	url = https://github.com/imaginerio/situated-views-data.git
-[submodule "tiler"]
-	path = src/tiler
-	url = git://github.com/zimeon/iiif.git

@@ -1,16 +1,15 @@
 import dagster as dg
 from dotenv import load_dotenv
 from solids.images import *
-from utils import (
-    df_csv_io_manager,
-    root_input_csv,
-    root_input_geojson,
-    update_metadata,
-)
+from solids.update_metadata import update_metadata
+from utils.pandas_csv_io import df_csv_io_manager
+from utils.csv_root_input import csv_root_input
+#from utils.geojson_root_input import geojson_root_input
+
 
 load_dotenv(override=True)
 
-preset = {
+default = {
     "solids": {
         "file_picker": {
             "config": {"env": "SOURCE"},
@@ -30,6 +29,11 @@ preset = {
                 "env": "EXIFTOOL",
             }
         },
+        "upload_to_cloud": {
+            "config": {
+                "env": "JSTOR_IMAGES"
+            }
+        }
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -42,14 +46,14 @@ preset = {
         dg.ModeDefinition(
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "metadata_root": root_input_csv,
+                "metadata_root": csv_root_input,
             }
         )
     ],
     preset_defs=[
         dg.PresetDefinition(
             "default",
-            run_config=preset,
+            run_config=default,
             mode="default",
         )
     ],
