@@ -31,4 +31,4 @@ EXPOSE 10000
 # instead of the default workspace.yaml since we are using the python
 # executable from the container image, not the local Python executable
 # ENTRYPOINT ["dagit", "-w", "workspace.yaml", "-h", "0.0.0.0", "-p", "10000"]
-ENTRYPOINT ["dagster", "pipeline", "execute", "-f", "pipelines/IIIF_pipeline.py", "--preset", "default"]
+# ENTRYPOINT ["dagster", "pipeline", "execute", "-f", "pipelines/IIIF_pipeline.py", "--preset", "default"]
