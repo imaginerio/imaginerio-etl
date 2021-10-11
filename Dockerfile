@@ -7,8 +7,7 @@ RUN mkdir /dagster
 # Change working dirtory
 WORKDIR /dagster
 
-ENV DAGSTER_HOME=/dagster/.dagster
-RUN mkdir $DAGSTER_HOME
+#ENV DAGSTER_HOME=/dagster/.dagster
 
 RUN apt-get update && apt-get install -y git
 
