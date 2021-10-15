@@ -7,7 +7,7 @@ from pipelines.metadata_pipeline import *
 from pipelines.images_pipeline import *
 from pipelines.camera_pipeline import *
 from pipelines.git_pipeline import *
-from pipelines.IIIF_pipeline import *
+from pipelines.iiif_pipeline import *
 
 
 @dg.repository

@@ -3,7 +3,10 @@ from datetime import datetime
 import dagster as dg
 from dotenv import load_dotenv
 from solids.camera import *
-from utils import *
+from solids.update_metadata import update_metadata
+from utils.csv_root_input import csv_root_input
+from utils.geojson_io import geojson_io_manager
+from utils.pandas_csv_io import df_csv_io_manager
 
 load_dotenv(override=True)
 
@@ -43,8 +46,8 @@ preset = {
             resource_defs={
                 "geojson": geojson_io_manager,
                 "pandas_csv": df_csv_io_manager,
-                "metadata_root": root_input_csv,
-                "cumulus_root": root_input_csv
+                "metadata_root": csv_root_input,
+                "cumulus_root": csv_root_input
             }
         )
     ],

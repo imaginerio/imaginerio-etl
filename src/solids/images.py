@@ -9,11 +9,15 @@ import dagster as dg
 import pandas as pd
 from tqdm import tqdm
 from numpy import nan
+from dotenv import load_dotenv
 from PIL import Image as PILImage
 from tests.dataframe_types import *
 from tests.objects_types import *
 
 from solids.exiftool import ExifTool
+
+load_dotenv(override=True)
+
 
 
 class Image:
@@ -289,7 +293,11 @@ def upload_to_cloud(context, to_upload):
 
     S3 = boto3.client("s3")
     BUCKET = "imaginerio-images"
-
+    ims = "/mnt/d/imagineRio-images/jpeg-hd"
+    jstor = "/mnt/d/JSTOR-images"
+    to_upload = [os.path.join(ims, file) for file in os.listdir(ims) if file.endswith(".jpg")]
+    to_upload.append([os.path.join(jstor, file) for file in os.listdir(jstor) if file.endswith(".jpg")])
+    #print(to_upload)
     for image_path in tqdm(to_upload, "Uploading files..."):
         id = os.path.basename(image_path).split(".")[0]
         key_name = "iiif/{0}/full/max/0/default.jpg".format(id)

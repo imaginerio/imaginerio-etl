@@ -24,11 +24,11 @@ default = {
             }
         },
         "create_images_df": {"config": {"env": "CLOUD"}},
-        "write_metadata": {
-            "config": {
-                "env": "EXIFTOOL",
-            }
-        },
+        #"write_metadata": {
+        #    "config": {
+        #        "env": "EXIFTOOL",
+        #    }
+        #},
         "upload_to_cloud": {
             "config": {
                 "env": "JSTOR_IMAGES"
@@ -62,9 +62,9 @@ def images_pipeline():
     files = file_picker()
     to_tag = file_dispatcher(files=files)
     images_df = create_images_df(files=files)
-    update_metadata(df=images_df)
-    to_upload = write_metadata(to_tag=to_tag)
-    upload_to_cloud(to_upload)
+    #update_metadata(df=images_df)
+    #to_upload = write_metadata(to_tag=to_tag)
+    upload_to_cloud(to_tag)
 
 
 ################   SCHEDULES   ##################

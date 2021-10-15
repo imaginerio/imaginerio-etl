@@ -5,8 +5,13 @@ from datetime import datetime
 import dagster as dg
 import dagster_pandas as dp
 import pandas as pd
+import geopandas as gpd
 from dotenv import load_dotenv
-from utils import *
+from utils.pandas_csv_io import df_csv_io_manager
+from utils.csv_root_input import csv_root_input
+from utils.xls_root_input import root_input_xls
+from utils.geojson_root_input import geojson_root_input
+from solids.update_metadata import update_metadata
 from tests.dataframe_types import *
 from tests.objects_types import *
 
@@ -154,12 +159,12 @@ def metadata_jstor(context, jstor, metadata):
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "cumulus_root": root_input_csv,
+                "cumulus_root": csv_root_input,
                 "jstor_root": root_input_xls,
-                "wikidata_root": root_input_csv,
-                "portals_root": root_input_csv,
-                "camera_root": root_input_geojson,
-                "images_root": root_input_csv,
+                "wikidata_root": csv_root_input,
+                "portals_root": csv_root_input,
+                "camera_root": geojson_root_input,
+                "images_root": csv_root_input,
             },
         )
     ],

@@ -22,6 +22,7 @@ from tqdm import tqdm
 from solids.export import *
 
 load_dotenv(override=True)
+
 iiifpapi3.BASE_URL = "https://imaginerio-images.s3.us-east-1.amazonaws.com/"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 # iiifpapi3.BASE_URL = "http://127.0.0.1:8000/"
@@ -84,16 +85,23 @@ def tile_image(identifier):
 
 
 def write_manifest(info, identifier, item, mapping):
-
     def get_multilingual_values(en):
         url = "http://wikidata.org/wiki/{0}".format(mapping.loc[en, "Wiki ID"])
         pt = mapping.loc[en, "Label:pt"]
-        return{"url":url,"en":str(en),"pt":str(pt)}
+        return {"url": url, "en": str(en), "pt": str(pt)}
 
-    #Values
+    # Values
     title = str(item["Title"])
-    description_en = str(item["Description (English)"]) if pd.notna(item["Description (English)"]) else item["Description (Portuguese)"]
-    description_pt = str(item["Description (Portuguese)"]) if pd.notna(item["Description (Portuguese)"]) else item["Description (English)"]
+    description_en = (
+        str(item["Description (English)"])
+        if pd.notna(item["Description (English)"])
+        else item["Description (Portuguese)"]
+    )
+    description_pt = (
+        str(item["Description (Portuguese)"])
+        if pd.notna(item["Description (Portuguese)"])
+        else item["Description (English)"]
+    )
     creator = str(item["Creator"])
     date = str(item["Date"])
     type = get_multilingual_values(item["Type"])
@@ -116,7 +124,8 @@ def write_manifest(info, identifier, item, mapping):
     manifest = iiifpapi3.Manifest()
     manifest.set_id(
         extendbase_url="iiif/{0}/manifest.json".format(
-            str(identifier).replace(" ", "_"))
+            str(identifier).replace(" ", "_")
+        )
     )
     manifest.add_label("pt-BR", title)
 
@@ -191,7 +200,7 @@ def write_manifest(info, identifier, item, mapping):
                 ],
                 "pt-BR": [
                     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        materials["url"],materials["pt"]
+                        materials["url"], materials["pt"]
                     )
                 ],
             },
@@ -237,10 +246,8 @@ def write_manifest(info, identifier, item, mapping):
     )
 
     # Rights & Attribution
-    manifest.add_summary(
-        language="en", text=description_en)
-    manifest.add_summary(
-        language="pt-BR", text=description_pt)
+    manifest.add_summary(language="en", text=description_en)
+    manifest.add_summary(language="pt-BR", text=description_pt)
     manifest.add_requiredStatement(
         label="Attribution",
         value="Hosted by imagineRio",
@@ -329,7 +336,9 @@ def append_to_collection(manifest, collection_name):
     logo.set_format("image/png")
     logo.set_hightwidth(164, 708)
     try:
-        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/collection/{0}.json".format(collection_name)
+        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/collection/{0}.json".format(
+            collection_name
+        )
         retry_strategy = Retry(
             total=3,
             status_forcelist=[429, 500, 502, 503, 504],
@@ -341,7 +350,7 @@ def append_to_collection(manifest, collection_name):
         http.mount("http://", adapter)
         collection_data = http.get(endpoint).json()
         collection = read_API3_json_dict(collection_data)
-    #TO-DO don't wait for json_save to throw exception, check for response code instead
+    # TO-DO don't wait for json_save to throw exception, check for response code instead
     except Exception as e:
         print(e)
         print("Couldn't find collection. Creating...")
@@ -404,11 +413,10 @@ def upload_to_cloud():
         for file in files:
             path = root.split("tmp/")[-1] + "/" + file
             content = (
-                "image/jpeg" if file.split(
-                    ".")[-1] == "jpg" else "application/json"
+                "image/jpeg" if file.split(".")[-1] == "jpg" else "application/json"
             )
             try:
-                upload = S3.upload_file(
+                S3.upload_file(
                     os.path.join(root, file),
                     BUCKET,
                     path,
@@ -434,22 +442,25 @@ def upload_to_cloud():
     #     "debug": dg.BoolSource,
     # },
     input_defs=[
-        dg.InputDefinition(
-            "metadata", root_manager_key="metadata_root"),
-        dg.InputDefinition(
-            "mapping", root_manager_key="mapping_root"
-        )
+        dg.InputDefinition("metadata", root_manager_key="metadata_root"),
+        dg.InputDefinition("mapping", root_manager_key="mapping_root"),
     ],
 )
-def iiify(
-    context,
-    metadata,
-    mapping
-):
+def iiify(context, metadata, mapping):
     metadata.set_index("Source ID", inplace=True)
     mapping.set_index("Label:en", inplace=True)
-    metadata.dropna(subset=["Source", "Latitude", "Source URL", "Media URL", "First Year", "Last Year"], inplace=True)
-    metadata = metadata.loc[metadata["Source"]=="Instituto Moreira Salles"]
+    metadata.dropna(
+        subset=[
+            "Source",
+            "Latitude",
+            "Source URL",
+            "Media URL",
+            "First Year",
+            "Last Year",
+        ],
+        inplace=True,
+    )
+    metadata = metadata.loc[metadata["Source"] == "Instituto Moreira Salles"]
     if context.mode_def.name == "test":
         metadata = metadata[-2:]
     for identifier, item in metadata.iterrows():
@@ -462,6 +473,6 @@ def iiify(
             manifest = write_manifest(info, identifier, item, mapping)
             for collection_name in item["Item Set"].lower().split("||"):
                 append_to_collection(manifest, collection_name)
-            #if not context.solid_config["debug"]:
+            # if not context.solid_config["debug"]:
             if context.mode_def.name == "prod":
                 upload_to_cloud()

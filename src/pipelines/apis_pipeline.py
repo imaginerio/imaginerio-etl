@@ -5,7 +5,9 @@ import dagster as dg
 from dotenv import load_dotenv
 from pandas.core.frame import DataFrame
 from solids.apis import *
-from utils import *
+from solids.update_metadata import update_metadata
+from utils.pandas_csv_io import df_csv_io_manager
+from utils.csv_root_input import csv_root_input
 
 load_dotenv(override=True)
 
@@ -53,7 +55,7 @@ preset_portals = {
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "metadata_root": root_input_csv,
+                "metadata_root": csv_root_input,
             },
         ),
     ],

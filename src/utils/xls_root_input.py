@@ -1,5 +1,6 @@
 import pandas as pd
-from pandas_csv_io import function_int
+import dagster as dg
+from utils.pandas_csv_io import function_int
 
 
 @dg.root_input_manager(config_schema=dg.StringSource)

@@ -4,8 +4,9 @@ from utils import *
 
 @dg.pipeline
 def git_pipeline():
-    pull_new_data()
-    push_new_data()
+    pass
+    #pull_new_data()
+    #push_new_data()
 
 
 ################   SCHEDULES   ##################
