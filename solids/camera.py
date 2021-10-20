@@ -239,21 +239,25 @@ def rename_single(context, cumulus: main_dataframe_types):
     list_kmls = [x for x in kmls if x != path_gitkeep]
 
     for kml in list_kmls:
-        with open(kml, "r") as f:
+        with open(kml, "r+") as f:
             txt = f.read()
             filename = find_with_re("name", txt)
+            new_filename = None
             if filename not in list(cumulus["Source ID"]):
                 loc = cumulus.loc[cumulus["preliminary id"].str.contains(filename, na=False),"Source ID"]
                 if not loc.empty:
                     try:
                         new_filename = loc.item()
-                        txt = re.sub("(?<=<name>).+(?=<\/name>)",
-                                    new_filename, txt)
-                        os.rename(kml,os.path.join(path, new_filename +".kml"))
+                        txt = re.sub("(?<=<name>).+(?=<\/name>)",new_filename, txt)
+                        f.seek(0)
+                        f.write(txt)
+                        f.truncate()
+                        
                         print(f"Renamed: {filename} > {new_filename}")
-                    except:
-                        print(f"{filename} error")
-        
+                    except Exception as e:
+                        print(f"{filename} error", e)
+        if new_filename:
+            os.rename(kml,os.path.join(path, new_filename +".kml"))
 
     new_kmls = [
         os.path.join(path, file)
@@ -276,8 +280,8 @@ def change_img_href(context, list_kmls: type_list_of_kmls):
             txt = f.read()
             filename = find_with_re("name", txt)
             txt = re.sub(
-                "(?<=<href>).+(?=<\/href>\n\t+<\/Icon>\n\t+<ViewVolume>)",
-                f"https://images.imaginerio.org/iiif-img/{filename}/full/^1200,/0/default.jpg",
+                "(?<=<href>).+(?=<\/href>\n\t+<\/Icon>\n(\t+<rotation>+.+<\/rotation>\n)?\t+<ViewVolume>)",
+                f"https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/{filename}/full/max/0/default.jpg",
                 txt,
             )
             f.seek(0)
