@@ -5,6 +5,7 @@ from solids.utils import *
 
 load_dotenv(override=True)
 
+# Switch commits to another branch, change preset.
 # from dagster_slack import slack_resource
 preset = {
     "resources": {
@@ -20,8 +21,14 @@ preset = {
     },
     "solids": {
         "export_html": {"config": {"env": "INDEX"}},
-        "push_new_data":{"config":"import omeka/wikidata and dashboard"},
-        "push_new_data_2":{"config":"import omeka/wikidata and dashboard"},
+        "push_new_data":{
+            "config":{
+                "commit":"import omeka/wikidata and dashboard",
+                "branch":"dev"}},
+        "push_new_data_2":{
+            "config":{
+                "commit":"import omeka/wikidata and dashboard",
+                "branch":"dev"}},
     },
 }
 
@@ -85,7 +92,8 @@ def export_pipeline():
     wikidata_df = make_df_to_wikidata(export_df)
     wikidata_df = organise_creator(quickstate=wikidata_df)
 
-    push_new_data(omeka_df,wikidata_df)
+    #push_new_data(omeka_df)
+    push_new_data(wikidata_df)
 
 
     # index.html

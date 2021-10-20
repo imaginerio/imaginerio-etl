@@ -9,6 +9,8 @@ from solids.utils import *
 
 load_dotenv(override=True)
 
+# Switch commits to another branch, change preset.
+
 # Call all APIs
 preset = {
     "solids": {
@@ -17,9 +19,18 @@ preset = {
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
         "query_portals": {"config": {"env": "PORTALS_API"}},
         "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
-        "push_new_data":{"config":"APIs"},
-        "push_new_data_2":{"config":"APIs"},
-        "push_new_data_3":{"config":"APIs"},
+        "push_new_data":{
+            "config":{
+                "commit":"APIS",
+                "branch":"dev"}},
+        "push_new_data_2":{
+            "config":{
+                "commit":"APIS",
+                "branch":"dev"}},
+        "push_new_data_3":{
+            "config":{
+                "commit":"APIS",
+                "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -28,7 +39,10 @@ preset_omeka = {
     "solids": {
         "omeka_dataframe": {"config": {"env": "OUTPUT"}},
         "query_omeka": {"config": {"env": "OMEKA_API"}},
-        "push_new_data":{"config":"API Omeka"},
+        "push_new_data":{
+            "config":{
+                "commit":"API Omeka",
+                "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -36,7 +50,10 @@ preset_omeka = {
 preset_wikidata = {
     "solids": {
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
-        "push_new_data":{"config":"API Wikidata"},
+        "push_new_data":{
+            "config":{
+                "commit":"API Wikidata",
+                "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -45,7 +62,10 @@ preset_portals = {
     "solids": {
         "query_portals": {"config": {"env": "PORTALS_API"}},
         "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
-        "push_new_data":{"config":"API Portals"},
+        "push_new_data":{
+            "config":{
+                "commit":"API Portals",
+                "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }

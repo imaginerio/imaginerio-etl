@@ -11,6 +11,7 @@ from solids.utils import (
 
 load_dotenv(override=True)
 
+# Switch commits to another branch, change preset.
 preset = {
     "solids": {
         "file_picker": {
@@ -31,7 +32,10 @@ preset = {
                 "env": "EXIFTOOL",
             }
         },
-        "push_new_data":{"config":"Images"},
+        "push_new_data":{
+            "config":{
+                "commit":"Images",
+                "branch":"dev"}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},

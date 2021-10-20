@@ -7,6 +7,7 @@ from solids.utils import *
 
 load_dotenv(override=True)
 
+# Switch commits to another branch, change preset.
 preset = {
     "solids": {
         "get_list": {"config": {"env": "NEW_RAW"}},
@@ -29,7 +30,11 @@ preset = {
                     "env": "PROCESSED_SINGLE"}}},
 
         "create_geojson": {"config": {"env": "CAMERA"}},
-        "push_new_data":{"config":"Geojson"},
+        "push_new_data":{
+            "config":{
+                "commit":"Geojson",
+                "branch":"dev"
+            }},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},

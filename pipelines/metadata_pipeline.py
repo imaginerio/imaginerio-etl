@@ -13,7 +13,7 @@ from tests.objects_types import *
 from functools import reduce
 load_dotenv(override=True)
 
-
+# Switch commits to another branch, change preset.
 preset = {
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS"}},
@@ -23,7 +23,14 @@ preset = {
         "images_root": {"config": {"env": "IMAGES"}},
         "jstor_root": {"config": {"env": "JSTOR_XLS"}},
     },
-    "solids":{"push_new_data":{"config":"Metadata"},}
+    "solids":{
+        "push_new_data":{
+            "config":{
+                "commit":"Metadata",
+                "branch":"dev"
+            }
+        }
+    }
 }
 
 

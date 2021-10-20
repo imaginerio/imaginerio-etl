@@ -251,18 +251,30 @@ def pull_new_data(context):
     pull = subprocess.Popen(comands)
 
 
-@dg.solid(config_schema=dg.Field(dg.String),input_defs=[dg.InputDefinition("commit",dagster_type=dg.Nothing)])
+@dg.solid(
+    config_schema={
+        "commit":dg.Field(dg.String),
+        "branch":dg.Field(dg.String)
+        },
+    input_defs=[
+        dg.InputDefinition("commit",dagster_type=dg.Nothing)
+    ]
+)
 def push_new_data(context):
     """
     Push data to Git submodule
     and commit changes to main
     repository
     """
+
+    commit = context.solid_config["commit"]
+    branch = context.solid_config["branch"]
+
     submodule_push = [
         "pwd",
         "git checkout main",
         "git add .",
-        "git commit -a -m ':card_file_box: Update {commit} data'".format(commit=context.solid_config),
+        f"git commit -a -m ':card_file_box: Update {commit} data'",
         "git push",
     ]
 
@@ -281,7 +293,7 @@ def push_new_data(context):
 
     etl_push = [
         "pwd",
-        "git checkout feature/dagster-git",
+        f"git checkout {branch}",
         "git add data",
         "git commit -m ':card_file_box: Update submodule'",
         "git push",

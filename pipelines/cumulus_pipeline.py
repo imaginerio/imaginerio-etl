@@ -7,11 +7,20 @@ from solids.utils import *
 
 load_dotenv(override=True)
 
+
+# Switch commits to another branch, change preset.
 preset = {
+    "solids":{
+        "push_new_data":{
+            "config":{
+                "commit":"Cumulus",
+                "branch":"dev"
+            }
+        }
+    },
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
         "metadata_root": {"config": {"env": "METADATA"}},
-        "push_new_data":{"config":"Cumulus"},
     }
 }
 
