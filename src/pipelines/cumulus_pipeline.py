@@ -14,6 +14,7 @@ preset = {
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
         "metadata_root": {"config": {"env": "METADATA"}},
+        "smapshot_root": {"config": {"env": "SMAPSHOT"}}
     }
 }
 
@@ -26,6 +27,7 @@ preset = {
                 "pandas_csv": df_csv_io_manager,
                 "cumulus_root": root_input_xml,
                 "metadata_root": csv_root_input,
+                "smapshot_root": csv_root_input
             },
         )
     ],

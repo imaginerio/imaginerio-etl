@@ -39,10 +39,10 @@ metadata_dataframe_types = dp.create_dagster_pandas_dataframe_type(
             "Materials"),
         dp.PandasColumn.string_column(
             "Fabrication Method"),
-        dp.PandasColumn.string_column(
-            "Rights", ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "License", ignore_missing_vals=True),
+        #dp.PandasColumn.string_column(
+        #    "Rights", ignore_missing_vals=True),
+        #dp.PandasColumn.string_column(
+        #    "License", ignore_missing_vals=True),
         # dp.PandasColumn.string_column(
         #    "Attribution", ignore_missing_vals=True),
         dp.PandasColumn(
@@ -109,10 +109,10 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
         dp.PandasColumn.string_column("Materials", is_required=False),
         dp.PandasColumn.string_column("Fabrication Method", is_required=False,
                                       ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "Rights", is_required=False, ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "License", is_required=False, ignore_missing_vals=True),
+        #dp.PandasColumn.string_column(
+        #    "Rights", is_required=False, ignore_missing_vals=True),
+        #dp.PandasColumn.string_column(
+        #    "License", is_required=False, ignore_missing_vals=True),
         #dp.PandasColumn.string_column("Attribution", is_required=False),
         dp.PandasColumn(
             "Width (mm)", constraints=[

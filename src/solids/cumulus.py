@@ -230,8 +230,11 @@ def format_date(context, df: dp.DataFrame):
     return cumulus
 
 
-@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
-def create_columns(context, df_cumulus: main_dataframe_types):
+@dg.solid(input_defs=[
+        dg.InputDefinition("smapshot", root_manager_key="smapshot_root")],
+    output_defs=[
+        dg.OutputDefinition(dagster_type=dp.DataFrame)])
+def create_columns(context, df_cumulus: main_dataframe_types, smapshot: dp.DataFrame):
     """
     Map processes and formats according to Wikidata entities
     """
@@ -300,6 +303,8 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     df_cumulus["Description (English)"] = ""
     df_cumulus["Type"] = "Photograph"
     df_cumulus["Item Set"] = "All||Views"
+    include = df_cumulus["Source ID"].isin(smapshot["id"])
+    df_cumulus.loc[include, "Item Set"] = df_cumulus["Item Set"] + "||Smapshot"
     df_cumulus["Source"] = "Instituto Moreira Salles"
     df_cumulus["License"] = ""
     df_cumulus["Rights"] = ""
