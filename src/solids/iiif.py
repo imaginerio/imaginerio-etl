@@ -100,33 +100,6 @@ def write_manifests(context, item, mapping):
     imgwidth, imgheight = image.size
     mapping.set_index("Label:en", inplace=True)
 
-    def get_multilingual_values(en):
-        url = "http://wikidata.org/wiki/{0}".format(mapping.loc[en, "Wiki ID"])
-        pt = mapping.loc[en, "Label:pt"]
-        return {"url": url, "en": str(en), "pt": str(pt)}
-
-    # Values
-    title = str(item["Title"])
-    description_en = (
-        str(item["Description (English)"])
-        if item["Description (English)"] != ""
-        else item["Description (Portuguese)"]
-    )
-    description_pt = (
-        str(item["Description (Portuguese)"])
-        if item["Description (Portuguese)"] != ""
-        else item["Description (English)"]
-    )
-    creator = str(item["Creator"])
-    date = str(item["Date"])
-    type = get_multilingual_values(item["Type"])
-    materials = get_multilingual_values(item["Materials"])
-    fabrication_method = get_multilingual_values(item["Fabrication Method"])
-    width = str(item["Width (mm)"])
-    height = str(item["Height (mm)"])
-    source = str(item["Source"])
-    source_url = str(item["Source URL"])
-
     # Logo
     logo = iiifpapi3.logo()
     logo.set_id(
@@ -142,128 +115,116 @@ def write_manifests(context, item, mapping):
             str(identifier).replace(" ", "_")
         )
     )
-    manifest.add_label("pt-BR", title)
+    manifest.add_label("pt-BR", str(item["Title"]))
 
     # Metadata
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Identifier"], "pt-BR": ["Identificador"]},
-            "value": {"en": [identifier], "pt-BR": [identifier]},
-        }
-    )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Title"], "pt-BR": ["Título"]},
-            "value": {
-                "en": [title],
-                "pt-BR": [title],
-            },
-        }
-    )
-    if description_en or description_pt:
-        manifest.add_metadata(
-            entry={
-                "label": {"en": ["Description"], "pt-BR": ["Descrição"]},
-                "value": {
-                    "en": [description_en],
-                    "pt-BR": [description_pt],
-                },
+    def get_multilingual_uri(values_en, label_en, label_pt):
+        en = []
+        pt = []
+        if not values_en:
+            return None
+        else:
+            for value_en in values_en.split("||"):
+                url = "http://wikidata.org/wiki/{0}".format(
+                    mapping.loc[value_en, "Wiki ID"]
+                )
+                value_pt = mapping.loc[value_en, "Label:pt"]
+                en.append(
+                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                        url, value_en
+                    )
+                )
+                pt.append(
+                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                        url, value_pt
+                    )
+                )
+                d = {"en": en, "pt": pt}
+
+            return {
+                "label_en": [label_en],
+                "label_pt": [label_pt],
+                "value_en": d["en"],
+                "value_pt": d["pt"],
             }
-        )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Creator"], "pt-BR": ["Autor"]},
-            "value": {
-                "en": [creator],
-                "pt-BR": [creator],
-            },
-        }
+
+    def set_metadata_field(manifest, field):
+        if field:
+            if "value" in field:
+                value = {"none": field["value"]} if any(field["value"]) else None
+            else:
+                value = (
+                    {"en": field["value_en"], "pt-BR": field["value_pt"]}
+                    if any(field["value_pt"])
+                    else None
+                )
+
+            if value:
+                manifest.add_metadata(
+                    entry={
+                        "label": {"en": field["label_en"], "pt-BR": field["label_pt"]},
+                        "value": value,
+                    }
+                )
+        else:
+            pass
+
+    title = {
+        "label_en": ["Title"],
+        "label_pt": ["Título"],
+        "value": [str(item["Title"])],
+    }
+    description = {
+        "label_en": ["Description"],
+        "label_pt": ["Descrição"],
+        "value_en": [str(item["Description (English)"])]
+        if item["Description (English)"]
+        else item["Description (Portuguese)"],
+        "value_pt": [str(item["Description (Portuguese)"])]
+        if item["Description (Portuguese)"]
+        else item["Description (English)"],
+    }
+    creator = {
+        "label_en": ["Creator"],
+        "label_pt": ["Autor"],
+        "value": [str(item["Creator"])],
+    }
+    date = {"label_en": ["Date"], "label_pt": ["Data"], "value": [str(item["Date"])]}
+    type = get_multilingual_uri(item["Type"], "Type", "Tipo")
+    materials = get_multilingual_uri(item["Materials"], "Materials", "Materiais")
+    fabrication_method = get_multilingual_uri(
+        item["Fabrication Method"], "Fabrication Method", "Método de Fabricação"
     )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Date"], "pt-BR": ["Data"]},
-            "value": {
-                "en": [date],
-                "pt-BR": [date],
-            },
-        }
-    )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Type"], "pt-BR": ["Tipo"]},
-            "value": {
-                "en": [
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        type["url"], type["en"]
-                    )
-                ],
-                "pt-BR": [
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        type["url"], type["pt"]
-                    )
-                ],
-            },
-        }
-    )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Materials"], "pt-BR": ["Materiais"]},
-            "value": {
-                "en": [
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        materials["url"], materials["en"]
-                    )
-                ],
-                "pt-BR": [
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        materials["url"], materials["pt"]
-                    )
-                ],
-            },
-        }
-    )
-    manifest.add_metadata(
-        entry={
-            "label": {
-                "en": ["Fabrication Method"],
-                "pt-BR": ["Método de Fabricação"],
-            },
-            "value": {
-                "en": [
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        fabrication_method["url"], fabrication_method["en"]
-                    )
-                ],
-                "pt-BR": [
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        fabrication_method["url"], fabrication_method["pt"]
-                    )
-                ],
-            },
-        }
-    )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Width (mm)"], "pt-BR": ["Largura (mm)"]},
-            "value": {
-                "en": [width],
-                "pt-BR": [width],
-            },
-        }
-    )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Height (mm)"], "pt-BR": ["Altura (mm)"]},
-            "value": {
-                "en": [height],
-                "pt-BR": [height],
-            },
-        }
-    )
+    width = {
+        "label_en": ["Width (mm)"],
+        "label_pt": ["Largura (mm)"],
+        "value": [str(item["Width (mm)"])],
+    }
+    height = {
+        "label_en": ["Height (mm)"],
+        "label_pt": ["Altura (mm)"],
+        "value": [str(item["Height (mm)"])],
+    }
+    fields = [
+        title,
+        description,
+        creator,
+        date,
+        type,
+        materials,
+        fabrication_method,
+        width,
+        height,
+    ]
+
+    for field in fields:
+        set_metadata_field(manifest, field)
 
     # Rights & Attribution
-    manifest.add_summary(language="en", text=description_en)
-    manifest.add_summary(language="pt-BR", text=description_pt)
+    if description["value_en"]:
+        manifest.add_summary(language="en", text=description["value_en"])
+        manifest.add_summary(language="pt-BR", text=description["value_pt"])
+
     manifest.add_requiredStatement(
         label="Attribution",
         value="Hosted by imagineRio",
@@ -286,8 +247,8 @@ def write_manifests(context, item, mapping):
 
     # Homepage
     item_homepage = iiifpapi3.homepage()
-    homepage_id = source_url
-    homepage_label = source
+    homepage_id = str(item["Source URL"])
+    homepage_label = str(item["Source"])
     try:
         item_homepage.set_id(objid=homepage_id)
         item_homepage.add_label(language="none", text=homepage_label)
@@ -459,10 +420,10 @@ def get_items(context, metadata):
         ],
         inplace=True,
     )
-    metadata.fillna("",inplace=True)
-    #metadata = metadata.loc[metadata["Source"] == "Instituto Moreira Salles"]
+    metadata.fillna("", inplace=True)
+    # metadata = metadata.loc[metadata["Source"] == "Instituto Moreira Salles"]
     if context.mode_def.name == "test":
-        metadata = metadata[:2]
+        metadata = pd.DataFrame(metadata.loc["001GU001020"]).T
     for identifier, item in metadata.iterrows():
         yield dg.DynamicOutput(
             value={"identifier": identifier, "row": item},
