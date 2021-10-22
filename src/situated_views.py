@@ -21,7 +21,7 @@ def situated_views():
             "metadata_pipeline": lambda: metadata_pipeline,
             "camera_pipeline": lambda: camera_pipeline,
             "git_pipeline": lambda: git_pipeline,
-            "IIIF_pipeline": lambda: IIIF_pipeline,
+            "iiif_pipeline": lambda: iiif_pipeline,
         },
         "schedules": {
             "apis_pipeline_weekly": lambda: apis_pipeline_weekly,
