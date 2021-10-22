@@ -109,12 +109,12 @@ def write_manifests(context, item, mapping):
     title = str(item["Title"])
     description_en = (
         str(item["Description (English)"])
-        if pd.notna(item["Description (English)"])
+        if item["Description (English)"] != ""
         else item["Description (Portuguese)"]
     )
     description_pt = (
         str(item["Description (Portuguese)"])
-        if pd.notna(item["Description (Portuguese)"])
+        if item["Description (Portuguese)"] != ""
         else item["Description (English)"]
     )
     creator = str(item["Creator"])
@@ -160,15 +160,16 @@ def write_manifests(context, item, mapping):
             },
         }
     )
-    manifest.add_metadata(
-        entry={
-            "label": {"en": ["Description"], "pt-BR": ["Descrição"]},
-            "value": {
-                "en": [description_en],
-                "pt-BR": [description_pt],
-            },
-        }
-    )
+    if description_en or description_pt:
+        manifest.add_metadata(
+            entry={
+                "label": {"en": ["Description"], "pt-BR": ["Descrição"]},
+                "value": {
+                    "en": [description_en],
+                    "pt-BR": [description_pt],
+                },
+            }
+        )
     manifest.add_metadata(
         entry={
             "label": {"en": ["Creator"], "pt-BR": ["Autor"]},
@@ -458,7 +459,8 @@ def get_items(context, metadata):
         ],
         inplace=True,
     )
-    metadata = metadata.loc[metadata["Source"] == "Instituto Moreira Salles"]
+    metadata.fillna("",inplace=True)
+    #metadata = metadata.loc[metadata["Source"] == "Instituto Moreira Salles"]
     if context.mode_def.name == "test":
         metadata = metadata[:2]
     for identifier, item in metadata.iterrows():

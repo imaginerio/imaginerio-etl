@@ -4,7 +4,7 @@ import dagster as dg
 from dagster_aws.s3 import s3_resource
 from dotenv import load_dotenv
 from solids.iiif import *
-from solids.upload_to_cloud import upload_to_cloud
+#from solids.upload_to_cloud import upload_to_cloud
 from utils.csv_root_input import csv_root_input
 from utils.local_iiif_io_manager import local_iiif_io_manager
 from utils.s3_io_manager import s3_io_manager
