@@ -269,15 +269,26 @@ def write_manifests(context, item):
     item_homepage.set_type("Text")
     item_homepage.set_format("text/html")
     manifest.add_homepage(item_homepage)
+
+    # See Also
     if item["Wikidata ID"]:
-        wikidata_homepage = iiifpapi3.homepage()
-        wikidata_homepage.set_id(
+        wikidata_seealso = iiifpapi3.seeAlso()
+        wikidata_seealso.set_id(
             objid="https://www.wikidata.org/wiki/{0}".format(item["Wikidata ID"])
         )
-        wikidata_homepage.add_label(language="none", text="Wikidata")
-        wikidata_homepage.set_type("Text")
-        wikidata_homepage.set_format("text/html")
-        manifest.add_homepage(wikidata_homepage)
+        wikidata_seealso.add_label(language="none", text="Wikidata")
+        wikidata_seealso.set_type("Text")
+        wikidata_seealso.set_format("text/html")
+        manifest.add_seeAlso(wikidata_seealso)
+    if item["Smapshot ID"]:
+        smapshot_seealso = iiifpapi3.seeAlso()
+        smapshot_seealso.set_id(
+            objid="https://smapshot.heig-vd.ch/visit/{0}".format(item["Smapshot ID"])
+        )
+        smapshot_seealso.add_label(language="none", text="Smapshot")
+        smapshot_seealso.set_type("Text")
+        smapshot_seealso.set_format("text/html")
+        manifest.add_seeAlso(smapshot_seealso)
 
     # Provider
     item_provider = iiifpapi3.provider()
