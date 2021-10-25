@@ -261,15 +261,11 @@ def write_manifests(context, item):
     manifest.add_thumbnail(thumbnailobj=thumbnail)
 
     # Homepage
+    homepage_id = item["Source URL"] if item["Source URL"] else "https://imaginerio.org/en/map#{0}".format(identifier)
+    homepage_label = item["Source"] if item["Source"] else "imagineRio"
     item_homepage = iiifpapi3.homepage()
-    homepage_id = str(item["Source URL"])
-    homepage_label = str(item["Source"])
-    try:
-        item_homepage.set_id(objid=homepage_id)
-        item_homepage.add_label(language="none", text=homepage_label)
-    except:
-        item_homepage.set_id("https://imaginerio.org/en/map#{0}".format(identifier))
-        item_homepage.add_label(language="none", text="imagineRio")
+    item_homepage.set_id(objid=homepage_id)
+    item_homepage.add_label(language="none", text=homepage_label)
     item_homepage.set_type("Text")
     item_homepage.set_format("text/html")
     manifest.add_homepage(item_homepage)
@@ -436,20 +432,11 @@ def write_manifests(context, item):
 def get_items(context, metadata, mapping):
     metadata.set_index("Source ID", inplace=True)
     mapping.set_index("Label:en", inplace=True)
-    metadata.dropna(
-        subset=[
-            "Source",
-            "Latitude",
-            "Source URL",
-            "Media URL",
-            "First Year",
-            "Last Year",
-        ],
-        inplace=True,
-    )
+    ims = (metadata["Latitude"].notna()) & (metadata["Source URL"].notna()) & (metadata["Media URL"].notna()) & (metadata["First Year"].notna()) & (metadata["Last Year"].notna())
+    jstor = (metadata["Source"] != "Instituto Moreira Salles")
+    metadata = metadata.loc[(metadata["Source"].notna()) & (ims | jstor)]
     metadata.fillna("", inplace=True)
     context.log.info(len(metadata))
-    # metadata = metadata.loc[metadata["Source"] == "Instituto Moreira Salles"]
     if context.mode_def.name == "test":
         metadata = pd.DataFrame(metadata.loc["0071824cx006-02"]).T
     for identifier, item in metadata.iterrows():
