@@ -82,11 +82,11 @@ def tile_image(context, item):
 
 
 @dg.solid(
-    input_defs=[dg.InputDefinition("mapping", root_manager_key="mapping_root")],
     output_defs=[dg.OutputDefinition(io_manager_key="iiif_manager")],
 )
-def write_manifests(context, item, mapping):
+def write_manifests(context, item):
     identifier = item["identifier"]
+    mapping = item["mapping"]
     item = item["row"]
     context.log.info("Processing: {0}".format(str(identifier)))
 
@@ -98,7 +98,6 @@ def write_manifests(context, item, mapping):
     ).content
     image = Image.open(io.BytesIO(img))
     imgwidth, imgheight = image.size
-    mapping.set_index("Label:en", inplace=True)
 
     # Logo
     logo = iiifpapi3.logo()
@@ -115,10 +114,10 @@ def write_manifests(context, item, mapping):
             str(identifier).replace(" ", "_")
         )
     )
-    manifest.add_label("pt-BR", str(item["Title"]))
+    manifest.add_label("pt-BR", item["Title"])
 
     # Metadata
-    def get_multilingual_uri(values_en, label_en, label_pt):
+    def map_wikidata(values_en, label_en, label_pt):
         en = []
         pt = []
         if not values_en:
@@ -169,30 +168,44 @@ def write_manifests(context, item, mapping):
         else:
             pass
 
+    # Values
     title = {
         "label_en": ["Title"],
         "label_pt": ["Título"],
-        "value": [str(item["Title"])],
+        "value": [item["Title"]],
     }
     description = {
         "label_en": ["Description"],
         "label_pt": ["Descrição"],
-        "value_en": [str(item["Description (English)"])]
+        "value_en": [item["Description (English)"]]
         if item["Description (English)"]
-        else item["Description (Portuguese)"],
-        "value_pt": [str(item["Description (Portuguese)"])]
+        else [item["Description (Portuguese)"]],
+        "value_pt": [item["Description (Portuguese)"]]
         if item["Description (Portuguese)"]
-        else item["Description (English)"],
+        else [item["Description (English)"]],
     }
     creator = {
         "label_en": ["Creator"],
         "label_pt": ["Autor"],
-        "value": [str(item["Creator"])],
+        "value": [item["Creator"]],
     }
     date = {"label_en": ["Date"], "label_pt": ["Data"], "value": [str(item["Date"])]}
-    type = get_multilingual_uri(item["Type"], "Type", "Tipo")
-    materials = get_multilingual_uri(item["Materials"], "Materials", "Materiais")
-    fabrication_method = get_multilingual_uri(
+    try:
+        depicts = {
+            "label_en": ["Depicts"],
+            "label_pt": ["Retrata"],
+            "value": [
+                '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                    *depicts.split(" ", maxsplit=1)
+                )
+                for depicts in item["Depicts"].split("||")
+            ],
+        }
+    except:
+        depicts = None
+    type = map_wikidata(item["Type"], "Type", "Tipo")
+    materials = map_wikidata(item["Materials"], "Materials", "Materiais")
+    fabrication_method = map_wikidata(
         item["Fabrication Method"], "Fabrication Method", "Método de Fabricação"
     )
     width = {
@@ -205,11 +218,13 @@ def write_manifests(context, item, mapping):
         "label_pt": ["Altura (mm)"],
         "value": [str(item["Height (mm)"])],
     }
+
     fields = [
         title,
         description,
         creator,
         date,
+        depicts,
         type,
         materials,
         fabrication_method,
@@ -253,10 +268,20 @@ def write_manifests(context, item, mapping):
         item_homepage.set_id(objid=homepage_id)
         item_homepage.add_label(language="none", text=homepage_label)
     except:
-        item_homepage.set_id("https://imaginerio.org/")
+        item_homepage.set_id("https://imaginerio.org/en/map#{0}".format(identifier))
         item_homepage.add_label(language="none", text="imagineRio")
     item_homepage.set_type("Text")
     item_homepage.set_format("text/html")
+    manifest.add_homepage(item_homepage)
+    if item["Wikidata ID"]:
+        wikidata_homepage = iiifpapi3.homepage()
+        wikidata_homepage.set_id(
+            objid="https://www.wikidata.org/wiki/{0}".format(item["Wikidata ID"])
+        )
+        wikidata_homepage.add_label(language="none", text="Wikidata")
+        wikidata_homepage.set_type("Text")
+        wikidata_homepage.set_format("text/html")
+        manifest.add_homepage(wikidata_homepage)
 
     # Provider
     item_provider = iiifpapi3.provider()
@@ -272,7 +297,7 @@ def write_manifests(context, item, mapping):
     canvas.set_id(extendbase_url="canvas/p1")
     canvas.set_height(imgwidth)
     canvas.set_width(imgheight)
-    canvas.add_label(language="none", text="Recto")
+    canvas.add_label(language="none", text=identifier)
 
     annopage = canvas.add_annotationpage_to_items()
     annopage.set_id(extendbase_url="annotation-page/p1")
@@ -376,9 +401,9 @@ def write_manifests(context, item, mapping):
 
             thumbnailobj = iiifpapi3.thumbnail()
             thumbnailobj.set_id(
-                extendbase_url="iiif/0071824cx001-01/full/144,95/0/default.jpg"
+                extendbase_url="iiif/0071824cx001-01/full/295,221/0/default.jpg"
             )
-            thumbnailobj.set_hightwidth(95, 144)
+            thumbnailobj.set_hightwidth(221, 295)
             collection.add_thumbnail(thumbnailobj=thumbnailobj)
             collection.add_provider(collection_provider)
 
@@ -404,11 +429,13 @@ def write_manifests(context, item, mapping):
 @dg.solid(
     input_defs=[
         dg.InputDefinition("metadata", root_manager_key="metadata_root"),
+        dg.InputDefinition("mapping", root_manager_key="mapping_root"),
     ],
     output_defs=[dg.DynamicOutputDefinition(dict)],
 )
-def get_items(context, metadata):
+def get_items(context, metadata, mapping):
     metadata.set_index("Source ID", inplace=True)
+    mapping.set_index("Label:en", inplace=True)
     metadata.dropna(
         subset=[
             "Source",
@@ -421,11 +448,12 @@ def get_items(context, metadata):
         inplace=True,
     )
     metadata.fillna("", inplace=True)
+    context.log.info(len(metadata))
     # metadata = metadata.loc[metadata["Source"] == "Instituto Moreira Salles"]
     if context.mode_def.name == "test":
-        metadata = pd.DataFrame(metadata.loc["001GU001020"]).T
+        metadata = pd.DataFrame(metadata.loc["0071824cx006-02"]).T
     for identifier, item in metadata.iterrows():
         yield dg.DynamicOutput(
-            value={"identifier": identifier, "row": item},
+            value={"identifier": identifier, "row": item, "mapping": mapping},
             mapping_key=identifier.replace("-", "_"),
         )
