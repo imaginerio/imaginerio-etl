@@ -7,6 +7,7 @@ import dagster_pandas as dp
 import boto3
 import dagster as dg
 import pandas as pd
+import numpy as np
 from tqdm import tqdm
 from numpy import nan
 from dotenv import load_dotenv
@@ -199,23 +200,20 @@ def create_images_df(context, files: dict):
     Creates a dataframe with every image available and links to full size and thumbnail
     """
 
-    hd = context.solid_config
-    sd = hd + "sd/"
+    prefix = context.solid_config
     dicts = []
 
     for img in files["geolocated"]:
         img_dict = {
             "Source ID": img.id,
-            "Media URL": os.path.join(hd, img.jpg),
-            "img_sd": os.path.join(sd, img.jpg),
+            "Media URL": os.path.join(prefix, img.id, "full","max","0","default.jpg"),
         }
         dicts.append(img_dict)
 
     for img in files["backlog"]:
         img_dict = {
             "Source ID": img.id,
-            "Media URL": nan,
-            "img_sd": nan,
+            "Media URL": np.nan,
         }
         dicts.append(img_dict)
 
@@ -294,7 +292,7 @@ def upload_to_cloud(context, to_upload):
     S3 = boto3.client("s3")
     BUCKET = "imaginerio-images"
     ims = "/mnt/d/imagineRio-images/jpeg-hd"
-    jstor = "/mnt/d/JSTOR-images"
+    jstor = "/mnt/d/imagineRio-images/JSTOR-images"
     to_upload = [os.path.join(ims, file) for file in os.listdir(ims) if file.endswith(".jpg")]
     to_upload.append([os.path.join(jstor, file) for file in os.listdir(jstor) if file.endswith(".jpg")])
     #print(to_upload)
