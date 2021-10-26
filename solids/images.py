@@ -7,6 +7,7 @@ import dagster_pandas as dp
 import boto3
 import dagster as dg
 import pandas as pd
+import requests
 from tqdm import tqdm
 from numpy import nan
 from PIL import Image as PILImage
@@ -195,15 +196,13 @@ def create_images_df(context, files: dict):
     Creates a dataframe with every image available and links to full size and thumbnail
     """
 
-    hd = context.solid_config
-    sd = hd + "sd/"
+    bucket = context.solid_config
     dicts = []
 
     for img in files["geolocated"]:
         img_dict = {
             "Source ID": img.id,
-            "Media URL": os.path.join(hd, img.jpg),
-            "img_sd": os.path.join(sd, img.jpg),
+            "Media URL": os.path.join(bucket,img.id,"full","max","0","default.jpg"),
         }
         dicts.append(img_dict)
 
@@ -211,7 +210,6 @@ def create_images_df(context, files: dict):
         img_dict = {
             "Source ID": img.id,
             "Media URL": nan,
-            "img_sd": nan,
         }
         dicts.append(img_dict)
 
@@ -284,18 +282,17 @@ def write_metadata(context, metadata: dp.DataFrame, to_tag):
     return to_upload
 
 
-@dg.solid(
-    config_schema={
-        "jpeg_hd": dg.StringSource,
-    },
-)
+@dg.solid
 def upload_to_cloud(context, to_upload):
     S3 = boto3.client("s3")
     BUCKET = "imaginerio-images"
     for image_path in tqdm(to_upload, "Uploading files..."):
         id = os.path.basename(image_path)[1].split(".")[0]
         key_name = "{0}/full/max/0/default.jpg".format(id)
-        try:
-            S3.upload_file(image_path, BUCKET, key_name)
-        except:
-            print("Couldn't upload image {0}, skipping".format(id))
+        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/"+key_name
+        response = requests.get(endpoint)
+        if not response.status_code == 200:
+            try:
+                S3.upload_file(image_path, BUCKET, key_name)
+            except:
+                print("Couldn't upload image {0}, skipping".format(id))
