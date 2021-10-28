@@ -7,14 +7,17 @@ import dagster_pandas as dp
 import boto3
 import dagster as dg
 import pandas as pd
-import requests
+import numpy as np
 from tqdm import tqdm
 from numpy import nan
+from dotenv import load_dotenv
 from PIL import Image as PILImage
 from tests.dataframe_types import *
 from tests.objects_types import *
 
 from solids.exiftool import ExifTool
+
+load_dotenv(override=True)
 
 
 class Image:
@@ -196,20 +199,22 @@ def create_images_df(context, files: dict):
     Creates a dataframe with every image available and links to full size and thumbnail
     """
 
-    bucket = context.solid_config
+    prefix = context.solid_config
     dicts = []
 
     for img in files["geolocated"]:
         img_dict = {
             "Source ID": img.id,
-            "Media URL": os.path.join(bucket,img.id,"full","max","0","default.jpg"),
+            "Media URL": os.path.join(
+                prefix, img.id, "full", "max", "0", "default.jpg"
+            ),
         }
         dicts.append(img_dict)
 
     for img in files["backlog"]:
         img_dict = {
             "Source ID": img.id,
-            "Media URL": nan,
+            "Media URL": np.nan,
         }
         dicts.append(img_dict)
 
@@ -284,15 +289,31 @@ def write_metadata(context, metadata: dp.DataFrame, to_tag):
 
 @dg.solid
 def upload_to_cloud(context, to_upload):
+
     S3 = boto3.client("s3")
     BUCKET = "imaginerio-images"
+    ims = "/mnt/d/imagineRio-images/jpeg-hd"
+    jstor = "/mnt/d/imagineRio-images/JSTOR-images"
+    to_upload = [
+        os.path.join(ims, file) for file in os.listdir(ims) if file.endswith(".jpg")
+    ]
+    to_upload.append(
+        [
+            os.path.join(jstor, file)
+            for file in os.listdir(jstor)
+            if file.endswith(".jpg")
+        ]
+    )
+    # print(to_upload)
     for image_path in tqdm(to_upload, "Uploading files..."):
-        id = os.path.basename(image_path)[1].split(".")[0]
-        key_name = "{0}/full/max/0/default.jpg".format(id)
-        endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/"+key_name
-        response = requests.get(endpoint)
-        if not response.status_code == 200:
-            try:
-                S3.upload_file(image_path, BUCKET, key_name)
-            except:
-                print("Couldn't upload image {0}, skipping".format(id))
+        id = os.path.basename(image_path).split(".")[0]
+        key_name = "iiif/{0}/full/max/0/default.jpg".format(id)
+        try:
+            S3.upload_file(
+                image_path,
+                BUCKET,
+                key_name,
+                ExtraArgs={"ACL": "public-read", "ContentType": "image/jpeg"},
+            )
+        except:
+            print("Couldn't upload image {0}, skipping".format(id))
