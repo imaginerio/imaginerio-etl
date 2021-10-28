@@ -22,18 +22,18 @@ preset = {
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
         "query_portals": {"config": {"env": "PORTALS_API"}},
         "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
-        "push_new_data":{
-            "config":{
-                "commit":"APIS",
-                "branch":"dev"}},
-        "push_new_data_2":{
-            "config":{
-                "commit":"APIS",
-                "branch":"dev"}},
-        "push_new_data_3":{
-            "config":{
-                "commit":"APIS",
-                "branch":"dev"}},
+        # "push_new_data":{
+        #     "config":{
+        #         "commit":"APIS",
+        #         "branch":"dev"}},
+        # "push_new_data_2":{
+        #     "config":{
+        #         "commit":"APIS",
+        #         "branch":"dev"}},
+        # "push_new_data_3":{
+        #     "config":{
+        #         "commit":"APIS",
+        #         "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -42,10 +42,10 @@ preset_omeka = {
     "solids": {
         "omeka_dataframe": {"config": {"env": "OUTPUT"}},
         "query_omeka": {"config": {"env": "OMEKA_API"}},
-        "push_new_data":{
-            "config":{
-                "commit":"API Omeka",
-                "branch":"dev"}},
+        # "push_new_data":{
+        #     "config":{
+        #         "commit":"API Omeka",
+        #         "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -53,10 +53,10 @@ preset_omeka = {
 preset_wikidata = {
     "solids": {
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
-        "push_new_data":{
-            "config":{
-                "commit":"API Wikidata",
-                "branch":"dev"}},
+        # "push_new_data":{
+        #     "config":{
+        #         "commit":"API Wikidata",
+        #         "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -65,10 +65,10 @@ preset_portals = {
     "solids": {
         "query_portals": {"config": {"env": "PORTALS_API"}},
         "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
-        "push_new_data":{
-            "config":{
-                "commit":"API Portals",
-                "branch":"dev"}},
+        # "push_new_data":{
+        #     "config":{
+        #         "commit":"API Portals",
+        #         "branch":"dev"}},
     },
     "resources": {"metadata_root": {"config": {"env": "METADATA"}}},
 }
@@ -130,7 +130,7 @@ def apis_pipeline():
     portals_df = portals_dataframe(portals_results)
     # portals_df = validate_portals(portals_df)
     ok_portals = update_metadata(df=portals_df)
-    push_new_data(ok_portals)
+    #push_new_data(ok_portals)
 
 
 ################   SENSORS   ##################

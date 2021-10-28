@@ -34,10 +34,10 @@ preset = {
                 "env": "EXIFTOOL",
             }
         },
-        "push_new_data":{
-            "config":{
-                "commit":"Images",
-                "branch":"dev"}},
+        # "push_new_data":{
+        #     "config":{
+        #         "commit":"Images",
+        #         "branch":"dev"}},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -69,7 +69,7 @@ def images_pipeline():
     ok = update_metadata(df=images_df)
     to_upload = write_metadata(to_tag=to_tag)
     upload_to_cloud(to_upload)
-    push_new_data(ok)
+    #push_new_data(ok)
 
 ################   SCHEDULES   ##################
 
