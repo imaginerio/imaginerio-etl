@@ -1,7 +1,15 @@
 import dagster as dg
 import subprocess
 
-@dg.solid
+@dg.solid(
+    config_schema={
+        "commit":dg.Field(dg.String),
+        "branch":dg.Field(dg.String)
+        },
+    input_defs=[
+        dg.InputDefinition("commit",dagster_type=dg.Nothing)
+    ]
+)
 def push_new_data(context):
     """
     Push data to Git submodule
@@ -56,4 +64,3 @@ def push_new_data(context):
             context.log.info(f"command: {command} \noutput: {output} \nERROR: {errors}")
         else:
             context.log.info(f"command: {command} \noutput: {output}")
-© 2021 GitHub, Inc.
