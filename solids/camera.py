@@ -422,8 +422,8 @@ def move_files(context, new_features: type_list_of_features):
     Manage processed files
     """
 
-    path_new_single = context.solid_config["new_single"]
-    path_processed_single = context.solid_config["processed_single"]
+    path_new_single = os.path.abspath(context.solid_config["new_single"])
+    path_processed_single = os.path.abspath(context.solid_config["processed_single"])
     list_kmls = [feature["properties"]["Source ID"]
                  for feature in new_features]
 
