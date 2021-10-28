@@ -69,7 +69,7 @@ def tile_image(context, item):
         with open(img_path, "wb") as handler:
             handler.write(img_data)
 
-        command = ["java", "-jar", "utils/iiif-tiler.jar", img_path, "-output", "iiif", "-tile_size","256","-version","3"]
+        command = ["java", "-jar", "utils/iiif-tiler.jar", img_path, "-tile_size", "256", "-version", "3"]
 
         process = subprocess.Popen(
             command,
