@@ -14,6 +14,7 @@ from PIL import Image
 from requests.adapters import HTTPAdapter
 from requests.api import get
 from urllib3.util import Retry
+from urllib.parse import quote, urlparse, urlunparse, urljoin
 
 from solids.export import *
 
@@ -21,6 +22,8 @@ load_dotenv(override=True)
 
 iiifpapi3.BASE_URL = "https://imaginerio-images.s3.us-east-1.amazonaws.com/"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
+Image.MAX_IMAGE_PIXELS = None
+
 
 
 def info_json_exists(identifier):
@@ -261,8 +264,12 @@ def write_manifests(context, item):
     manifest.add_thumbnail(thumbnailobj=thumbnail)
 
     # Homepage
-    homepage_id = item["Source URL"] if item["Source URL"] else "https://imaginerio.org/en/map#{0}".format(identifier)
+    homepage_id = item["Source URL"] if item["Source URL"] else "https://null"
+    url_parts = urlparse(homepage_id)
+    homepage_id = "https://" + "".join(url_parts[1])
+
     homepage_label = item["Source"] if item["Source"] else "imagineRio"
+
     item_homepage = iiifpapi3.homepage()
     item_homepage.set_id(objid=homepage_id)
     item_homepage.add_label(language="none", text=homepage_label)
@@ -271,6 +278,13 @@ def write_manifests(context, item):
     manifest.add_homepage(item_homepage)
 
     # See Also
+    imaginerio_seealso = iiifpapi3.seeAlso()
+    imaginerio_seealso.set_id(
+        objid="https://www.imaginerio.org/map#{0}".format(identifier)
+    )
+    imaginerio_seealso.add_label(language="none", text="imagineRio")
+    imaginerio_seealso.set_type("Text")
+
     if item["Wikidata ID"]:
         wikidata_seealso = iiifpapi3.seeAlso()
         wikidata_seealso.set_id(
@@ -278,8 +292,9 @@ def write_manifests(context, item):
         )
         wikidata_seealso.add_label(language="none", text="Wikidata")
         wikidata_seealso.set_type("Text")
-        wikidata_seealso.set_format("text/html")
+        # wikidata_seealso.set_format("text/html")
         manifest.add_seeAlso(wikidata_seealso)
+
     if item["Smapshot ID"]:
         smapshot_seealso = iiifpapi3.seeAlso()
         smapshot_seealso.set_id(
@@ -287,7 +302,7 @@ def write_manifests(context, item):
         )
         smapshot_seealso.add_label(language="none", text="Smapshot")
         smapshot_seealso.set_type("Text")
-        smapshot_seealso.set_format("text/html")
+        # smapshot_seealso.set_format("text/html")
         manifest.add_seeAlso(smapshot_seealso)
 
     # Provider
@@ -347,8 +362,9 @@ def write_manifests(context, item):
             if context.mode_def.name == "test":
                 collection = read_API3_json(collection_path)
             else:
-                endpoint = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/collection/{0}.json".format(
-                    collection_name
+                endpoint = (
+                    "https://imaginerio-images.s3.us-east-1.amazonaws.com/"
+                    + collection_path
                 )
                 retry_strategy = Retry(
                     total=3,
@@ -388,7 +404,7 @@ def write_manifests(context, item):
             # Collection manifest
             collection = iiifpapi3.Collection()
             collection.set_id(
-                extendbase_url="iiif/collection/{0}".format(collection_name)
+                extendbase_url="iiif/collection/{0}.json".format(collection_name)
             )
             collection.add_label("en", collection_name)
             collection.add_label("pt-BR", collection_name)
@@ -449,7 +465,7 @@ def get_items(context, metadata, mapping):
     metadata.fillna("", inplace=True)
     context.log.info(len(metadata))
     if context.mode_def.name == "test":
-        metadata = pd.DataFrame(metadata.loc["0071824cx006-02"]).T
+        metadata = pd.DataFrame(metadata.loc["2588984"]).T
     for identifier, item in metadata.iterrows():
         yield dg.DynamicOutput(
             value={"identifier": identifier, "row": item, "mapping": mapping},
