@@ -69,7 +69,7 @@ def tile_image(context, item):
         with open(img_path, "wb") as handler:
             handler.write(img_data)
 
-        command = ["java", "-jar", "utils/mod-tiler.jar", img_path]
+        command = ["java", "-jar", "utils/iiif-tiler.jar", img_path, "-output", "iiif", "-tile_size","256","-version","3"]
 
         process = subprocess.Popen(
             command,
@@ -264,13 +264,18 @@ def write_manifests(context, item):
     manifest.add_thumbnail(thumbnailobj=thumbnail)
 
     # Homepage
+    item_homepage = iiifpapi3.homepage()
+    
     homepage_id = item["Source URL"] if item["Source URL"] else "https://null"
-    url_parts = urlparse(homepage_id)
-    homepage_id = "https://" + "".join(url_parts[1])
+    
+    try: 
+        item_homepage.set_id(objid=homepage_id)
+    except:
+        url_parts = urlparse(homepage_id)
+        homepage_id = "https://" + "".join(url_parts[1])
+        item_homepage.set_id(objid=homepage_id)
 
     homepage_label = item["Source"] if item["Source"] else "imagineRio"
-
-    item_homepage = iiifpapi3.homepage()
     item_homepage.set_id(objid=homepage_id)
     item_homepage.add_label(language="none", text=homepage_label)
     item_homepage.set_type("Text")
