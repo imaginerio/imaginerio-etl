@@ -6,7 +6,11 @@ import dagster as dg
 import dagster_pandas as dp
 import pandas as pd
 from dotenv import load_dotenv
-from solids.utils import *
+from utils.df_csv_io_manager import df_csv_io_manager
+from utils.csv_root_input import csv_root_input
+from utils.xls_root_input import xls_root_input
+from utils.geojson_root_input import geojson_root_input
+from solids.push_new_data import push_new_data
 from tests.dataframe_types import *
 from tests.objects_types import *
 
@@ -160,12 +164,12 @@ def metadata_jstor(context, jstor, metadata):
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "cumulus_root": root_input_csv,
-                "jstor_root": root_input_xls,
-                "wikidata_root": root_input_csv,
-                "portals_root": root_input_csv,
-                "camera_root": root_input_geojson,
-                "images_root": root_input_csv,
+                "cumulus_root": csv_root_input,
+                "jstor_root": xls_root_input,
+                "wikidata_root": csv_root_input,
+                "portals_root": csv_root_input,
+                "camera_root": geojson_root_input,
+                "images_root": csv_root_input,
             },
         )
     ],

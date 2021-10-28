@@ -1,7 +1,10 @@
 import dagster as dg
 from dotenv import load_dotenv
 from solids.export import *
-from solids.utils import *
+from utils.csv_root_input import csv_root_input
+from utils.geojson_root_input import geojson_root_input
+from utils.df_csv_io_manager import df_csv_io_manager
+from solids.push_new_data import push_new_data
 
 load_dotenv(override=True)
 
@@ -54,15 +57,15 @@ preset_html = {
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "metadata_root": root_input_csv,
-                "smapshot_root": root_input_csv,
-                "cumulus_root": root_input_csv,
-                "wikidata_root": root_input_csv,
-                "camera_root": root_input_geojson,
-                "images_root": root_input_csv,
-                "omeka_root": root_input_csv,
-                "mapping_root": root_input_csv,
-                "portals_root": root_input_csv
+                "metadata_root": csv_root_input,
+                "smapshot_root": csv_root_input,
+                "cumulus_root": csv_root_input,
+                "wikidata_root": csv_root_input,
+                "camera_root": geojson_root_input,
+                "images_root": csv_root_input,
+                "omeka_root": csv_root_input,
+                "mapping_root": csv_root_input,
+                "portals_root": csv_root_input
             },
         )
     ],
