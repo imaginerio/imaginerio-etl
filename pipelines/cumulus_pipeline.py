@@ -15,12 +15,12 @@ load_dotenv(override=True)
 # Switch commits to another branch, change preset.
 preset = {
     "solids":{
-        "push_new_data":{
-            "config":{
-                "commit":"Cumulus",
-                "branch":"dev"
-            }
-        }
+        # "push_new_data":{
+        #     "config":{
+        #         "commit":"Cumulus",
+        #         "branch":"dev"
+        #     }
+        # }
     },
     "resources": {
         "cumulus_root": {"config": {"env": "CUMULUS_XML"}},
@@ -57,7 +57,7 @@ def cumulus_pipeline():
     cumulus_df = create_columns(cumulus_df)
     select_columns(cumulus_df)
     ok = update_metadata(df=cumulus_df)
-    push_new_data(ok)
+    #push_new_data(ok)
 
 
 ################   SENSORS   ##################

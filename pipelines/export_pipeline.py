@@ -28,10 +28,6 @@ preset = {
             "config":{
                 "commit":"import omeka/wikidata and dashboard",
                 "branch":"dev"}},
-        "push_new_data_2":{
-            "config":{
-                "commit":"import omeka/wikidata and dashboard",
-                "branch":"dev"}},
     },
 }
 

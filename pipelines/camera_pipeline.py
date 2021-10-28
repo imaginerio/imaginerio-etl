@@ -35,11 +35,11 @@ preset = {
                     "env": "PROCESSED_SINGLE"}}},
 
         "create_geojson": {"config": {"env": "CAMERA"}},
-        "push_new_data":{
-            "config":{
-                "commit":"Geojson",
-                "branch":"dev"
-            }},
+        # "push_new_data":{
+        #     "config":{
+        #         "commit":"Geojson",
+        #         "branch":"dev"
+        #     }},
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
@@ -79,7 +79,7 @@ def camera_pipeline():
     move_files(new_features)
     geojson = create_geojson(new_features=new_features)
     ok = update_metadata(df=geojson)
-    push_new_data(ok)
+    #push_new_data(ok)
 
 
 ################   SENSORS   ##################
