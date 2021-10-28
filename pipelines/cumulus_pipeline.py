@@ -3,7 +3,11 @@ from datetime import datetime
 import dagster as dg
 from dotenv import load_dotenv
 from solids.cumulus import *
-from solids.utils import *
+from solids.update_metadata import update_metadata
+from solids.push_new_data import push_new_data
+from utils.csv_root_input import csv_root_input
+from utils.xml_root_input import xml_root_input
+from utils.df_csv_io_manager import df_csv_io_manager
 
 load_dotenv(override=True)
 
@@ -31,8 +35,8 @@ preset = {
             name="default",
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "cumulus_root": root_input_xml,
-                "metadata_root": root_input_csv,
+                "cumulus_root": xml_root_input,
+                "metadata_root": csv_root_input,
             },
         )
     ],

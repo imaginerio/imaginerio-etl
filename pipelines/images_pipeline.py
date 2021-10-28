@@ -1,13 +1,12 @@
 import dagster as dg
 from dotenv import load_dotenv
 from solids.images import *
-from solids.utils import (
-    df_csv_io_manager,
-    push_new_data,
-    root_input_csv,
-    root_input_geojson,
-    update_metadata,
-)
+from solids import update_metadata
+from utils.df_csv_io_manager import df_csv_io_manager
+from solids.push_new_data import push_new_data
+from utils.csv_root_input import csv_root_input
+from utils.geojson_root_input import geojson_root_input
+
 
 load_dotenv(override=True)
 
@@ -48,7 +47,7 @@ preset = {
         dg.ModeDefinition(
             resource_defs={
                 "pandas_csv": df_csv_io_manager,
-                "metadata_root": root_input_csv,
+                "metadata_root": csv_root_input,
             }
         )
     ],
