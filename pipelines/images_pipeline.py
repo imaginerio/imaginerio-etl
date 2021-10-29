@@ -2,11 +2,10 @@ import dagster as dg
 from dagster_aws.s3 import s3_resource
 from dotenv import load_dotenv
 from solids.images import *
-from solids import update_metadata
+from solids.update_metadata import update_metadata
 from utils.df_csv_io_manager import df_csv_io_manager
 from solids.push_new_data import push_new_data
 from utils.csv_root_input import csv_root_input
-from utils.geojson_root_input import geojson_root_input
 from utils.s3_io_manager import s3_io_manager
 
 
