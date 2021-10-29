@@ -14,7 +14,7 @@ from PIL import Image
 from requests.adapters import HTTPAdapter
 from requests.api import get
 from urllib3.util import Retry
-from urllib.parse import quote, urlparse, urlunparse, urljoin
+from urllib.parse import urlsplit, urlunsplit
 
 from solids.export import *
 
@@ -271,9 +271,10 @@ def write_manifests(context, item):
     try: 
         item_homepage.set_id(objid=homepage_id)
     except:
-        url_parts = urlparse(homepage_id)
-        homepage_id = "https://" + "".join(url_parts[1])
-        item_homepage.set_id(objid=homepage_id)
+        url_parts = list(urlsplit("http://acervo.bndigital.bn.br/sophia/index.asp?codigo_sophia=1695"))
+        url_parts[2:5] = ["","",""]
+        new_url = urlunsplit(url_parts)
+        item_homepage.set_id(objid=new_url)
 
     homepage_label = item["Source"] if item["Source"] else "imagineRio"
     item_homepage.set_id(objid=homepage_id)
