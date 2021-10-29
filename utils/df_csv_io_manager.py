@@ -28,9 +28,8 @@ class PandasCsvIOManager(dg.IOManager):
         """
         Loads DataFrame from CSV file
         """
-        #TO-DO remove src from path
         file_path = os.path.join(
-            "src", "data", "output", context.upstream_output.name)
+            "data", "output", context.upstream_output.name)
         df = pd.read_csv(file_path + ".csv", error_bad_lines=False)
 
         # by default pandas converts int+nan columns to float
