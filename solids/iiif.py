@@ -20,7 +20,7 @@ from solids.export import *
 
 load_dotenv(override=True)
 
-iiifpapi3.BASE_URL = "https://imaginerio-images.s3.us-east-1.amazonaws.com/"
+iiifpapi3.BASE_URL = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 Image.MAX_IMAGE_PIXELS = None
 
@@ -113,7 +113,7 @@ def write_manifests(context, item):
     # Header
     manifest = iiifpapi3.Manifest()
     manifest.set_id(
-        extendbase_url="iiif/{0}/manifest.json".format(
+        extendbase_url="{0}/manifest.json".format(
             str(identifier).replace(" ", "_")
         )
     )
@@ -256,11 +256,11 @@ def write_manifests(context, item):
     thumb_width = int(imgwidth / 16)
     thumb_height = int(imgheight / 16)
     thumbnail.set_id(
-        extendbase_url="iiif/{0}/full/{1},{2}/0/default.jpg".format(
+        extendbase_url="{0}/full/{1},{2}/0/default.jpg".format(
             str(identifier).replace(" ", "_"), thumb_width, thumb_height
         )
     )
-    thumbnail.set_hightwidth(150, 200)
+    thumbnail.set_hightwidth(thumb_height, thumb_width)
     manifest.add_thumbnail(thumbnailobj=thumbnail)
 
     # Homepage
@@ -290,6 +290,7 @@ def write_manifests(context, item):
     )
     imaginerio_seealso.add_label(language="none", text="imagineRio")
     imaginerio_seealso.set_type("Text")
+    manifest.add_seeAlso(imaginerio_seealso)
 
     if item["Wikidata ID"]:
         wikidata_seealso = iiifpapi3.seeAlso()
@@ -333,14 +334,14 @@ def write_manifests(context, item):
     annotation.set_id(extendbase_url="annotation/p1")
     annotation.set_motivation("painting")
     annotation.body.set_id(
-        extendbase_url="iiif/{0}/full/max/0/default.jpg".format(identifier)
+        extendbase_url="{0}/full/max/0/default.jpg".format(identifier)
     )
     annotation.body.set_type("Image")
     annotation.body.set_format("image/jpeg")
     annotation.body.set_width(imgwidth)
     annotation.body.set_height(imgheight)
     s = annotation.body.add_service()
-    s.set_id(extendbase_url="iiif/{0}/".format(identifier))
+    s.set_id(extendbase_url="{0}/".format(identifier))
     s.set_type("ImageService3")
     s.set_profile("level0")
 
@@ -410,7 +411,7 @@ def write_manifests(context, item):
             # Collection manifest
             collection = iiifpapi3.Collection()
             collection.set_id(
-                extendbase_url="iiif/collection/{0}.json".format(collection_name)
+                extendbase_url="collection/{0}.json".format(collection_name)
             )
             collection.add_label("en", collection_name)
             collection.add_label("pt-BR", collection_name)
@@ -429,10 +430,24 @@ def write_manifests(context, item):
             collection.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
 
             thumbnailobj = iiifpapi3.thumbnail()
+
+            if collection_name == "all" or collection_name == "views":
+                thumb_id="0071824cx001-01/full/295,221/0/default.jpg"
+                h,w = 221, 295
+            elif collection_name == "plans":
+                thumb_id = "10639297/full/259,356/0/default.jpg"
+                h,w = 356,259
+            elif collection_name == "maps":
+                thumb_id = "10643717/full/512,259/0/default.jpg"
+                h,w = 259,512
+            elif collection_name == "aerials":
+                thumb_id = "24879867/full/394,260/0/default.jpg"
+                h,w = 260, 394
+
             thumbnailobj.set_id(
-                extendbase_url="iiif/0071824cx001-01/full/295,221/0/default.jpg"
+                extendbase_url=thumb_id
             )
-            thumbnailobj.set_hightwidth(221, 295)
+            thumbnailobj.set_hightwidth(h, w)
             collection.add_thumbnail(thumbnailobj=thumbnailobj)
             collection.add_provider(collection_provider)
 
