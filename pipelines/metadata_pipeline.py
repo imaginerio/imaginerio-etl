@@ -5,6 +5,7 @@ from datetime import datetime
 import dagster as dg
 import dagster_pandas as dp
 import pandas as pd
+import geopandas as gpd
 from dotenv import load_dotenv
 from utils.df_csv_io_manager import df_csv_io_manager
 from utils.csv_root_input import csv_root_input
