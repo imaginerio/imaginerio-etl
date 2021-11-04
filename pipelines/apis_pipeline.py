@@ -7,7 +7,7 @@ from pandas.core.frame import DataFrame
 from solids.apis import *
 from solids.update_metadata import update_metadata
 from utils.csv_root_input import csv_root_input
-from utils.df_csv_io_manger import df_csv_io_manager
+from utils.df_csv_io_manager import df_csv_io_manager
 from solids.push_new_data import push_new_data
 
 load_dotenv(override=True)

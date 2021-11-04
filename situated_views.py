@@ -6,8 +6,7 @@ from pipelines.export_pipeline import *
 from pipelines.metadata_pipeline import *
 from pipelines.images_pipeline import *
 from pipelines.camera_pipeline import *
-from pipelines.git_pipeline import *
-from pipelines.IIIF_pipeline import *
+from pipelines.iiif_pipeline import *
 
 
 @dg.repository
@@ -20,13 +19,13 @@ def situated_views():
             "export_pipeline": lambda: export_pipeline,
             "metadata_pipeline": lambda: metadata_pipeline,
             "camera_pipeline": lambda: camera_pipeline,
-            "git_pipeline": lambda: git_pipeline,
-            "IIIF_pipeline": lambda: IIIF_pipeline,
+            #"git_pipeline": lambda: git_pipeline,
+            "iiif_pipeline": lambda: iiif_pipeline,
         },
         "schedules": {
             "apis_pipeline_weekly": lambda: apis_pipeline_weekly,
-            "pull_new_data_hourly": lambda: pull_new_data_hourly,
-            "push_new_data_daily": lambda: push_new_data_daily,
+            #"pull_new_data_hourly": lambda: pull_new_data_hourly,
+            #"push_new_data_daily": lambda: push_new_data_daily,
         },
         "sensors": {
             "trigger_cumulus": lambda: trigger_cumulus,
