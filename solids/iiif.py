@@ -20,7 +20,7 @@ from solids.export import *
 
 load_dotenv(override=True)
 
-iiifpapi3.BASE_URL = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif"
+iiifpapi3.BASE_URL = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 Image.MAX_IMAGE_PIXELS = None
 
@@ -271,7 +271,7 @@ def write_manifests(context, item):
     try: 
         item_homepage.set_id(objid=homepage_id)
     except:
-        url_parts = list(urlsplit("http://acervo.bndigital.bn.br/sophia/index.asp?codigo_sophia=1695"))
+        url_parts = list(urlsplit(homepage_id))
         url_parts[2:5] = ["","",""]
         new_url = urlunsplit(url_parts)
         item_homepage.set_id(objid=new_url)
@@ -324,8 +324,8 @@ def write_manifests(context, item):
     # Canvas
     canvas = manifest.add_canvas_to_items()
     canvas.set_id(extendbase_url="canvas/p1")
-    canvas.set_height(imgwidth)
-    canvas.set_width(imgheight)
+    canvas.set_height(imgheight)
+    canvas.set_width(imgwidth)
     canvas.add_label(language="none", text=identifier)
 
     annopage = canvas.add_annotationpage_to_items()
@@ -486,7 +486,7 @@ def get_items(context, metadata, mapping):
     metadata.fillna("", inplace=True)
     context.log.info(len(metadata))
     if context.mode_def.name == "test":
-        metadata = pd.DataFrame(metadata.loc["2588984"]).T
+        metadata = pd.DataFrame(metadata.loc["007A5P4F03-041"]).T
     for identifier, item in metadata.iterrows():
         yield dg.DynamicOutput(
             value={"identifier": identifier, "row": item, "mapping": mapping},
