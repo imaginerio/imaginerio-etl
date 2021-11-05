@@ -277,7 +277,6 @@ def write_manifests(context, item):
         item_homepage.set_id(objid=new_url)
 
     homepage_label = item["Source"] if item["Source"] else "imagineRio"
-    item_homepage.set_id(objid=homepage_id)
     item_homepage.add_label(language="none", text=homepage_label)
     item_homepage.set_type("Text")
     item_homepage.set_format("text/html")
@@ -362,7 +361,7 @@ def write_manifests(context, item):
     logo.set_format("image/png")
     logo.set_hightwidth(164, 708)
 
-    for collection_name in item["Item Set"].lower().split("||"):
+    for collection_name in item["Collection"].lower().split("||"):
         collection_path = "iiif/collection/{0}.json".format(collection_name)
 
         try:
@@ -486,7 +485,7 @@ def get_items(context, metadata, mapping):
     metadata.fillna("", inplace=True)
     context.log.info(len(metadata))
     if context.mode_def.name == "test":
-        metadata = pd.DataFrame(metadata.loc["007A5P4F03-041"]).T
+        metadata = pd.DataFrame(metadata.loc["3328257"]).T
     for identifier, item in metadata.iterrows():
         yield dg.DynamicOutput(
             value={"identifier": identifier, "row": item, "mapping": mapping},

@@ -85,7 +85,7 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
             "First Year",
             "Last Year",
             "Type",
-            "Item Set",
+            "Collection",
             "Source",
             "Source URL",  # url do portals
             "Materials",
@@ -115,8 +115,7 @@ def metadata_jstor(context, jstor, metadata):
     jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]','',x))
     jstor = jstor.rename(columns={"Title original Language":"Title"})
     jstor["Source ID"] = jstor["SSID"]
-    jstor["Item Set"] = jstor["Item Set"].fillna("All")
-    jstor.loc[~jstor["Item Set"].str.contains("All"),"Item Set"] = jstor["Item Set"].astype(str) + "||All"
+    jstor["Collection"] = jstor["Collection"] + "||All"
     metadata = metadata.append(jstor)
 
     metadata_new = metadata[
@@ -132,7 +131,7 @@ def metadata_jstor(context, jstor, metadata):
             "First Year",
             "Last Year",
             "Type",
-            "Item Set",
+            "Collection",
             "Source",
             "Source URL",  # url do portals
             "Materials",
