@@ -75,6 +75,7 @@ class S3IOManager(dg.IOManager):
                                         key, e
                                     )
                                 )
+                            os.remove(key)
 
         # content = context.metadata["content"]
         # name = context.name
