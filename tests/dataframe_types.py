@@ -31,7 +31,7 @@ metadata_dataframe_types = dp.create_dagster_pandas_dataframe_type(
                 int_column()]),
         dp.PandasColumn.string_column("Type"),
         dp.PandasColumn.string_column(
-            "Item Set"),
+            "Collection"),
         dp.PandasColumn.string_column(
             "Source"),
         dp.PandasColumn("Source URL", constraints=[url_column()]),
@@ -91,8 +91,8 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
         # cumulus Columns
         dp.PandasColumn.string_column(
             "Title", is_required=False, ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "Description (English)", is_required=False, ignore_missing_vals=True),
+        #dp.PandasColumn.string_column(
+        #    "Description (English)", is_required=False, ignore_missing_vals=True),
         dp.PandasColumn.string_column(
             "Description (Portuguese)", is_required=False, ignore_missing_vals=True),
         dp.PandasColumn.string_column(
@@ -104,15 +104,15 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
                 int_column()], is_required=False),
         dp.PandasColumn.string_column(
             "Type", is_required=False, ignore_missing_vals=True),
-        dp.PandasColumn.string_column("Item Set", is_required=False),
+        dp.PandasColumn.string_column("Collection", is_required=False),
         dp.PandasColumn.string_column("Source", is_required=False),
         dp.PandasColumn.string_column("Materials", is_required=False),
         dp.PandasColumn.string_column("Fabrication Method", is_required=False,
                                       ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "Rights", is_required=False, ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "License", is_required=False, ignore_missing_vals=True),
+        #dp.PandasColumn.string_column(
+        #    "Rights", is_required=False, ignore_missing_vals=True),
+        #dp.PandasColumn.string_column(
+        #    "License", is_required=False, ignore_missing_vals=True),
         #dp.PandasColumn.string_column("Attribution", is_required=False),
         dp.PandasColumn(
             "Width (mm)", constraints=[
