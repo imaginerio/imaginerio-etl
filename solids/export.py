@@ -193,7 +193,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     # filter items
     df = df.loc[
         (df["Source"] == "Instituto Moreira Salles") & df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna() & df["Width (mm)"].notna() & df["Height (mm)"]]  
-    df = df.dropna(subset=["Item Set"])
+    df = df.dropna(subset=["Collection"])
     df[["First Year", "Last Year"]] = df[["First Year", "Last Year"]].applymap(lambda x: str(int(x)), na_action="ignore")
 
     mapping.set_index("Label:en", inplace=True)
