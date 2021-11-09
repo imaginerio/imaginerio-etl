@@ -3,6 +3,8 @@ import shutil
 from datetime import datetime as dt
 from pathlib import Path
 from copy import deepcopy
+
+from numpy.core.numeric import NaN
 import dagster_pandas as dp
 
 import dagster as dg
@@ -82,7 +84,7 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
     # filter items
     omeka_df = df.loc[
         (df["Source"]== "Instituto Moreira Salles") & (df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna())]  
-    omeka_df = omeka_df.dropna(subset=["Item Set"])
+    omeka_df = omeka_df.dropna(subset=["Collection"])
     mapping.set_index("Label:en",inplace=True)
     omeka_df[["First Year", "Last Year"]] = omeka_df[
         ["First Year", "Last Year"]
@@ -102,7 +104,7 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
     omeka_df["Wikidata ID"] = "www.wikidata.org/wiki/" + \
         omeka_df["Wikidata ID"] + " Wikidata"
     include = omeka_df["Source ID"].isin(smapshot["id"])
-    omeka_df.loc[include, "Item Set"] = omeka_df["Item Set"] + "||Smapshot"
+    omeka_df.loc[include, "Collection"] = omeka_df["Collection"] + "||Smapshot"
 
     omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]] = omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]].applymap(
         string2url,na_action="ignore")
@@ -131,7 +133,7 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
             "Media URL": "media",
             "Latitude": "latitude",
             "Longitude": "longitude",
-            "Item Set": "item_sets"
+            "Collection": "item_sets"
         }
     )
 
@@ -182,13 +184,8 @@ def import_omeka_dataframe(_, df: dp.DataFrame):
 def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
 
     def string2qid(string):
-        if "||Stereoscopy" or "||Estereoscopia" in string:
-            string = string.split("||")[0]
-            QID = mapping.loc[string, "Wiki ID"]
-            return QID + "||Q35158"
-        else:
-            QID = mapping.loc[string, "Wiki ID"]
-            return QID
+        QID = mapping.loc[string, "Wiki ID"]
+        return QID
 
     # filter items
     df = df.loc[
@@ -201,10 +198,13 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     df["First Year"] = pd.to_datetime(df["First Year"])
     df["Last Year"] = pd.to_datetime(df["Last Year"])
 
+    df[["Materials","Materials_"]] = df["Materials"].str.rsplit("||",n=1,expand=True)
+
     quickstate = pd.DataFrame(
         columns=[
             "qid",
             "P31",
+            "P31_a",
             "Lpt-br",
             "Dpt-br",
             "Den",
@@ -244,15 +244,30 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     quickstate["qal1319"] = df["First Year"].apply(dt.isoformat) + "Z/9"
     # latest date
     quickstate["qal1326"] = df["Last Year"].apply(dt.isoformat) + "Z/9"
-
     # pt-br label
     quickstate["Lpt-br"] = df["Title"]
-    # pt-br description
+    # creator
+    quickstate["P170"] = df["Creator"]
+    # inventory number
+    quickstate["P217"] = df["Source ID"]
+
+    # description
+    # pt-br
     quickstate["Dpt-br"] = "Fotografia de " + df["Creator"]
-    # en description
+    # en
     quickstate["Den"] = "Photograph by " + df["Creator"]
+
+    list_creator = list(quickstate["P170"].unique())
+    for author in list_creator:
+        df_creator = quickstate.loc[quickstate["P170"]==author]
+        duplicate = list(df_creator.duplicated(subset=["Lpt-br"]))
+        df_creator.loc[duplicate,"Dpt-br"] = df_creator["P217"] + " Fotografia de " + df_creator["P170"]
+        df_creator.loc[duplicate,"Den"] = df_creator["P217"] + " Photograph by " + df_creator["P170"]
+        quickstate.loc[quickstate["P170"]==author,["Dpt-br","Den"]] = df_creator[["Dpt-br","Den"]]
+
     # Instance of
     quickstate["P31"] = "Q125191"
+    quickstate["P31_a"] = df["Materials_"].map({"Stereoscopy":"Q35158"})
     # country
     quickstate["P17"] = "Q155"
     # coordinate of POV
@@ -265,14 +280,10 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     quickstate["qal7787"] = df["heading"].astype(str) + "U28390"
     # tilt
     quickstate["qal8208"] = df["tilt"].astype(str) + "U28390"
-    # creator
-    quickstate["P170"] = df["Creator"]
     # made from material
     quickstate["P186"] = df["Materials"]
     # collection
     quickstate["P195"] = "Q71989864"
-    # inventory number
-    quickstate["P217"] = df["Source ID"]
     # fabrication method
     quickstate["P2079"] = df["Fabrication Method"]
     # field of view
