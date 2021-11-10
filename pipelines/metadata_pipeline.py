@@ -124,8 +124,7 @@ def metadata_jstor(context, jstor, metadata):
             "SSID",
             "Title",
             "Creator",
-            # vazio ou string fixa feito no cumulus ok
-            "Description (English)",
+            "Description (English)", # vazio ou string fixa feito no cumulus ok
             "Description (Portuguese)",
             "Date",
             "First Year",
