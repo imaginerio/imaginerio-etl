@@ -18,8 +18,8 @@ metadata_dataframe_types = dp.create_dagster_pandas_dataframe_type(
         dp.PandasColumn.string_column(
             "SSID", unique=True, ignore_missing_vals=True),
         dp.PandasColumn.string_column("Title"),
-        dp.PandasColumn.string_column(
-            "Description (English)"),
+        # dp.PandasColumn.string_column(
+        #     "Description (English)"),
         dp.PandasColumn.string_column(
             "Description (Portuguese)"),
         dp.PandasColumn.string_column("Date"),
@@ -41,8 +41,8 @@ metadata_dataframe_types = dp.create_dagster_pandas_dataframe_type(
             "Fabrication Method"),
         dp.PandasColumn.string_column(
             "Rights", ignore_missing_vals=True),
-        dp.PandasColumn.string_column(
-            "License", ignore_missing_vals=True),
+        # dp.PandasColumn.string_column(
+        #     "License", ignore_missing_vals=True),
         # dp.PandasColumn.string_column(
         #    "Attribution", ignore_missing_vals=True),
         dp.PandasColumn(
