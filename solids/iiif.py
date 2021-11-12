@@ -77,6 +77,14 @@ def tile_image(context, item):
         process.communicate()
         os.remove(img_path)
 
+        #TO-DO remove when java tiler gets updated with id as CLI argument
+        with open("iiif/{0}/info.json".format(identifier),"r+") as f:
+            info = json.load(f)
+            info["id"] = info["id"].replace("http://localhost:8887", "https://imaginerio-images.s3.us-east-1.amazonaws.com")
+            f.seek(0)  # rewind
+            json.dump(info, f, indent=4)
+            f.truncate()
+
         return [
             {"data": "iiif/{0}".format(identifier), "type": "path"},
         ]
