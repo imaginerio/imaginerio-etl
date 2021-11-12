@@ -117,8 +117,7 @@ def organize_columns(context, df: dp.DataFrame):
     cumulus_df = cumulus_df.drop_duplicates(subset="Source ID", keep="last")
 
     # reverse cretor name
-    cumulus_df["Creator"] = cumulus_df["Creator"].str.replace(
-        r"(.+),\s+(.+)", r"\2 \1")
+    cumulus_df["Creator"] = cumulus_df["Creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
 
     return cumulus_df
 
@@ -153,10 +152,8 @@ def extract_dimensions(context, df: dp.DataFrame):
         r"[.:] (?P<height>\d+,?\d?) [Xx] (?P<width>\d+,?\d?)"
     )
 
-    df["Width (mm)"] = dimensions["width"].str.replace(
-        ",", ".").astype(float) * 10
-    df["Height (mm)"] = dimensions["height"].str.replace(
-        ",", ".").astype(float) * 10
+    df["Width (mm)"] = dimensions["width"].str.replace(",", ".").astype(float) * 10
+    df["Height (mm)"] = dimensions["height"].str.replace(",", ".").astype(float) * 10
 
     return df
 
@@ -171,8 +168,7 @@ def format_date(context, df: dp.DataFrame):
     df.loc[df["Date"].str.count(r"[-\/^a-z]") == 0, "date_accuracy"] = "year"
     df.loc[df["Date"].str.count(r"[\/-]") == 1, "date_accuracy"] = "month"
     df.loc[df["Date"].str.count(r"[\/-]") == 2, "date_accuracy"] = "day"
-    df.loc[df["Date"].str.contains(
-        r"[a-z]", na=False), "date_accuracy"] = "circa"
+    df.loc[df["Date"].str.contains(r"[a-z]", na=False), "date_accuracy"] = "circa"
 
     # format date
     df["First Year"] = df["First Year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
@@ -220,8 +216,7 @@ def format_date(context, df: dp.DataFrame):
         "%m/%Y"
     )  # month
     df.loc[
-        df["Date"].str.fullmatch(
-            r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
+        df["Date"].str.fullmatch(r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
     ] = df["datetime"].dt.strftime("%d/%m/%Y")
 
     cumulus = df
@@ -235,6 +230,16 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     """
     Map processes and formats according to Wikidata entities
     """
+
+    df_cumulus["Description (English)"] = ""
+    df_cumulus["Type"] = "Photograph"
+    df_cumulus["Collection"] = "All||Views"
+    df_cumulus["Source"] = "Instituto Moreira Salles"
+    df_cumulus["License"] = ""
+    df_cumulus["Rights"] = ""
+    df_cumulus["Attribution"] = ""
+    df_cumulus["Smapshot ID"] = ""
+
     df_cumulus.loc[
         df_cumulus["Materials"] == "FOTOGRAFIA/ Papel", "Materials"
     ] = "Photographic print"
@@ -251,8 +256,8 @@ def create_columns(context, df_cumulus: main_dataframe_types):
         df_cumulus["Materials"] == "DIAPOSITIVO/ Vidro", "Materials"
     ] = "Glass diapositive"
 
-    df_cumulus.loc[df_cumulus["format"] == "Estereoscopia", "Materials"] = (
-        df_cumulus["Materials"] + "||Stereoscopy"
+    df_cumulus.loc[df_cumulus["format"] == "Estereoscopia", "Type"] = (
+        df_cumulus["Type"] + "||Stereoscopy"
     )
 
     df_cumulus.loc[
@@ -296,15 +301,6 @@ def create_columns(context, df_cumulus: main_dataframe_types):
         df_cumulus["Fabrication Method"] == "MEIO-TOM/ Pigmento",
         "Fabrication Method",
     ] = "Photogravure"
-
-    df_cumulus["Description (English)"] = ""
-    df_cumulus["Type"] = "Photograph"
-    df_cumulus["Collection"] = "All||Views"
-    df_cumulus["Source"] = "Instituto Moreira Salles"
-    df_cumulus["License"] = ""
-    df_cumulus["Rights"] = ""
-    df_cumulus["Attribution"] = ""
-    df_cumulus["Smapshot ID"] = ""
 
     return df_cumulus
 
