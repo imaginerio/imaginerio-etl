@@ -127,20 +127,24 @@ def write_manifests(context, item):
             return None
         else:
             for value_en in values_en.split("||"):
-                url = "http://wikidata.org/wiki/{0}".format(
-                    mapping.loc[value_en, "Wiki ID"]
-                )
-                value_pt = mapping.loc[value_en, "Label:pt"]
-                en.append(
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        url, value_en
+                try:
+                    url = "http://wikidata.org/wiki/{0}".format(
+                        mapping.loc[value_en, "Wiki ID"]
                     )
-                )
-                pt.append(
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        url, value_pt
+                    value_pt = mapping.loc[value_en, "Label:pt"]
+                    en.append(
+                        '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                            url, value_en
+                        )
                     )
-                )
+                    pt.append(
+                        '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                            url, value_pt
+                        )
+                    )
+                except:
+                    en.append(value_en)
+                    pt.append(value_en)
                 d = {"en": en, "pt": pt}
 
             return {
@@ -442,6 +446,9 @@ def write_manifests(context, item):
             elif collection_name == "aerials":
                 thumb_id = "24879867/full/394,260/0/default.jpg"
                 h,w = 260, 394
+            elif collection_name == "mare":
+                thumb_id = "31770323/full/188,125/0/default.jpg"
+                h,w = 125, 188
 
             thumbnailobj.set_id(
                 extendbase_url=thumb_id
@@ -477,15 +484,15 @@ def write_manifests(context, item):
     output_defs=[dg.DynamicOutputDefinition(dict)],
 )
 def get_items(context, metadata, mapping):
-    metadata.set_index("Source ID", inplace=True)
-    mapping.set_index("Label:en", inplace=True)
     ims = (metadata["Latitude"].notna()) & (metadata["Source URL"].notna()) & (metadata["Media URL"].notna()) & (metadata["First Year"].notna()) & (metadata["Last Year"].notna())
     jstor = (metadata["Source"] != "Instituto Moreira Salles")
-    metadata = metadata.loc[(metadata["Source"].notna()) & (ims | jstor)]
+    metadata = metadata.loc[ims | jstor]
     metadata.fillna("", inplace=True)
+    metadata.set_index("Source ID", inplace=True)
+    mapping.set_index("Label:en", inplace=True)
     context.log.info(len(metadata))
     if context.mode_def.name == "test":
-        metadata = pd.DataFrame(metadata.loc["3328257"]).T
+        metadata = pd.DataFrame(metadata.loc["31770320"]).T
     for identifier, item in metadata.iterrows():
         yield dg.DynamicOutput(
             value={"identifier": identifier, "row": item, "mapping": mapping},
