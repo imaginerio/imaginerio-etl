@@ -256,12 +256,39 @@ def write_manifests(context, item):
         manifest.add_summary(language="pt-BR", text=description["value_pt"][0])
 
     manifest.add_requiredStatement(
-        label="Attribution",
-        value="Hosted by imagineRio",
-        language_l="en",
-        language_v="en",
+        label = "Hosting",
+        value = "Hosted by imagineRio",
+        language_l = "en",
+        language_v = "en",
     )
-    manifest.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
+
+    manifest.add_requiredStatement(
+        label = "Hospedagem",
+        value = "Hospedado por imagineRio",
+        language_l = "pt-BR",
+        language_v = "pt-BR",
+    )
+
+    if item["Attribution"]:
+        manifest.add_requiredStatement(
+            label = "Attribution", 
+            value = item["Attribution"], 
+            language_v = "en", 
+            language_l = "en",
+        )
+        manifest.add_requiredStatement(
+            label="Atribuição",
+            value = item["Attribution"],
+            language_v = "pt-BR",
+            language_l= "pt-BR",
+        )
+        
+    if item["License"] and item["License"].startswith("http"):
+        manifest.set_rights(item["License"])
+    elif item["Rights"] and item["Rights"].startswith("http"):
+        manifest.set_rights(item["Rights"])
+    else:
+        manifest.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
 
     # Thumbnail
     thumbnail = iiifpapi3.thumbnail()
