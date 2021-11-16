@@ -252,8 +252,8 @@ def write_manifests(context, item):
 
     # Rights & Attribution
     if description["value_en"]:
-        manifest.add_summary(language="en", text=description["value_en"])
-        manifest.add_summary(language="pt-BR", text=description["value_pt"])
+        manifest.add_summary(language="en", text=description["value_en"][0])
+        manifest.add_summary(language="pt-BR", text=description["value_pt"][0])
 
     manifest.add_requiredStatement(
         label="Attribution",
