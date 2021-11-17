@@ -14,35 +14,34 @@ preset = {
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
         "smapshot_root": {"config": {"env": "SMAPSHOT"}},
-        "camera_root":{"config":{"env": "CAMERA"}},
-        "cumulus_root":{"config":{"env": "CUMULUS"}},
-        "images_root":{"config":{"env": "IMAGES"}},
-        "omeka_root":{"config":{"env": "OMEKA"}},
-        "wikidata_root":{"config":{"env": "WIKIDATA"}},
-        "mapping_root":{"config":{"env": "MAPPING"}},
+        "camera_root": {"config": {"env": "CAMERA"}},
+        "cumulus_root": {"config": {"env": "CUMULUS"}},
+        "images_root": {"config": {"env": "IMAGES"}},
+        "omeka_root": {"config": {"env": "OMEKA"}},
+        "wikidata_root": {"config": {"env": "WIKIDATA"}},
+        "mapping_root": {"config": {"env": "MAPPING"}},
         "portals_root": {"config": {"env": "PORTALS"}},
     },
     "solids": {
         "export_html": {"config": {"env": "INDEX"}},
-        "push_new_data":{
-            "config":{
-                "commit":"import omeka/wikidata and dashboard",
-                "branch":"dev"}},
+        "push_new_data": {
+            "config": {"commit": "import omeka/wikidata and dashboard", "branch": "dev"}
+        },
     },
 }
 
 preset_html = {
     "resources": {
-        "camera_root":{"config":{"env": "CAMERA"}},
+        "camera_root": {"config": {"env": "CAMERA"}},
         "portals_root": {"config": {"env": "PORTALS"}},
-        "cumulus_root":{"config":{"env": "CUMULUS"}},
-        "images_root":{"config":{"env": "IMAGES"}},
-        "omeka_root":{"config":{"env": "OMEKA"}},
-        "wikidata_root":{"config":{"env": "WIKIDATA"}}
+        "cumulus_root": {"config": {"env": "CUMULUS"}},
+        "images_root": {"config": {"env": "IMAGES"}},
+        "omeka_root": {"config": {"env": "OMEKA"}},
+        "wikidata_root": {"config": {"env": "WIKIDATA"}},
     },
     "solids": {
         "export_html": {"config": {"env": "INDEX"}},
-        "push_new_data":{"config":"dashboard"},
+        # "push_new_data": {"config": "dashboard"},
     },
 }
 
@@ -61,7 +60,7 @@ preset_html = {
                 "images_root": csv_root_input,
                 "omeka_root": csv_root_input,
                 "mapping_root": csv_root_input,
-                "portals_root": csv_root_input
+                "portals_root": csv_root_input,
             },
         )
     ],
@@ -74,10 +73,16 @@ preset_html = {
         dg.PresetDefinition(
             "preset_html",
             run_config=preset_html,
-            solid_selection=["format_values_chart","create_hbar","create_pie","export_html","push_new_data"],
+            solid_selection=[
+                "format_values_chart",
+                "create_hbar",
+                "create_pie",
+                "export_html",
+            ],
             mode="default",
-        )
-    ])
+        ),
+    ],
+)
 def export_pipeline():
 
     export_df = load_metadata()
@@ -91,9 +96,8 @@ def export_pipeline():
     wikidata_df = make_df_to_wikidata(export_df)
     wikidata_df = organise_creator(quickstate=wikidata_df)
 
-    #push_new_data(omeka_df)
+    # push_new_data(omeka_df)
     push_new_data(wikidata_df)
-
 
     # index.html
     values = format_values_chart()
