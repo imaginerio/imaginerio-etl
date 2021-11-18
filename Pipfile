@@ -23,6 +23,7 @@ validators = "*"
 boto3 = "*"
 pyiiifpres = {git = "https://github.com/giacomomarchioro/pyIIIFpres"}
 dagster-aws = "*"
+imgspy = "*"
 
 [dev-packages]
 black = "*"
