@@ -233,7 +233,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
 
     df_cumulus["Description (English)"] = ""
     df_cumulus["Type"] = "Photograph"
-    df_cumulus["Collection"] = "All||Views"
+    df_cumulus["Collections"] = "All||Views"
     df_cumulus["Source"] = "Instituto Moreira Salles"
     df_cumulus["License"] = ""
     df_cumulus["Rights"] = ""
@@ -329,7 +329,7 @@ def select_columns(context, df_cumulus: main_dataframe_types):
             "First Year",
             "Last Year",
             "Type",
-            "Collection",
+            "Collections",
             "Source",
             "Materials",
             "Fabrication Method",
