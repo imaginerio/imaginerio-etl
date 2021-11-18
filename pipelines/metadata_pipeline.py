@@ -1,7 +1,7 @@
 import datetime
 import re
 from datetime import datetime
-
+import numpy as np
 import dagster as dg
 import dagster_pandas as dp
 import pandas as pd
@@ -166,8 +166,7 @@ def metadata_jstor(context, jstor, metadata):
         ]
     ]
 
-    metadata["SSID"].astype(str)
-    metadata_new.name = "metadata"
+    metadata_new["SSID"] = metadata_new["SSID"].astype(np.float).astype("Int32")
     return metadata_new.set_index("Source ID")
 
 
