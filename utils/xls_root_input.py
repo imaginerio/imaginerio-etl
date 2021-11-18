@@ -10,10 +10,12 @@ def xls_root_input(context):
     instead of upstream solid
     """
     path = context.resource_config
+
     return pd.read_excel(
         path,
         converters={
-            "First Year[19466]": function_int,
-            "Last Year[19467]": function_int,
+            "SSID": function_int,
+            "First Display Year[19466]": function_int,
+            "Last Display Year[19467]": function_int,
         },
     )
