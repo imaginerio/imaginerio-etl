@@ -33,19 +33,24 @@ from bokeh.models import (
     input_defs=[
         dg.InputDefinition("metadata", root_manager_key="metadata_root"),
         dg.InputDefinition("camera", root_manager_key="camera_root"),
-        dg.InputDefinition("cumulus", root_manager_key="cumulus_root")
+        dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
     ],
-    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)]
+    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
 )
-def load_metadata(_,metadata: dp.DataFrame,camera: main_dataframe_types,cumulus: main_dataframe_types):
+def load_metadata(
+    _,
+    metadata: dp.DataFrame,
+    camera: main_dataframe_types,
+    cumulus: main_dataframe_types,
+):
     """
     Merge relevant dataframes to access objects
     status and properties
     """
-    camera_df = camera[["Source ID","heading","tilt","altitude","fov"]]
-    cumulus_df = cumulus[["Source ID","datetime","date_accuracy"]]
+    camera_df = camera[["Source ID", "heading", "tilt", "altitude", "fov"]]
+    cumulus_df = cumulus[["Source ID", "datetime", "date_accuracy"]]
     cumulus_df["datetime"] = pd.to_datetime(cumulus_df["datetime"])
-    datas = [cumulus_df,camera_df]
+    datas = [cumulus_df, camera_df]
     export_df = metadata
 
     for df in datas:
@@ -54,25 +59,36 @@ def load_metadata(_,metadata: dp.DataFrame,camera: main_dataframe_types,cumulus:
     return export_df
 
 
-@dg.solid(input_defs=[
-    dg.InputDefinition("smapshot", root_manager_key="smapshot_root"),
-    dg.InputDefinition("mapping", root_manager_key="mapping_root")], output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
-def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mapping: dp.DataFrame):
-
+@dg.solid(
+    input_defs=[
+        dg.InputDefinition("smapshot", root_manager_key="smapshot_root"),
+        dg.InputDefinition("mapping", root_manager_key="mapping_root"),
+    ],
+    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
+)
+def organize_columns_to_omeka(
+    _, df: dp.DataFrame, smapshot: dp.DataFrame, mapping: dp.DataFrame
+):
     def string2url(string):
         if "||Stereoscopy" in string:
             string = string.split("||")[0]
             QID = mapping.loc[string, "Wiki ID"]
-            return f"http://wikidata.org/wiki/{QID} {string}"+"||http://wikidata.org/wiki/Q35158 Stereoscopy"
+            return (
+                f"http://wikidata.org/wiki/{QID} {string}"
+                + "||http://wikidata.org/wiki/Q35158 Stereoscopy"
+            )
         elif "||Estereoscopia" in string:
             string = string.split("||")[0]
             QID = mapping.loc[string, "Wiki ID"]
-            return f"http://wikidata.org/wiki/{QID} {string}"+"||http://wikidata.org/wiki/Q35158 Estereoscopia"
+            return (
+                f"http://wikidata.org/wiki/{QID} {string}"
+                + "||http://wikidata.org/wiki/Q35158 Estereoscopia"
+            )
         else:
             QID = mapping.loc[string, "Wiki ID"]
             return f"http://wikidata.org/wiki/{QID} {string}"
-    
-    def translateString (string):
+
+    def translateString(string):
         if "||Stereoscopy" in string:
             string = string.split("||")[0]
             kw = mapping.loc[string, "Label:pt"]
@@ -83,15 +99,25 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
 
     # filter items
     omeka_df = df.loc[
-        (df["Source"]== "Instituto Moreira Salles") & (df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna())]  
-    omeka_df = omeka_df.dropna(subset=["Collection"])
-    mapping.set_index("Label:en",inplace=True)
+        (df["Source"] == "Instituto Moreira Salles")
+        & (
+            df["Latitude"].notna()
+            & df["Source URL"].notna()
+            & df["Media URL"].notna()
+            & df["First Year"].notna()
+            & df["Last Year"].notna()
+        )
+    ]
+    omeka_df = omeka_df.dropna(subset=["Collections"])
+    mapping.set_index("Label:en", inplace=True)
     omeka_df[["First Year", "Last Year"]] = omeka_df[
         ["First Year", "Last Year"]
     ].applymap(lambda x: str(int(x)), na_action="ignore")
 
     # create columns
-    omeka_df.loc[omeka_df["First Year"].notna(),"dcterms:available"] = omeka_df["First Year"].astype(str) + "/" + omeka_df["Last Year"].astype(str)
+    omeka_df.loc[omeka_df["First Year"].notna(), "dcterms:available"] = (
+        omeka_df["First Year"].astype(str) + "/" + omeka_df["Last Year"].astype(str)
+    )
     omeka_df["dcterms:format:en"] = omeka_df["Materials"]
     omeka_df["dcterms:format:pt"] = omeka_df["Materials"]
     omeka_df["dcterms:medium:en"] = omeka_df["Fabrication Method"]
@@ -101,20 +127,24 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
 
     # format data
     omeka_df["Source URL"] = omeka_df["Source URL"] + " " + omeka_df["Source"]
-    omeka_df["Wikidata ID"] = "www.wikidata.org/wiki/" + \
-        omeka_df["Wikidata ID"] + " Wikidata"
+    omeka_df["Wikidata ID"] = (
+        "www.wikidata.org/wiki/" + omeka_df["Wikidata ID"] + " Wikidata"
+    )
     include = omeka_df["Source ID"].isin(smapshot["id"])
-    omeka_df.loc[include, "Collection"] = omeka_df["Collection"] + "||Smapshot"
+    omeka_df.loc[include, "Collections"] = omeka_df["Collections"] + "||Smapshot"
 
-    omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]] = omeka_df[["dcterms:format:en","dcterms:medium:en","dcterms:type:en"]].applymap(
-        string2url,na_action="ignore")
-    omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]] = omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]].applymap(
-        translateString,na_action = "ignore")
+    omeka_df[["dcterms:format:en", "dcterms:medium:en", "dcterms:type:en"]] = omeka_df[
+        ["dcterms:format:en", "dcterms:medium:en", "dcterms:type:en"]
+    ].applymap(string2url, na_action="ignore")
+    omeka_df[["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]] = omeka_df[
+        ["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]
+    ].applymap(translateString, na_action="ignore")
     mapping = mapping.reset_index()
-    mapping.set_index("Label:pt",inplace=True)
-    omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]] = omeka_df[["dcterms:format:pt","dcterms:medium:pt","dcterms:type:pt"]].applymap(
-        string2url,na_action = "ignore")
-    
+    mapping.set_index("Label:pt", inplace=True)
+    omeka_df[["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]] = omeka_df[
+        ["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]
+    ].applymap(string2url, na_action="ignore")
+
     # rename columns
     omeka_df = omeka_df.rename(
         columns={
@@ -133,7 +163,7 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
             "Media URL": "media",
             "Latitude": "latitude",
             "Longitude": "longitude",
-            "Collection": "item_sets"
+            "Collection": "item_sets",
         }
     )
 
@@ -170,8 +200,11 @@ def organize_columns_to_omeka(_, df: dp.DataFrame, smapshot: dp.DataFrame, mappi
 
 
 @dg.solid(
-    output_defs=[dg.OutputDefinition(
-        io_manager_key="pandas_csv", name="import_omeka", dagster_type=dp.DataFrame)],
+    output_defs=[
+        dg.OutputDefinition(
+            io_manager_key="pandas_csv", name="import_omeka", dagster_type=dp.DataFrame
+        )
+    ],
 )
 def import_omeka_dataframe(_, df: dp.DataFrame):
     omeka_df = df
@@ -180,25 +213,37 @@ def import_omeka_dataframe(_, df: dp.DataFrame):
     return omeka_df.set_index("dcterms:identifier")
 
 
-@dg.solid(input_defs=[dg.InputDefinition("mapping", root_manager_key="mapping_root")], output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+@dg.solid(
+    input_defs=[dg.InputDefinition("mapping", root_manager_key="mapping_root")],
+    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
+)
 def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
-
     def string2qid(string):
         QID = mapping.loc[string, "Wiki ID"]
         return QID
 
     # filter items
     df = df.loc[
-        (df["Source"] == "Instituto Moreira Salles") & df["Latitude"].notna() & df["Source URL"].notna() & df["Media URL"].notna() & df["First Year"].notna() & df["Last Year"].notna() & df["Width (mm)"].notna() & df["Height (mm)"]]  
-    df = df.dropna(subset=["Collection"])
-    df[["First Year", "Last Year"]] = df[["First Year", "Last Year"]].applymap(lambda x: str(int(x)), na_action="ignore")
+        (df["Source"] == "Instituto Moreira Salles")
+        & df["Latitude"].notna()
+        & df["Source URL"].notna()
+        & df["Media URL"].notna()
+        & df["First Year"].notna()
+        & df["Last Year"].notna()
+        & df["Width (mm)"].notna()
+        & df["Height (mm)"]
+    ]
+    df = df.dropna(subset=["Collections"])
+    df[["First Year", "Last Year"]] = df[["First Year", "Last Year"]].applymap(
+        lambda x: str(int(x)), na_action="ignore"
+    )
 
     mapping.set_index("Label:en", inplace=True)
 
     df["First Year"] = pd.to_datetime(df["First Year"])
     df["Last Year"] = pd.to_datetime(df["Last Year"])
 
-    df[["Materials","Materials_"]] = df["Materials"].str.rsplit("||",n=1,expand=True)
+    df[["Materials", "Materials_"]] = df["Materials"].str.rsplit("||", n=1, expand=True)
 
     quickstate = pd.DataFrame(
         columns=[
@@ -236,62 +281,90 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     day = quickstate["date_accuracy"] == "day"
 
     quickstate["P571"] = df["datetime"].apply(dt.isoformat)
-    quickstate.loc[circa, "P571"] = quickstate["P571"] + "Z/8"
-    quickstate.loc[year, "P571"] = quickstate["P571"] + "Z/9"
-    quickstate.loc[month, "P571"] = quickstate["P571"] + "Z/10"
-    quickstate.loc[day, "P571"] = quickstate["P571"] + "Z/11"
+    quickstate.loc[circa, "P571"] = "+" + quickstate["P571"] + "Z/8"
+    quickstate.loc[year, "P571"] = "+" + quickstate["P571"] + "Z/9"
+    quickstate.loc[month, "P571"] = "+" + quickstate["P571"] + "Z/10"
+    quickstate.loc[day, "P571"] = "+" + quickstate["P571"] + "Z/11"
     # earliest date
-    quickstate["qal1319"] = df["First Year"].apply(dt.isoformat) + "Z/9"
+    # quickstate["qal1319"] = df["First Year"].apply(dt.isoformat) + "Z/9"
+    quickstate["P571"] = (
+        quickstate["P571"] + "|P580|+" + df["First Year"].apply(dt.isoformat) + "Z/9"
+        "|P582|+" + df["Last Year"].apply(dt.isoformat) + "Z/9"
+    )
     # latest date
-    quickstate["qal1326"] = df["Last Year"].apply(dt.isoformat) + "Z/9"
+    # quickstate["qal1326"] = df["Last Year"].apply(dt.isoformat) + "Z/9"
     # pt-br label
     quickstate["Lpt-br"] = df["Title"]
     # creator
     quickstate["P170"] = df["Creator"]
-    # inventory number
-    quickstate["P217"] = df["Source ID"]
-
     # description
     # pt-br
     quickstate["Dpt-br"] = "Fotografia de " + df["Creator"]
     # en
-    quickstate["Den"] = "Photograph by " + df["Creator"]
+    quickstate["Den"] = np.where(
+        df["Creator"] != "Anônimo",
+        "Photograph by " + df["Creator"],
+        "Photograph by Unknown",
+    )
 
     list_creator = list(quickstate["P170"].unique())
     for author in list_creator:
-        df_creator = quickstate.loc[quickstate["P170"]==author]
+        df_creator = quickstate.loc[quickstate["P170"] == author]
         duplicate = list(df_creator.duplicated(subset=["Lpt-br"]))
-        df_creator.loc[duplicate,"Dpt-br"] = df_creator["P217"] + " Fotografia de " + df_creator["P170"]
-        df_creator.loc[duplicate,"Den"] = df_creator["P217"] + " Photograph by " + df_creator["P170"]
-        quickstate.loc[quickstate["P170"]==author,["Dpt-br","Den"]] = df_creator[["Dpt-br","Den"]]
+        df_creator.loc[duplicate, "Dpt-br"] = (
+            "Fotografia de " + df_creator["P170"] + " (" + df_creator["P217"] + ")"
+        )
+        df_creator.loc[duplicate, "Den"] = np.where(
+            df_creator.loc[duplicate, "P170"] != "Anônimo",
+            "Photograph by "
+            + df_creator.loc[duplicate, "P170"]
+            + " ("
+            + df_creator.loc[duplicate, "P217"]
+            + ")",
+            "Photograph by Unknown" + " (" + df_creator.loc[duplicate, "P217"] + ")",
+        )
+        quickstate.loc[quickstate["P170"] == author, ["Dpt-br", "Den"]] = df_creator[
+            ["Dpt-br", "Den"]
+        ]
 
     # Instance of
     quickstate["P31"] = "Q125191"
-    quickstate["P31_a"] = df["Materials_"].map({"Stereoscopy":"Q35158"})
+    quickstate["P31_a"] = df["Materials_"].map({"Stereoscopy": "Q35158"})
     # country
     quickstate["P17"] = "Q155"
     # coordinate of POV
     quickstate["P1259"] = (
-        "@" + df["Latitude"].astype(str) + "/" + df["Longitude"].astype(str)
+        ("@" + df["Latitude"].astype(str) + "/" + df["Longitude"].astype(str))
+        + "|P2044|"
+        + df["altitude"].astype(str)
+        + "U11573"
+        + "|P7787|"
+        + df["heading"].astype(str)
+        + "U28390"
+        + "|P8208|"
+        + df["tilt"].astype(str)
+        + "U28390"
     )
     # altitude
-    quickstate["qal2044"] = df["altitude"].astype(str) + "U11573"
+    # quickstate["qal2044"] = df["altitude"].astype(str) + "P11573"
     # heading
-    quickstate["qal7787"] = df["heading"].astype(str) + "U28390"
+    # quickstate["qal7787"] = df["heading"].astype(str) + "P28390"
     # tilt
-    quickstate["qal8208"] = df["tilt"].astype(str) + "U28390"
+    # quickstate["qal8208"] = df["tilt"].astype(str) + "P28390"
     # made from material
     quickstate["P186"] = df["Materials"]
     # collection
     quickstate["P195"] = "Q71989864"
+    # inventory number
+    quickstate["P217"] = df["Source ID"]
     # fabrication method
     quickstate["P2079"] = df["Fabrication Method"]
     # field of view
     quickstate["P4036"] = df["fov"].astype(str) + "U28390"
     # width
-    quickstate["P2049"] = df["Width (mm)"].astype(str) + "U174728"
+    quickstate["P2049"] = df["Width (mm)"].astype(str) + "U174789"
     # height
-    quickstate["P2048"] = df["Height (mm)"].astype(str) + "U174728"
+    quickstate["P2048"] = df["Height (mm)"].astype(str) + "U174789"
     # IMS ID
     quickstate["P7835"] = df["Source URL"].str.extract(r"(\d+)").astype(int)
     # qid
@@ -300,16 +373,20 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     # quickstate["P6216"]
 
     # format data P186 and P2079
-    quickstate[["P186", "P2079"]] = quickstate[["P186", "P2079"]
-                                               ].applymap(string2qid, na_action="ignore")
+    quickstate[["P186", "P2079"]] = quickstate[["P186", "P2079"]].applymap(
+        string2qid, na_action="ignore"
+    )
 
     return quickstate
 
 
 @dg.solid(
     output_defs=[
-        dg.OutputDefinition(io_manager_key="pandas_csv",
-                            name="import_wikidata", dagster_type=dp.DataFrame)
+        dg.OutputDefinition(
+            io_manager_key="pandas_csv",
+            name="import_wikidata",
+            dagster_type=dp.DataFrame,
+        )
     ]
 )
 def organise_creator(_, quickstate: dp.DataFrame):
@@ -372,19 +449,101 @@ def organise_creator(_, quickstate: dp.DataFrame):
     quickstate = quickstate.drop(columns="date_accuracy")
     quickstate.name = "import_wikidata"
 
+    def df2quickstatements(df):
+        create_str = ""
+        edit_str = ""
+        str_props = ["Lpt-br", "Dpt-br", "Den", "P217", "P7835"]
+        no_ref_props = ["Lpt-br", "Dpt-br", "Den"]
+        for _, row in df.iterrows():
+            row = dict(row)
+            props = []
+            if row["qid"]:
+                for key in row.keys():
+                    if row[key]:
+                        if key in str_props:
+                            row[key] = '"{0}"'.format(row[key])
+                        prop_str = "|".join(
+                            [
+                                str(row["qid"]),
+                                str(key).replace("P31_a", "P31"),
+                                str(row[key]),
+                            ]
+                        )
+                        if key == "P217":
+                            prop_str += "|P195|Q71989864"
+                        if key == "P195":
+                            prop_str += "|P217|" + '"{0}"'.format(row["P217"])
+                        if key not in no_ref_props:
+                            prop_str += "|S248|Q64995339|S813|+{0}Z/11".format(
+                                dt.now().strftime("%Y-%m-%dT00:00:00")
+                            )
+                        props.append(prop_str)
+                item_str = "||".join(props)
+                if not edit_str:
+                    edit_str += item_str
+                else:
+                    edit_str += "||" + item_str
+            else:
+                props.append("CREATE")
+                for key in row.keys():
+                    if row[key]:
+                        if key in str_props:
+                            row[key] = '"{0}"'.format(row[key])
+                        prop_str = "|".join(
+                            [
+                                "LAST",
+                                str(key).replace("P31_a", "P31"),
+                                str(row[key]),
+                            ]
+                        )
+                        if key == "P217":
+                            prop_str += "|P195|Q71989864"
+                        if key == "P195":
+                            prop_str += "|P217|" + '"{0}"'.format(row["P217"])
+                        if key not in no_ref_props:
+                            prop_str += "|S248|Q64995339|S813|+{0}Z/11".format(
+                                dt.now().strftime("%Y-%m-%dT00:00:00")
+                            )
+                        props.append(prop_str)
+                item_str = "||".join(props)
+                if not create_str:
+                    create_str += item_str
+                else:
+                    create_str += "||" + item_str
+
+        return {"create": create_str, "edit": edit_str}
+
+    quickstate.fillna("", inplace=True)
+
+    with open("data/output/create_quickstatements.txt", "w+") as f:
+        f.write(df2quickstatements(quickstate)["create"])
+
+    with open("data/output/edit_quickstatements.txt", "w+") as f:
+        f.write(df2quickstatements(quickstate)["edit"])
+
     return quickstate.set_index("qid")
 
 
-@dg.solid(input_defs=[
-    dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
-    dg.InputDefinition("camera", root_manager_key="camera_root"),
-    dg.InputDefinition("images", root_manager_key="images_root"),
-    dg.InputDefinition("omeka", root_manager_key="omeka_root"),
-    dg.InputDefinition("wikidata", root_manager_key="wikidata_root"),
-    dg.InputDefinition("portals", root_manager_key="portals_root")],
-    output_defs=[dg.OutputDefinition(dagster_type=list)])
-
-def format_values_chart(context, cumulus: main_dataframe_types,portals: main_dataframe_types,camera: main_dataframe_types,images: main_dataframe_types,omeka: main_dataframe_types,wikidata:main_dataframe_types):
+@dg.solid(
+    input_defs=[
+        dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
+        dg.InputDefinition("camera", root_manager_key="camera_root"),
+        dg.InputDefinition("images", root_manager_key="images_root"),
+        dg.InputDefinition("omeka", root_manager_key="omeka_root"),
+        dg.InputDefinition("wikidata", root_manager_key="wikidata_root"),
+        dg.InputDefinition("portals", root_manager_key="portals_root"),
+    ],
+    output_defs=[dg.OutputDefinition(dagster_type=list)],
+)
+def format_values_chart(
+    context,
+    cumulus: main_dataframe_types,
+    portals: main_dataframe_types,
+    camera: main_dataframe_types,
+    images: main_dataframe_types,
+    omeka: main_dataframe_types,
+    wikidata: main_dataframe_types,
+):
 
     # kml finished
     kml_ims = camera.loc[camera["Source"] == "Instituto Moreira Salles"]
@@ -485,9 +644,17 @@ def create_hbar(context, values: list):
         toolbar_location=None,
     )
 
-    plot_hbar.title.text_font_size="25px"
-    plot_hbar.title.text_font_style="bold"
-    plot_hbar.add_layout(Title(text="Project Progress",align="left", text_font_size="15px",text_font_style="bold"),"above")
+    plot_hbar.title.text_font_size = "25px"
+    plot_hbar.title.text_font_style = "bold"
+    plot_hbar.add_layout(
+        Title(
+            text="Project Progress",
+            align="left",
+            text_font_size="15px",
+            text_font_style="bold",
+        ),
+        "above",
+    )
 
     # construct bars with differents colors
     hbar_1 = plot_hbar.hbar(
@@ -565,8 +732,7 @@ def create_pie(context, values: list):
 
     a = {"To do": 100 - x, "Done": x}
 
-    datas = pd.Series(a).reset_index(
-        name="value").rename(columns={"index": "data"})
+    datas = pd.Series(a).reset_index(name="value").rename(columns={"index": "data"})
     datas["angle"] = (360 * datas["value"]) / 100
     datas["color"] = ["lightgrey", "orange"]
 
