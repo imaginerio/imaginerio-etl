@@ -16,6 +16,7 @@ from tests.dataframe_types import *
 from tests.objects_types import *
 
 from functools import reduce
+
 load_dotenv(override=True)
 
 # Switch commits to another branch, change preset.
@@ -42,16 +43,24 @@ preset = {
 ################   SOLIDS   ##################
 
 
-@ dg.solid(
+@dg.solid(
     input_defs=[
         dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
         dg.InputDefinition("wikidata", root_manager_key="wikidata_root"),
         dg.InputDefinition("portals", root_manager_key="portals_root"),
         dg.InputDefinition("camera", root_manager_key="camera_root"),
         dg.InputDefinition("images", root_manager_key="images_root"),
-    ], output_defs=[dg.OutputDefinition(dagster_type=pd.DataFrame)]
+    ],
+    output_defs=[dg.OutputDefinition(dagster_type=pd.DataFrame)],
 )
-def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataframe_types, portals: main_dataframe_types, camera: gpd.GeoDataFrame, images: main_dataframe_types):
+def create_metadata(
+    context,
+    cumulus: main_dataframe_types,
+    wikidata: main_dataframe_types,
+    portals: main_dataframe_types,
+    camera: gpd.GeoDataFrame,
+    images: main_dataframe_types,
+):
     camera_new = camera[
         [
             "Source ID",
@@ -59,10 +68,11 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
             "Latitude",
         ]
     ]
-    
+
     dfs = [cumulus, camera_new, images, portals, wikidata]
-    metadata = reduce(lambda left, right: pd.merge(left,
-                                                   right, how="left", on='Source ID'), dfs)
+    metadata = reduce(
+        lambda left, right: pd.merge(left, right, how="left", on="Source ID"), dfs
+    )
 
     # find itens who are not in metadata
     def review_items(df1, df2):
@@ -85,7 +95,7 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
             "First Year",
             "Last Year",
             "Type",
-            "Collection",
+            "Collections",
             "Source",
             "Source URL",  # url do portals
             "Materials",
@@ -108,14 +118,21 @@ def create_metadata(context, cumulus: main_dataframe_types, wikidata: main_dataf
     return metadata_new
 
 
-@ dg.solid(
-    input_defs=[dg.InputDefinition( "jstor", root_manager_key="jstor_root", dagster_type=pd.DataFrame)],
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")])
+@dg.solid(
+    input_defs=[
+        dg.InputDefinition(
+            "jstor", root_manager_key="jstor_root", dagster_type=pd.DataFrame
+        )
+    ],
+    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="metadata")],
+)
 def metadata_jstor(context, jstor, metadata):
-    jstor = jstor.rename(columns=lambda x: re.sub(r'\[[0-9]*\]','',x))
-    jstor = jstor.rename(columns={"Title original Language":"Title"})
+    jstor = jstor.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x))
+    jstor = jstor.rename(columns={"Title original Language": "Title"})
+    jstor = jstor.rename(columns={"First Display Year": "First Year"})
+    jstor = jstor.rename(columns={"Last Display Year": "Last Year"})
     jstor["Source ID"] = jstor["SSID"]
-    jstor["Collection"] = jstor["Collection"] + "||All"
+    jstor["Collections"] = jstor["Collections"] + "||All"
     metadata = metadata.append(jstor)
 
     metadata_new = metadata[
@@ -124,13 +141,13 @@ def metadata_jstor(context, jstor, metadata):
             "SSID",
             "Title",
             "Creator",
-            "Description (English)", # vazio ou string fixa feito no cumulus ok
+            "Description (English)",  # vazio ou string fixa feito no cumulus ok
             "Description (Portuguese)",
             "Date",
             "First Year",
             "Last Year",
             "Type",
-            "Collection",
+            "Collections",
             "Source",
             "Source URL",  # url do portals
             "Materials",
@@ -157,7 +174,7 @@ def metadata_jstor(context, jstor, metadata):
 ################   PIPELINE   ##################
 
 
-@ dg.pipeline(
+@dg.pipeline(
     mode_defs=[
         dg.ModeDefinition(
             name="default",
@@ -183,13 +200,13 @@ def metadata_jstor(context, jstor, metadata):
 def metadata_pipeline():
     metadata = create_metadata()
     ok = metadata_jstor(metadata=metadata)
-    #push_new_data(ok)
+    # push_new_data(ok)
 
 
 ################   SENSORS   ##################
 
 
-@ dg.sensor(pipeline_name="metadata_pipeline")
+@dg.sensor(pipeline_name="metadata_pipeline")
 def trigger_metadata(context):
     metadata = "data/output/metadata.csv"
     if not os.path.exists(metadata):
