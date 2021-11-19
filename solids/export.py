@@ -243,7 +243,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     df["First Year"] = pd.to_datetime(df["First Year"])
     df["Last Year"] = pd.to_datetime(df["Last Year"])
 
-    df[["Materials", "Materials_"]] = df["Materials"].str.rsplit("||", n=1, expand=True)
+    df[["Type", "Type_"]] = df["Type"].str.rsplit("||", n=1, expand=True)
 
     quickstate = pd.DataFrame(
         columns=[
@@ -329,7 +329,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
 
     # Instance of
     quickstate["P31"] = "Q125191"
-    quickstate["P31_a"] = df["Materials_"].map({"Stereoscopy": "Q35158"})
+    quickstate["P31_a"] = df["Type_"].map({"Stereoscopy": "Q35158"})
     # country
     quickstate["P17"] = "Q155"
     # coordinate of POV
