@@ -69,19 +69,19 @@ def validate_kml(kml):
 type_list_of_kmls = dg.DagsterType(
     name="type_list_of_kmls",
     type_check_fn=lambda _, value: all(
-        list(map(lambda x: True if x.endswith(".kml") else False, value)))
+        list(map(lambda x: True if x.endswith(".kml") else False, value))
+    ),
 )
 
 
 type_list_of_features = dg.DagsterType(
     name="type_list_of_features",
-    type_check_fn=lambda _, value: validate_list_of_features(value)
+    type_check_fn=lambda _, value: validate_list_of_features(value),
 )
 
 
 type_geojson = dg.DagsterType(
-    name="type_geojson",
-    type_check_fn=lambda _, value: validate_geojson(value)
+    name="type_geojson", type_check_fn=lambda _, value: validate_geojson(value)
 )
 
 
