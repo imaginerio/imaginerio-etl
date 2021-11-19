@@ -20,6 +20,7 @@ from tests.dataframe_types import *
 from tests.objects_types import *
 from turfpy.misc import sector
 from tqdm import tqdm
+
 load_dotenv(override=True)
 
 
@@ -188,8 +189,7 @@ def get_list(context):
 
 
 @dg.solid(
-    config_schema={"new_single": dg.StringSource,
-                   "processed_raw": dg.StringSource}
+    config_schema={"new_single": dg.StringSource, "processed_raw": dg.StringSource}
 )
 def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False):
     """
@@ -207,8 +207,7 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
             if re.search("<Folder>", txt):
                 header = "\n".join(txt.split("\n")[:2])
                 photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
-                photooverlays[-1] = re.sub("</Folder>\n</kml>",
-                                           "", photooverlays[-1])
+                photooverlays[-1] = re.sub("</Folder>\n</kml>", "", photooverlays[-1])
 
         for po in photooverlays:
             filename = find_with_re("name", po)
@@ -221,8 +220,7 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
 
 @dg.solid(
     config_schema=dg.StringSource,
-    input_defs=[dg.InputDefinition(
-        "cumulus", root_manager_key="cumulus_root")],
+    input_defs=[dg.InputDefinition("cumulus", root_manager_key="cumulus_root")],
     output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)],
 )
 def rename_single(context, cumulus: main_dataframe_types):
@@ -244,20 +242,23 @@ def rename_single(context, cumulus: main_dataframe_types):
             filename = find_with_re("name", txt)
             new_filename = None
             if filename not in list(cumulus["Source ID"]):
-                loc = cumulus.loc[cumulus["preliminary id"].str.contains(filename, na=False),"Source ID"]
+                loc = cumulus.loc[
+                    cumulus["preliminary id"].str.contains(filename, na=False),
+                    "Source ID",
+                ]
                 if not loc.empty:
                     try:
                         new_filename = loc.item()
-                        txt = re.sub("(?<=<name>).+(?=<\/name>)",new_filename, txt)
+                        txt = re.sub("(?<=<name>).+(?=<\/name>)", new_filename, txt)
                         f.seek(0)
                         f.write(txt)
                         f.truncate()
-                        
+
                         print(f"Renamed: {filename} > {new_filename}")
                     except Exception as e:
                         print(f"{filename} error", e)
         if new_filename:
-            os.rename(kml,os.path.join(path, new_filename +".kml"))
+            os.rename(kml, os.path.join(path, new_filename + ".kml"))
 
     new_kmls = [
         os.path.join(path, file)
@@ -307,8 +308,7 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
                 alt = round(float(find_with_re("altitude", txt)), 5)
                 z = 15
                 tile = mercantile.tile(lng, lat, z)
-                westmost, southmost, eastmost, northmost = mercantile.bounds(
-                    tile)
+                westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
                 pixel_column = np.interp(lng, [westmost, eastmost], [0, 256])
                 pixel_row = np.interp(lat, [southmost, northmost], [256, 0])
                 tile_img = Image.open(
@@ -324,8 +324,7 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
                 txt = re.sub(
                     "(?<=<altitudeMode>).+(?=<\/altitudeMode>)", "absolute", txt
                 )
-                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)",
-                             f"{new_height}", txt)
+                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)", f"{new_height}", txt)
                 txt = re.sub(
                     "(?<=<coordinates>).+(?=<\/coordinates>)",
                     f"{lng},{lat},{new_height}",
@@ -341,8 +340,7 @@ def correct_altitude_mode(context, kmls: type_list_of_kmls):
 
 
 @dg.solid(
-    input_defs=[dg.InputDefinition(
-        "metadata", root_manager_key="metadata_root")],
+    input_defs=[dg.InputDefinition("metadata", root_manager_key="metadata_root")],
     output_defs=[dg.OutputDefinition(dagster_type=type_list_of_features)],
 )
 def create_feature(
@@ -409,13 +407,11 @@ def create_feature(
 
         except Exception as E:
             context.log.info(f"ERROR: {E} no ID: {Id}")
-
     return new_features
 
 
 @dg.solid(
-    config_schema={"new_single": dg.StringSource,
-                   "processed_single": dg.StringSource}
+    config_schema={"new_single": dg.StringSource, "processed_single": dg.StringSource}
 )
 def move_files(context, new_features: type_list_of_features):
     """
@@ -424,8 +420,7 @@ def move_files(context, new_features: type_list_of_features):
 
     path_new_single = os.path.abspath(context.solid_config["new_single"])
     path_processed_single = os.path.abspath(context.solid_config["processed_single"])
-    list_kmls = [feature["properties"]["Source ID"]
-                 for feature in new_features]
+    list_kmls = [feature["properties"]["Source ID"] for feature in new_features]
 
     for kml in tqdm(list_kmls, desc="KMLS"):
         try:
@@ -445,15 +440,16 @@ def move_files(context, new_features: type_list_of_features):
 
 @dg.solid(
     config_schema=dg.StringSource,
-    input_defs=[dg.InputDefinition(
-        "cumulus", root_manager_key="cumulus_root")],
+    input_defs=[dg.InputDefinition("cumulus", root_manager_key="cumulus_root")],
     output_defs=[
         dg.OutputDefinition(
             io_manager_key="geojson", name="import_viewcones", dagster_type=type_geojson
         )
     ],
 )
-def create_geojson(context, new_features: type_list_of_features, cumulus: main_dataframe_types):
+def create_geojson(
+    context, new_features: type_list_of_features, cumulus: main_dataframe_types
+):
     """
     Build GEOJSON from FeatureCollection
     """
@@ -467,15 +463,20 @@ def create_geojson(context, new_features: type_list_of_features, cumulus: main_d
             ]
             for identifier in current_ids:
                 if identifier not in list(cumulus["Source ID"]):
-                    loc_feature = cumulus.loc[cumulus["preliminary id"].str.contains(identifier, na=False),"Source ID"]
+                    loc_feature = cumulus.loc[
+                        cumulus["preliminary id"].str.contains(identifier, na=False),
+                        "Source ID",
+                    ]
                     if not loc_feature.empty:
                         try:
                             new_identifier = loc_feature.item()
                             index = current_ids.index(identifier)
-                            current_features[index]["properties"]["Source ID"] = new_identifier  
+                            current_features[index]["properties"][
+                                "Source ID"
+                            ] = new_identifier
                             print(f"Renamed: {identifier} > {new_identifier}")
                         except:
-                            print(f"{identifier} error")  
+                            print(f"{identifier} error")
 
             for new_feature in tqdm(new_features, desc="FEATURES"):
                 id_new = new_feature["properties"]["Source ID"]
@@ -491,14 +492,12 @@ def create_geojson(context, new_features: type_list_of_features, cumulus: main_d
                     # context.log.info("Appended: ", id_new)
                     current_features.append(new_feature)
 
-            feature_collection = geojson.FeatureCollection(
-                features=current_features)
+            feature_collection = geojson.FeatureCollection(features=current_features)
             return feature_collection
 
         else:
-            feature_collection = geojson.FeatureCollection(
-                features=new_features)
+            feature_collection = geojson.FeatureCollection(features=new_features)
             return feature_collection
     else:
-        context.log.info("Nothing's to updated on import_viewcones")
-        pass
+        context.log.info("Nothing to update in import_viewcones")
+        return geojson.load(open(camera))
