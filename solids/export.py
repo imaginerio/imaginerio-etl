@@ -520,10 +520,10 @@ def organise_creator(_, quickstate: dp.DataFrame):
 
     quickstate.fillna("", inplace=True)
 
-    with open("data/output/create_quickstatements.txt", "w+") as f:
+    with open("data/output/quickstatements_create.txt", "w+") as f:
         f.write(df2quickstatements(quickstate)["create"])
 
-    with open("data/output/edit_quickstatements.txt", "w+") as f:
+    with open("data/output/quickstatements_edit.txt", "w+") as f:
         f.write(df2quickstatements(quickstate)["edit"])
 
     return quickstate.set_index("qid")
