@@ -306,13 +306,20 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
         "Photograph by " + df["Creator"],
         "Photograph by Unknown",
     )
+    # inventory number
+    quickstate["P217"] = df["Source ID"]
 
     list_creator = list(quickstate["P170"].unique())
+
     for author in list_creator:
         df_creator = quickstate.loc[quickstate["P170"] == author]
-        duplicate = list(df_creator.duplicated(subset=["Lpt-br"]))
+        duplicate = df_creator.duplicated(subset=["Lpt-br"], keep=False)
         df_creator.loc[duplicate, "Dpt-br"] = (
-            "Fotografia de " + df_creator["P170"] + " (" + df_creator["P217"] + ")"
+            "Fotografia de "
+            + df_creator.loc[duplicate, "P170"]
+            + " ("
+            + df_creator.loc[duplicate, "P217"]
+            + ")"
         )
         df_creator.loc[duplicate, "Den"] = np.where(
             df_creator.loc[duplicate, "P170"] != "Anônimo",
@@ -355,8 +362,6 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     quickstate["P186"] = df["Materials"]
     # collection
     quickstate["P195"] = "Q71989864"
-    # inventory number
-    quickstate["P217"] = df["Source ID"]
     # fabrication method
     quickstate["P2079"] = df["Fabrication Method"]
     # field of view
