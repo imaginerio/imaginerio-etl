@@ -87,8 +87,7 @@ def create_metadata(
         [
             "Source ID",
             "Title",
-            "Creator",
-            # vazio ou string fixa feito no cumulus ok
+            "Creator",  # vazio ou string fixa feito no cumulus ok
             "Description (English)",
             "Description (Portuguese)",
             "Date",
@@ -128,9 +127,18 @@ def create_metadata(
 )
 def metadata_jstor(context, jstor, metadata):
     jstor = jstor.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x))
-    jstor = jstor.rename(columns={"Title original Language": "Title"})
-    jstor = jstor.rename(columns={"First Display Year": "First Year"})
-    jstor = jstor.rename(columns={"Last Display Year": "Last Year"})
+    jstor.drop(columns="Creator", inplace=True)
+    jstor = jstor.rename(
+        columns={
+            "Title original Language": "Title",
+            "Creator (Shared Shelf Names)": "Creator",
+            "First Display Year": "First Year",
+            "Last Display Year": "Last Year",
+            "Source (Repository)": "Source",
+            "Repository URL": "Source URL",
+            "Required Statement": "Attribution",
+        }
+    )
     jstor["Source ID"] = jstor["SSID"]
     jstor["Collections"] = jstor["Collections"] + "||All"
     metadata = metadata.append(jstor)
@@ -166,7 +174,7 @@ def metadata_jstor(context, jstor, metadata):
         ]
     ]
 
-    metadata_new["SSID"] = metadata_new["SSID"].astype(np.float).astype("Int32")
+    # metadata_new["SSID"] = metadata_new["SSID"].astype(np.float).astype("Int32")
     return metadata_new.set_index("Source ID")
 
 
