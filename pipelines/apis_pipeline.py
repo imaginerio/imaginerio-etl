@@ -17,8 +17,8 @@ load_dotenv(override=True)
 # Call all APIs
 preset = {
     "solids": {
-        "omeka_dataframe": {"config": {"env": "OUTPUT"}},
-        "query_omeka": {"config": {"env": "OMEKA_API"}},
+        # "omeka_dataframe": {"config": {"env": "OUTPUT"}},
+        # "query_omeka": {"config": {"env": "OMEKA_API"}},
         "query_wikidata": {"config": {"env": "WIKIDATA_API"}},
         "query_portals": {"config": {"env": "PORTALS_API"}},
         "portals_dataframe": {"config": {"env": "PORTALS_PREFIX"}},
@@ -95,42 +95,54 @@ preset_portals = {
         dg.PresetDefinition(
             "preset_omeka",
             run_config=preset_omeka,
-            solid_selection=["query_omeka", "omeka_dataframe", "update_metadata","push_new_data"],
+            solid_selection=[
+                # "query_omeka",
+                # "omeka_dataframe",
+                "update_metadata",
+            ],  # "push_new_data"
             mode="default",
         ),
         dg.PresetDefinition(
             "preset_wikidata",
             run_config=preset_wikidata,
-            solid_selection=["query_wikidata", "wikidata_dataframe", "update_metadata","push_new_data"],
+            solid_selection=[
+                "query_wikidata",
+                "wikidata_dataframe",
+                "update_metadata",
+            ],  # "push_new_data"
             mode="default",
         ),
         dg.PresetDefinition(
             "preset_portals",
             run_config=preset_portals,
-            solid_selection=["query_portals", "portals_dataframe", "update_metadata","push_new_data"],
+            solid_selection=[
+                "query_portals",
+                "portals_dataframe",
+                "update_metadata",
+            ],  # "push_new_data"
             mode="default",
         ),
     ],
 )
 def apis_pipeline():
 
-    omeka_results = query_omeka()
-    omeka_df = omeka_dataframe(omeka_results)
+    # omeka_results = query_omeka()
+    # omeka_df = omeka_dataframe(omeka_results)
     # omeka_df = validate_omeka(omeka_df)
-    ok_omeka = update_metadata(df=omeka_df)
-    push_new_data(ok_omeka)
+    # ok_omeka = update_metadata(df=omeka_df)
+    # push_new_data(ok_omeka)
 
     wikidata_results = query_wikidata()
     wikidata_df = wikidata_dataframe(wikidata_results)
     # wikidata_df = validate_wikidata(wikidata_df)
     ok_wikidata = update_metadata(df=wikidata_df)
-    push_new_data(ok_wikidata)
+    # push_new_data(ok_wikidata)
 
     portals_results = query_portals()
     portals_df = portals_dataframe(portals_results)
     # portals_df = validate_portals(portals_df)
     ok_portals = update_metadata(df=portals_df)
-    #push_new_data(ok_portals)
+    # push_new_data(ok_portals)
 
 
 ################   SENSORS   ##################
