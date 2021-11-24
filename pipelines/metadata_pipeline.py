@@ -140,7 +140,7 @@ def metadata_jstor(context, jstor, metadata):
         }
     )
     jstor["Source ID"] = jstor["SSID"]
-    jstor["Collections"] = jstor["Collections"] + "||All"
+    jstor["Collections"] = jstor["Collections"].str.replace("|", "||") + "||All"
     metadata = metadata.append(jstor)
 
     metadata_new = metadata[
