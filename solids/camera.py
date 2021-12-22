@@ -216,6 +216,7 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
         if delete_original:
             os.remove(os.path.abspath(kml))
         shutil.move(kml, path_processed_raw)
+    return "ok"
 
 
 @dg.solid(
@@ -223,7 +224,7 @@ def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False)
     input_defs=[dg.InputDefinition("cumulus", root_manager_key="cumulus_root")],
     output_defs=[dg.OutputDefinition(dagster_type=type_list_of_kmls)],
 )
-def rename_single(context, cumulus: main_dataframe_types):
+def rename_single(context, cumulus: main_dataframe_types, ok):
     """
     Check for changes in identifiers and correct filename
     """

@@ -18,22 +18,17 @@ preset = {
         "get_list": {"config": {"env": "NEW_RAW"}},
         "split_photooverlays": {
             "config": {
-                "new_single": {
-                    "env": "NEW_SINGLE"
-                },
-                "processed_raw": {
-                    "env": "PROCESSED_RAW"}}},
-
-        "rename_single": {
-            "config": {"env": "NEW_SINGLE"}},
+                "new_single": {"env": "NEW_SINGLE"},
+                "processed_raw": {"env": "PROCESSED_RAW"},
+            }
+        },
+        "rename_single": {"config": {"env": "NEW_SINGLE"}},
         "move_files": {
             "config": {
-                "new_single": {
-                    "env": "NEW_SINGLE"
-                },
-                "processed_single": {
-                    "env": "PROCESSED_SINGLE"}}},
-
+                "new_single": {"env": "NEW_SINGLE"},
+                "processed_single": {"env": "PROCESSED_SINGLE"},
+            }
+        },
         "create_geojson": {"config": {"env": "CAMERA"}},
         # "push_new_data":{
         #     "config":{
@@ -43,7 +38,8 @@ preset = {
     },
     "resources": {
         "metadata_root": {"config": {"env": "METADATA"}},
-        "cumulus_root": {"config": {"env": "CUMULUS"}}},
+        "cumulus_root": {"config": {"env": "CUMULUS"}},
+    },
 }
 
 
@@ -55,8 +51,8 @@ preset = {
                 "geojson": geojson_io_manager,
                 "pandas_csv": df_csv_io_manager,
                 "metadata_root": csv_root_input,
-                "cumulus_root": csv_root_input
-            }
+                "cumulus_root": csv_root_input,
+            },
         )
     ],
     preset_defs=[
@@ -72,14 +68,14 @@ def camera_pipeline():
     kmls = get_list()
     kmls = split_photooverlays(kmls)
 
-    kmls = rename_single()
+    kmls = rename_single(ok=kmls)
     kmls = change_img_href(kmls)
     kmls = correct_altitude_mode(kmls)
     new_features = create_feature(kmls=kmls)
     move_files(new_features)
     geojson = create_geojson(new_features=new_features)
     ok = update_metadata(df=geojson)
-    #push_new_data(ok)
+    # push_new_data(ok)
 
 
 ################   SENSORS   ##################
