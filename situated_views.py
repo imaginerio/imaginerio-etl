@@ -1,38 +1,25 @@
 import dagster as dg
-from pipelines.cumulus_pipeline import *
-from pipelines.images_pipeline import *
-from pipelines.apis_pipeline import *
-from pipelines.export_pipeline import *
-from pipelines.metadata_pipeline import *
-from pipelines.images_pipeline import *
-from pipelines.camera_pipeline import *
-from pipelines.iiif_pipeline import *
+from jobs.format_ims_metadata import *
+from jobs.handle_images import *
+from jobs.query_apis import *
+from jobs.export_data import *
+from jobs.compile_metadata import *
+from jobs.handle_images import *
+from jobs.process_kmls import *
+from jobs.iiif_pipeline import *
 
 
 @dg.repository
 def situated_views():
     return {
         "pipelines": {
-            "cumulus_pipeline": lambda: cumulus_pipeline,
+            "cumulus_pipeline": lambda: format_ims_metadata,
             "images_pipeline": lambda: images_pipeline,
-            "apis_pipeline": lambda: apis_pipeline,
+            "apis_pipeline": lambda: query_apis,
             "export_pipeline": lambda: export_pipeline,
-            "metadata_pipeline": lambda: metadata_pipeline,
-            "camera_pipeline": lambda: camera_pipeline,
-            #"git_pipeline": lambda: git_pipeline,
+            "metadata_pipeline": lambda: compile_metadata,
+            "camera_pipeline": lambda: process_kmls,
+            # "git_pipeline": lambda: git_pipeline,
             "iiif_pipeline": lambda: iiif_pipeline,
-        },
-        "schedules": {
-            "apis_pipeline_weekly": lambda: apis_pipeline_weekly,
-            #"pull_new_data_hourly": lambda: pull_new_data_hourly,
-            #"push_new_data_daily": lambda: push_new_data_daily,
-        },
-        "sensors": {
-            "trigger_cumulus": lambda: trigger_cumulus,
-            "trigger_export": lambda: trigger_export,
-            "trigger_metadata": lambda: trigger_metadata,
-            "trigger_apis": lambda: trigger_apis,
-            "trigger_camera_step1": lambda: trigger_camera_step1,
-            "trigger_camera_step2": lambda: trigger_camera_step2,
         },
     }
