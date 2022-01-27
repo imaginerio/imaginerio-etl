@@ -14,7 +14,7 @@ from tests.dataframe_types import main_dataframe_types
         "camera": In(root_manager_key="camera_root"),
         "images": In(root_manager_key="images_root"),
     },
-    out=Out(dagster_type=pd.DataFrame),
+    out={"metadata": Out(dagster_type=pd.DataFrame)},
 )
 def generate_metadata(
     context,
