@@ -4,7 +4,6 @@ from math import *
 
 from dagster import op, In, Out, DynamicOut
 import pandas as pd
-import imgspy
 import requests
 from dotenv import load_dotenv
 from IIIFpres import iiifpapi3
@@ -22,6 +21,36 @@ BUCKET = os.environ["BUCKET"]
 iiifpapi3.BASE_URL = BUCKET + "/iiif/"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 Image.MAX_IMAGE_PIXELS = None
+
+
+@op(
+    ins={
+        "metadata": In(root_manager_key="metadata_root"),
+        "mapping": In(root_manager_key="mapping_root"),
+    },
+    out=DynamicOut(dict),
+)
+def get_items(context, metadata, mapping):
+    ims = (
+        (metadata["Latitude"].notna())
+        & (metadata["Source URL"].notna())
+        & (metadata["Media URL"].notna())
+        & (metadata["First Year"].notna())
+        & (metadata["Last Year"].notna())
+    )
+    jstor = metadata["SSID"].notna()
+    metadata = metadata.loc[ims | jstor]
+    metadata.fillna("", inplace=True)
+    metadata.set_index("Source ID", inplace=True)
+    mapping.set_index("Label:en", inplace=True)
+    context.log.info(len(metadata))
+    if context.get_tag("mode") == "test":
+        metadata = pd.DataFrame(metadata.loc["001AAN005121"]).T
+    for identifier, item in metadata.iterrows():
+        yield dg.DynamicOutput(
+            value={"identifier": identifier, "row": item, "mapping": mapping},
+            mapping_key=identifier.replace("-", "_"),
+        )
 
 
 def file_exists(type, identifier):
@@ -50,7 +79,7 @@ def file_exists(type, identifier):
 def tile_image(context, item):
     identifier = item["identifier"]
 
-    if not file_exists("info", identifier) or context.mode_def.name == "test":
+    if not file_exists("info", identifier) or context.get_tag("mode") == "test":
         img_data = requests.get(
             BUCKET + "/iiif/{0}/full/max/0/default.jpg".format(identifier)
         ).content
@@ -66,7 +95,7 @@ def tile_image(context, item):
         command = [
             "java",
             "-jar",
-            "utils/iiif-tiler.jar",
+            "resources/iiif-tiler.jar",
             img_path,
             "-tile_size",
             "256",
@@ -102,16 +131,21 @@ def write_manifests(context, item):
 
     identifier = item["identifier"]
 
-    # if not file_exists("manifest", identifier) or context.mode_def.name == "test":
+    # if file_exists("manifest", identifier) and context.get_tag("mode") == "prod":
+    #     pass
+    # else:
     mapping = item["mapping"]
     item = item["row"]
     context.log.info("Processing: {0}".format(str(identifier)))
 
     # Get image sizes
-    img_info = imgspy.info(
-        BUCKET + "/iiif/{0}/full/max/0/default.jpg".format(identifier)
-    )
-    imgwidth, imgheight = img_info["width"], img_info["height"]
+    img_sizes = requests.get(BUCKET + "/iiif/{0}/info.json".format(identifier)).json()[
+        "sizes"
+    ]
+    full_width, full_height = img_sizes[-1].values()
+    thumb_width, thumb_height = min(
+        img_sizes, key=lambda x: abs(x["width"] - 600)
+    ).values()
 
     # Logo
     logo = iiifpapi3.logo()
@@ -284,8 +318,6 @@ def write_manifests(context, item):
 
     # Thumbnail
     thumbnail = iiifpapi3.thumbnail()
-    thumb_width = int(imgwidth / 16)
-    thumb_height = int(imgheight / 16)
     thumbnail.set_id(
         extendbase_url="{0}/full/{1},{2}/0/default.jpg".format(
             str(identifier).replace(" ", "_"), thumb_width, thumb_height
@@ -354,8 +386,8 @@ def write_manifests(context, item):
     # Canvas
     canvas = manifest.add_canvas_to_items()
     canvas.set_id(extendbase_url="canvas/p1")
-    canvas.set_height(imgheight)
-    canvas.set_width(imgwidth)
+    canvas.set_width(full_width)
+    canvas.set_height(full_height)
     canvas.add_label(language="none", text=identifier)
 
     annopage = canvas.add_annotationpage_to_items()
@@ -368,8 +400,8 @@ def write_manifests(context, item):
     )
     annotation.body.set_type("Image")
     annotation.body.set_format("image/jpeg")
-    annotation.body.set_width(imgwidth)
-    annotation.body.set_height(imgheight)
+    annotation.body.set_width(full_width)
+    annotation.body.set_height(full_height)
     s = annotation.body.add_service()
     s.set_id(extendbase_url="{0}/".format(identifier))
     s.set_type("ImageService3")
@@ -396,7 +428,7 @@ def write_manifests(context, item):
         collection_path = "iiif/collection/{0}.json".format(collection_name)
 
         try:
-            if context.mode_def.name == "test":
+            if context.get_tag("mode") == "test":
                 collection = read_API3_json(collection_path)
             else:
                 endpoint = BUCKET + "/" + collection_path
@@ -494,37 +526,5 @@ def write_manifests(context, item):
         data.append(collections)
 
         print("Collection updated: {0}".format(collection_name))
-    # else:
-    #    pass
 
     return data
-
-
-@op(
-    ins={
-        "metadata": In(root_manager_key="metadata_root"),
-        "mapping": In(root_manager_key="mapping_root"),
-    },
-    out=DynamicOut(dict),
-)
-def get_items(context, metadata, mapping):
-    ims = (
-        (metadata["Latitude"].notna())
-        & (metadata["Source URL"].notna())
-        & (metadata["Media URL"].notna())
-        & (metadata["First Year"].notna())
-        & (metadata["Last Year"].notna())
-    )
-    jstor = metadata["SSID"].notna()
-    metadata = metadata.loc[ims | jstor]
-    metadata.fillna("", inplace=True)
-    metadata.set_index("Source ID", inplace=True)
-    mapping.set_index("Label:en", inplace=True)
-    context.log.info(len(metadata))
-    if context.mode_def.name == "test":
-        metadata = pd.DataFrame(metadata.loc["007A5P4F03-006"]).T
-    for identifier, item in metadata.iterrows():
-        yield dg.DynamicOutput(
-            value={"identifier": identifier, "row": item, "mapping": mapping},
-            mapping_key=identifier.replace("-", "_"),
-        )
