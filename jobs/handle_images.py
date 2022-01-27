@@ -16,24 +16,24 @@ load_dotenv(override=True)
         "metadata_root": csv_root_input,
     },
     config={
-        "solids": {
+        "ops": {
             "file_picker": {
                 "config": {"env": "SOURCE"},
             },
             "file_dispatcher": {
                 "config": {
-                    "backlog": {"env": "IMG_BACKLOG"},
-                    "jpeg_hd": {"env": "JPEG_HD"},
-                    "jpeg_sd": {"env": "JPEG_SD"},
-                    "tiff": {"env": "TIFF"},
+                    "tif": {"env": "TIF"},
+                    "jpg": {"env": "JPG"},
+                    "backlog": {"env": "BACKLOG"},
+                    # "jpeg_sd": {"env": "JPEG_SD"},
                     "review": {"env": "REVIEW"},
                 }
             },
             "create_images_df": {"config": {"env": "CLOUD"}},
-            "write_metadata": {
+            "embed_metadata": {
                 "config": {
                     "env": "EXIFTOOL",
-                }
+                },
             },
         },
         "resources": {
@@ -42,9 +42,9 @@ load_dotenv(override=True)
     },
 )
 def handle_images():
-    files = file_picker()
-    to_tag = file_dispatcher(files=files)
-    images_df = create_images_df(files=files)
+    image_list = file_picker()
+    dispatched = file_dispatcher(image_list)
+    images_df = create_images_df(image_list)
     update_metadata(df=images_df)
-    to_upload = write_metadata(to_tag=to_tag)
-    upload_to_cloud(to_upload)
+    embedded = embed_metadata(image_list=dispatched)
+    # upload_to_cloud(embedded)
