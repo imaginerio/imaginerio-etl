@@ -1,10 +1,11 @@
+import re
 from dagster import op, In, Out
 import pandas as pd
 
 
 @op(
     ins={"jstor": In(root_manager_key="jstor_root", dagster_type=pd.DataFrame)},
-    out=Out(io_manager_key="pandas_csv"),
+    out={"metadata": Out(io_manager_key="pandas_csv")},
 )
 def append_jstor(context, jstor, metadata):
     jstor = jstor.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x))
