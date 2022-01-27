@@ -33,7 +33,7 @@ load_dotenv(override=True)
             "mapping_root": {"config": {"env": "MAPPING"}},
             "portals_root": {"config": {"env": "PORTALS"}},
         },
-        "solids": {
+        "ops": {
             "export_html": {"config": {"env": "INDEX"}},
         },
     },

@@ -20,7 +20,7 @@ load_dotenv(override=True)
         "cumulus_root": csv_root_input,
     },
     config={
-        "solids": {
+        "ops": {
             "get_list": {"config": {"env": "NEW_RAW"}},
             "split_photooverlays": {
                 "config": {
