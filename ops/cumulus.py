@@ -123,7 +123,7 @@ def organize_columns(context, df: dp.DataFrame):
 
 
 @op(
-    out=Out(io_manager_key="pandas_csv", dagster_type=dp.DataFrame)
+    out={"creators": Out(io_manager_key="pandas_csv", dagster_type=dp.DataFrame)}
 )  # save list of Creatorss for rights assessment
 def creators_list(context, df: dp.DataFrame):
     """
@@ -301,7 +301,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     return df_cumulus
 
 
-@op(out=Out(io_manager_key="pandas_csv", dagster_type=dp.DataFrame))
+@op(out={"cumulus": Out(io_manager_key="pandas_csv", dagster_type=dp.DataFrame)})
 def select_columns(context, df_cumulus: main_dataframe_types):
     """
     Filter columns for saving CSV file
