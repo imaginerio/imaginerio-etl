@@ -8,6 +8,7 @@ import requests
 from dotenv import load_dotenv
 from IIIFpres import iiifpapi3
 from IIIFpres.utilities import *
+import jsonschema
 from PIL import Image
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
@@ -403,7 +404,7 @@ def write_manifests(context, item):
     annotation.body.set_width(full_width)
     annotation.body.set_height(full_height)
     s = annotation.body.add_service()
-    s.set_id(extendbase_url="{0}/".format(identifier))
+    s.set_id(extendbase_url=identifier)
     s.set_type("ImageService3")
     s.set_profile("level0")
 
@@ -414,16 +415,16 @@ def write_manifests(context, item):
         ensure_ascii=False,
         context="http://iiif.io/api/presentation/3/context.json",
     )
+
+    # validate manifest
+    with open("input/iiif_3_0_schema.json") as schema:
+        try:
+            jsonschema.validate(instance=manifest, schema=json.load(schema))
+        except jsonschema.exceptions.ValidationError:
+            context.log.warning("Manifest {0} is invalid".format(identifier))
     data = [{"data": manifest_obj, "key": manifest_path, "type": "json"}]
 
-    # Logo
-    logo = iiifpapi3.logo()
-    logo.set_id(
-        "https://aws1.discourse-cdn.com/free1/uploads/imaginerio/original/1X/8c4f71106b4c8191ffdcafb4edeedb6f6f58b482.png"
-    )
-    logo.set_format("image/png")
-    logo.set_hightwidth(164, 708)
-
+    # collections
     for collection_name in item["Collections"].lower().split("||"):
         collection_path = "iiif/collection/{0}.json".format(collection_name)
 
