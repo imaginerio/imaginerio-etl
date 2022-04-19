@@ -198,8 +198,10 @@ def format_date(context, df: dp.DataFrame):
     df["First Year"] = df["First Year"].dt.strftime("%Y")
     df["Last Year"] = df["Last Year"].dt.strftime("%Y")
 
-    df.loc[df["Date"].str.contains(r"[a-z]", na=False) & df["Date"].notna(), "Date"] = (
-        df["datetime"].dt.strftime("%Y") + " circa"
+    df.loc[
+        df["Date"].str.contains(r"[a-z]", na=False) & df["Date"].notna(), "Date"
+    ] = "circa " + (
+        df["datetime"].dt.strftime("%Y")
     )  # circa
     df.loc[df["Date"].str.fullmatch(r"\d{4}") & df["Date"].notna(), "Date"] = df[
         "datetime"
@@ -213,7 +215,9 @@ def format_date(context, df: dp.DataFrame):
     )  # month
     df.loc[
         df["Date"].str.fullmatch(r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
-    ] = df["datetime"].dt.strftime("%d/%m/%Y")
+    ] = df["datetime"].dt.strftime(
+        "%d/%m/%Y"
+    )  # day
 
     cumulus = df
     cumulus.name = "cumulus"
@@ -238,19 +242,19 @@ def create_columns(context, df_cumulus: main_dataframe_types):
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "FOTOGRAFIA/ Papel", "Materials"
-    ] = "Photographic print"
+    ] = "Photographic Print"
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", "Materials"
-    ] = "Photomechanical print"
+    ] = "Photomechanical Print"
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "NEGATIVO/ Vidro", "Materials"
-    ] = "Glass plate negative"
+    ] = "Glass Plate Negative"
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "DIAPOSITIVO/ Vidro", "Materials"
-    ] = "Glass diapositive"
+    ] = "Glass Diapositive"
 
     df_cumulus.loc[df_cumulus["format"] == "Estereoscopia", "Type"] = (
         df_cumulus["Type"] + "||Stereoscopy"
@@ -267,7 +271,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "GELATINA/ Prata", "Fabrication Method"
-    ] = "Silver gelatin"
+    ] = "Gelatin Silver"
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "COLÓDIO/ Prata", "Fabrication Method"
@@ -276,7 +280,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "LANTERN SLIDE / Prata",
         "Fabrication Method",
-    ] = "Lantern slide"
+    ] = "Lantern Slide"
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "AMBROTIPIA/ Prata",
@@ -286,7 +290,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "COLOTIPIA/ Pigmento",
         "Fabrication Method",
-    ] = "Collotype print"
+    ] = "Collotype Print"
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "FOTOGRAVURA/ Pigmento",
