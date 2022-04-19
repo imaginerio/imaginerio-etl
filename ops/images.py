@@ -19,6 +19,48 @@ from ops.exiftool import ExifTool
 
 load_dotenv(override=True)
 
+PILImage.MAX_IMAGE_PIXELS = None
+
+
+class Tif(object):
+    def copy(self, image):
+        print("Copying {} to {}".format(image.id, os.environ["TIF"]))
+        shutil.copy2(image.original_path, os.environ["TIF"])
+
+
+class Highres(object):
+    def copy(self, image):
+        origin = os.path.join(os.environ["TIF"], image.tif)
+        destination = os.path.join(os.environ["JPG"], image.jpg)
+        print("Copying {} to {}".format(origin, destination))
+        try:
+            with PILImage.open(origin) as im:
+                im.save(
+                    destination,
+                    "jpeg",
+                    quality=95,
+                    icc_profile=im.info.get("icc_profile"),
+                    # exif=im.info["exif"],
+                )
+        except OSError as e:
+            print(f"Cannot convert {image.tif}")
+
+
+class Lowres(object):
+    def copy(self, image):
+        origin = os.path.join(os.environ["TIF"], image.tif)
+        if image.to_review:
+            destination = os.path.join(os.environ["REVIEW"], image.jpg)
+        else:
+            destination = os.path.join(os.environ["BACKLOG"], image.jpg)
+        print("Copying {} to {}".format(origin, destination))
+        try:
+            with PILImage.open(origin) as im:
+                im.thumbnail((1000, 1000))
+                im.save(destination)
+        except OSError:
+            print(f"Cannot convert {image.tif}")
+
 
 class Image:
     def __init__(self, original_path, has_kml, catalog):
@@ -30,6 +72,10 @@ class Image:
         self.__in_catalog = self.__id in catalog
         self.__metadata = None
         self.__on_cloud = None
+
+    @property
+    def original_path(self):
+        return self.__original_path
 
     @property
     def id(self):
@@ -47,17 +93,9 @@ class Image:
     def is_geolocated(self):
         return self.__is_geolocated
 
-    # @is_geolocated.setter
-    # def is_geolocated(self, has_kml):
-    #    self.__is_geolocated = self.__id in has_kml
-
     @property
     def in_catalog(self):
         return self.__in_catalog
-
-    # @in_catalog.setter
-    # def in_catalog(self, catalog):
-    #    self.__in_catalog = self.__id in catalog
 
     @property
     def to_tif(self):
@@ -89,25 +127,9 @@ class Image:
     def on_cloud(self):
         pass
 
-    def copy_to(self, destination):
-        if destination.endswith("tif"):
-            print("Copying {} to {}".format(self.__id, destination))
-            shutil.copy2(self.__original_path, destination)
-        elif destination.endswith("backlog") or destination.endswith("review"):
-            print("Copying {} to {}".format(self.__id, destination))
-            try:
-                with PILImage.open(os.path.join(os.environ["TIF"], self.__tif)) as im:
-                    im.thumbnail((1000, 1000))
-                    im.save(os.path.join(destination, self.__jpg))
-            except OSError:
-                print(f"Cannot convert {self.__tif}")
-        else:
-            print("Copying {} to {}".format(self.__id, destination))
-            try:
-                with PILImage.open(os.path.join(os.environ["TIF"], self.__tif)) as im:
-                    im.save(os.path.join(destination, self.__jpg))
-            except OSError:
-                print(f"Cannot convert {self.__tif}")
+    def copy_strategy(self, strategy):
+
+        strategy.copy(self)
 
     @property
     def has_embedded_metadata(self):
@@ -121,42 +143,51 @@ class Image:
 
     @metadata.setter
     def metadata(self, metadata):
-        metadata.fillna(value="", inplace=True)
-        metadata["Source ID"] = metadata["Source ID"].str.upper()
-        metadata.set_index("Source ID", inplace=True)
-        item = metadata.loc[self.__id]
+        item = metadata.loc[self.__id].copy()
+        item.fillna(value="", inplace=True)
         self.__metadata = [
-            "-IPTC:Source=Instituto Moreira Salles/IMS",
-            "-IPTC:CopyrightNotice=This image is in the Public Domain.",
-            "-IPTC:City=Rio de Janeiro",
-            "-IPTC:Province-State=RJ",
-            "-IPTC:Country-PrimaryLocationName=Brasil",
-            "-GPSLatitudeRef=S",
-            "-GPSLongitudeRef=W",
-            "-GPSAltitudeRef=0",
-            "-GPSImgDirectionRef=T",
-            "-IPTC:DateCreated={}".format(item["Date"]),
-            "-IPTC:By-line={}".format(item["Creator"]),
-            "-IPTC:ObjectName={}".format(self.__id),
-            "-IPTC:Headline={}".format(item["Title"]),
-            "-IPTC:Caption-Abstract={}".format(item["Description (Portuguese)"]),
-            "-IPTC:ObjectTypeReference={}".format(item["Type"]),
-            # "-IPTC:Dimensions={}x{}mm".format(item["Width"], item["Height"]),
-            "-IPTC:Keywords={}".format(",".join(item["Depicts"].split("||"))),
-            "-GPSLatitude={}".format(item["Latitude"]),
-            "-GPSLongitude={}".format(item["Longitude"]),
-            # "-GPSAltitude={}".format(item["Altitude"]),
-            # "-GPSImgDirection={}".format(item["Bearing"]),
+            param.encode(encoding="utf-8")
+            for param in [
+                "-xmp:artworkorobject={{aosource=Instituto Moreira Salles,aocopyrightnotice=Public Domain,aocreator={0},aosourceinvno={1},aosourceinvurl={2},aotitle={3},aocontentdescription={4},aophysicaldescription={5}}}".format(
+                    item["Creator"],
+                    self.__id,
+                    item["Source URL"],
+                    item["Title"],
+                    item["Description (Portuguese)"],
+                    item["Materials"],
+                ),
+                "-iptc:city=Rio de Janeiro",
+                "-iptc:province-State=RJ",
+                "-iptc:country-primarylocationname=Brasil",
+                "-iptc:keywords={}".format(",".join(item["Depicts"].split("||"))),
+                "-exif:gpslatitude={}".format(item["Latitude"]),
+                "-exif:gpslongitude={}".format(item["Longitude"]),
+                "-exif:gpslatituderef=S",
+                "-exif:gpslongituderef=W",
+                "-exif:gpsaltituderef=0",
+                "-exif:gpsimgdirectionref=T",
+                # "-IPTC:Dimensions={}x{}mm".format(item["Width"], item["Height"]),
+                # "-GPSAltitude={}".format(item["Altitude"]),
+                # "-GPSImgDirection={}".format(item["Bearing"]),
+            ]
         ]
-
-    def embed_metadata(self):
-        with ExifTool(executable_=os.environ["EXIFTOOL"]) as et:
-            for param in self.__metadata:
-                param = param.encode(encoding="utf-8")
-                dest = os.path.join(os.environ["JPG"], self.__jpg).encode(
+        if "circa" in item["Date"]:
+            self.__metadata.append(
+                "-xmp:AOCircaDateCreated={}".format(item["Date"]).encode(
                     encoding="utf-8"
                 )
-                et.execute(param, dest)
+            ),
+        else:
+            self.__metadata.append(
+                "-xmp:AODateCreated={}".format(item["Date"]).encode(encoding="utf-8"),
+            )
+
+    def embed_metadata(self):
+        with ExifTool() as et:
+            et.execute(
+                *self.__metadata,
+                os.path.join(os.environ["JPG"], self.__jpg).encode(encoding="utf-8"),
+            )
 
     def upload_to_cloud(self):
         pass
@@ -165,7 +196,7 @@ class Image:
 @op(
     config_schema=dg.StringSource,
     ins={"metadata": In(root_manager_key="metadata_root")},
-    out=Out(dagster_type=list),
+    # out=Out(dagster_type=list),
 )
 def file_picker(context, metadata: dp.DataFrame):
     """
@@ -175,7 +206,7 @@ def file_picker(context, metadata: dp.DataFrame):
 
     source = context.solid_config
 
-    metadata["Source ID"] = metadata["Source ID"].str.upper()
+    # metadata["Source ID"] = metadata["Source ID"].str.upper()
     has_kml = list(metadata.loc[metadata["Latitude"].notna(), "Source ID"])
     catalog = list(metadata["Source ID"])
     images = [
@@ -209,19 +240,16 @@ def file_dispatcher(context, images: list):
     BACKLOG = context.solid_config["backlog"]
     REVIEW = context.solid_config["review"]
 
-    for image in images:
+    for image in tqdm(images, desc="Copying images..."):
 
         if image.to_tif:
-            image.copy_to(TIF)
+            image.copy_strategy(Tif())
 
         if image.to_jpg:
-            image.copy_to(JPG)
+            image.copy_strategy(Highres())
 
-        if image.to_backlog:
-            image.copy_to(BACKLOG)
-
-        if image.to_review:
-            image.copy_to(REVIEW)
+        if image.to_backlog or image.to_review:
+            image.copy_strategy(Lowres())
 
     return images
 
@@ -267,11 +295,15 @@ def embed_metadata(context, metadata: dp.DataFrame, images):
     to high-res JPGs
     """
 
-    for image in images:
-        if image.is_geolocated and not image.has_embedded_metadata:
-            image.get_metadata = metadata
-            image.embed_metadata
+    metadata.set_index("Source ID", inplace=True)
 
+    for image in tqdm(images, desc="Embedding metadata..."):
+        if image.is_geolocated and not image.has_embedded_metadata:
+            image.metadata = metadata
+            try:
+                image.embed_metadata()
+            except Exception as e:
+                print(e)
     return images
 
 
