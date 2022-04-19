@@ -1,4 +1,4 @@
-from dagster import job
+from dagster import job, in_process_executor
 from dagster_aws.s3 import s3_resource
 from dotenv import load_dotenv
 from ops.images import *
@@ -39,12 +39,14 @@ load_dotenv(override=True)
         "resources": {
             "metadata_root": {"config": {"env": "METADATA"}},
         },
+        #"execution": {"config": {"multiprocess": {"max_concurrent": 1}}},
     },
+    executor_def=in_process_executor
 )
 def handle_images():
-    image_list = file_picker()
-    dispatched = file_dispatcher(image_list)
-    images_df = create_images_df(image_list)
+    images = file_picker()
+    images_df = create_images_df(images)
     update_metadata(df=images_df)
-    embedded = embed_metadata(image_list=dispatched)
+    dispatched = file_dispatcher(images)
+    embedded = embed_metadata(images=dispatched)
     # upload_to_cloud(embedded)
