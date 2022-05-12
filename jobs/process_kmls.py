@@ -21,7 +21,7 @@ load_dotenv(override=True)
     },
     config={
         "ops": {
-            "get_list": {"config": {"env": "NEW_RAW"}},
+            "list_kmls": {"config": {"env": "NEW_RAW"}},
             "split_photooverlays": {
                 "config": {
                     "new_single": {"env": "NEW_SINGLE"},
@@ -45,7 +45,7 @@ load_dotenv(override=True)
 )
 def process_kmls():
 
-    kmls = get_list()
+    kmls = list_kmls()
     kmls = split_photooverlays(kmls)
 
     kmls = rename_single(ok=kmls)

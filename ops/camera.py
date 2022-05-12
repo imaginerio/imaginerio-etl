@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import requests
 from dotenv import load_dotenv
+from lxml import etree
 from PIL import Image
 from pykml import parser
 from pyproj import Proj
@@ -24,473 +25,352 @@ from tqdm import tqdm
 load_dotenv(override=True)
 
 
-def find_with_re(property, kml):
-    """
-    Utility function to find KML properties using regex
-    """
-    return re.search(f"(?<=<{property}>).+(?=<\/{property}>)", kml).group(0)
+class KML:
 
+    header = b"""\
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom"></kml>
+"""
 
-def reproject(coordinates, inverse=False):
-    """
-    Transform Rio's geographic to world
-    coordinates or vice-versa with inverse=True
-    """
-    rj = Proj("EPSG:32722")
-    origin = Point(coordinates)
-    origin_proj = rj(origin.x, origin.y, inverse=inverse)
-
-    return Point(origin_proj)
-
-
-def query_wikidata(Q):
-    """
-    Query Wikidata's SPARQL endpoint for entities' coordinates
-    """
-    endpoint_url = "https://query.wikidata.org/sparql"
-
-    query = """SELECT ?coordinate
-        WHERE
-        {
-        wd:%s wdt:P625 ?coordinate .
-        }""" % (
-        Q
-    )
-
-    def get_results(endpoint_url, query):
-        user_agent = "WDQS-example Python/%s.%s" % (
-            sys.version_info[0],
-            sys.version_info[1],
+    def __init__(self, path):
+        try:
+            self._tree = etree.parse(path)
+        except OSError:
+            self._tree = etree.fromstring(requests.get(path).content)
+        self._folder = self._tree.find(
+            "kml:Folder", namespaces={"kml": "http://www.opengis.net/kml/2.2"}
         )
-        # TODO adjust user agent; see https://w.wiki/CX6
-        sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
-        sparql.setQuery(query)
-        sparql.setReturnFormat(JSON)
-        return sparql.query().convert()
+        self._photooverlay = self._tree.find(
+            "kml:PhotoOverlay", namespaces={"kml": "http://www.opengis.net/kml/2.2"}
+        )
 
-    results = get_results(endpoint_url, query)
-    result_list = []
-    for result in results["results"]["bindings"]:
-        if result:
-            result_list.append(result["coordinate"]["value"])
-    return result_list
+    @staticmethod
+    def to_element():
+        return etree.XML(KML.header)
 
 
-def get_radius(kml):
-    """
-    Calculate viewcone radius using Wikidata depicts
-    or trigonometry if not available
-    """
-    with open(kml, "r") as f:
-        KML = parser.parse(f).getroot()
+class Folder:
 
-    id = str(KML.PhotoOverlay.name)
-    tilt = KML.PhotoOverlay.Camera.tilt
-    df = pd.read_csv(
-        os.environ["METADATA"],
-        index_col="Source ID",
-    )
-    depicts = df.loc[id, "Depicts"]
-    if isinstance(depicts, str):
-        depicts = depicts.split("||")
-        distances = []
-        points = []
-        for depict in depicts:
-            q = re.search("(?<=\/)Q\d+", depict).group(0)
-            point = query_wikidata(q)
-            if point:
-                points.append(point[0])
-            else:
-                continue
-            for point in points:
+    tag = "Folder"
 
-                lnglat = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point)
-                lng = lnglat.group(1)
-                lat = lnglat.group(2)
-                depicted = reproject((float(lng), float(lat)))
-                origin = reproject(
-                    (
-                        KML.PhotoOverlay.Camera.longitude,
-                        KML.PhotoOverlay.Camera.latitude,
-                    )
-                )
-
-                distance = origin.distance(depicted)
-                distances.append(distance)
-
-        if distances:
-            radius = max(distances)
-
-        else:
-
-            return None
-    else:
-        if tilt <= 89:
-            tan = math.tan((tilt * math.pi) / 180)
-            radius = KML.PhotoOverlay.Camera.altitude * tan
-            if radius < 400:
-
-                return None
-        else:
-
-            return None
-
-    return radius
+    def __init__(self, element):
+        self._id = element.findtext(
+            "kml:name",
+            namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+        )
+        self._children = element.findall(
+            "kml:PhotoOverlay", namespaces={"kml": "http://www.opengis.net/kml/2.2"}
+        )
 
 
-def draw_feature(kml, properties, radius=0.2):
-    """
-    Use pre-obtained radius to draw circular sector
-    (viewcone) for each image
-    """
-    with open(kml, "r") as f:
-        KML = parser.parse(f).getroot()
-
-    camera = KML.PhotoOverlay.Camera
-    viewvolume = KML.PhotoOverlay.ViewVolume
-    point = Point(camera.longitude, camera.latitude)
-    center = geojson.Feature(geometry=point)
-    start_angle = camera.heading - viewvolume.rightFov
-    end_angle = camera.heading - viewvolume.leftFov
-
-    if start_angle > end_angle:
-        start_angle = start_angle - 360
-    else:
-        pass
-
-    cone = sector(
-        center,
-        radius,
-        start_angle,
-        end_angle,
-        options={"properties": properties, "steps": 200},
-    )
-    return cone
-
-
-@op(
-    config_schema=dg.StringSource,
-    out=Out(dagster_type=type_list_of_kmls),
-)
-def get_list(context):
-    """
-    List KML files to be processed
-    """
-    path = context.solid_config
-    path_gitkeep = os.path.join(path, ".gitkeep")
-    list_kmls = os.listdir(path)
-    kmls = []
-    for kml in list_kmls:
-        full_path = os.path.join(path, kml)
-        kmls.append(full_path)
-    list_kmls = [x for x in kmls if x != path_gitkeep]
-
-    return list_kmls
-
-
-@op(config_schema={"new_single": dg.StringSource, "processed_raw": dg.StringSource})
-def split_photooverlays(context, kmls: type_list_of_kmls, delete_original=False):
-    """
-    Split <folder> KMLs into individual ones
-    """
-    path_new_single = context.solid_config["new_single"]
-    path_processed_raw = context.solid_config["processed_raw"]
-    splited_kmls = []
-    photooverlays = ""
-
-    for kml in tqdm(kmls, desc="KMLS"):
-        splited_kmls.append(kml)
-        with open(kml, "r") as f:
-            txt = f.read()
-            if re.search("<Folder>", txt):
-                header = "\n".join(txt.split("\n")[:2])
-                photooverlays = re.split(".(?=<PhotoOverlay>)", txt)[1:]
-                photooverlays[-1] = re.sub("</Folder>\n</kml>", "", photooverlays[-1])
-
-        for po in photooverlays:
-            filename = find_with_re("name", po)
-            with open(os.path.join(path_new_single, filename + ".kml"), "w") as k:
-                k.write(f"{header}\n{po}</kml>")
-        if delete_original:
-            os.remove(os.path.abspath(kml))
-        shutil.move(kml, path_processed_raw)
-    return "ok"
-
-
-@op(
-    config_schema=dg.StringSource,
-    ins={"cumulus": In(root_manager_key="cumulus_root")},
-    out=Out(dagster_type=type_list_of_kmls),
-)
-def rename_single(context, cumulus: main_dataframe_types, ok):
-    """
-    Check for changes in identifiers and correct filename
-    """
-    path = context.solid_config
-    path_gitkeep = os.path.join(path, ".gitkeep")
-    kmls = [
-        os.path.join(path, file)
-        for file in os.listdir(path)
-        if os.path.isfile(os.path.join(path, file))
-    ]
-    list_kmls = [x for x in kmls if x != path_gitkeep]
-
-    for kml in list_kmls:
-        with open(kml, "r+") as f:
-            txt = f.read()
-            filename = find_with_re("name", txt)
-            new_filename = None
-            if filename not in list(cumulus["Source ID"]):
-                loc = cumulus.loc[
-                    cumulus["preliminary id"].str.contains(filename, na=False),
-                    "Source ID",
-                ]
-                if not loc.empty:
-                    try:
-                        new_filename = loc.item()
-                        txt = re.sub("(?<=<name>).+(?=<\/name>)", new_filename, txt)
-                        f.seek(0)
-                        f.write(txt)
-                        f.truncate()
-
-                        print(f"Renamed: {filename} > {new_filename}")
-                    except Exception as e:
-                        print(f"{filename} error", e)
-        if new_filename:
-            os.rename(kml, os.path.join(path, new_filename + ".kml"))
-
-    new_kmls = [
-        os.path.join(path, file)
-        for file in os.listdir(path)
-        if os.path.isfile(os.path.join(path, file))
-    ]
-    list_kmls = [x for x in new_kmls if x != path_gitkeep]
-
-    return list_kmls
-
-
-@op(out=Out(dagster_type=type_list_of_kmls))
-def change_img_href(context, list_kmls: type_list_of_kmls):
-    """
-    Substitute local image file link used for
-    geolocating by public IIIF Image API
-    """
-    for kml in tqdm(list_kmls, desc="KMLS"):
-        with open(kml, "r+") as f:
-            txt = f.read()
-            filename = find_with_re("name", txt)
-            txt = re.sub(
-                "(?<=<href>).+(?=<\/href>\n\t+<\/Icon>\n(\t+<rotation>+.+<\/rotation>\n)?\t+<ViewVolume>)",
-                f"https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/{filename}/full/max/0/default.jpg",
-                txt,
+class PhotoOverlay:
+    def __init__(self, element, catalog):
+        self._element = element
+        self._id = element.findtext(
+            "kml:name",
+            namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+        )
+        self._latitude = float(
+            element.findtext(
+                "kml:Camera/kml:latitude",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
             )
-            f.seek(0)
-            f.write(txt)
-            f.truncate()
-
-    return list_kmls
-
-
-@op(out=Out(dagster_type=type_list_of_kmls))
-def correct_altitude_mode(context, kmls: type_list_of_kmls):
-    """
-    Check for KMLs with altitude relative to ground,
-    query Mapbox-terrain-rgb and change for relative
-    to sea level (absolute)
-    """
-    for kml in tqdm(kmls, desc="KMLS"):
-        with open(kml, "r+") as f:
-            txt = f.read()
-            if re.search("(?<=altitudeMode>)relative(.+)?(?=\/altitudeMode>)", txt):
-                lat = round(float(find_with_re("latitude", txt)), 5)
-                lng = round(float(find_with_re("longitude", txt)), 5)
-                alt = round(float(find_with_re("altitude", txt)), 5)
-                z = 15
-                tile = mercantile.tile(lng, lat, z)
-                westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
-                pixel_column = np.interp(lng, [westmost, eastmost], [0, 256])
-                pixel_row = np.interp(lat, [southmost, northmost], [256, 0])
-                tile_img = Image.open(
-                    requests.get(
-                        "https://api.mapbox.com/v4/mapbox.terrain-rgb/10/800/200.pngraw?access_token=pk.eyJ1IjoibWFydGltcGFzc29zIiwiYSI6ImNra3pmN2QxajBiYWUycW55N3E1dG1tcTEifQ.JFKSI85oP7M2gbeUTaUfQQ",
-                        stream=True,
-                    ).raw
-                ).load()
-
-                R, G, B, _ = tile_img[int(pixel_row), int(pixel_column)]
-                height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
-                new_height = height + alt
-                txt = re.sub(
-                    "(?<=<altitudeMode>).+(?=<\/altitudeMode>)", "absolute", txt
-                )
-                txt = re.sub("(?<=<altitude>).+(?=<\/altitude>)", f"{new_height}", txt)
-                txt = re.sub(
-                    "(?<=<coordinates>).+(?=<\/coordinates>)",
-                    f"{lng},{lat},{new_height}",
-                    txt,
-                )
-
-                f.seek(0)
-                f.write(txt)
-                f.truncate()
-            else:
-                continue
-    return kmls
-
-
-@op(
-    ins={"metadata": In(root_manager_key="metadata_root")},
-    out=Out(dagster_type=type_list_of_features),
-)
-def create_feature(
-    context, kmls: type_list_of_kmls, metadata: metadata_dataframe_types
-):
-    """
-    Build GEOJSON Feature with metadata and viewcone polygon
-    """
-    new_features = []
-    processed_ids = []
-    metadata["upper_ids"] = metadata["Source ID"].str.upper()
-    metadata = metadata.set_index("upper_ids")
-    # Id = ""
-
-    for kml in tqdm(kmls, desc="KMLS"):
+        )
+        self._longitude = float(
+            element.findtext(
+                "kml:Camera/kml:longitude",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+            )
+        )
+        self._altitude = float(
+            element.findtext(
+                "kml:Camera/kml:altitude",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+            )
+        )
         try:
-            with open(kml, "r") as f:
-                KML = parser.parse(f).getroot()
-                Id = (str(KML.PhotoOverlay.name)).upper()
-                properties = {
-                    "Source ID": metadata.loc[Id, "Source ID"],
-                    "Title": ""
-                    if pd.isna(metadata.loc[Id, "Title"])
-                    else str(metadata.loc[Id, "Title"]),
-                    "Date": ""
-                    if pd.isna(metadata.loc[Id, "Date"])
-                    else str(metadata.loc[Id, "Date"]),
-                    "Description (Portuguese)": ""
-                    if pd.isna(metadata.loc[Id, "Description (Portuguese)"])
-                    else str(metadata.loc[Id, "Description (Portuguese)"]),
-                    "Creator": ""
-                    if pd.isna(metadata.loc[Id, "Creator"])
-                    else str(metadata.loc[Id, "Creator"]),
-                    "First Year": ""
-                    if pd.isna(metadata.loc[Id, "First Year"])
-                    else str(int(metadata.loc[Id, "First Year"])),
-                    "Last Year": ""
-                    if pd.isna(metadata.loc[Id, "Last Year"])
-                    else str(int(metadata.loc[Id, "Last Year"])),
-                    "Source": str(metadata.loc[Id, "Source"]),
-                    "Longitude": str(
-                        round(float(KML.PhotoOverlay.Camera.longitude), 5)
-                    ),
-                    "Latitude": str(round(float(KML.PhotoOverlay.Camera.latitude), 5)),
-                    "altitude": str(round(float(KML.PhotoOverlay.Camera.altitude), 5)),
-                    "heading": str(round(float(KML.PhotoOverlay.Camera.heading), 5)),
-                    "tilt": str(round(float(KML.PhotoOverlay.Camera.tilt), 5)),
-                    "fov": str(
-                        abs(float(KML.PhotoOverlay.ViewVolume.leftFov))
-                        + abs(float(KML.PhotoOverlay.ViewVolume.rightFov))
-                    ),
-                }
-
-                radius = get_radius(kml)
-                context.log.info(f"OK: {Id}")
-                if radius:
-                    feature = draw_feature(
-                        kml, radius=radius / 1000, properties=properties
-                    )
-                else:
-                    feature = draw_feature(kml, properties=properties)
-                new_features.append(feature)
-                processed_ids.append(Id)
-
-        except Exception as E:
-            context.log.info(f"ERROR: {E} no ID: {Id}")
-    return new_features
-
-
-@op(config_schema={"new_single": dg.StringSource, "processed_single": dg.StringSource})
-def move_files(context, new_features: type_list_of_features):
-    """
-    Manage processed files
-    """
-
-    path_new_single = os.path.abspath(context.solid_config["new_single"])
-    path_processed_single = os.path.abspath(context.solid_config["processed_single"])
-    list_kmls = [feature["properties"]["Source ID"] for feature in new_features]
-
-    for kml in tqdm(list_kmls, desc="KMLS"):
+            self._altitude_mode = element.findtext(
+                "kml:Camera/kml:altitudeMode",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+            )
+        except:
+            self._altitude_mode = element.findtext(
+                "kml:Camera/gx:altitudeMode",
+                namespaces={
+                    "kml": "http://www.opengis.net/kml/2.2",
+                    "gx": "http://www.google.com/kml/ext/2.2",
+                },
+            )
+        self._heading = float(
+            element.findtext(
+                "kml:Camera/kml:heading",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+            )
+        )
+        self._tilt = float(
+            element.findtext(
+                "kml:Camera/kml:tilt",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+            )
+        )
+        self._left_fov = float(
+            element.findtext(
+                "kml:ViewVolume/kml:leftFov",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+            )
+        )
+        self._right_fov = float(
+            element.findtext(
+                "kml:ViewVolume/kml:rightFov",
+                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+            )
+        )
+        self._image = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/{0}/full/max/0/default.jpg".format(
+            self._id
+        )
+        self._radius = None
+        self._viewcone = None
         try:
-            kml_from = os.path.join(path_new_single, kml + ".kml")
-            kml_to = os.path.join(path_processed_single, kml + ".kml")
-            if os.path.exists(kml_to):
-                os.remove(os.path.abspath(kml_to))
-                shutil.move(kml_from, path_processed_single)
-            else:
-                shutil.move(kml_from, path_processed_single)
+            self._depicts = catalog.loc[self._id, "Depicts"]
+            self._properties = {
+                "Document ID": str(self._id),
+                "Title": ""
+                if pd.isna(catalog.loc[self._id, "Title"])
+                else str(catalog.loc[self._id, "Title"]),
+                "Date": ""
+                if pd.isna(catalog.loc[self._id, "Date"])
+                else str(catalog.loc[self._id, "Date"]),
+                "Description (Portuguese)": ""
+                if pd.isna(catalog.loc[self._id, "Description (Portuguese)"])
+                else str(catalog.loc[self._id, "Description (Portuguese)"]),
+                "Creator": ""
+                if pd.isna(catalog.loc[self._id, "Creator"])
+                else str(catalog.loc[self._id, "Creator"]),
+                "First Year": ""
+                if pd.isna(catalog.loc[self._id, "First Year"])
+                else str(int(catalog.loc[self._id, "First Year"])),
+                "Last Year": ""
+                if pd.isna(catalog.loc[self._id, "Last Year"])
+                else str(int(catalog.loc[self._id, "Last Year"])),
+                "Provider": str(catalog.loc[self._id, "Provider"]),
+                "Longitude": str(round(self._longitude, 5)),
+                "Latitude": str(round(self._latitude, 5)),
+                "Altitude": str(round(self._altitude, 5)),
+                "Heading": str(round(self._heading, 5)),
+                "Tilt": str(round(self._tilt, 5)),
+                "FOV": str(abs(self._left_fov) + abs(self._right_fov)),
+            }
+        except KeyError:
+            self._depicts = None
+            self._properties = None
 
-        except Exception as e:
-            context.log.info(e)
+    @property
+    def altitude(self):
+        return self._altitude
 
-    return list
+    @altitude.setter
+    def altitude(self, value):
+        self._altitude = value
 
+    @property
+    def gx_altitude_mode(self):
+        return self._gx_altitude_mode
 
-@op(
-    config_schema=dg.StringSource,
-    ins={"cumulus": In(root_manager_key="cumulus_root")},
-    out={"import_viewcones": Out(io_manager_key="geojson", dagster_type=type_geojson)},
-)
-def create_geojson(
-    context, new_features: type_list_of_features, cumulus: main_dataframe_types
-):
-    """
-    Build GEOJSON from FeatureCollection
-    """
-    camera = context.solid_config
+    @property
+    def altitude_mode(self):
+        return self._altitude_mode
 
-    if new_features:
-        if os.path.isfile(camera):
-            current_features = (geojson.load(open(camera))).features
-            current_ids = [
-                feature["properties"]["Source ID"] for feature in current_features
+    @altitude_mode.setter
+    def altitude_mode(self, value):
+        self._altitude_mode = value
+
+    def update_id(self, catalog):
+        """
+        Looks for the current ID in the past IDs field and
+        updates it if necessary
+        """
+        if self._id not in catalog.index:
+            loc = catalog.loc[
+                catalog["preliminary id"].str.contains(self._id, na=False),
+                "Document ID",
             ]
-            for identifier in current_ids:
-                if identifier not in list(cumulus["Source ID"]):
-                    loc_feature = cumulus.loc[
-                        cumulus["preliminary id"].str.contains(identifier, na=False),
-                        "Source ID",
-                    ]
-                    if not loc_feature.empty:
-                        try:
-                            new_identifier = loc_feature.item()
-                            index = current_ids.index(identifier)
-                            current_features[index]["properties"][
-                                "Source ID"
-                            ] = new_identifier
-                            print(f"Renamed: {identifier} > {new_identifier}")
-                        except:
-                            print(f"{identifier} error")
+            if not loc.empty:
+                new_id = loc.item()
+                self._id = new_id
 
-            for new_feature in tqdm(new_features, desc="FEATURES"):
-                id_new = new_feature["properties"]["Source ID"]
+    def correct_altitude_mode(self):
+        """
+        Checks for relative altitudes, queries mapbox altitude API and
+        corrects altitude value and mode to absolute
+        """
 
-                if id_new in current_ids:
-                    # context.log.info(id_new)
-                    print("Updated: " + id_new)
-                    index = current_ids.index(id_new)
-                    current_features[index] = new_feature
+        z = 15
+        tile = mercantile.tile(self._longitude, self._latitude, z)
+        westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
+        pixel_column = int(np.interp(self._longitude, [westmost, eastmost], [0, 256]))
+        pixel_row = int(np.interp(self._latitude, [southmost, northmost], [256, 0]))
+        tile_img = Image.open(
+            requests.get(
+                "https://api.mapbox.com/v4/mapbox.terrain-rgb/10/800/200.pngraw?access_token=pk.eyJ1IjoibWFydGltcGFzc29zIiwiYSI6ImNra3pmN2QxajBiYWUycW55N3E1dG1tcTEifQ.JFKSI85oP7M2gbeUTaUfQQ",
+                stream=True,
+            ).raw
+        ).load()
+        R, G, B, _ = tile_img[pixel_row, pixel_column]
+        height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
+        self._altitude = height + self._altitude
+        self._altitude_mode = "absolute"
+        # return absolute_altitude
 
-                else:
-                    print("Appended: " + id_new)
-                    # context.log.info("Appended: ", id_new)
-                    current_features.append(new_feature)
+    def get_radius_via_trigonometry(self):
+        """
+        Calculate viewcone radius using trigonometry
+        """
 
-            feature_collection = geojson.FeatureCollection(features=current_features)
-            return feature_collection
-
+        if self._tilt <= 89:
+            tan = math.tan((self._tilt * math.pi) / 180)
+            radius = self._altitude * tan
+            if radius < 400:
+                self._radius = None
+            else:
+                self._radius = radius
         else:
-            feature_collection = geojson.FeatureCollection(features=new_features)
-            return feature_collection
+            self._radius = None
+
+    def get_radius_via_depicted_entities(self):
+        """
+        Calculate viewcone radius using Wikidata depicts
+        """
+
+        if isinstance(self._depicts, str):
+            depicts = self._depicts.split("||")
+            distances = []
+            points = []
+            for depict in depicts:
+                q = re.search("(?<=\/)Q\d+", depict).group(0)
+                point = query_wikidata(q)
+                if point:
+                    points.append(point[0])
+                else:
+                    continue
+                for point in points:
+                    lnglat = re.search("\((-\d+\.\d+) (-\d+\.\d+)\)", point)
+                    lng = float(lnglat.group(1))
+                    lat = float(lnglat.group(2))
+                    depicted = geo_to_world_coors(coors=(lng, lat))
+                    origin = geo_to_world_coors(coors=(self._longitude, self._latitude))
+                    distance = origin.distance(depicted)
+                    distances.append(distance)
+            if distances:
+                self._radius = max(distances)
+            else:
+                self._radius = None
+
+    def to_feature(self):
+        """
+        Draws a viewcone and returns a geojson polygon with properties
+        """
+
+        point = Point(self._longitude, self._latitude)
+        center = geojson.Feature(geometry=point)
+        start_angle = self._heading + self._left_fov
+        end_angle = self._heading + self._right_fov
+
+        if start_angle > end_angle:
+            start_angle = start_angle - 360
+
+        if not self._radius:
+            self._radius = 400
+
+        feature = sector(
+            center,
+            round(self._radius),
+            round(start_angle),
+            round(end_angle),
+            options={"properties": self._properties, "steps": 200},
+        )
+        return feature
+
+    def to_element(self):
+        # href = self._element.xpath('//PhotoOverlay/icon/href')
+        # href[0].text = self._image
+        href = self._element.xpath(
+            "kml:Icon/kml:href", namespaces={"kml": "http://www.opengis.net/kml/2.2"}
+        )
+        altitude = self._element.xpath(
+            "kml:Camera/kml:altitude",
+            namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+        )
+        altitude_mode = self._element.xpath(
+            "kml:Camera/kml:altitudeMode",
+            namespaces={"kml": "http://www.opengis.net/kml/2.2"},
+        )
+        href[0].text = self._image
+        altitude[0].text = str(self._altitude)
+        altitude_mode[0].text = self._altitude_mode
+        return self._element
+
+
+metadata = pd.read_csv(
+    "https://raw.githubusercontent.com/imaginerio/situated-views-data/main/output/metadata.csv"
+)
+metadata.rename(
+    columns={
+        "Source ID": "Document ID",
+        "Source": "Provider",
+        "Source URL": "Document URL",
+    },
+    inplace=True,
+)
+metadata.set_index("Document ID", inplace=True)
+camera = "https://github.com/imaginerio/situated-views-data/blob/main/output/import_viewcones.geojson"
+kml1 = KML(
+    "https://raw.githubusercontent.com/imaginerio/situated-views-data/main/input/kmls/processed_raw/2019-04-12-Davi.kml"
+)
+kml2 = KML(
+    "https://raw.githubusercontent.com/imaginerio/situated-views-data/main/input/kmls/processed_raw/2019-06-05-Martim.kml"
+)
+master_kml = "/content/master.kml"
+samples = [kml1, kml2]  # , single
+photo_overlays = []
+
+if os.path.exists(camera):
+    features = (geojson.load(open(camera))).features
+else:
+    features = []
+
+if os.path.exists(master_kml):
+    master_folder = KML(master_kml)._folder
+else:
+    master = KML.to_element()
+    master_folder = etree.SubElement(master, "Folder")
+
+# Parse PhotoOverlays
+for sample in samples:
+    if sample._folder is not None:
+        folder = Folder(sample._folder)
+        for child in folder._children:
+            photo_overlays.append(PhotoOverlay(child, metadata))
     else:
-        context.log.info("Nothing to update in import_viewcones")
-        return geojson.load(open(camera))
+        photo_overlays.append(PhotoOverlay(sample._photooverlay, metadata))
+
+
+# Manipulate PhotoOverlays
+for photo_overlay in photo_overlays:
+    print(photo_overlay._id)
+    # photo_overlay.update_id(metadata)
+    if "relative" in photo_overlay._altitude_mode:
+        photo_overlay.correct_altitude_mode()
+    if photo_overlay._depicts:
+        photo_overlay.get_radius_via_depicted_entities()
+    else:
+        photo_overlay.get_radius_via_trigonometry()
+
+    # Dispatch data
+    features.append(photo_overlay.to_feature())
+    # print(photo_overlay.to_element())
+    master_folder.append(photo_overlay.to_element())
+
+feature_collection = geojson.FeatureCollection(features=features)
+# print(etree.tostring(master))
+etree.ElementTree(master).write("/content/master.kml", pretty_print=True)
+# print(feature_collection)
