@@ -5,7 +5,7 @@ from dagster.builtins import Nothing
 import dagster_pandas as dp
 
 import boto3
-from dagster import op, In, Out
+from dagster import op, In, Out, DynamicOut, DynamicOutput
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 from PIL import Image as PILImage
 from tests.dataframe_types import *
 from tests.objects_types import *
+from ops.helpers import file_exists
 
 from ops.exiftool import ExifTool
 
@@ -71,7 +72,7 @@ class Image:
         self.__is_geolocated = self.__id in has_kml
         self.__in_catalog = self.__id in catalog
         self.__metadata = None
-        self.__on_cloud = None
+        self.__on_cloud = file_exists(self.__id, "image")
 
     @property
     def original_path(self):
@@ -125,7 +126,7 @@ class Image:
 
     @property
     def on_cloud(self):
-        pass
+        return self.__on_cloud
 
     def copy_strategy(self, strategy):
 
@@ -151,7 +152,7 @@ class Image:
                 "-xmp:artworkorobject={{aosource=Instituto Moreira Salles,aocopyrightnotice=Public Domain,aocreator={0},aosourceinvno={1},aosourceinvurl={2},aotitle={3},aocontentdescription={4},aophysicaldescription={5}}}".format(
                     item["Creator"],
                     self.__id,
-                    item["Source URL"],
+                    item["Document URL"],
                     item["Title"],
                     item["Description (Portuguese)"],
                     item["Materials"],
@@ -206,9 +207,9 @@ def file_picker(context, metadata: dp.DataFrame):
 
     source = context.solid_config
 
-    # metadata["Source ID"] = metadata["Source ID"].str.upper()
-    has_kml = list(metadata.loc[metadata["Latitude"].notna(), "Source ID"])
-    catalog = list(metadata["Source ID"])
+    # metadata["Document ID"] = metadata["Document ID"].str.upper()
+    has_kml = list(metadata.loc[metadata["Latitude"].notna(), "Document ID"])
+    catalog = list(metadata["Document ID"])
     images = [
         Image(os.path.join(root, name), has_kml, catalog)
         for root, _, files in os.walk(source)
@@ -264,25 +265,21 @@ def create_images_df(context, images: list):
     """
 
     prefix = context.solid_config
-    dicts = []
 
-    for img in images:
-        img_dict = {
-            "Source ID": img.id,
-        }
-        img_dict["Media URL"] = (
-            os.path.join(prefix, img.id, "full", "max", "0", "default.jpg")
-            if img.is_geolocated
-            else np.nan
-        )
-        dicts.append(img_dict)
-
-    images_df = pd.DataFrame(data=dicts)
+    id = [img.id for img in images]
+    url = [
+        os.path.join(prefix, img.id, "full", "max", "0", "default.jpg")
+        if img.is_geolocated
+        else np.nan
+        for img in images
+    ]
+    images_df = pd.DataFrame(url, index=id)
     images_df.drop_duplicates(inplace=True)
-    images_df.sort_values(by="Source ID")
+    images_df.sort_index(inplace=True)
     context.log.info(f"{len(images_df)} images available in hi-res")
+    print(images_df)
 
-    return images_df.set_index("Source ID")
+    return images_df
 
 
 @op(
@@ -295,7 +292,7 @@ def embed_metadata(context, metadata: dp.DataFrame, images):
     to high-res JPGs
     """
 
-    metadata.set_index("Source ID", inplace=True)
+    metadata.set_index("Document ID", inplace=True)
 
     for image in tqdm(images, desc="Embedding metadata..."):
         if image.is_geolocated and not image.has_embedded_metadata:
@@ -307,15 +304,18 @@ def embed_metadata(context, metadata: dp.DataFrame, images):
     return images
 
 
-@op
-def upload_to_cloud(context, images: list):
+@op(
+    out=DynamicOut(io_manager_key="s3_manager"),
+)
+def upload_to_cloud(images: list):
     """
     Uploads finished JPGs to AWS S3
     """
 
     for image in images:
         if not image.on_cloud:
-            image.upload_to_cloud
+            path = os.path.join(os.environ["JPG"], image.jpg)
+            yield DynamicOutput(value=path, mapping_key=image.id.replace("-", "_"))
 
     # S3 = boto3.client("s3")
     # BUCKET = "imaginerio-images"
