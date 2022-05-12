@@ -76,7 +76,7 @@ def organize_columns(context, df: dp.DataFrame):
     # rename columns
     cumulus_df = df.rename(
         columns={
-            "Record Name": "Source ID",
+            "Record Name": "Document ID",
             "CÓDIGO DE IDENTIFICAÇÃO PRELIMINAR": "preliminary id",
             "TÍTULO": "Title",
             "RESUMO": "Description (Portuguese)",
@@ -93,7 +93,7 @@ def organize_columns(context, df: dp.DataFrame):
     # select columns
     cumulus_df = cumulus_df[
         [
-            "Source ID",
+            "Document ID",
             "Title",
             "Description (Portuguese)",
             "Creator",
@@ -109,12 +109,12 @@ def organize_columns(context, df: dp.DataFrame):
     ]
 
     # remove file extension
-    cumulus_df["Source ID"] = cumulus_df["Source ID"].str.split(".", n=1, expand=True)[
-        0
-    ]
+    cumulus_df["Document ID"] = cumulus_df["Document ID"].str.split(
+        ".", n=1, expand=True
+    )[0]
 
     # remove duplicates
-    cumulus_df = cumulus_df.drop_duplicates(subset="Source ID", keep="last")
+    cumulus_df = cumulus_df.drop_duplicates(subset="Document ID", keep="last")
 
     # reverse cretor name
     cumulus_df["Creator"] = cumulus_df["Creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
@@ -233,8 +233,8 @@ def create_columns(context, df_cumulus: main_dataframe_types):
 
     df_cumulus["Description (English)"] = ""
     df_cumulus["Type"] = "Photograph"
-    df_cumulus["Collections"] = "All||Views"
-    df_cumulus["Source"] = "Instituto Moreira Salles"
+    df_cumulus["Collections"] = "Views"
+    df_cumulus["Provider"] = "Instituto Moreira Salles"
     df_cumulus["License"] = ""
     df_cumulus["Rights"] = ""
     df_cumulus["Attribution"] = ""
@@ -312,7 +312,7 @@ def select_columns(context, df_cumulus: main_dataframe_types):
     """
     df = df_cumulus[
         [
-            "Source ID",
+            "Document ID",
             "Title",
             "Creator",
             "Description (English)",
@@ -324,7 +324,7 @@ def select_columns(context, df_cumulus: main_dataframe_types):
             "Last Year",
             "Type",
             "Collections",
-            "Source",
+            "Provider",
             "Materials",
             "Fabrication Method",
             "Rights",
@@ -337,4 +337,4 @@ def select_columns(context, df_cumulus: main_dataframe_types):
         ]
     ]
 
-    return df.set_index("Source ID")
+    return df.set_index("Document ID")

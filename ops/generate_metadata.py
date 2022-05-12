@@ -26,7 +26,7 @@ def generate_metadata(
 ):
     camera_new = camera[
         [
-            "Source ID",
+            "Document ID",
             "Longitude",
             "Latitude",
         ]
@@ -34,13 +34,13 @@ def generate_metadata(
 
     dfs = [cumulus, camera_new, images, portals, wikidata]
     metadata = reduce(
-        lambda left, right: pd.merge(left, right, how="left", on="Source ID"), dfs
+        lambda left, right: pd.merge(left, right, how="left", on="Document ID"), dfs
     )
 
     # find itens who are not in metadata
     def review_items(df1, df2):
-        filter = df2["Source ID"].isin(df1["Source ID"])
-        review = list(df2["Source ID"].loc[~filter])
+        filter = df2["Document ID"].isin(df1["Document ID"])
+        review = list(df2["Document ID"].loc[~filter])
         context.log.info(f"{len(review)} Items to review on :  {review}")
 
     review_items(metadata, camera_new)
@@ -48,7 +48,7 @@ def generate_metadata(
 
     metadata_new = metadata[
         [
-            "Source ID",
+            "Document ID",
             "Title",
             "Creator",  # vazio ou string fixa feito no cumulus ok
             "Description (English)",
@@ -58,8 +58,8 @@ def generate_metadata(
             "Last Year",
             "Type",
             "Collections",
-            "Source",
-            "Source URL",  # url do portals
+            "Provider",
+            "Document URL",  # url do portals
             "Materials",
             "Fabrication Method",
             "Rights",  # vazio ou string fixa feito no cumulus ok

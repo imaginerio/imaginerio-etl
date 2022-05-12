@@ -16,18 +16,15 @@ def append_jstor(context, jstor, metadata):
             "Creator (Shared Shelf Names)": "Creator",
             "First Display Year": "First Year",
             "Last Display Year": "Last Year",
-            "Source (Repository)": "Source",
-            "Repository URL": "Source URL",
-            "Required Statement": "Attribution",
         }
     )
-    jstor["Source ID"] = jstor["SSID"]
-    jstor["Collections"] = jstor["Collections"].str.replace("|", "||") + "||All"
+    jstor["Document ID"] = jstor["SSID"]
+    jstor["Collections"] = jstor["Collections"].str.replace("|", "||")
     metadata = metadata.append(jstor)
 
     metadata_new = metadata[
         [
-            "Source ID",
+            "Document ID",
             "SSID",
             "Title",
             "Creator",
@@ -38,13 +35,13 @@ def append_jstor(context, jstor, metadata):
             "Last Year",
             "Type",
             "Collections",
-            "Source",
-            "Source URL",  # url do portals
+            "Provider",
+            "Document URL",  # url do portals
             "Materials",
             "Fabrication Method",
             "Rights",  # vazio ou string fixa feito no cumulus ok
             "License",  # vazio ou string fixa feito no cumulus ok
-            "Attribution",  # vazio ou string fixa feito no cumulus ok
+            "Required Statement",  # vazio ou string fixa feito no cumulus ok
             "Width (mm)",
             "Height (mm)",
             "Latitude",  # camera
@@ -57,4 +54,4 @@ def append_jstor(context, jstor, metadata):
     ]
 
     # metadata_new["SSID"] = metadata_new["SSID"].astype(np.float).astype("Int32")
-    return metadata_new.set_index("Source ID")
+    return metadata_new.set_index("Document ID")
