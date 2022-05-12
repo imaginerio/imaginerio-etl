@@ -1,12 +1,16 @@
-from dagster import graph
+from dagster import ExperimentalWarning, graph
 from dotenv import load_dotenv
 from ops.iiif import *
+import warnings
 
 load_dotenv(override=True)
+
+warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
 
 @graph
 def iiif_factory():
     items = get_items()
-    items.map(tile_image)
-    items.map(write_manifests)
+    tiles = items.map(tile_image)
+    manifests = tiles.map(write_manifest)
+    upload_collections(manifests.collect())
