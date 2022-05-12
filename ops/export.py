@@ -38,14 +38,14 @@ def load_metadata(
     Merge relevant dataframes to access objects
     status and properties
     """
-    camera_df = camera[["Source ID", "heading", "tilt", "altitude", "fov"]]
-    cumulus_df = cumulus[["Source ID", "datetime", "date_accuracy"]]
+    camera_df = camera[["Document ID", "heading", "tilt", "altitude", "fov"]]
+    cumulus_df = cumulus[["Document ID", "datetime", "date_accuracy"]]
     cumulus_df["datetime"] = pd.to_datetime(cumulus_df["datetime"])
     datas = [cumulus_df, camera_df]
     export_df = metadata
 
     for df in datas:
-        export_df = export_df.merge(df, how="outer", on="Source ID")
+        export_df = export_df.merge(df, how="outer", on="Document ID")
 
     return export_df
 
@@ -61,9 +61,9 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
 
     # filter items
     df = df.loc[
-        (df["Source"] == "Instituto Moreira Salles")
+        (df["Provider"] == "Instituto Moreira Salles")
         & df["Latitude"].notna()
-        & df["Source URL"].notna()
+        & df["Document URL"].notna()
         & df["Media URL"].notna()
         & df["First Year"].notna()
         & df["Last Year"].notna()
@@ -144,7 +144,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
         "Photograph by Unknown",
     )
     # inventory number
-    quickstate["P217"] = df["Source ID"]
+    quickstate["P217"] = df["Document ID"]
 
     list_creator = list(quickstate["P170"].unique())
 
@@ -208,7 +208,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     # height
     quickstate["P2048"] = df["Height (mm)"].astype(str) + "U174789"
     # IMS ID
-    quickstate["P7835"] = df["Source URL"].str.extract(r"(\d+)").astype(int)
+    quickstate["P7835"] = df["Document URL"].str.extract(r"(\d+)").astype(int)
     # qid
     quickstate["qid"] = df["Wikidata ID"]
     # Copyright status
@@ -368,7 +368,6 @@ def organise_creator(_, quickstate: dp.DataFrame):
         "cumulus": In(root_manager_key="cumulus_root"),
         "camera": In(root_manager_key="camera_root"),
         "images": In(root_manager_key="images_root"),
-        "omeka": In(root_manager_key="omeka_root"),
         "wikidata": In(root_manager_key="wikidata_root"),
         "portals": In(root_manager_key="portals_root"),
     },
@@ -380,12 +379,11 @@ def format_values_chart(
     portals: main_dataframe_types,
     camera: main_dataframe_types,
     images: main_dataframe_types,
-    omeka: main_dataframe_types,
     wikidata: main_dataframe_types,
 ):
 
     # kml finished
-    kml_ims = camera.loc[camera["Source"] == "Instituto Moreira Salles"]
+    kml_ims = camera.loc[camera["Provider"] == "Instituto Moreira Salles"]
     val_kml = len(kml_ims[kml_ims["geometry"].notna()])
     # kml total
     val_kml_total = 0
@@ -396,40 +394,32 @@ def format_values_chart(
     val_img_total = len(images["Media URL"])
 
     # cumulus published
-    api_p = portals["Source ID"].isin(cumulus["Source ID"])
+    api_p = portals["Document ID"].isin(cumulus["Document ID"])
     portals = portals[api_p]
-    val_meta = len(portals[portals["Source URL"].notna()])
+    val_meta = len(portals[portals["Document URL"].notna()])
     # cumulus total
     val_meta_total = len(cumulus)
 
     # wiki published
-    wiki = wikidata["Source ID"].isin(cumulus["Source ID"])
+    wiki = wikidata["Document ID"].isin(cumulus["Document ID"])
     wikidata = wikidata[wiki]
     val_wiki = len(wikidata[wikidata["wikidata_image"].notna()])
     # wiki total
     val_wiki_total = len(wikidata[wikidata["Wikidata ID"].notna()])
 
-    # omeka published
-    omk = omeka["Source ID"].isin(cumulus["Source ID"])
-    omeka = omeka[omk]
-    val_omeka = len(omeka[omeka["omeka_url"].notna()])
-    # omeka total
-    val_omeka_total = 0
-
     values_hbar = {
         "Done_orange": [0, val_wiki, val_meta, 0, 0],
-        "Done_blue": [val_omeka, 0, 0, val_img, val_kml],
+        "Done_blue": [0, 0, val_img, val_kml],
         "To do": [
-            val_omeka_total,
             val_wiki_total - val_wiki,
             val_meta_total - val_meta,
             val_img_total - val_img,
             val_kml_total,
         ],
-        "y": ["Omeka-S", "Wiki", "Cumulus", "HiRes Images", "KML"],
+        "y": ["Wiki", "Cumulus", "HiRes Images", "KML"],
     }
 
-    values_pie = [val_omeka, val_wiki, val_meta, val_img, val_kml]
+    values_pie = [val_wiki, val_meta, val_img, val_kml]
 
     values = [values_hbar, values_pie]
 
