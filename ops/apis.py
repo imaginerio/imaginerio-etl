@@ -106,9 +106,9 @@ def wikidata_dataframe(context, results):
             wikidata_df["wikidata_id_url"].str.split("/").str[-1]
         )
 
-        wikidata_df = wikidata_df.rename(columns={"id": "Source ID"})
+        wikidata_df = wikidata_df.rename(columns={"id": "Document ID"})
 
-        return wikidata_df.set_index("Source ID")
+        return wikidata_df.set_index("Document ID")
 
 
 # PORTALS
@@ -169,32 +169,32 @@ def portals_dataframe(context, results: dp.DataFrame):
         dataframe = dataframe.rename(
             columns={
                 "id": "portals_id",
-                "RecordName": "Source ID",
+                "RecordName": "Document ID",
                 "Author.displaystring": "Creator",
                 "Title": "Title",
                 "Date": "Date",
             }
         )
 
-        dataframe["Source ID"] = dataframe["Source ID"].str.split(
+        dataframe["Document ID"] = dataframe["Document ID"].str.split(
             ".", n=1, expand=True
         )[0]
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 
-        dataframe["Source URL"] = prefix + dataframe["portals_id"]
+        dataframe["Document URL"] = prefix + dataframe["portals_id"]
 
         portals_df = dataframe[
             [
-                "Source ID",
+                "Document ID",
                 "portals_id",
-                "Source URL",
+                "Document URL",
             ]
         ]
 
-        portals_df = portals_df.drop_duplicates(subset="Source ID")
+        portals_df = portals_df.drop_duplicates(subset="Document ID")
 
-        return portals_df.set_index("Source ID")
+        return portals_df.set_index("Document ID")
 
     else:
         context.log.info("Couldn't update")

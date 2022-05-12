@@ -14,13 +14,13 @@ def update_metadata(
     """
     df.reset_index(inplace=True)
     # find items how not are found on metadata
-    filter = df["Source ID"].isin(metadata["Source ID"])
-    review = list(df["Source ID"].loc[~filter])
+    filter = df["Document ID"].isin(metadata["Document ID"])
+    review = list(df["Document ID"].loc[~filter])
     context.log.info(f"{len(review)} Items to review: {review}")
 
-    df.set_index("Source ID", inplace=True)
+    df.set_index("Document ID", inplace=True)
 
-    metadata.set_index("Source ID", inplace=True)
+    metadata.set_index("Document ID", inplace=True)
     metadata.update(df)
 
     return metadata

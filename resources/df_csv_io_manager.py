@@ -50,7 +50,7 @@ class PandasCsvIOManager(dg.IOManager):
         return pd.read_csv(
             file_path + ".csv",
             converters=conversion,
-            index_col="Source ID",
+            index_col="Document ID",
         )
 
     def handle_output(self, context, obj):
