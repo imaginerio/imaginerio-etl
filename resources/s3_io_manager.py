@@ -33,88 +33,75 @@ class S3IOManager(dg.IOManager):
 
         return obj
 
-    def handle_output(self, context, obj):
-        if obj:
-            # obj = [{"data":data, "key": path, "type": json},{"data":data, "key": path, "type": json},{"data": path, "key":path,"type": image},]
-            for item in obj:
-                if item["type"] == "json":
-                    print(self.bucket, item["key"])
-                    self.s3.put_object(
-                        Bucket=self.bucket,
-                        Body=item["data"],
-                        Key=item["key"],
-                        ContentType="application/json",
+    def handle_output(self, path):
+        if os.path.isdir(path):
+            for root, _, files in os.walk(path):
+                for file in files:
+                    key = os.path.join(root, file)
+                    content = (
+                        "image/jpeg" if file.endswith("jpg") else "application/json"
                     )
+                    print("Would be uploading {0} as {1}".format(key, content))
+                    # self.s3.upload_file(
+                    #     key,
+                    #     self.bucket,
+                    #     key,
+                    #     ExtraArgs={"ContentType": content},
+                    # )
+        else:
+            content = "image/jpeg" if path.endswith("jpg") else "application/json"
+            print("Would be uploading {0} as {1}".format(path, content))
+            # self.s3.upload_file(
+            #     path,
+            #     self.bucket,
+            #     path,
+            #     ExtraArgs={"ContentType": content},
+            # )
+            os.remove(path)
 
-                elif item["type"] == "path":
-                    # context.log.debug("Upload image at: {0}".format(item["data"]))
-                    for root, dirs, files in os.walk(item["data"]):
-                        for file in files:
-                            key = os.path.join(root, file)
-                            content = (
-                                "image/jpeg"
-                                if file.endswith("jpg")
-                                else "application/json"
-                            )
-                            try:
-                                print(
-                                    key,
-                                    self.bucket,
-                                    key,
-                                    content,
-                                )
-                                self.s3.upload_file(
-                                    key,
-                                    self.bucket,
-                                    key,
-                                    ExtraArgs={"ContentType": content},
-                                )
-                            except Exception as e:
-                                print(
-                                    "Couldn't upload image {0}.Error: {1}".format(
-                                        key, e
-                                    )
-                                )
-                            os.remove(key)
+    # def handle_output(self, context, obj):
+    #     if obj:
+    #         # obj = [{"data":data, "key": path, "type": json},{"data":data, "key": path, "type": json},{"data": path, "key":path,"type": image},]
+    #         for item in obj:
+    #             if item["type"] == "json":
+    #                 print(self.bucket, item["key"])
+    #                 self.s3.put_object(
+    #                     Bucket=self.bucket,
+    #                     Body=item["data"],
+    #                     Key=item["key"],
+    #                     ContentType="application/json",
+    #                 )
 
-        # content = context.metadata["content"]
-        # name = context.name
-        # key = context.metadata["storage"] + name
-
-        # if isinstance(obj, str) and len(obj) < 40:  # if path
-        #     upload_start = time.time()
-        #     context.log.debug(f"Uploading the file at: {self._uri_for_key(key)}")
-        #     self.s3.upload_file(
-        #         obj,
-        #         self.bucket,
-        #         key,
-        #         ExtraArgs={"ContentType": content},
-        #     )
-        #     upload_end = time.time()
-        #     print("Upload: ", upload_end - upload_start)
-
-        # elif isinstance(obj, str):  # if json
-        #     context.log.debug(f"Writing json object at: {self._uri_for_key(key)}")
-        #     self.s3.put_object(
-        #         Bucket=self.bucket,
-        #         Body=obj,
-        #         Key=key,
-        #         ContentType=content,
-        #     )
-        # elif isinstance(obj, list):
-        #     for item in obj:
-
-        # else:  # if image
-        #     writing_start = time.time()
-        #     context.log.debug(f"Upload the object at: {self._uri_for_key(key)}")
-        #     img_bytes = io.BytesIO()
-        #     # obj.save(img_bytes, format="jpg")
-        #     # img_bytes = bytearray(obj)
-        #     self.s3.upload_fileobj(
-        #         img_bytes, self.bucket, key, ExtraArgs={"ContentType": content}
-        #     )
-        #     writing_end = time.time()
-        #     print("Wrinting: ", writing_end - writing_start)
+    #             elif item["type"] == "path":
+    #                 # context.log.debug("Upload image at: {0}".format(item["data"]))
+    #                 for root, dirs, files in os.walk(item["data"]):
+    #                     for file in files:
+    #                         key = os.path.join(root, file)
+    #                         content = (
+    #                             "image/jpeg"
+    #                             if file.endswith("jpg")
+    #                             else "application/json"
+    #                         )
+    #                         try:
+    #                             print(
+    #                                 key,
+    #                                 self.bucket,
+    #                                 key,
+    #                                 content,
+    #                             )
+    #                             self.s3.upload_file(
+    #                                 key,
+    #                                 self.bucket,
+    #                                 key,
+    #                                 ExtraArgs={"ContentType": content},
+    #                             )
+    #                         except Exception as e:
+    #                             print(
+    #                                 "Couldn't upload image {0}.Error: {1}".format(
+    #                                     key, e
+    #                                 )
+    #                             )
+    #                         os.remove(key)
 
 
 @dg.io_manager(
