@@ -1,4 +1,5 @@
-from dagster import repository
+import warnings
+from dagster import repository, ExperimentalWarning
 from dagster_aws.s3 import s3_resource
 from jobs.format_ims_metadata import format_ims_metadata
 from jobs.handle_images import handle_images
@@ -8,8 +9,10 @@ from jobs.compile_metadata import compile_metadata
 from jobs.process_kmls import process_kmls
 from jobs.iiif_factory import iiif_factory
 from resources.csv_root_input import csv_root_input
-from resources.json_local_io_manager import json_local_io_manager
+from resources.local_io_manager import local_io_manager
 from resources.s3_io_manager import s3_io_manager
+
+warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
 
 @repository
@@ -26,7 +29,7 @@ def test_repo():
             resource_defs={
                 "metadata_root": csv_root_input,
                 "mapping_root": csv_root_input,
-                "iiif_manager": json_local_io_manager,
+                "iiif_manager": local_io_manager,
             },
             tags={"mode": "test"},
         ),
