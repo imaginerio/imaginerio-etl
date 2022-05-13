@@ -1,41 +1,32 @@
-import os
-import shutil
 from datetime import datetime as dt
-from pathlib import Path
 from copy import deepcopy
 
 from numpy.core.numeric import NaN
 import dagster_pandas as dp
 
-import dagster as dg
-import geojson
+from dagster import op, In, Out
 import numpy as np
 import pandas as pd
 from tests.dataframe_types import *
 from tests.objects_types import *
 
-from dagster.core.definitions import solid
 from bokeh.layouts import layout
 from bokeh.transform import cumsum
 from bokeh.plotting import output_file, show, figure
 from bokeh.models import (
-    CheckboxButtonGroup,
-    CustomJS,
-    LinearColorMapper,
-    Row,
     HoverTool,
     Span,
     Title,
 )
 
 
-@dg.solid(
-    input_defs=[
-        dg.InputDefinition("metadata", root_manager_key="metadata_root"),
-        dg.InputDefinition("camera", root_manager_key="camera_root"),
-        dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
-    ],
-    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
+@op(
+    ins={
+        "metadata": In(root_manager_key="metadata_root"),
+        "camera": In(root_manager_key="camera_root"),
+        "cumulus": In(root_manager_key="cumulus_root"),
+    },
+    out=Out(dagster_type=dp.DataFrame),
 )
 def load_metadata(
     _,
@@ -47,175 +38,21 @@ def load_metadata(
     Merge relevant dataframes to access objects
     status and properties
     """
-    camera_df = camera[["Source ID", "heading", "tilt", "altitude", "fov"]]
-    cumulus_df = cumulus[["Source ID", "datetime", "date_accuracy"]]
+    camera_df = camera[["Document ID", "heading", "tilt", "altitude", "fov"]]
+    cumulus_df = cumulus[["Document ID", "datetime", "date_accuracy"]]
     cumulus_df["datetime"] = pd.to_datetime(cumulus_df["datetime"])
     datas = [cumulus_df, camera_df]
     export_df = metadata
 
     for df in datas:
-        export_df = export_df.merge(df, how="outer", on="Source ID")
+        export_df = export_df.merge(df, how="outer", on="Document ID")
 
     return export_df
 
 
-@dg.solid(
-    input_defs=[
-        dg.InputDefinition("smapshot", root_manager_key="smapshot_root"),
-        dg.InputDefinition("mapping", root_manager_key="mapping_root"),
-    ],
-    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
-)
-def organize_columns_to_omeka(
-    _, df: dp.DataFrame, smapshot: dp.DataFrame, mapping: dp.DataFrame
-):
-    def string2url(string):
-        if "||Stereoscopy" in string:
-            string = string.split("||")[0]
-            QID = mapping.loc[string, "Wiki ID"]
-            return (
-                f"http://wikidata.org/wiki/{QID} {string}"
-                + "||http://wikidata.org/wiki/Q35158 Stereoscopy"
-            )
-        elif "||Estereoscopia" in string:
-            string = string.split("||")[0]
-            QID = mapping.loc[string, "Wiki ID"]
-            return (
-                f"http://wikidata.org/wiki/{QID} {string}"
-                + "||http://wikidata.org/wiki/Q35158 Estereoscopia"
-            )
-        else:
-            QID = mapping.loc[string, "Wiki ID"]
-            return f"http://wikidata.org/wiki/{QID} {string}"
-
-    def translateString(string):
-        if "||Stereoscopy" in string:
-            string = string.split("||")[0]
-            kw = mapping.loc[string, "Label:pt"]
-            return kw + "||Estereoscopia"
-        else:
-            kw = mapping.loc[string, "Label:pt"]
-            return kw
-
-    # filter items
-    omeka_df = df.loc[
-        (df["Source"] == "Instituto Moreira Salles")
-        & (
-            df["Latitude"].notna()
-            & df["Source URL"].notna()
-            & df["Media URL"].notna()
-            & df["First Year"].notna()
-            & df["Last Year"].notna()
-        )
-    ]
-    omeka_df = omeka_df.dropna(subset=["Collections"])
-    mapping.set_index("Label:en", inplace=True)
-    omeka_df[["First Year", "Last Year"]] = omeka_df[
-        ["First Year", "Last Year"]
-    ].applymap(lambda x: str(int(x)), na_action="ignore")
-
-    # create columns
-    omeka_df.loc[omeka_df["First Year"].notna(), "dcterms:available"] = (
-        omeka_df["First Year"].astype(str) + "/" + omeka_df["Last Year"].astype(str)
-    )
-    omeka_df["dcterms:format:en"] = omeka_df["Materials"]
-    omeka_df["dcterms:format:pt"] = omeka_df["Materials"]
-    omeka_df["dcterms:medium:en"] = omeka_df["Fabrication Method"]
-    omeka_df["dcterms:medium:pt"] = omeka_df["Fabrication Method"]
-    omeka_df["dcterms:type:en"] = omeka_df["Type"]
-    omeka_df["dcterms:type:pt"] = omeka_df["Type"]
-
-    # format data
-    omeka_df["Source URL"] = omeka_df["Source URL"] + " " + omeka_df["Source"]
-    omeka_df["Wikidata ID"] = (
-        "www.wikidata.org/wiki/" + omeka_df["Wikidata ID"] + " Wikidata"
-    )
-    include = omeka_df["Source ID"].isin(smapshot["id"])
-    omeka_df.loc[include, "Collections"] = omeka_df["Collections"] + "||Smapshot"
-
-    omeka_df[["dcterms:format:en", "dcterms:medium:en", "dcterms:type:en"]] = omeka_df[
-        ["dcterms:format:en", "dcterms:medium:en", "dcterms:type:en"]
-    ].applymap(string2url, na_action="ignore")
-    omeka_df[["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]] = omeka_df[
-        ["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]
-    ].applymap(translateString, na_action="ignore")
-    mapping = mapping.reset_index()
-    mapping.set_index("Label:pt", inplace=True)
-    omeka_df[["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]] = omeka_df[
-        ["dcterms:format:pt", "dcterms:medium:pt", "dcterms:type:pt"]
-    ].applymap(string2url, na_action="ignore")
-
-    # rename columns
-    omeka_df = omeka_df.rename(
-        columns={
-            "Source ID": "dcterms:identifier",
-            "Title": "dcterms:title",
-            "Description (Portuguese)": "dcterms:description",
-            "Creator": "dcterms:creator",
-            "Date": "dcterms:date",
-            "Width (mm)": "schema:width",
-            "Height (mm)": "schema:height",
-            "Rights": "dcterms:rights",
-            "Attribution": "dcterms:bibliographicCitation",
-            "Source URL": "dcterms:source",
-            "Wikidata ID": "dcterms:hasVersion",
-            "Depicts": "foaf:depicts",
-            "Media URL": "media",
-            "Latitude": "latitude",
-            "Longitude": "longitude",
-            "Collection": "item_sets",
-        }
-    )
-
-    # select columns
-    omeka_df = omeka_df[
-        [
-            "dcterms:identifier",
-            "dcterms:title",
-            "dcterms:description",
-            "dcterms:creator",
-            "dcterms:date",
-            "dcterms:available",
-            "dcterms:type:en",
-            "dcterms:type:pt",
-            "dcterms:medium:pt",
-            "dcterms:medium:en",
-            "dcterms:format:pt",
-            "dcterms:format:en",
-            "dcterms:rights",
-            "dcterms:bibliographicCitation",
-            "dcterms:source",
-            "dcterms:hasVersion",
-            "latitude",
-            "longitude",
-            "foaf:depicts",
-            "schema:width",
-            "schema:height",
-            "media",
-            "item_sets",
-        ]
-    ]
-
-    return omeka_df
-
-
-@dg.solid(
-    output_defs=[
-        dg.OutputDefinition(
-            io_manager_key="pandas_csv", name="import_omeka", dagster_type=dp.DataFrame
-        )
-    ],
-)
-def import_omeka_dataframe(_, df: dp.DataFrame):
-    omeka_df = df
-    omeka_df.name = "import_omeka"
-
-    return omeka_df.set_index("dcterms:identifier")
-
-
-@dg.solid(
-    input_defs=[dg.InputDefinition("mapping", root_manager_key="mapping_root")],
-    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
+@op(
+    ins={"mapping": In(root_manager_key="mapping_root")},
+    out=Out(dagster_type=dp.DataFrame),
 )
 def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     def string2qid(string):
@@ -224,9 +61,9 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
 
     # filter items
     df = df.loc[
-        (df["Source"] == "Instituto Moreira Salles")
+        (df["Provider"] == "Instituto Moreira Salles")
         & df["Latitude"].notna()
-        & df["Source URL"].notna()
+        & df["Document URL"].notna()
         & df["Media URL"].notna()
         & df["First Year"].notna()
         & df["Last Year"].notna()
@@ -307,7 +144,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
         "Photograph by Unknown",
     )
     # inventory number
-    quickstate["P217"] = df["Source ID"]
+    quickstate["P217"] = df["Document ID"]
 
     list_creator = list(quickstate["P170"].unique())
 
@@ -371,7 +208,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     # height
     quickstate["P2048"] = df["Height (mm)"].astype(str) + "U174789"
     # IMS ID
-    quickstate["P7835"] = df["Source URL"].str.extract(r"(\d+)").astype(int)
+    quickstate["P7835"] = df["Document URL"].str.extract(r"(\d+)").astype(int)
     # qid
     quickstate["qid"] = df["Wikidata ID"]
     # Copyright status
@@ -385,14 +222,11 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     return quickstate
 
 
-@dg.solid(
-    output_defs=[
-        dg.OutputDefinition(
-            io_manager_key="pandas_csv",
-            name="import_wikidata",
-            dagster_type=dp.DataFrame,
-        )
-    ]
+@op(
+    out=Out(
+        io_manager_key="pandas_csv",
+        dagster_type=dp.DataFrame,
+    )
 )
 def organise_creator(_, quickstate: dp.DataFrame):
     creators = {
@@ -529,16 +363,15 @@ def organise_creator(_, quickstate: dp.DataFrame):
     return quickstate.set_index("qid")
 
 
-@dg.solid(
-    input_defs=[
-        dg.InputDefinition("cumulus", root_manager_key="cumulus_root"),
-        dg.InputDefinition("camera", root_manager_key="camera_root"),
-        dg.InputDefinition("images", root_manager_key="images_root"),
-        dg.InputDefinition("omeka", root_manager_key="omeka_root"),
-        dg.InputDefinition("wikidata", root_manager_key="wikidata_root"),
-        dg.InputDefinition("portals", root_manager_key="portals_root"),
-    ],
-    output_defs=[dg.OutputDefinition(dagster_type=list)],
+@op(
+    ins={
+        "cumulus": In(root_manager_key="cumulus_root"),
+        "camera": In(root_manager_key="camera_root"),
+        "images": In(root_manager_key="images_root"),
+        "wikidata": In(root_manager_key="wikidata_root"),
+        "portals": In(root_manager_key="portals_root"),
+    },
+    out=Out(dagster_type=list),
 )
 def format_values_chart(
     context,
@@ -546,12 +379,11 @@ def format_values_chart(
     portals: main_dataframe_types,
     camera: main_dataframe_types,
     images: main_dataframe_types,
-    omeka: main_dataframe_types,
     wikidata: main_dataframe_types,
 ):
 
     # kml finished
-    kml_ims = camera.loc[camera["Source"] == "Instituto Moreira Salles"]
+    kml_ims = camera.loc[camera["Provider"] == "Instituto Moreira Salles"]
     val_kml = len(kml_ims[kml_ims["geometry"].notna()])
     # kml total
     val_kml_total = 0
@@ -562,47 +394,39 @@ def format_values_chart(
     val_img_total = len(images["Media URL"])
 
     # cumulus published
-    api_p = portals["Source ID"].isin(cumulus["Source ID"])
+    api_p = portals["Document ID"].isin(cumulus["Document ID"])
     portals = portals[api_p]
-    val_meta = len(portals[portals["Source URL"].notna()])
+    val_meta = len(portals[portals["Document URL"].notna()])
     # cumulus total
     val_meta_total = len(cumulus)
 
     # wiki published
-    wiki = wikidata["Source ID"].isin(cumulus["Source ID"])
+    wiki = wikidata["Document ID"].isin(cumulus["Document ID"])
     wikidata = wikidata[wiki]
     val_wiki = len(wikidata[wikidata["wikidata_image"].notna()])
     # wiki total
     val_wiki_total = len(wikidata[wikidata["Wikidata ID"].notna()])
 
-    # omeka published
-    omk = omeka["Source ID"].isin(cumulus["Source ID"])
-    omeka = omeka[omk]
-    val_omeka = len(omeka[omeka["omeka_url"].notna()])
-    # omeka total
-    val_omeka_total = 0
-
     values_hbar = {
         "Done_orange": [0, val_wiki, val_meta, 0, 0],
-        "Done_blue": [val_omeka, 0, 0, val_img, val_kml],
+        "Done_blue": [0, 0, val_img, val_kml],
         "To do": [
-            val_omeka_total,
             val_wiki_total - val_wiki,
             val_meta_total - val_meta,
             val_img_total - val_img,
             val_kml_total,
         ],
-        "y": ["Omeka-S", "Wiki", "Cumulus", "HiRes Images", "KML"],
+        "y": ["Wiki", "Cumulus", "HiRes Images", "KML"],
     }
 
-    values_pie = [val_omeka, val_wiki, val_meta, val_img, val_kml]
+    values_pie = [val_wiki, val_meta, val_img, val_kml]
 
     values = [values_hbar, values_pie]
 
     return values
 
 
-@dg.solid
+@op
 def create_hbar(context, values: list):
     """
     Build bar graph stating progress
@@ -723,7 +547,7 @@ def create_hbar(context, values: list):
     return plot_hbar
 
 
-@dg.solid
+@op
 def create_pie(context, values: list):
     """
     Build pie chart stating project's progress
@@ -774,7 +598,7 @@ def create_pie(context, values: list):
     return plot_pie
 
 
-@dg.solid(config_schema=dg.StringSource)
+@op(config_schema=dg.StringSource)
 def export_html(context, plot_hbar, plot_pie):
     """
     Create dashboard HTML page

@@ -1,38 +1,65 @@
-import dagster as dg
-from pipelines.cumulus_pipeline import *
-from pipelines.images_pipeline import *
-from pipelines.apis_pipeline import *
-from pipelines.export_pipeline import *
-from pipelines.metadata_pipeline import *
-from pipelines.images_pipeline import *
-from pipelines.camera_pipeline import *
-from pipelines.iiif_pipeline import *
+import warnings
+from dagster import repository, ExperimentalWarning
+from dagster_aws.s3 import s3_resource
+from jobs.format_ims_metadata import format_ims_metadata
+from jobs.handle_images import handle_images
+from jobs.query_apis import query_apis
+from jobs.export_data import export_data
+from jobs.compile_metadata import compile_metadata
+from jobs.process_kmls import process_kmls
+from jobs.iiif_factory import iiif_factory
+from resources.csv_root_input import csv_root_input
+from resources.local_io_manager import local_io_manager
+from resources.s3_io_manager import s3_io_manager
+
+warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
 
-@dg.repository
-def situated_views():
-    return {
-        "pipelines": {
-            "cumulus_pipeline": lambda: cumulus_pipeline,
-            "images_pipeline": lambda: images_pipeline,
-            "apis_pipeline": lambda: apis_pipeline,
-            "export_pipeline": lambda: export_pipeline,
-            "metadata_pipeline": lambda: metadata_pipeline,
-            "camera_pipeline": lambda: camera_pipeline,
-            #"git_pipeline": lambda: git_pipeline,
-            "iiif_pipeline": lambda: iiif_pipeline,
-        },
-        "schedules": {
-            "apis_pipeline_weekly": lambda: apis_pipeline_weekly,
-            #"pull_new_data_hourly": lambda: pull_new_data_hourly,
-            #"push_new_data_daily": lambda: push_new_data_daily,
-        },
-        "sensors": {
-            "trigger_cumulus": lambda: trigger_cumulus,
-            "trigger_export": lambda: trigger_export,
-            "trigger_metadata": lambda: trigger_metadata,
-            "trigger_apis": lambda: trigger_apis,
-            "trigger_camera_step1": lambda: trigger_camera_step1,
-            "trigger_camera_step2": lambda: trigger_camera_step2,
-        },
-    }
+@repository
+def test_repo():
+    return [
+        iiif_factory.to_job(
+            config={
+                "resources": {
+                    "metadata_root": {"config": {"env": "METADATA"}},
+                    "mapping_root": {"config": {"env": "MAPPING"}},
+                    "iiif_manager": {"config": {"s3_bucket": "imaginerio-images"}},
+                },
+            },
+            resource_defs={
+                "metadata_root": csv_root_input,
+                "mapping_root": csv_root_input,
+                "iiif_manager": local_io_manager,
+            },
+            tags={"mode": "test"},
+        ),
+    ]
+
+
+@repository
+def prod_repo():
+    return [
+        format_ims_metadata,
+        handle_images,
+        query_apis,
+        export_data,
+        compile_metadata,
+        process_kmls,
+        iiif_factory.to_job(
+            config={
+                "resources": {
+                    "metadata_root": {"config": {"env": "METADATA"}},
+                    "mapping_root": {"config": {"env": "MAPPING"}},
+                    "iiif_manager": {"config": {"s3_bucket": "imaginerio-images"}},
+                },
+                "execution": {"config": {"multiprocess": {"max_concurrent": 4}}},
+            },
+            resource_defs={
+                "metadata_root": csv_root_input,
+                "mapping_root": csv_root_input,
+                "iiif_manager": s3_io_manager,
+                "s3": s3_resource,
+            },
+            tags={"mode": "prod"},
+        ),
+    ]

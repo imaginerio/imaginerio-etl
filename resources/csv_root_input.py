@@ -1,7 +1,8 @@
 import dagster as dg
 import pandas as pd
 import numpy as np
-#from pandas_csv_io import function_int
+
+# from pandas_csv_io import function_int
 
 
 def function_int(x):
@@ -14,7 +15,7 @@ def csv_root_input(context):
     Reads CSV file from project directory
     instead of upstream solid
     """
-    df = pd.read_csv(context.resource_config, error_bad_lines=False)
+    df = pd.read_csv(context.resource_config)
 
     to_convert = {
         "SSID": function_int,
@@ -31,6 +32,4 @@ def csv_root_input(context):
         else:
             pass
 
-    return pd.read_csv(
-        context.resource_config, error_bad_lines=False, converters=conversion
-    )
+    return pd.read_csv(context.resource_config, converters=conversion)

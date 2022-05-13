@@ -13,7 +13,7 @@ metadata_dataframe_types = dp.create_dagster_pandas_dataframe_type(
     name="metadata_dataframe_types",
     description="Dataframe type to validate the metadata.csv",
     columns=[
-        dp.PandasColumn.string_column("Source ID", unique=True, non_nullable=True),
+        dp.PandasColumn.string_column("Document ID", unique=True, non_nullable=True),
         dp.PandasColumn.string_column("SSID", unique=True, ignore_missing_vals=True),
         dp.PandasColumn.string_column("Title"),
         # dp.PandasColumn.string_column(
@@ -24,8 +24,8 @@ metadata_dataframe_types = dp.create_dagster_pandas_dataframe_type(
         dp.PandasColumn("Last Year", constraints=[int_column()]),
         dp.PandasColumn.string_column("Type"),
         dp.PandasColumn.string_column("Collections"),
-        dp.PandasColumn.string_column("Source"),
-        dp.PandasColumn("Source URL", constraints=[url_column()]),
+        dp.PandasColumn.string_column("Provider"),
+        dp.PandasColumn("Document URL", constraints=[url_column()]),
         dp.PandasColumn.string_column("Materials"),
         dp.PandasColumn.string_column("Fabrication Method"),
         dp.PandasColumn.string_column("Rights", ignore_missing_vals=True),
@@ -51,7 +51,7 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
     columns=[
         # Portals Columns
         dp.PandasColumn.integer_column("portals_id", is_required=False),
-        dp.PandasColumn("Source URL", constraints=[url_column()], is_required=False),
+        dp.PandasColumn("Document URL", constraints=[url_column()], is_required=False),
         # Wikidata Columns
         dp.PandasColumn(
             "wikidata_id_url", constraints=[url_column()], is_required=False
@@ -60,9 +60,7 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
         dp.PandasColumn.string_column("wikidata_image", is_required=False),
         dp.PandasColumn("Depicts", constraints=[url_column()], is_required=False),
         dp.PandasColumn.string_column("Wikidata ID", is_required=False),
-        # Omeka Columns
-        dp.PandasColumn("omeka_url", constraints=[url_column()], is_required=False),
-        # cumulus Columns
+        # Cumulus Columns
         dp.PandasColumn.string_column(
             "Title", is_required=False, ignore_missing_vals=True
         ),
@@ -80,7 +78,7 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
             "Type", is_required=False, ignore_missing_vals=True
         ),
         dp.PandasColumn.string_column("Collections", is_required=False),
-        dp.PandasColumn.string_column("Source", is_required=False),
+        dp.PandasColumn.string_column("Provider", is_required=False),
         dp.PandasColumn.string_column("Materials", is_required=False),
         dp.PandasColumn.string_column(
             "Fabrication Method", is_required=False, ignore_missing_vals=True
@@ -97,71 +95,6 @@ main_dataframe_types = dp.create_dagster_pandas_dataframe_type(
         dp.PandasColumn("Media URL", is_required=False, constraints=[url_column()]),
         dp.PandasColumn.string_column(
             "img_sd", is_required=False, ignore_missing_vals=True
-        ),
-        # Import omeka Columns
-        dp.PandasColumn.string_column(
-            "dcterms:identifier", unique=True, is_required=False
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:title", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:description", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:creator", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:date", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:available", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn(
-            "dcterms:type:en", constraints=[url_column()], is_required=False
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:type:pt", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:medium:pt", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn(
-            "dcterms:medium:en", constraints=[url_column()], is_required=False
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:format:pt", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn(
-            "dcterms:format:en", constraints=[url_column()], is_required=False
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:rights", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:bibliographicCitation", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:source", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "dcterms:hasVersion", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn("latitude", constraints=[float_column()], is_required=False),
-        dp.PandasColumn("longitude", constraints=[float_column()], is_required=False),
-        dp.PandasColumn.string_column(
-            "schema:polygon", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn("foaf:depicts", constraints=[url_column()], is_required=False),
-        dp.PandasColumn.string_column(
-            "schema:width", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn.string_column(
-            "schema:height", is_required=False, ignore_missing_vals=True
-        ),
-        dp.PandasColumn("media", constraints=[url_column()], is_required=False),
-        dp.PandasColumn.string_column(
-            "item_sets", is_required=False, ignore_missing_vals=True
         ),
         # Import wiki Columns
         dp.PandasColumn.string_column(
