@@ -1,4 +1,4 @@
-import dagster as dg
+from dagster import op, In, Out
 import dagster_pandas as dp
 from dagster_pandas.data_frame import DataFrame
 from numpy.core.numeric import True_
@@ -9,9 +9,9 @@ from tests.objects_types import *
 
 
 # solids cumulus
-@dg.solid(
-    input_defs=[dg.InputDefinition("root", root_manager_key="cumulus_root")],
-    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
+@op(
+    ins={"root": In(root_manager_key="cumulus_root")},
+    out=Out(dagster_type=dp.DataFrame),
 )
 def xml_to_df(context, root):
     """
@@ -67,7 +67,7 @@ def xml_to_df(context, root):
     return cumulus_df
 
 
-@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+@op(out=Out(dagster_type=dp.DataFrame))
 def organize_columns(context, df: dp.DataFrame):
     """
     Rename columns, remove file extension from identifiers,
@@ -76,7 +76,7 @@ def organize_columns(context, df: dp.DataFrame):
     # rename columns
     cumulus_df = df.rename(
         columns={
-            "Record Name": "Source ID",
+            "Record Name": "Document ID",
             "CÓDIGO DE IDENTIFICAÇÃO PRELIMINAR": "preliminary id",
             "TÍTULO": "Title",
             "RESUMO": "Description (Portuguese)",
@@ -93,7 +93,7 @@ def organize_columns(context, df: dp.DataFrame):
     # select columns
     cumulus_df = cumulus_df[
         [
-            "Source ID",
+            "Document ID",
             "Title",
             "Description (Portuguese)",
             "Creator",
@@ -109,12 +109,12 @@ def organize_columns(context, df: dp.DataFrame):
     ]
 
     # remove file extension
-    cumulus_df["Source ID"] = cumulus_df["Source ID"].str.split(".", n=1, expand=True)[
-        0
-    ]
+    cumulus_df["Document ID"] = cumulus_df["Document ID"].str.split(
+        ".", n=1, expand=True
+    )[0]
 
     # remove duplicates
-    cumulus_df = cumulus_df.drop_duplicates(subset="Source ID", keep="last")
+    cumulus_df = cumulus_df.drop_duplicates(subset="Document ID", keep="last")
 
     # reverse cretor name
     cumulus_df["Creator"] = cumulus_df["Creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
@@ -122,12 +122,8 @@ def organize_columns(context, df: dp.DataFrame):
     return cumulus_df
 
 
-@dg.solid(
-    output_defs=[
-        dg.OutputDefinition(
-            io_manager_key="pandas_csv", name="creators", dagster_type=dp.DataFrame
-        )
-    ]
+@op(
+    out={"creators": Out(io_manager_key="pandas_csv", dagster_type=dp.DataFrame)}
 )  # save list of Creatorss for rights assessment
 def creators_list(context, df: dp.DataFrame):
     """
@@ -143,7 +139,7 @@ def creators_list(context, df: dp.DataFrame):
 
 
 # extract dimensions
-@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+@op(out=Out(dagster_type=dp.DataFrame))
 def extract_dimensions(context, df: dp.DataFrame):
     """
     Infer width and height in mm from dimensions field
@@ -158,7 +154,7 @@ def extract_dimensions(context, df: dp.DataFrame):
     return df
 
 
-@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+@op(out=Out(dagster_type=dp.DataFrame))
 def format_date(context, df: dp.DataFrame):
     """
     Infer circa dates and format date string according to accuracy
@@ -185,8 +181,8 @@ def format_date(context, df: dp.DataFrame):
 
     circa = df["date_accuracy"] == "circa"
 
-    firstna = df["First Year"].isna()
-    lastna = df["Last Year"].isna()
+    # firstna = df["First Year"].isna()
+    # lastna = df["Last Year"].isna()
 
     df.loc[circa & df["First Year"].isna(), "First Year"] = df[
         "datetime"
@@ -202,8 +198,10 @@ def format_date(context, df: dp.DataFrame):
     df["First Year"] = df["First Year"].dt.strftime("%Y")
     df["Last Year"] = df["Last Year"].dt.strftime("%Y")
 
-    df.loc[df["Date"].str.contains(r"[a-z]", na=False) & df["Date"].notna(), "Date"] = (
-        df["datetime"].dt.strftime("%Y") + " circa"
+    df.loc[
+        df["Date"].str.contains(r"[a-z]", na=False) & df["Date"].notna(), "Date"
+    ] = "circa " + (
+        df["datetime"].dt.strftime("%Y")
     )  # circa
     df.loc[df["Date"].str.fullmatch(r"\d{4}") & df["Date"].notna(), "Date"] = df[
         "datetime"
@@ -217,7 +215,9 @@ def format_date(context, df: dp.DataFrame):
     )  # month
     df.loc[
         df["Date"].str.fullmatch(r"\d+[\/-]\d+[\/-]\d+") & df["Date"].notna(), "Date"
-    ] = df["datetime"].dt.strftime("%d/%m/%Y")
+    ] = df["datetime"].dt.strftime(
+        "%d/%m/%Y"
+    )  # day
 
     cumulus = df
     cumulus.name = "cumulus"
@@ -225,7 +225,7 @@ def format_date(context, df: dp.DataFrame):
     return cumulus
 
 
-@dg.solid(output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)])
+@op(out=Out(dagster_type=dp.DataFrame))
 def create_columns(context, df_cumulus: main_dataframe_types):
     """
     Map processes and formats according to Wikidata entities
@@ -233,8 +233,8 @@ def create_columns(context, df_cumulus: main_dataframe_types):
 
     df_cumulus["Description (English)"] = ""
     df_cumulus["Type"] = "Photograph"
-    df_cumulus["Collections"] = "All||Views"
-    df_cumulus["Source"] = "Instituto Moreira Salles"
+    df_cumulus["Collections"] = "Views"
+    df_cumulus["Provider"] = "Instituto Moreira Salles"
     df_cumulus["License"] = ""
     df_cumulus["Rights"] = ""
     df_cumulus["Attribution"] = ""
@@ -242,19 +242,19 @@ def create_columns(context, df_cumulus: main_dataframe_types):
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "FOTOGRAFIA/ Papel", "Materials"
-    ] = "Photographic print"
+    ] = "Photographic Print"
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "REPRODUÇÃO FOTOMECÂNICA/ Papel", "Materials"
-    ] = "Photomechanical print"
+    ] = "Photomechanical Print"
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "NEGATIVO/ Vidro", "Materials"
-    ] = "Glass plate negative"
+    ] = "Glass Plate Negative"
 
     df_cumulus.loc[
         df_cumulus["Materials"] == "DIAPOSITIVO/ Vidro", "Materials"
-    ] = "Glass diapositive"
+    ] = "Glass Diapositive"
 
     df_cumulus.loc[df_cumulus["format"] == "Estereoscopia", "Type"] = (
         df_cumulus["Type"] + "||Stereoscopy"
@@ -271,7 +271,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "GELATINA/ Prata", "Fabrication Method"
-    ] = "Silver gelatin"
+    ] = "Gelatin Silver"
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "COLÓDIO/ Prata", "Fabrication Method"
@@ -280,7 +280,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "LANTERN SLIDE / Prata",
         "Fabrication Method",
-    ] = "Lantern slide"
+    ] = "Lantern Slide"
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "AMBROTIPIA/ Prata",
@@ -290,7 +290,7 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "COLOTIPIA/ Pigmento",
         "Fabrication Method",
-    ] = "Collotype print"
+    ] = "Collotype Print"
 
     df_cumulus.loc[
         df_cumulus["Fabrication Method"] == "FOTOGRAVURA/ Pigmento",
@@ -305,20 +305,14 @@ def create_columns(context, df_cumulus: main_dataframe_types):
     return df_cumulus
 
 
-@dg.solid(
-    output_defs=[
-        dg.OutputDefinition(
-            io_manager_key="pandas_csv", name="cumulus", dagster_type=dp.DataFrame
-        )
-    ]
-)
+@op(out={"cumulus": Out(io_manager_key="pandas_csv", dagster_type=dp.DataFrame)})
 def select_columns(context, df_cumulus: main_dataframe_types):
     """
     Filter columns for saving CSV file
     """
     df = df_cumulus[
         [
-            "Source ID",
+            "Document ID",
             "Title",
             "Creator",
             "Description (English)",
@@ -330,7 +324,7 @@ def select_columns(context, df_cumulus: main_dataframe_types):
             "Last Year",
             "Type",
             "Collections",
-            "Source",
+            "Provider",
             "Materials",
             "Fabrication Method",
             "Rights",
@@ -343,4 +337,4 @@ def select_columns(context, df_cumulus: main_dataframe_types):
         ]
     ]
 
-    return df.set_index("Source ID")
+    return df.set_index("Document ID")

@@ -3,7 +3,7 @@ import urllib
 from time import sleep
 from typing import Dict
 
-import dagster as dg
+from dagster import In, Out, op
 import dagster_pandas as dp
 import pandas as pd
 import requests
@@ -14,82 +14,10 @@ from tqdm import tqdm
 from urllib3.util import Retry
 
 
-# OMEKA
-@dg.solid(
-    config_schema=dg.StringSource, output_defs=[dg.OutputDefinition(dagster_type=dict)]
-)
-def query_omeka(context):
-    """
-    Get all items published in Omeka-S by identifier and internal ID
-    """
-    endpoint = context.solid_config
-
-    # start session
-    retry_strategy = Retry(
-        total=3,
-        status_forcelist=[429, 500, 502, 503, 504],
-        method_whitelist=["HEAD", "GET", "OPTIONS"],
-    )
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    http = requests.Session()
-    http.mount("https://", adapter)
-    http.mount("http://", adapter)
-
-    response = http.get(endpoint, params={"per_page": 1})
-
-    # loop over pages until response is blank
-    results = {}
-    l1, l2 = [], []
-    page = 1
-    while response != []:
-        response = http.get(endpoint, params={"page": page, "per_page": 250}).json()
-
-        for item in response:
-            try:
-                l1.append(item["dcterms:identifier"][0]["@value"])
-                l2.append(item["@id"])
-            except:
-                pass
-        page += 1
-        sleep(0.5)
-
-    results.update({"Source ID": l1, "omeka_url": l2})
-
-    return results
-
-
-@dg.solid(
-    config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_omeka")],
-)
-def omeka_dataframe(context, results: dict):
-    """
-    Create dataframe from Omeka-S API response
-    """
-    print(type(results))
-    path_output = context.solid_config
-    path = os.path.join(path_output, "duplicated-omeka.csv")
-    if results == None:
-        context.log.info("Couldn't update")
-        return None
-
-    else:
-        # create dataframes
-        omeka_df = pd.DataFrame(results)
-        omeka_duplicated = omeka_df[omeka_df.duplicated(subset="Source ID")]
-        if len(omeka_duplicated) > 0:
-            omeka_duplicated.to_csv(path)
-        omeka_df.drop_duplicates(subset="Source ID", inplace=True)
-
-        omeka_df.name = "api_omeka"
-
-        return omeka_df.set_index("Source ID")
-
-
 # WIKIDATA
 
 
-@dg.solid(config_schema=dg.StringSource)
+@op(config_schema=dg.StringSource)
 def query_wikidata(context):
     """
     Query Wikidata's SPARQL endpoint for entities
@@ -132,9 +60,7 @@ def query_wikidata(context):
         return None
 
 
-@dg.solid(
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_wikidata")]
-)
+@op(out={"api_wikidata": Out(io_manager_key="pandas_csv")})
 def wikidata_dataframe(context, results):
     """
     Create dataframe from Wikidata's response
@@ -180,15 +106,15 @@ def wikidata_dataframe(context, results):
             wikidata_df["wikidata_id_url"].str.split("/").str[-1]
         )
 
-        wikidata_df = wikidata_df.rename(columns={"id": "Source ID"})
+        wikidata_df = wikidata_df.rename(columns={"id": "Document ID"})
 
-        return wikidata_df.set_index("Source ID")
+        return wikidata_df.set_index("Document ID")
 
 
 # PORTALS
-@dg.solid(
+@op(
     config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(dagster_type=dp.DataFrame)],
+    out=Out(dagster_type=dp.DataFrame),
 )
 def query_portals(context):
     """
@@ -228,9 +154,9 @@ def query_portals(context):
     return dataframe
 
 
-@dg.solid(
+@op(
     config_schema=dg.StringSource,
-    output_defs=[dg.OutputDefinition(io_manager_key="pandas_csv", name="api_portals")],
+    out={"api_portals": Out(io_manager_key="pandas_csv")},
 )
 def portals_dataframe(context, results: dp.DataFrame):
     """
@@ -243,32 +169,32 @@ def portals_dataframe(context, results: dp.DataFrame):
         dataframe = dataframe.rename(
             columns={
                 "id": "portals_id",
-                "RecordName": "Source ID",
+                "RecordName": "Document ID",
                 "Author.displaystring": "Creator",
                 "Title": "Title",
                 "Date": "Date",
             }
         )
 
-        dataframe["Source ID"] = dataframe["Source ID"].str.split(
+        dataframe["Document ID"] = dataframe["Document ID"].str.split(
             ".", n=1, expand=True
         )[0]
 
         dataframe["portals_id"] = dataframe["portals_id"].astype(str)
 
-        dataframe["Source URL"] = prefix + dataframe["portals_id"]
+        dataframe["Document URL"] = prefix + dataframe["portals_id"]
 
         portals_df = dataframe[
             [
-                "Source ID",
+                "Document ID",
                 "portals_id",
-                "Source URL",
+                "Document URL",
             ]
         ]
 
-        portals_df = portals_df.drop_duplicates(subset="Source ID")
+        portals_df = portals_df.drop_duplicates(subset="Document ID")
 
-        return portals_df.set_index("Source ID")
+        return portals_df.set_index("Document ID")
 
     else:
         context.log.info("Couldn't update")
