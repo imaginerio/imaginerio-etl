@@ -1,10 +1,10 @@
 import math
+from operator import index
 import os
 import re
 import shutil
 import sys
 
-from dagster import op, In, Out
 import geojson
 import mercantile
 import numpy as np
@@ -17,12 +17,14 @@ from pykml import parser
 from pyproj import Proj
 from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
-from tests.dataframe_types import *
-from tests.objects_types import *
 from turfpy.misc import sector
 from tqdm import tqdm
 
+from helpers import query_wikidata, geo_to_world_coors
+
 load_dotenv(override=True)
+
+CAMERA = os.environ["CAMERA"]
 
 
 class KML:
@@ -310,67 +312,52 @@ class PhotoOverlay:
         return self._element
 
 
-metadata = pd.read_csv(
-    "https://raw.githubusercontent.com/imaginerio/situated-views-data/main/output/metadata.csv"
-)
-metadata.rename(
-    columns={
-        "Source ID": "Document ID",
-        "Source": "Provider",
-        "Source URL": "Document URL",
-    },
-    inplace=True,
-)
-metadata.set_index("Document ID", inplace=True)
-camera = "https://github.com/imaginerio/situated-views-data/blob/main/output/import_viewcones.geojson"
-kml1 = KML(
-    "https://raw.githubusercontent.com/imaginerio/situated-views-data/main/input/kmls/processed_raw/2019-04-12-Davi.kml"
-)
-kml2 = KML(
-    "https://raw.githubusercontent.com/imaginerio/situated-views-data/main/input/kmls/processed_raw/2019-06-05-Martim.kml"
-)
-master_kml = "/content/master.kml"
-samples = [kml1, kml2]  # , single
-photo_overlays = []
+if __name__ == "__main__":
+    metadata = pd.read_csv(os.environ["METADATA"], index_col="Document ID")
+    master_kml = "/content/master.kml"
+    photo_overlays = []
+    samples = [
+        "data/input/kmls/2019-04-12-Davi.kml",
+        "data/input/kmls/2019-05-21-Martim.kml",
+    ]
 
-if os.path.exists(camera):
-    features = (geojson.load(open(camera))).features
-else:
-    features = []
-
-if os.path.exists(master_kml):
-    master_folder = KML(master_kml)._folder
-else:
-    master = KML.to_element()
-    master_folder = etree.SubElement(master, "Folder")
-
-# Parse PhotoOverlays
-for sample in samples:
-    if sample._folder is not None:
-        folder = Folder(sample._folder)
-        for child in folder._children:
-            photo_overlays.append(PhotoOverlay(child, metadata))
+    if os.path.exists(CAMERA):
+        features = (geojson.load(open(CAMERA))).features
     else:
-        photo_overlays.append(PhotoOverlay(sample._photooverlay, metadata))
+        features = []
 
-
-# Manipulate PhotoOverlays
-for photo_overlay in photo_overlays:
-    print(photo_overlay._id)
-    # photo_overlay.update_id(metadata)
-    if "relative" in photo_overlay._altitude_mode:
-        photo_overlay.correct_altitude_mode()
-    if photo_overlay._depicts:
-        photo_overlay.get_radius_via_depicted_entities()
+    if os.path.exists(master_kml):
+        master_folder = KML(master_kml)._folder
     else:
-        photo_overlay.get_radius_via_trigonometry()
+        master = KML.to_element()
+        master_folder = etree.SubElement(master, "Folder")
 
-    # Dispatch data
-    features.append(photo_overlay.to_feature())
-    # print(photo_overlay.to_element())
-    master_folder.append(photo_overlay.to_element())
+    # Parse PhotoOverlays
+    for sample in samples:
+        if sample._folder is not None:
+            folder = Folder(sample._folder)
+            for child in folder._children:
+                photo_overlays.append(PhotoOverlay(child, metadata))
+        else:
+            photo_overlays.append(PhotoOverlay(sample._photooverlay, metadata))
 
-feature_collection = geojson.FeatureCollection(features=features)
-# print(etree.tostring(master))
-etree.ElementTree(master).write("/content/master.kml", pretty_print=True)
-# print(feature_collection)
+    # Manipulate PhotoOverlays
+    for photo_overlay in tqdm(photo_overlays, desc="Manipulating PhotoOverlays"):
+        print(photo_overlay._id)
+        # photo_overlay.update_id(metadata)
+        if "relative" in photo_overlay._altitude_mode:
+            photo_overlay.correct_altitude_mode()
+        if photo_overlay._depicts:
+            photo_overlay.get_radius_via_depicted_entities()
+        else:
+            photo_overlay.get_radius_via_trigonometry()
+
+        # Dispatch data
+        features.append(photo_overlay.to_feature())
+        # print(photo_overlay.to_element())
+        master_folder.append(photo_overlay.to_element())
+
+    feature_collection = geojson.FeatureCollection(features=features)
+    # print(etree.tostring(master))
+    etree.ElementTree(master).write("/content/master.kml", pretty_print=True)
+    # print(feature_collection)

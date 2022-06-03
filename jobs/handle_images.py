@@ -1,4 +1,4 @@
-from dagster import job, in_process_executor
+from dagster import job, in_process_executor, Any
 from dagster_aws.s3 import s3_resource
 from dotenv import load_dotenv
 from ops.images import *
@@ -28,12 +28,12 @@ load_dotenv(override=True)
                     "tif": {"env": "TIF"},
                     "jpg": {"env": "JPG"},
                     "backlog": {"env": "BACKLOG"},
-                    # "jpeg_sd": {"env": "JPEG_SD"},
                     "review": {"env": "REVIEW"},
                 }
             },
-            "create_images_df": {"config": {"env": "BUCKET"}},
+            # "create_images_df": {"config": {"env": "BUCKET"}},
             "embed_metadata": {
+                # "inputs": {"image": Any},
                 "config": {
                     "env": "EXIFTOOL",
                 },
@@ -49,8 +49,10 @@ load_dotenv(override=True)
 )
 def handle_images():
     images = file_picker()
-    images_df = create_images_df(images)
-    update_metadata(df=images_df)
-    dispatched = file_dispatcher(images)
-    embedded = embed_metadata(images=dispatched)
-    upload_to_cloud(embedded)
+    # images_df = create_images_df(images)
+    # update_metadata(df=images_df)
+    dispatched = images.map(file_dispatcher)  # (images)
+    embedded = dispatched.map(embed_metadata)  # (images=dispatched)
+    uploaded = embedded.map(upload_to_cloud)
+    # images_df = create_images_df(uploaded.collect())
+    # update_metadata(df=images_df)
