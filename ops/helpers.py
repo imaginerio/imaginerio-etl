@@ -1,9 +1,20 @@
-from urllib3.util import Retry
-from requests.adapters import HTTPAdapter
+import os
+import sys
+import shutil
+
+import boto3
+import geojson
+import mercantile
 from IIIFpres import iiifpapi3
 from IIIFpres.utilities import *
-import requests
-import os
+from lxml import etree
+from pyproj import Proj
+from requests.adapters import HTTPAdapter
+from shapely.geometry import Point
+from SPARQLWrapper import JSON, SPARQLWrapper
+from tqdm import tqdm
+from turfpy.misc import sector
+from urllib3.util import Retry
 
 
 def create_collection(name, manifest):
@@ -79,13 +90,8 @@ def create_collection(name, manifest):
     collection.add_provider(collection_provider)
     collection.add_manifest_to_items(manifest)
 
-    with open(collection_path, "w") as f:
-        f.write(
-            collection.json_dumps(
-                dumps_errors=False,
-                ensure_ascii=False,
-                context="http://iiif.io/api/presentation/3/context.json",
-            )
+    collection.orjson_save(
+        collection_path, context="http://iiif.io/api/presentation/3/context.json"
         )
 
     return collection
@@ -94,25 +100,103 @@ def create_collection(name, manifest):
 def file_exists(identifier, type):
 
     if type == "info" or type == "manifest":
-        endpoint = os.environ["BUCKET"] + "/iiif/{0}/{1}.json".format(identifier, type)
+        key = "iiif/{0}/{1}.json".format(identifier, type)
     else:
-        endpoint = os.environ["BUCKET"] + "/iiif/{0}/full/max/0/default.jpg".format(
-            identifier
-        )
+        key = "iiif/{0}/full/max/0/default.jpg".format(identifier)
 
-    retry_strategy = Retry(
-        total=3,
-        status_forcelist=[429, 500, 502, 503, 504],
-        method_whitelist=["HEAD", "GET", "OPTIONS"],
-    )
-
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    http = requests.Session()
-    http.mount("https://", adapter)
-    http.mount("http://", adapter)
-    response = http.get(endpoint)
-
-    if response.status_code == 200:
+    s3 = boto3.resource("s3")
+    bucket = s3.Bucket("imaginerio-images")
+    objs = list(bucket.objects.filter(Prefix=key))
+    if any([w.key == key for w in objs]):
         return True
     else:
         return False
+
+
+def upload_folder_to_s3(source, mode="test"):
+    s3 = boto3.resource("s3")
+    for root, _, files in os.walk(source):
+        for file in files:
+            path = os.path.join(root, file)
+            if mode == "test":
+                print("Would be uploading {0}".format(path))
+            else:
+                s3.meta.client.upload_file(
+                    path,
+                    os.environ["BUCKET_NAME"],
+                    path,
+                    ExtraArgs={
+                        "ContentType": "image/jpeg"
+                        if file.endswith(".jpg")
+                        else "application/json"
+                    },
+                )
+    if mode == "test":
+        return False
+    else:
+        shutil.rmtree(source)
+        return True
+
+
+def upload_file_to_s3(source, target, mode="test"):
+    s3 = boto3.resource("s3")
+    if mode == "test":
+        print("Would be uploading {0} to {1}".format(source, target))
+        return False
+    else:
+        s3.meta.client.upload_file(
+            source,
+            os.environ["BUCKET_NAME"],
+            target,
+            ExtraArgs={
+                "ContentType": "image/jpeg"
+                if source.endswith(".jpg")
+                else "application/json"
+            },
+        )
+        return True
+
+
+def query_wikidata(Q):
+    """
+    Query Wikidata's SPARQL endpoint for entities' coordinates
+    """
+    endpoint_url = "https://query.wikidata.org/sparql"
+
+    query = """SELECT ?coordinate
+        WHERE
+        {
+        wd:%s wdt:P625 ?coordinate .
+        }""" % (
+        Q
+    )
+
+    def get_results(endpoint_url, query):
+        user_agent = "WDQS-example Python/%s.%s" % (
+            sys.version_info[0],
+            sys.version_info[1],
+        )
+        # TODO adjust user agent; see https://w.wiki/CX6
+        sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
+        sparql.setQuery(query)
+        sparql.setReturnFormat(JSON)
+        return sparql.query().convert()
+
+    results = get_results(endpoint_url, query)
+    result_list = []
+    for result in results["results"]["bindings"]:
+        if result:
+            result_list.append(result["coordinate"]["value"])
+    return result_list
+
+
+def geo_to_world_coors(coors, inverse=False):
+    """
+    Transform Rio's geographic to world
+    coordinates or vice-versa with inverse=True
+    """
+    rj = Proj("EPSG:32722")
+    origin = Point(coors)
+    origin_proj = rj(origin.x, origin.y, inverse=inverse)
+
+    return Point(origin_proj)

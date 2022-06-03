@@ -1,32 +1,50 @@
+import argparse
+from json import JSONDecodeError
+import logging
+import logging.config
 import os
 import subprocess
 from math import *
+from urllib.parse import urlsplit, urlunsplit
 
-from dagster import op, In, Out, DynamicOut, DynamicOutput, ExperimentalWarning, Nothing
+import jsonschema
 import pandas as pd
 import requests
+from requests.adapters import HTTPAdapter
 from dotenv import load_dotenv
 from IIIFpres import iiifpapi3
 from IIIFpres.utilities import *
-import jsonschema
 from PIL import Image
-from requests.adapters import HTTPAdapter
-from urllib3.util import Retry
-from urllib.parse import urlsplit, urlunsplit
 
-import ops.helpers as h
-
-BUCKET = os.environ["BUCKET"]
+from helpers import *
 
 load_dotenv(override=True)
+
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": True,
+    }
+)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+BUCKET = os.environ["BUCKET"]
+COLLECTIONS = os.environ["COLLECTIONS"]
 
 iiifpapi3.BASE_URL = BUCKET + "iiif/"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 Image.MAX_IMAGE_PIXELS = None
 
+session = requests.Session()
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
+session.mount('http://', HTTPAdapter(max_retries=retries))
+session.mount('https://', HTTPAdapter(max_retries=retries))
+
 
 class Item:
     def __init__(self, id, row, mapping):
+        logger.debug(f"Creating item {id}")
         self._id = id
         self._title = row["Title"]
         self._description = {
@@ -57,20 +75,7 @@ class Item:
             "label_pt": ["Data"],
             "value": [str(row["Date"])],
         }
-        self._depicts = (
-            {
-                "label_en": ["Depicts"],
-                "label_pt": ["Retrata"],
-                "value": [
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        *depicts.split(" ", maxsplit=1)
-                    )
-                    for depicts in row["Depicts"].split("||")
-                ],
-            }
-            if row["Depicts"]
-            else None
-        )
+        self._depicts = self.map_wikidata(row["Depicts"], "Depicts", "Retrata", mapping)
         self._type = self.map_wikidata(row["Type"], "Type", "Tipo", mapping)
         self._fabrication_method = self.map_wikidata(
             row["Fabrication Method"],
@@ -112,23 +117,23 @@ class Item:
         self._wikidata_id = row["Wikidata ID"]
         self._smapshot_id = row["Smapshot ID"]
         self._collections = row["Collections"]
-        self._is_tiled = h.file_exists(id, "info")
-        self._base_path = "iiif/{0}".format(id)
-        self._remote_img_path = self._base_path + "/full/max/0/default.jpg"
+        self._remote_img_path = row["Media URL"]
+        self._base_path = f"iiif/{id}"
         self._local_img_path = self._base_path + ".jpg"
         self._info_path = self._base_path + "/info.json"
         self._manifest_path = self._base_path + "/manifest.json"
 
     def download_full_image(self):
-        img_data = requests.get(BUCKET + self._remote_img_path).content
-        with open(self._local_img_path, "wb") as handler:
-            handler.write(img_data)
+        response = session.get(self._remote_img_path)
+        if response.status_code == 200:
+            with open(self._local_img_path, "wb") as handler:
+                handler.write(response.content)
 
     def tile_image(self):
         command = [
             "java",
             "-jar",
-            "resources/iiif-tiler.jar",
+            "ops/iiif-tiler.jar",
             self._local_img_path,
             "-tile_size",
             "256",
@@ -137,7 +142,13 @@ class Item:
         ]
         process = subprocess.Popen(command)
         process.communicate()
-        os.remove(self._local_img_path)
+        os.makedirs(self._base_path, exist_ok=True)
+        with open(self._info_path, "r+") as f:
+            info = json.load(f)
+            info["id"] = info["id"].replace("http://localhost:8887", BUCKET[:-1])
+            f.seek(0)  # rewind
+            json.dump(info, f, indent=4)
+            f.truncate()
 
     def map_wikidata(self, values_en, label_en, label_pt, mapping):
         en = []
@@ -145,7 +156,7 @@ class Item:
         if not values_en:
             return None
         else:
-            for value_en in values_en.split("||"):
+            for value_en in values_en.split("|"):
                 try:
                     url = "http://wikidata.org/wiki/{0}".format(
                         mapping.loc[value_en, "Wiki ID"]
@@ -173,7 +184,7 @@ class Item:
                 "value_pt": d["pt"],
             }
 
-    def get_metadata_entry(self, field):
+    def get_metadata_entry(self, manifest, field):
         if field:
             if "value" in field:
                 value = {"none": field["value"]} if any(field["value"]) else None
@@ -184,29 +195,22 @@ class Item:
                     else None
                 )
             if value:
-                return {
-                    "label": {
-                        "en": field["label_en"],
-                        "pt-BR": field["label_pt"],
-                    },
-                    "value": value,
-                }
+                manifest.add_metadata(
+                    entry={
+                        "label": {
+                            "en": field["label_en"],
+                            "pt-BR": field["label_pt"],
+                        },
+                        "value": value,
+                    }
+                )
         else:
             return None
 
 
-@op(
-    ins={
-        "metadata": In(root_manager_key="metadata_root"),
-        "mapping": In(root_manager_key="mapping_root"),
-    },
-    out=DynamicOut(),
-)
-def get_items(context, metadata, mapping):
+def get_items(metadata, mapping, mode):
 
-    os.makedirs("iiif/collection", exist_ok=True)
-    mapping.set_index("Label:en", inplace=True)
-    metadata.set_index("Document ID", inplace=True)
+    os.makedirs(COLLECTIONS, exist_ok=True)
 
     # filter ready to go items
     ims = (
@@ -221,14 +225,14 @@ def get_items(context, metadata, mapping):
 
     # download existing collections
     for name in metadata["Collections"].dropna().str.split("\|\|").explode().unique():
-        collection_path = "iiif/collection/{0}.json".format(name.lower())
-        response = requests.get(BUCKET + collection_path)
+        collection_path = f"{COLLECTIONS}/{name.lower()}.json"
+        response = session.get(BUCKET + collection_path)
         if response.status_code == 200:
             with open(collection_path, "w") as f:
                 json.dump(response.json(), f, indent=4)
 
     # save current and try to load previous data
-    if context.get_tag("mode") != "test":
+    if mode == "prod":
         try:
             last_run = pd.read_pickle("data/input/last_run.pickle")
         except:
@@ -240,53 +244,39 @@ def get_items(context, metadata, mapping):
         # process only new or modified items
         if last_run is not None:
             new_items = metadata.loc[~metadata.index.isin(last_run.index)]
-            modified_items = last_run.compare(metadata.loc[last_run.index]).index
+            previous_items = metadata.loc[last_run.index]
+            modified_items = last_run.compare(previous_items).index
             to_process = metadata.loc[modified_items].append(new_items)
         else:
             to_process = metadata
 
     # test with dataframe's first item
     else:
-        to_process = metadata.fillna("")  # pd.DataFrame(metadata.iloc[0]).T
+        to_process = pd.DataFrame(metadata.loc["30509540"]).T
 
-    context.log.info(f"Processing {len(to_process)} items")
+    logger.debug(f"Processing {len(to_process)} items")
 
-    for id, row in to_process.iterrows():
-        yield DynamicOutput(
-            value=Item(id, row, mapping),
-            mapping_key=id.replace("-", "_"),
-        )
+    return [Item(id, row, mapping) for id, row in to_process.fillna("").iterrows()]
 
 
-@op
-def tile_image(context, item):
-
-    if not item._is_tiled or context.get_tag("mode") == "test":
-        item.download_full_image()
-        item.tile_image()
-
-        # TO-DO remove when java tiler gets updated with id as CLI argument
-        with open("iiif/{0}/info.json".format(item._id), "r+") as f:
-            info = json.load(f)
-            info["id"] = info["id"].replace("http://localhost:8887", BUCKET)
-            f.seek(0)  # rewind
-            json.dump(info, f, indent=4)
-            f.truncate()
-    else:
-        context.log.info("Image is already tiled")
-    return item
-
-
-@op(
-    out=Out(io_manager_key="iiif_manager"),
-)
-def write_manifest(context, item):
+def write_manifest(item):
 
     id = item._id
-    context.log.info("Processing: {0}".format(str(id)))
+    logger.debug("Creating manifest {0}".format(str(id)))
 
     # Get image sizes
-    img_sizes = requests.get(BUCKET + item._info_path).json()["sizes"]
+    try:
+        img_sizes = session.get(BUCKET + item._info_path).json()["sizes"]
+    except JSONDecodeError:
+        try:
+            logger.debug("Attempting to download remote image")
+            item.download_full_image()
+            item.tile_image()
+            img_sizes = json.load(open(item._info_path))["sizes"]
+        except:
+            logger.error(f"Image {id} unavailable")
+            return False
+
     full_width, full_height = img_sizes[-1].values()
     # Pick size closer to 600px (long edge) for thumbnail
     thumb_width, thumb_height = min(
@@ -309,7 +299,7 @@ def write_manifest(context, item):
     manifest.add_label("pt-BR", item._title)
 
     for field in item._metadata:
-        manifest.add_metadata(entry=item.get_metadata_entry(field))
+        item.get_metadata_entry(manifest, field)
 
     # Rights & Attribution
     if item._description["value_en"][0]:
@@ -428,39 +418,60 @@ def write_manifest(context, item):
         try:
             jsonschema.validate(
                 instance=json.loads(
-                    manifest.json_dumps(
+                    manifest.orjson_dumps(
                         context="http://iiif.io/api/presentation/3/context.json"
                     )
                 ),
                 schema=json.load(schema),
             )
         except jsonschema.exceptions.ValidationError as e:
-            print(e)
-            context.log.warning("Manifest {0} is invalid".format(id))
+            logger.error("Manifest {0} is invalid\n".format(id), e)
+            return False
 
     # Add to collection
-    for name in item._collections.split("||"):  # ["Collections"]
-        if name:
+    for collection_name in item._collections.split("|"):  # ["Collections"]
+        if collection_name:
             try:
                 collection = read_API3_json(
-                    "iiif/collection/{0}.json".format(name.lower())
+                    f"{COLLECTIONS}/{collection_name.lower()}.json"
                 )
-                for object in collection.items:
-                    if "{0}/manifest".format(id) in object.id:
-                        collection.items.remove(object)
+                for current_item in collection.items:
+                    if f"/{id}/" in current_item.id:
+                        logger.debug(f"Updating manifest {id} in {collection_name}")
+                        collection.items.remove(current_item)
                 collection.add_manifest_to_items(manifest)
+                collection.orjson_save(f"{COLLECTIONS}/{collection_name}.json")
             except FileNotFoundError:
-                h.create_collection(name, manifest)
+                logger.debug("Collection doesn't exist, creating...")
+                create_collection(collection_name, manifest)
         else:
             continue
 
-    manifest.json_save(
+    os.makedirs(item._base_path, exist_ok=True)
+
+    manifest.orjson_save(
         item._manifest_path, context="http://iiif.io/api/presentation/3/context.json"
     )
+    logger.debug(f"Saved manifest at {item._manifest_path}")
 
-    return item._base_path
+    return True
 
 
-@op(out=Out(io_manager_key="iiif_manager"))
-def upload_collections(start):
-    return "iiif/collection"
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
+    )
+    args = parser.parse_args()
+
+    metadata = pd.read_csv(os.environ["METADATA"], index_col="Document ID")
+    mapping = pd.read_csv(os.environ["MAPPING"], index_col="Label:en")
+    items = get_items(metadata, mapping, args.mode)
+
+    for item in tqdm(items, desc="Creating IIIF assets"):
+        success = write_manifest(item)
+        if success:
+            upload_folder_to_s3(item._base_path, mode=args.mode)
+        else:
+            continue
+    upload_folder_to_s3(COLLECTIONS, mode=args.mode)
