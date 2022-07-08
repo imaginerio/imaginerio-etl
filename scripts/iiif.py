@@ -3,6 +3,7 @@ from json import JSONDecodeError
 import logging
 import logging.config
 import os
+import re
 import subprocess
 from math import *
 from urllib.parse import urlsplit, urlunsplit
@@ -37,13 +38,13 @@ iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 Image.MAX_IMAGE_PIXELS = None
 
 session = requests.Session()
-retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
-session.mount('http://', HTTPAdapter(max_retries=retries))
-session.mount('https://', HTTPAdapter(max_retries=retries))
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
+session.mount("http://", HTTPAdapter(max_retries=retries))
+session.mount("https://", HTTPAdapter(max_retries=retries))
 
 
 class Item:
-    def __init__(self, id, row, mapping):
+    def __init__(self, id, row, vocabulary):
         logger.debug(f"Creating item {id}")
         self._id = id
         self._title = row["Title"]
@@ -65,26 +66,26 @@ class Item:
                 "value_pt": [row["Creator"]],
             }
         else:
-            self._creator = {
-                "label_en": ["Creator"],
-                "label_pt": ["Autor"],
-                "value": [row["Creator"]],
-            }
+            self._creator = self.map_wikidata(
+                row["Creator"], "Creator", "Autor", vocabulary
+            )
         self._date = {
             "label_en": ["Date"],
             "label_pt": ["Data"],
             "value": [str(row["Date"])],
         }
-        self._depicts = self.map_wikidata(row["Depicts"], "Depicts", "Retrata", mapping)
-        self._type = self.map_wikidata(row["Type"], "Type", "Tipo", mapping)
+        self._depicts = self.map_wikidata(
+            row["Depicts"], "Depicts", "Retrata", vocabulary
+        )
+        self._type = self.map_wikidata(row["Type"], "Type", "Tipo", vocabulary)
         self._fabrication_method = self.map_wikidata(
             row["Fabrication Method"],
             "Fabrication Method",
             "Método de Fabricação",
-            mapping,
+            vocabulary,
         )
         self._materials = self.map_wikidata(
-            row["Materials"], "Materials", "Materiais", mapping
+            row["Materials"], "Materials", "Materiais", vocabulary
         )
         self._width = {
             "label_en": ["Width (mm)"],
@@ -150,18 +151,21 @@ class Item:
             json.dump(info, f, indent=4)
             f.truncate()
 
-    def map_wikidata(self, values_en, label_en, label_pt, mapping):
+    def map_wikidata(self, property, vocabulary):
         en = []
         pt = []
+        values_en = self.getattr(property).split("|")
+        label_en = property
+        label_pt = vocabulary.loc[property, "Label:pt"]
         if not values_en:
             return None
         else:
             for value_en in values_en.split("|"):
                 try:
                     url = "http://wikidata.org/wiki/{0}".format(
-                        mapping.loc[value_en, "Wiki ID"]
+                        vocabulary.loc[value_en, "Wiki ID"]
                     )
-                    value_pt = mapping.loc[value_en, "Label:pt"]
+                    value_pt = vocabulary.loc[value_en, "Label:pt"]
                     en.append(
                         '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
                             url, value_en
@@ -208,7 +212,7 @@ class Item:
             return None
 
 
-def get_items(metadata, mapping, mode):
+def get_items(metadata, vocabulary, mode):
 
     os.makedirs(COLLECTIONS, exist_ok=True)
 
@@ -256,7 +260,7 @@ def get_items(metadata, mapping, mode):
 
     logger.debug(f"Processing {len(to_process)} items")
 
-    return [Item(id, row, mapping) for id, row in to_process.fillna("").iterrows()]
+    return [Item(id, row, vocabulary) for id, row in to_process.fillna("").iterrows()]
 
 
 def write_manifest(item):
@@ -458,20 +462,58 @@ def write_manifest(item):
 
 
 if __name__ == "__main__":
+
+    # parse arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
     )
     args = parser.parse_args()
 
-    metadata = pd.read_csv(os.environ["METADATA"], index_col="Document ID")
-    mapping = pd.read_csv(os.environ["MAPPING"], index_col="Label:en")
-    items = get_items(metadata, mapping, args.mode)
+    # open files and rename columns
+    vocabulary = pd.read_excel(os.environ["VOCABULARY"], index_col="Label (en)")
+    vocabulary.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
+    metadata = pd.read_excel(os.environ["METADATA"], index_col="Document ID")
+    metadata.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
+
+    # filter rows
+    if args["mode"] == "test":
+        metadata = metadata.iloc[0]
+    else:
+        metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
+
+    # filter columns
+    metadata = metadata[
+        "SSID",
+        "Rights",
+        "Provider",
+        "Collections",
+        "Type",
+        "Material",
+        "Fabrication Method",
+        "Media URL",
+        "Creator",
+        "Title",
+        "Description (Portuguese)",
+        "Description (English)",
+        "Date",
+        "First Year",
+        "Last Year",
+        "Document URL",
+        "Document ID",
+        "Required Statement",
+        "Wikidata ID",
+        "Smapshot ID",
+        "Depicts",
+    ]
+
+    items = get_items(metadata, vocabulary, args.mode)
 
     for item in tqdm(items, desc="Creating IIIF assets"):
         success = write_manifest(item)
-        if success:
+        if success and args.mode == "prod":
             upload_folder_to_s3(item._base_path, mode=args.mode)
         else:
             continue
-    upload_folder_to_s3(COLLECTIONS, mode=args.mode)
+    if args.mode == "prod":
+        upload_folder_to_s3(COLLECTIONS, mode=args.mode)
