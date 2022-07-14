@@ -27,12 +27,13 @@ logging.config.dictConfig(
 )
 
 logging.basicConfig(level=logging.DEBUG)
+logging.getLogger("PIL").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
 class Tif(object):
     def copy(self, image):
-        logger.debug("Copying {} to {}".format(image.id, os.environ["TIF"]))
+        tqdm.write("Copying {} to {}".format(image.id, os.environ["TIF"]))
         shutil.copy2(image.original_path, os.environ["TIF"])
 
 
@@ -40,7 +41,7 @@ class Highres(object):
     def copy(self, image):
         origin = os.path.join(os.environ["TIF"], image.tif)
         destination = os.path.join(os.environ["JPG"], image.jpg)
-        logger.debug("Copying {} to {}".format(origin, destination))
+        tqdm.write("Copying {} to {}".format(origin, destination))
         try:
             with PILImage.open(origin) as im:
                 im.save(
@@ -60,7 +61,7 @@ class Lowres(object):
             destination = os.path.join(os.environ["REVIEW"], image.jpg)
         else:
             destination = os.path.join(os.environ["BACKLOG"], image.jpg)
-        logger.debug("Copying {} to {}".format(origin, destination))
+        tqdm.write("Copying {} to {}".format(origin, destination))
         try:
             with PILImage.open(origin) as im:
                 im.thumbnail((1000, 1000))
@@ -74,14 +75,17 @@ class Image:
         self.__original_path = original_path
         self.__id = os.path.split(self.__original_path)[1].split(".")[0]
         self.__jpg = self.__id + ".jpg"
-        self.__tif = self.__id + ".tif" 
+        self.__tif = self.__id + ".tif"
         self.__in_catalog = self.__id in metadata.index
         if self.__in_catalog:
             self.__is_geolocated = pd.notna(metadata.loc[self.__id, "Latitude"])
         else:
             self.__is_geolocated = False
         self.__to_tif = not os.path.exists(os.path.join(os.environ["TIF"], self.__tif))
-        self.__to_jpg = not os.path.exists(os.path.join(os.environ["JPG"], self.__jpg)) and self.__is_geolocated
+        self.__to_jpg = (
+            not os.path.exists(os.path.join(os.environ["JPG"], self.__jpg))
+            and self.__is_geolocated
+        )
         self.__to_backlog = (
             not os.path.exists(os.path.join(os.environ["BACKLOG"], self.__jpg))
             and not self.__is_geolocated
@@ -91,7 +95,7 @@ class Image:
             and not self.__in_catalog
         )
         self.__metadata = None
-        #self.get_metadata(metadata)
+        # self.get_metadata(metadata)
 
     @property
     def original_path(self):
@@ -124,7 +128,7 @@ class Image:
     @property
     def to_jpg(self):
         return self.__to_jpg
-        
+
     @property
     def to_backlog(self):
         return self.__to_backlog
@@ -203,7 +207,7 @@ class Image:
                 *self.__metadata,
                 os.path.join(os.environ["JPG"], self.__jpg).encode(encoding="utf-8"),
             )
-        logger.debug(f"Embedded metadata in {image.id}")
+        tqdm.write(f"Embedded metadata in {image.id}")
 
     def upload_to_cloud(self):
         pass
@@ -212,10 +216,20 @@ class Image:
         return file_exists(self.__id, "image")
 
     def __str__(self):
-        of_interest = [self.__in_catalog, self.__is_geolocated, self.__to_tif, self.__to_jpg, self.__to_review, self.__to_backlog]
-        return "\n".join([f"{k}: {v}" for k, v in self.__dict__.items() if k in of_interest])
-        #k, getattr(self, k) for k in self.attrs
-        #return f"Item {self.id}:\nIs in catalog: {self.__in_catalog}\nIs geolocated: {self.__is_geolocated}\n"
+        of_interest = [
+            self.__in_catalog,
+            self.__is_geolocated,
+            self.__to_tif,
+            self.__to_jpg,
+            self.__to_review,
+            self.__to_backlog,
+        ]
+        return "\n".join(
+            [f"{k}: {v}" for k, v in self.__dict__.items() if k in of_interest]
+        )
+        # k, getattr(self, k) for k in self.attrs
+        # return f"Item {self.id}:\nIs in catalog: {self.__in_catalog}\nIs geolocated: {self.__is_geolocated}\n"
+
 
 def get_images(metadata):
     """
@@ -261,7 +275,7 @@ def dispatch(image):
     if image.to_backlog or image.to_review:
         image.copy_strategy(Lowres())
 
-    logger.debug(f"Dispatched image {image.id}")
+    tqdm.write(f"Dispatched image {image.id}")
     return image
 
 
@@ -307,8 +321,9 @@ if __name__ == "__main__":
         if image.is_geolocated and not image.has_embedded_metadata:
             image.get_metadata(metadata)
             image.embed_metadata()
+    
     for image in tqdm(images, desc="Uploading images"):
-        if not file_exists(image.id, "image"):
+        if image.is_geolocated and not file_exists(image.id, "image"):
             upload_file_to_s3(
                 os.path.join(os.environ["JPG"], image.jpg),
                 target="iiif/{0}/full/max/0/default.jpg".format(image.id),

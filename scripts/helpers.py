@@ -141,7 +141,7 @@ def upload_folder_to_s3(source, mode="test"):
 def upload_file_to_s3(source, target, mode="test"):
     s3 = boto3.resource("s3")
     if mode == "test":
-        print("Would be uploading {0} to {1}".format(source, target))
+        tqdm.write("Would be uploading {0} to {1}".format(source, target))
         return False
     else:
         s3.meta.client.upload_file(
