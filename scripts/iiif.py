@@ -1,235 +1,52 @@
 import argparse
-from json import JSONDecodeError
+import collections
 import logging
 import logging.config
 import os
 import re
 import subprocess
+from json import JSONDecodeError
 from math import *
 from urllib.parse import urlsplit, urlunsplit
 
 import jsonschema
 import pandas as pd
-import requests
-from requests.adapters import HTTPAdapter
+from tqdm import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 from dotenv import load_dotenv
 from IIIFpres import iiifpapi3
 from IIIFpres.utilities import *
 from PIL import Image
 
-from helpers import *
+from helpers import session, logger, upload_folder_to_s3, create_collection
+from item import Item
 
 load_dotenv(override=True)
 
-logging.config.dictConfig(
-    {
-        "version": 1,
-        "disable_existing_loggers": True,
-    }
-)
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# logging.config.dictConfig(
+#     {
+#         "version": 1,
+#         "disable_existing_loggers": True,
+#     }
+# )
+# logging.basicConfig(level=logging.DEBUG)
+# logger = logging.getLogger(__name__)
 
 BUCKET = os.environ["BUCKET"]
-COLLECTIONS = os.environ["COLLECTIONS"]
-
+COLLECTIONS = "iiif/collection/"
 iiifpapi3.BASE_URL = BUCKET + "iiif/"
 iiifpapi3.LANGUAGES = ["pt-BR", "en"]
 Image.MAX_IMAGE_PIXELS = None
-
-session = requests.Session()
-retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
-session.mount("http://", HTTPAdapter(max_retries=retries))
-session.mount("https://", HTTPAdapter(max_retries=retries))
-
-
-class Item:
-    def __init__(self, id, row, vocabulary):
-        logger.debug(f"Creating item {id}")
-        self._id = id
-        self._title = row["Title"]
-        self._description = {
-            "label_en": ["Description"],
-            "label_pt": ["Descrição"],
-            "value_en": [row["Description (English)"]]
-            if row["Description (English)"]
-            else [row["Description (Portuguese)"]],
-            "value_pt": [row["Description (Portuguese)"]]
-            if row["Description (Portuguese)"]
-            else [row["Description (English)"]],
-        }
-        if row["Creator"] == "Autoria não identificada":
-            self._creator = {
-                "label_en": ["Creator"],
-                "label_pt": ["Autor"],
-                "value_en": ["Unknown"],
-                "value_pt": [row["Creator"]],
-            }
-        else:
-            self._creator = self.map_wikidata(
-                row["Creator"], "Creator", "Autor", vocabulary
-            )
-        self._date = {
-            "label_en": ["Date"],
-            "label_pt": ["Data"],
-            "value": [str(row["Date"])],
-        }
-        self._depicts = self.map_wikidata(
-            row["Depicts"], "Depicts", "Retrata", vocabulary
-        )
-        self._type = self.map_wikidata(row["Type"], "Type", "Tipo", vocabulary)
-        self._fabrication_method = self.map_wikidata(
-            row["Fabrication Method"],
-            "Fabrication Method",
-            "Método de Fabricação",
-            vocabulary,
-        )
-        self._materials = self.map_wikidata(
-            row["Materials"], "Materials", "Materiais", vocabulary
-        )
-        self._width = {
-            "label_en": ["Width (mm)"],
-            "label_pt": ["Largura (mm)"],
-            "value": [str(row["Width (mm)"])],
-        }
-        self._height = {
-            "label_en": ["Height (mm)"],
-            "label_pt": ["Altura (mm)"],
-            "value": [str(row["Height (mm)"])],
-        }
-        self._metadata = [
-            self._description,
-            self._creator,
-            self._date,
-            self._depicts,
-            self._type,
-            self._materials,
-            self._fabrication_method,
-            self._width,
-            self._height,
-        ]
-        self._attribution = row["Attribution"]
-        self._license = row["License"]
-        self._rights = row["Rights"]
-        self._document_url = (
-            row["Document URL"] if row["Document URL"] else "https://null"
-        )
-        self._provider = row["Provider"] if row["Provider"] else "imagineRio"
-        self._wikidata_id = row["Wikidata ID"]
-        self._smapshot_id = row["Smapshot ID"]
-        self._collections = row["Collections"]
-        self._remote_img_path = row["Media URL"]
-        self._base_path = f"iiif/{id}"
-        self._local_img_path = self._base_path + ".jpg"
-        self._info_path = self._base_path + "/info.json"
-        self._manifest_path = self._base_path + "/manifest.json"
-
-    def download_full_image(self):
-        response = session.get(self._remote_img_path)
-        if response.status_code == 200:
-            with open(self._local_img_path, "wb") as handler:
-                handler.write(response.content)
-
-    def tile_image(self):
-        command = [
-            "java",
-            "-jar",
-            "ops/iiif-tiler.jar",
-            self._local_img_path,
-            "-tile_size",
-            "256",
-            "-version",
-            "3",
-        ]
-        process = subprocess.Popen(command)
-        process.communicate()
-        os.makedirs(self._base_path, exist_ok=True)
-        with open(self._info_path, "r+") as f:
-            info = json.load(f)
-            info["id"] = info["id"].replace("http://localhost:8887", BUCKET[:-1])
-            f.seek(0)  # rewind
-            json.dump(info, f, indent=4)
-            f.truncate()
-
-    def map_wikidata(self, property, vocabulary):
-        en = []
-        pt = []
-        values_en = self.getattr(property).split("|")
-        label_en = property
-        label_pt = vocabulary.loc[property, "Label:pt"]
-        if not values_en:
-            return None
-        else:
-            for value_en in values_en.split("|"):
-                try:
-                    url = "http://wikidata.org/wiki/{0}".format(
-                        vocabulary.loc[value_en, "Wiki ID"]
-                    )
-                    value_pt = vocabulary.loc[value_en, "Label:pt"]
-                    en.append(
-                        '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                            url, value_en
-                        )
-                    )
-                    pt.append(
-                        '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                            url, value_pt
-                        )
-                    )
-                except:
-                    en.append(value_en)
-                    pt.append(value_en)
-                d = {"en": en, "pt": pt}
-
-            return {
-                "label_en": [label_en],
-                "label_pt": [label_pt],
-                "value_en": d["en"],
-                "value_pt": d["pt"],
-            }
-
-    def get_metadata_entry(self, manifest, field):
-        if field:
-            if "value" in field:
-                value = {"none": field["value"]} if any(field["value"]) else None
-            else:
-                value = (
-                    {"en": field["value_en"], "pt-BR": field["value_pt"]}
-                    if any(field["value_pt"])
-                    else None
-                )
-            if value:
-                manifest.add_metadata(
-                    entry={
-                        "label": {
-                            "en": field["label_en"],
-                            "pt-BR": field["label_pt"],
-                        },
-                        "value": value,
-                    }
-                )
-        else:
-            return None
-
 
 def get_items(metadata, vocabulary, mode):
 
     os.makedirs(COLLECTIONS, exist_ok=True)
 
-    # filter ready to go items
-    ims = (
-        (metadata["Latitude"].notna())
-        & (metadata["Document URL"].notna())
-        & (metadata["Media URL"].notna())
-        & (metadata["First Year"].notna())
-        & (metadata["Last Year"].notna())
-    )
-    jstor = metadata["Provider"] != "Instituto Moreira Salles"
-    metadata = metadata.loc[ims | jstor]
-
-    # download existing collections
-    for name in metadata["Collections"].dropna().str.split("\|\|").explode().unique():
-        collection_path = f"{COLLECTIONS}/{name.lower()}.json"
+    # list all collection names
+    collections = metadata["Collections"].dropna().str.split("\|").explode().unique()
+    # download collection(s)
+    for name in collections:
+        collection_path = f"{COLLECTIONS}{name.lower()}.json"
         response = session.get(BUCKET + collection_path)
         if response.status_code == 200:
             with open(collection_path, "w") as f:
@@ -253,19 +70,17 @@ def get_items(metadata, vocabulary, mode):
             to_process = metadata.loc[modified_items].append(new_items)
         else:
             to_process = metadata
-
-    # test with dataframe's first item
     else:
-        to_process = pd.DataFrame(metadata.loc["30509540"]).T
-
+        to_process = metadata
+        
     logger.debug(f"Processing {len(to_process)} items")
 
     return [Item(id, row, vocabulary) for id, row in to_process.fillna("").iterrows()]
-
+    
 
 def write_manifest(item):
 
-    id = item._id
+    id = str(item._id)
     logger.debug("Creating manifest {0}".format(str(id)))
 
     # Get image sizes
@@ -323,9 +138,7 @@ def write_manifest(item):
         required_statement.add_value("Hosted by imagineRio.", "en")
         required_statement.add_value("Hospedado por imagineRio.", "pt-BR")
 
-    if item._license.startswith("http"):
-        manifest.set_rights(item._license)
-    elif item._rights.startswith("http"):
+    if item._rights.startswith("http"):
         manifest.set_rights(item._rights)
     else:
         manifest.set_rights("http://rightsstatements.org/vocab/CNE/1.0/")
@@ -471,20 +284,23 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # open files and rename columns
-    vocabulary = pd.read_excel(os.environ["VOCABULARY"], index_col="Label (en)")
+    vocabulary = pd.read_excel(os.environ["VOCABULARY"])
     vocabulary.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
-    metadata = pd.read_excel(os.environ["METADATA"], index_col="Document ID")
+    vocabulary.set_index("Label (en)", inplace=True)
+
+    metadata = pd.read_excel(os.environ["METADATA"])
     metadata.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
+    metadata.set_index("SSID", inplace=True)
 
     # filter rows
-    if args["mode"] == "test":
-        metadata = metadata.iloc[0]
+    if args.mode == "test":
+        metadata = pd.DataFrame(metadata.iloc[0]).T
     else:
         metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
 
     # filter columns
-    metadata = metadata[
-        "SSID",
+    metadata = metadata[[
+        "Document ID",
         "Rights",
         "Provider",
         "Collections",
@@ -500,20 +316,21 @@ if __name__ == "__main__":
         "First Year",
         "Last Year",
         "Document URL",
-        "Document ID",
         "Required Statement",
         "Wikidata ID",
         "Smapshot ID",
         "Depicts",
-    ]
-
+        "Width",
+        "Height"
+    ]]
+    
     items = get_items(metadata, vocabulary, args.mode)
 
-    for item in tqdm(items, desc="Creating IIIF assets"):
-        success = write_manifest(item)
-        if success and args.mode == "prod":
-            upload_folder_to_s3(item._base_path, mode=args.mode)
-        else:
-            continue
-    if args.mode == "prod":
+    with logging_redirect_tqdm():
+        for item in tqdm(items, desc="Creating IIIF assets"):
+            success = write_manifest(item)
+            if success:
+                upload_folder_to_s3(item._base_path, mode=args.mode)
+            else:
+                continue
         upload_folder_to_s3(COLLECTIONS, mode=args.mode)
