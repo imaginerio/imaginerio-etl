@@ -1,10 +1,12 @@
+import logging
 import os
-import sys
 import shutil
+import sys
 
 import boto3
 import geojson
 import mercantile
+import requests
 from IIIFpres import iiifpapi3
 from IIIFpres.utilities import *
 from lxml import etree
@@ -16,6 +18,19 @@ from tqdm import tqdm
 from turfpy.misc import sector
 from urllib3.util import Retry
 
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": True,
+    }
+)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+session = requests.Session()
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
+session.mount("http://", HTTPAdapter(max_retries=retries))
+session.mount("https://", HTTPAdapter(max_retries=retries))
 
 def create_collection(name, manifest):
 
@@ -119,11 +134,11 @@ def upload_folder_to_s3(source, mode="test"):
         for file in files:
             path = os.path.join(root, file)
             if mode == "test":
-                print("Would be uploading {0}".format(path))
+                logger.debug("Would be uploading {0}".format(path))
             else:
                 s3.meta.client.upload_file(
                     path,
-                    os.environ["BUCKET_NAME"],
+                    os.environ["BUCKET"],
                     path,
                     ExtraArgs={
                         "ContentType": "image/jpeg"
@@ -141,12 +156,12 @@ def upload_folder_to_s3(source, mode="test"):
 def upload_file_to_s3(source, target, mode="test"):
     s3 = boto3.resource("s3")
     if mode == "test":
-        tqdm.write("Would be uploading {0} to {1}".format(source, target))
+        logger.debug("Would be uploading {0} to {1}".format(source, target))
         return False
     else:
         s3.meta.client.upload_file(
             source,
-            os.environ["BUCKET_NAME"],
+            os.environ["BUCKET"],
             target,
             ExtraArgs={
                 "ContentType": "image/jpeg"
@@ -156,6 +171,20 @@ def upload_file_to_s3(source, target, mode="test"):
         )
         return True
 
+def invalidate_cache():
+    cloudfront = boto3.client("cloudfront")
+    cloudfront.create_invalidation(
+        DistributionId='string',
+        InvalidationBatch={
+            'Paths': {
+                'Quantity': 123,
+                'Items': [
+                    'string',
+                ]
+            },
+            'CallerReference': 'string'
+        }
+    )
 
 def query_wikidata(Q):
     """
