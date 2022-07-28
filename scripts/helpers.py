@@ -2,10 +2,13 @@ import logging
 import os
 import shutil
 import sys
+from datetime import datetime
+from logging import config
 
 import boto3
 import geojson
 import mercantile
+import pandas as pd
 import requests
 from IIIFpres import iiifpapi3
 from IIIFpres.utilities import *
@@ -24,7 +27,7 @@ logging.config.dictConfig(
         "disable_existing_loggers": True,
     }
 )
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(filename="data/output/debug.log", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 session = requests.Session()
@@ -122,10 +125,26 @@ def file_exists(identifier, type):
     s3 = boto3.resource("s3")
     bucket = s3.Bucket("imaginerio-images")
     objs = list(bucket.objects.filter(Prefix=key))
-    if any([w.key == key for w in objs]):
+    if any([obj.key == key for obj in objs]):
         return True
     else:
         return False
+
+
+def invalidate_cache(path):
+    cloudfront = boto3.client("cloudfront")
+    now = datetime.now()
+    timestamp = datetime.timestamp(now)
+    cloudfront.create_invalidation(
+        DistributionId=os.environ["DISTRIBUTION_ID"],
+        InvalidationBatch={
+            'Paths': {
+                'Quantity': 1,
+                'Items': [path]
+            },
+            'CallerReference': timestamp
+        }
+    )
 
 
 def upload_folder_to_s3(source, mode="test"):
@@ -138,7 +157,7 @@ def upload_folder_to_s3(source, mode="test"):
             else:
                 s3.meta.client.upload_file(
                     path,
-                    os.environ["BUCKET"],
+                    "imaginerio-images",
                     path,
                     ExtraArgs={
                         "ContentType": "image/jpeg"
@@ -146,6 +165,8 @@ def upload_folder_to_s3(source, mode="test"):
                         else "application/json"
                     },
                 )
+                invalidate_cache(path)
+
     if mode == "test":
         return False
     else:
@@ -161,30 +182,17 @@ def upload_file_to_s3(source, target, mode="test"):
     else:
         s3.meta.client.upload_file(
             source,
-            os.environ["BUCKET"],
+            "imaginerio-images",
             target,
             ExtraArgs={
                 "ContentType": "image/jpeg"
                 if source.endswith(".jpg")
                 else "application/json"
             },
+        
         )
         return True
 
-def invalidate_cache():
-    cloudfront = boto3.client("cloudfront")
-    cloudfront.create_invalidation(
-        DistributionId='string',
-        InvalidationBatch={
-            'Paths': {
-                'Quantity': 123,
-                'Items': [
-                    'string',
-                ]
-            },
-            'CallerReference': 'string'
-        }
-    )
 
 def query_wikidata(Q):
     """
@@ -229,3 +237,10 @@ def geo_to_world_coors(coors, inverse=False):
     origin_proj = rj(origin.x, origin.y, inverse=inverse)
 
     return Point(origin_proj)
+
+
+def update_metadata(df):
+    metadata = pd.read_csv(os.environ["METADATA"], index_col="Document ID")
+    metadata.update(df)
+    metadata.to_csv("data/output/metadata_test.csv")
+    #metadata.to_csv(os.environ["METADATA"])
