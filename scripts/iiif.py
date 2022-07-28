@@ -288,7 +288,7 @@ if __name__ == "__main__":
     vocabulary.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
     vocabulary.set_index("Label (en)", inplace=True)
 
-    metadata = pd.read_excel(os.environ["METADATA"])
+    metadata = pd.read_excel(os.environ["JSTOR"])
     metadata.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
     metadata.set_index("SSID", inplace=True)
 
