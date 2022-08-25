@@ -41,6 +41,7 @@ def query_portals(start_index):
     }
 
     params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
+    #try:
     response = session.post(os.environ["PORTALS_API"], params=params)
     data = response.json()
     portals = pd.json_normalize(data["items"])[["id", "RecordName"]]
@@ -49,7 +50,6 @@ def query_portals(start_index):
             ".", n=1, expand=True
         )[0]
     portals["Document URL"] = os.environ["PORTALS_PREFIX"] + portals["Document URL"].astype(str)
-    portals.set_index("Document ID", inplace=True)
 
     return portals
 
@@ -59,9 +59,13 @@ def main():
     portals_df = pd.DataFrame()
 
     while start_index < total_count:
+        print("Querying portals from index {}".format(start_index))
         portals_df = pd.concat([portals_df, query_portals(start_index)], ignore_index=True)
         start_index+=MAX_RETURNED
 
+    portals_df.drop_duplicates(subset="Document ID", inplace=True)
+    portals_df.to_csv(os.environ["PORTALS"])
+    portals_df.set_index("Document ID", inplace=True)
     update_metadata(portals_df)
 
 if __name__ == "__main__":
