@@ -35,6 +35,8 @@ retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
 session.mount("http://", HTTPAdapter(max_retries=retries))
 session.mount("https://", HTTPAdapter(max_retries=retries))
 
+float2str = lambda x:x.split(".")[0]
+
 def create_collection(name, manifest):
 
     collection_path = "iiif/collection/{0}.json".format(name.lower())
@@ -133,8 +135,7 @@ def file_exists(identifier, type):
 
 def invalidate_cache(path):
     cloudfront = boto3.client("cloudfront")
-    now = datetime.now()
-    timestamp = datetime.timestamp(now)
+    get_timestamp = lambda x: datetime.timestamp(x)
     cloudfront.create_invalidation(
         DistributionId=os.environ["DISTRIBUTION_ID"],
         InvalidationBatch={
@@ -142,7 +143,7 @@ def invalidate_cache(path):
                 'Quantity': 1,
                 'Items': [path]
             },
-            'CallerReference': timestamp
+            'CallerReference': get_timestamp(datetime.now())
         }
     )
 
@@ -240,7 +241,59 @@ def geo_to_world_coors(coors, inverse=False):
 
 
 def update_metadata(df):
-    metadata = pd.read_csv(os.environ["METADATA"], index_col="Document ID")
+    metadata = pd.read_csv(
+        os.environ["IMS_METADATA"], 
+        index_col="Document ID", 
+        converters={
+            "First Year": float2str, 
+            "Last Year":float2str, 
+            "Width":float2str, 
+            "Height":float2str
+            }
+        )
     metadata.update(df)
-    metadata.to_csv("data/output/metadata_test.csv")
-    #metadata.to_csv(os.environ["METADATA"])
+    metadata.to_csv(os.environ["IMS_METADATA"])
+    #return metadata
+
+
+def ims2jstor():
+    jstor = pd.read_excel(os.environ["JSTOR"])
+    jstor.set_index("Document ID[19474]", inplace=True)
+    ims = pd.read_csv(
+        os.environ["IMS_METADATA"], 
+        index_col="Document ID", 
+        converters={
+            "First Year": float2str, 
+            "Last Year":float2str, 
+            "Width":float2str, 
+            "Height":float2str
+            }
+        )
+
+    digitized = ims["Media URL"].notna()
+    published = ims["Document URL"].notna()
+    not_in_jstor = ~(ims.index.isin(jstor.index))
+    ims2jstor = ims.loc[digitized & published & not_in_jstor].copy()
+    ims2jstor.rename(
+        columns={
+            "Title":"Title[19462]",
+            "Date": "Date[19486]",
+            "First Year": "First Year[19466]",
+            "Last Year": "Last Year[19467]",
+            "Creator": "Creator[1603501]",
+            "Description (Portuguese)":"Description (Portuguese)[1612567]",
+            "Type":"Type[1604106]",
+            "Collections":"Collections[1711006]",
+            "Provider":"Provider[1731287]",
+            "Material":"Material[1612569]",
+            "Fabrication Method":"Fabrication Method[1612568]",
+            "Rights":"Rights[1861241]",
+            "Required Statement":"Required Statement[19484]",
+            "Width":"Width[1604102]",
+            "Height":"Height[1604103]",
+            "Document URL":"Document URL[796463]",
+        }, 
+        inplace=True
+    )    
+    ims2jstor.index.rename("Document ID[19474]", inplace=True)
+    ims2jstor.to_csv(os.environ["IMS2JSTOR"])
