@@ -1,16 +1,28 @@
+import argparse
 import os
+import re
+from xml.etree import ElementTree
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from dotenv import load_dotenv
+from sqlalchemy import distinct
+
+from helpers import ims2jstor
+from portals import main as query_portals
+from pull_images import main as pull_images
 
 load_dotenv(override=True)
 
-def xml_to_df(root):
+def xml_to_df(path):
     """
     Build Pandas DataFrame from XML file
     """
     # Find the uids
+
+    with open(path, encoding="utf8") as f:
+      tree = ElementTree.parse(f)
+      root = tree.getroot()
 
     uids = {}
     for thing in root[0][0]:
@@ -46,7 +58,7 @@ def xml_to_df(root):
             except KeyError:
                 continue
     formated_table = outDict["table"]
-    cumulus_df = pd.DataFrame(formated_table)
+    cumulus_df = pd.DataFrame(formated_table).drop_duplicates()
 
     # load
     cumulus_df = cumulus_df.astype(
@@ -102,7 +114,6 @@ def format_dates(df):
     year = df["date_accuracy"] == "year"
     month = df["date_accuracy"] == "month"
     day = df["date_accuracy"] == "day"
-    has_date = df["Date"].notna()
 
     # infer first and last year when unavailable
     df.loc[circa & df["First Year"].isna(), "First Year"] = df[
@@ -134,7 +145,7 @@ def format_data(df):
     normalize creator names, infer dimensions and format dates
     """
     # rename columns
-    df = df.rename(
+    df.rename(
         columns={
             "Record Name": "Document ID",
             "CÓDIGO DE IDENTIFICAÇÃO PRELIMINAR": "preliminary id",
@@ -149,6 +160,7 @@ def format_data(df):
             "DESIGNAÇÃO GENÉRICA": "Material",
             "FORMATO PADRÃO": "format",
         },
+        inplace=True
     )
 
     # remove file extension
@@ -156,18 +168,21 @@ def format_data(df):
         ".", n=1, expand=True
     )[0]
 
+    # replace newlines
+    df["Description (Portuguese)"] = df["Description (Portuguese)"].str.replace("\n", "")
+
     # reverse creator name
     df["Creator"] = df["Creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
 
     # create columns
-    df["Description (English)"] = ""
     df["Type"] = "Photograph"
     df["Collections"] = "Views"
     df["Provider"] = "Instituto Moreira Salles"
-    df["License"] = ""
-    df["Rights"] = ""
-    df["Attribution"] = "Instituto Moreira Salles"
-    df["Smapshot ID"] = ""
+    df["Rights"] = np.nan
+    df["Required Statement"] = "Provided by Instituto Moreira Salles"
+    df["Smapshot ID"] = np.nan
+    df["Document URL"] = np.nan
+    df["Media URL"] = np.nan
 
     # map materials, types and methods
     material_map = {
@@ -192,38 +207,51 @@ def format_data(df):
     df["Material"] = df["Material"].map(material_map)
     df["Fabrication Method"] = df["Fabrication Method"].map(fabrication_method_map)
     df.loc[df["format"] == "Estereoscopia", "Type"] = (
-        df["Type"] + "||Stereoscopy"
+        df["Type"] + "|Stereoscopy"
     )
 
     format_dates(df)
     extract_dimensions(df)
 
-    return df[
-        [
-            "Document ID",
-            "Title",
-            "Creator",
-            "Description (English)",
-            "Description (Portuguese)",
-            "Date",
-            "First Year",
-            "Last Year",
-            "Type",
-            "Collections",
-            "Provider",
-            "Material",
-            "Fabrication Method",
-            "Rights",
-            "License",
-            "Attribution",
-            "Width",
-            "Height",
-            "preliminary id",
-        ]
-    ].set_index("Document ID")
+    return df.filter(items=[
+        "Document ID",
+        "Title",
+        "Creator",
+        "Description (Portuguese)",
+        "Date",
+        "First Year",
+        "Last Year",
+        "Type",
+        "Collections",
+        "Provider",
+        "Material",
+        "Fabrication Method",
+        "Rights",
+        "Required Statement",
+        "Width",
+        "Height",
+        "Document URL",
+        "Media URL",
+    ]).set_index("Document ID")
 
+def main():
+    ims = xml_to_df(os.environ["CUMULUS_XML"])
+    ims = format_data(ims)
+    ims.to_csv(os.environ["IMS_METADATA"])
+
+    if args.mode == "portals" or args.mode == "all":
+        query_portals()
+    if args.mode == "images" or args.mode == "all":
+        pull_images()
+    ims2jstor()
 
 if __name__ == "__main__":
-    df = xml_to_df(os.environ["CUMULUS_XML"])
-    format_data(df).to_csv("data/output/ims_metadata.csv")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--mode", "-m", 
+        help="Which operations to run (portals, images or all)", 
+        choices=["portals", "images", "all"]
+    )
+    args = parser.parse_args()
 
+    main()
