@@ -1,20 +1,18 @@
+import sys 
+sys.path.insert(0, './classes')
+
 import argparse
-import logging.config
 import os
 import re
 
-
 import numpy as np
 import pandas as pd
+from image import Highres, Image, Tif
 from dotenv import load_dotenv
-from numpy import nan
-from PIL import Image as PILImage
-from regex import E
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from helpers import file_exists, logger, update_metadata, upload_file_to_s3
-from image import Image, Tif, Highres, Lowres
+from helpers import logger, update_metadata
 
 load_dotenv(override=True)
 
@@ -55,8 +53,8 @@ def dispatch(image):
     if image.to_jpg:
         image.copy_strategy(Highres())
 
-    if image.to_backlog or image.to_review:
-        image.copy_strategy(Lowres())
+    # if image.to_backlog or image.to_review:
+    #     image.copy_strategy(Lowres())
 
     logger.debug(f"Dispatched image {image.id}")
     return image
@@ -72,15 +70,13 @@ def create_images_df(images):
     id = [img.id for img in images]
     url = {"Media URL":[
         os.path.join(prefix, "iiif", img.id, "full", "max", "0", "default.jpg")
-        if img.is_geolocated
+        # if img.is_geolocated
+        if img.in_catalog
         else np.nan
         for img in images
     ]}
     images_df = pd.DataFrame(url, index=id)
-    # images_df.loc[images_df.duplicated()].to_csv("data/output/duplicated_images.csv")
     images_df.drop_duplicates(inplace=True)
-    images_df.sort_index(inplace=True)
-    images_df.to_csv("data/output/images_test.csv")
 
     logger.debug(f"{len(images_df)} images available in hi-res")
 
@@ -88,27 +84,30 @@ def create_images_df(images):
 
 
 def main():
-    metadata = pd.read_csv(os.environ["METADATA"], index_col="Document ID")
+    metadata = pd.read_csv(os.environ["IMS_METADATA"], index_col="Document ID")
     images = get_images(metadata)
     images_df = create_images_df(images)
-    update_metadata(images_df)
 
     with logging_redirect_tqdm():
         for image in tqdm(images, desc="Handling images"):
             dispatch(image)
-            if image.is_geolocated:
+            # if image.is_geolocated:
+            if image.in_catalog:
                 #image.get_metadata(metadata)
                 image.embed_metadata()
-                if not file_exists(image.id, "image"):
-                    upload_file_to_s3(
-                    os.path.join(os.environ["JPG"], image.jpg),
-                    target="iiif/{0}/full/max/0/default.jpg".format(image.id),
-                    mode=args.mode,
-                )
-                else:
-                    logger.debug(f"{image.id} already in bucket")
+                # if not file_exists(image.id, "image"):
+                #     upload_file_to_s3(
+                #     os.path.join(os.environ["JPG"], image.jpg),
+                #     target="iiif/{0}/full/max/0/default.jpg".format(image.id),
+                #     mode=args.mode,
+                # )
+                # else:
+                #     logger.debug(f"{image.id} already in bucket")
             else:
                 continue
+
+    update_metadata(images_df)
+    #return images_df
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
