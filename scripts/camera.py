@@ -313,7 +313,10 @@ class PhotoOverlay:
 
 
 if __name__ == "__main__":
-    metadata = pd.read_csv(os.environ["METADATA"], index_col="Document ID")
+    metadata = pd.read_excel(os.environ["JSTOR"])
+    metadata.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
+    metadata.set_index("Document ID", inplace=True)
+
     master_kml = "/content/master.kml"
     photo_overlays = []
     samples = [
