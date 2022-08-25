@@ -1,3 +1,6 @@
+import sys 
+sys.path.insert(0, './classes')
+
 import argparse
 import collections
 import logging
