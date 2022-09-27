@@ -239,19 +239,19 @@ def main():
     ims = format_data(ims)
     ims.to_csv(os.environ["IMS_METADATA"])
 
-    if args.mode == "portals" or args.mode == "all":
-        query_portals()
-    if args.mode == "images" or args.mode == "all":
-        pull_images()
+    #if args.mode == "portals" or args.mode == "all":
+    query_portals()
+    #if args.mode == "images" or args.mode == "all":
+    pull_images()
     ims2jstor()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--mode", "-m", 
-        help="Which operations to run (portals, images or all)", 
-        choices=["portals", "images", "all"]
-    )
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument(
+    #     "--mode", "-m", 
+    #     help="Which operations to run (portals, images or all)", 
+    #     choices=["portals", "images", "all"]
+    # )
+    # args = parser.parse_args()
 
     main()
