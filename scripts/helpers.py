@@ -1,11 +1,14 @@
 import logging
 import os
+import re
 import shutil
 import sys
 from datetime import datetime
 from logging import config
 
 import boto3
+import boto3.s3.transfer as s3transfer
+import botocore
 import geojson
 import mercantile
 import pandas as pd
@@ -36,6 +39,13 @@ session.mount("http://", HTTPAdapter(max_retries=retries))
 session.mount("https://", HTTPAdapter(max_retries=retries))
 
 float2str = lambda x:x.split(".")[0]
+
+def load_xls(xls, index):
+    df = pd.read_excel(xls)
+    df.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
+    df.set_index(index, inplace=True)
+    return df
+
 
 def create_collection(name, manifest):
 
@@ -141,12 +151,33 @@ def invalidate_cache(path):
         InvalidationBatch={
             'Paths': {
                 'Quantity': 1,
-                'Items': [path]
+                'Items': ["/"+path]
             },
-            'CallerReference': get_timestamp(datetime.now())
+            'CallerReference': str(get_timestamp(datetime.now()))
         }
     )
 
+def fast_upload(session, bucket_name, files, progress_func, workers=20):
+    botocore_config = botocore.config.Config(max_pool_connections=workers)
+    s3client = session.client('s3', config=botocore_config)
+    transfer_config = s3transfer.TransferConfig(
+        use_threads=True,
+        max_concurrency=workers,
+    )
+    s3t = s3transfer.create_transfer_manager(s3client, transfer_config)
+    for path in files:
+        s3t.upload(
+            path, bucket_name, path,
+            subscribers=[
+                s3transfer.ProgressCallbackInvoker(progress_func),
+            ],
+            extra_args={
+                "ContentType": "image/jpeg"
+                if path.endswith(".jpg")
+                else "application/json"
+            },
+        )
+    s3t.shutdown()  # wait for all the upload tasks to finish
 
 def upload_folder_to_s3(source, mode="test"):
     s3 = boto3.resource("s3")
@@ -154,7 +185,8 @@ def upload_folder_to_s3(source, mode="test"):
         for file in files:
             path = os.path.join(root, file)
             if mode == "test":
-                logger.debug("Would be uploading {0}".format(path))
+                continue
+                #logger.debug("Would be uploading {0}".format(path))
             else:
                 s3.meta.client.upload_file(
                     path,
@@ -166,7 +198,7 @@ def upload_folder_to_s3(source, mode="test"):
                         else "application/json"
                     },
                 )
-                invalidate_cache(path)
+                #invalidate_cache(path)
 
     if mode == "test":
         return False
@@ -178,7 +210,7 @@ def upload_folder_to_s3(source, mode="test"):
 def upload_file_to_s3(source, target, mode="test"):
     s3 = boto3.resource("s3")
     if mode == "test":
-        logger.debug("Would be uploading {0} to {1}".format(source, target))
+        #logger.debug("Would be uploading {0} to {1}".format(source, target))
         return False
     else:
         s3.meta.client.upload_file(
@@ -269,11 +301,12 @@ def ims2jstor():
             "Height":float2str
             }
         )
-
     digitized = ims["Media URL"].notna()
     published = ims["Document URL"].notna()
     not_in_jstor = ~(ims.index.isin(jstor.index))
-    ims2jstor = ims.loc[digitized & published & not_in_jstor].copy()
+    has_dates = (ims["First Year"].notna() & ims["Last Year"].notna())
+    ims2jstor = ims.loc[has_dates & digitized & published & not_in_jstor].copy()
+    ims2jstor.loc[ims2jstor["Creator"] == "Autoria não identificada", "Creator"] = "Unknown Authorship"
     ims2jstor.rename(
         columns={
             "Title":"Title[19462]",
@@ -294,6 +327,8 @@ def ims2jstor():
             "Document URL":"Document URL[796463]",
         }, 
         inplace=True
-    )    
+    )
+    ims2jstor[[column for column in jstor.columns if column not in ims2jstor.columns]] = ""
+    ims2jstor["SSID"] = "NEW"
     ims2jstor.index.rename("Document ID[19474]", inplace=True)
-    ims2jstor.to_csv(os.environ["IMS2JSTOR"])
+    ims2jstor.to_excel(os.environ["IMS2JSTOR"])
