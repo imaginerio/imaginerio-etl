@@ -20,6 +20,7 @@ validators = "*"
 boto3 = "*"
 pyiiifpres = {git = "https://github.com/giacomomarchioro/pyIIIFpres"}
 orjson = "*"
+openpyxl = "*"
 
 [dev-packages]
 black = "*"
