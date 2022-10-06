@@ -58,16 +58,16 @@ if __name__ == "__main__":
         master_folder = etree.SubElement(master, "Folder")
 
     # Parse PhotoOverlays
-    source = os.environ["PROCESSED_RAW"]
+    source = os.environ["KML_FOLDER"]
     for sample in os.listdir(source):
         sample = KML(os.path.join(source, sample))
         if sample._folder is not None:
             folder = Folder(sample._folder)
             for child in folder._children:
-                try:
-                    photo_overlays.append(PhotoOverlay(child, metadata))
-                except (ValueError):
-                    continue
+                #try:
+                photo_overlays.append(PhotoOverlay(child, metadata))
+                #except (ValueError):
+                #    continue
         else:
             photo_overlays.append(PhotoOverlay(sample._photooverlay, metadata))
 
@@ -86,10 +86,10 @@ if __name__ == "__main__":
 
                 # Dispatch data
                 feature = photo_overlay.to_feature()
-                if feature.properties:
-                    features.append(feature)
-                else:
-                    continue
+                #if feature.properties:
+                features.append(feature)
+                #else:
+                #    continue
                 # print(photo_overlay.to_element())
                 master_folder.append(photo_overlay.to_element())
             else:
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         feature_collection = geojson.FeatureCollection(features=features)
         # print(etree.tostring(master))
         etree.ElementTree(master).write("data/output/main.kml", pretty_print=True)
-        with open("data/output/main.geojson", "w", encoding='utf8') as f:
+        with open(os.environ["CAMERA"], "w", encoding='utf8') as f:
             #f.seek(0)
             json.dump(feature_collection, f, indent=4, ensure_ascii=False)
             #f.truncate()
