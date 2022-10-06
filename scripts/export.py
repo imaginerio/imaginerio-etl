@@ -196,7 +196,7 @@ def make_df_to_wikidata(_, df: dp.DataFrame, mapping: dp.DataFrame):
     # tilt
     # quickstate["qal8208"] = df["tilt"].astype(str) + "P28390"
     # made from material
-    quickstate["P186"] = df["Materials"]
+    quickstate["P186"] = df["Material"]
     # collection
     quickstate["P195"] = "Q71989864"
     # fabrication method
