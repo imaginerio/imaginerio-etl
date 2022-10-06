@@ -43,6 +43,8 @@ float2str = lambda x:x.split(".")[0]
 def load_xls(xls, index):
     df = pd.read_excel(xls)
     df.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
+    if 'SSID' in df.columns:
+        df["SSID"] = df["SSID"].astype(str)
     df.set_index(index, inplace=True)
     return df
 
