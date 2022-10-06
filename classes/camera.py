@@ -75,9 +75,9 @@ class PhotoOverlay:
             try:
                 self._ssid = catalog.index[catalog['Document ID'] == self._id].item()   
             except ValueError:
-                raise ValueError
+                self._ssid = None
         else:
-            self._ssid = int(self._id)
+            self._ssid = self._id
         self._latitude = float(
             element.findtext(
                 "kml:Camera/kml:latitude",
@@ -184,7 +184,6 @@ class PhotoOverlay:
                 "fov": str(abs(self._left_fov) + abs(self._right_fov)),
             }
         except KeyError:
-            print(self._ssid, self._id)
             self._depicts = None
             self._properties = None
 
@@ -288,7 +287,6 @@ class PhotoOverlay:
                     distance = origin.distance(depicted)
                     distances.append(distance)
             if distances:
-                tqdm.write(str(distances))
                 self._radius = max(distances)/1000
             else:
                 self._radius = None
