@@ -174,22 +174,37 @@ class Item:
             #     logger.error(f"{labels['pt']} missing Portuguese label in vocabulary")
             #     label_pt = labels["en"]
             for value_en in values_en:
-                try:
-                    url = "http://wikidata.org/wiki/{0}".format(
-                        vocabulary.loc[value_en, "Wikidata ID"]
-                    )
+                wikidata_id = vocabulary.loc[value_en, "Wikidata ID"]
+                value_pt = vocabulary.loc[value_en, "Label (pt)"]
+                if pd.notna(wikidata_id):
+                    url = "http://wikidata.org/wiki/{0}".format(wikidata_id)
+                else:
+                    url = None
+                if url and pd.notna(value_pt):
+                    # values = {value:
+                    #     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                    #         url, value
+                    #     ) for value in [value_en, value_pt]
+                    #     }
+                    # en.append(values["en"])
+                    # pt.append(values["pt"])
                     en.append(
                         '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
                             url, value_en
                         )
                     )
-                    value_pt = vocabulary.loc[value_en, "Label (pt)"]
                     pt.append(
-                        '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                            url, value_pt
+                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                        url, value_pt
                         )
                     )
-                except:
+                elif url and pd.isna(value_pt):
+                    value = '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                            url, value_en
+                        )
+                    en.append(value)
+                    pt.append(value)
+                else:
                     en.append(value_en)
                     pt.append(value_en)
             return {
