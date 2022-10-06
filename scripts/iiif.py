@@ -116,11 +116,10 @@ if __name__ == "__main__":
     with logging_redirect_tqdm():
         main_pbar = tqdm(items, desc="Creating IIIF assets")
         for item in main_pbar:
+
             main_pbar.set_postfix_str(str(item._id))
-            #try:
             success = item.write_manifest()
-            #except:
-            #    continue
+
             if success: # TODO item.upload_and_remove()
                 tiles = [os.path.join(root, file) for root, _, files in os.walk(item._base_path) for file in files]
                 total_size = sum([os.stat(f).st_size for f in tiles])
@@ -129,9 +128,12 @@ if __name__ == "__main__":
                     fast_upload(boto3.Session(), "imaginerio-images", tiles, upload_pbar.update)
                 #tqdm.write(f"Upload complete, removing folder {item._base_path}")
                 shutil.rmtree(os.path.abspath(item._base_path))
-                #upload_folder_to_s3(item._base_path, mode=args.mode)
             else:
                 continue
-        upload_folder_to_s3(COLLECTIONS, mode=args.mode)
+            
+        fast_upload(boto3.Session(), "imaginerio-images", [
+            os.path.relpath(file) for file in os.listdir(COLLECTIONS)
+            ])
+        #upload_folder_to_s3(COLLECTIONS, mode=args.mode)
 
     #invalidate_cache("/*")
