@@ -38,12 +38,13 @@ retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
 session.mount("http://", HTTPAdapter(max_retries=retries))
 session.mount("https://", HTTPAdapter(max_retries=retries))
 
-float2str = lambda x:x.split(".")[0]
+float2str = lambda x: x.split(".")[0]
+
 
 def load_xls(xls, index):
     df = pd.read_excel(xls)
     df.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
-    if 'SSID' in df.columns:
+    if "SSID" in df.columns:
         df["SSID"] = df["SSID"].astype(str)
     df.set_index(index, inplace=True)
     return df
@@ -124,7 +125,7 @@ def create_collection(name, manifest):
 
     collection.orjson_save(
         collection_path, context="http://iiif.io/api/presentation/3/context.json"
-        )
+    )
 
     return collection
 
@@ -151,28 +152,30 @@ def invalidate_cache(path):
     cloudfront.create_invalidation(
         DistributionId=os.environ["DISTRIBUTION_ID"],
         InvalidationBatch={
-            'Paths': {
-                'Quantity': 1,
-                'Items': ["/"+path]
-            },
-            'CallerReference': str(get_timestamp(datetime.now()))
-        }
+            "Paths": {"Quantity": 1, "Items": ["/" + path]},
+            "CallerReference": str(get_timestamp(datetime.now())),
+        },
     )
 
-def fast_upload(session, bucket_name, files, progress_func, workers=20):
+
+def fast_upload(session, bucket_name, files, progress_func=None, workers=20):
     botocore_config = botocore.config.Config(max_pool_connections=workers)
-    s3client = session.client('s3', config=botocore_config)
+    s3client = session.client("s3", config=botocore_config)
     transfer_config = s3transfer.TransferConfig(
         use_threads=True,
         max_concurrency=workers,
     )
     s3t = s3transfer.create_transfer_manager(s3client, transfer_config)
+    if progress_func:
+        subscribers = [s3transfer.ProgressCallbackInvoker(progress_func)]
+    else:
+        subscribers = []
     for path in files:
         s3t.upload(
-            path, bucket_name, path,
-            subscribers=[
-                s3transfer.ProgressCallbackInvoker(progress_func),
-            ],
+            path,
+            bucket_name,
+            path,
+            subscribers=subscribers,
             extra_args={
                 "ContentType": "image/jpeg"
                 if path.endswith(".jpg")
@@ -181,6 +184,7 @@ def fast_upload(session, bucket_name, files, progress_func, workers=20):
         )
     s3t.shutdown()  # wait for all the upload tasks to finish
 
+
 def upload_folder_to_s3(source, mode="test"):
     s3 = boto3.resource("s3")
     for root, _, files in os.walk(source):
@@ -188,7 +192,7 @@ def upload_folder_to_s3(source, mode="test"):
             path = os.path.join(root, file)
             if mode == "test":
                 continue
-                #logger.debug("Would be uploading {0}".format(path))
+                # logger.debug("Would be uploading {0}".format(path))
             else:
                 s3.meta.client.upload_file(
                     path,
@@ -200,7 +204,7 @@ def upload_folder_to_s3(source, mode="test"):
                         else "application/json"
                     },
                 )
-                #invalidate_cache(path)
+                # invalidate_cache(path)
 
     if mode == "test":
         return False
@@ -212,7 +216,7 @@ def upload_folder_to_s3(source, mode="test"):
 def upload_file_to_s3(source, target, mode="test"):
     s3 = boto3.resource("s3")
     if mode == "test":
-        #logger.debug("Would be uploading {0} to {1}".format(source, target))
+        # logger.debug("Would be uploading {0} to {1}".format(source, target))
         return False
     else:
         s3.meta.client.upload_file(
@@ -224,7 +228,6 @@ def upload_file_to_s3(source, target, mode="test"):
                 if source.endswith(".jpg")
                 else "application/json"
             },
-        
         )
         return True
 
@@ -276,61 +279,65 @@ def geo_to_world_coors(coors, inverse=False):
 
 def update_metadata(df):
     metadata = pd.read_csv(
-        os.environ["IMS_METADATA"], 
-        index_col="Document ID", 
+        os.environ["IMS_METADATA"],
+        index_col="Document ID",
         converters={
-            "First Year": float2str, 
-            "Last Year":float2str, 
-            "Width":float2str, 
-            "Height":float2str
-            }
-        )
+            "First Year": float2str,
+            "Last Year": float2str,
+            "Width": float2str,
+            "Height": float2str,
+        },
+    )
     metadata.update(df)
     metadata.to_csv(os.environ["IMS_METADATA"])
-    #return metadata
+    # return metadata
 
 
 def ims2jstor():
     jstor = pd.read_excel(os.environ["JSTOR"])
     jstor.set_index("Document ID[19474]", inplace=True)
     ims = pd.read_csv(
-        os.environ["IMS_METADATA"], 
-        index_col="Document ID", 
+        os.environ["IMS_METADATA"],
+        index_col="Document ID",
         converters={
-            "First Year": float2str, 
-            "Last Year":float2str, 
-            "Width":float2str, 
-            "Height":float2str
-            }
-        )
+            "First Year": float2str,
+            "Last Year": float2str,
+            "Width": float2str,
+            "Height": float2str,
+        },
+    )
     digitized = ims["Media URL"].notna()
     published = ims["Document URL"].notna()
     not_in_jstor = ~(ims.index.isin(jstor.index))
-    has_dates = (ims["First Year"].notna() & ims["Last Year"].notna())
+    has_dates = ims["First Year"].notna() & ims["Last Year"].notna()
     ims2jstor = ims.loc[has_dates & digitized & published & not_in_jstor].copy()
-    ims2jstor.loc[ims2jstor["Creator"] == "Autoria não identificada", "Creator"] = "Unknown Authorship"
+    ims2jstor.loc[
+        ims2jstor["Creator"] == "Autoria não identificada", "Creator"
+    ] = "Unknown Authorship"
     ims2jstor.rename(
         columns={
-            "Title":"Title[19462]",
+            "Title": "Title[19462]",
             "Date": "Date[19486]",
             "First Year": "First Year[19466]",
             "Last Year": "Last Year[19467]",
             "Creator": "Creator[1603501]",
-            "Description (Portuguese)":"Description (Portuguese)[1612567]",
-            "Type":"Type[1604106]",
-            "Collections":"Collections[1711006]",
-            "Provider":"Provider[1731287]",
-            "Material":"Material[1612569]",
-            "Fabrication Method":"Fabrication Method[1612568]",
-            "Rights":"Rights[1861241]",
-            "Required Statement":"Required Statement[19484]",
-            "Width":"Width[1604102]",
-            "Height":"Height[1604103]",
-            "Document URL":"Document URL[796463]",
-        }, 
-        inplace=True
+            "Description (Portuguese)": "Description (Portuguese)[1612567]",
+            "Type": "Type[1604106]",
+            "Collection": "Collection[1711006]",
+            "Provider": "Provider[1731287]",
+            "Material": "Material[1612569]",
+            "Fabrication Method": "Fabrication Method[1612568]",
+            "Rights": "Rights[1861241]",
+            "Required Statement": "Required Statement[19484]",
+            "Width": "Width[1604102]",
+            "Height": "Height[1604103]",
+            "Document URL": "Document URL[796463]",
+        },
+        inplace=True,
     )
-    ims2jstor[[column for column in jstor.columns if column not in ims2jstor.columns]] = ""
+    ims2jstor[
+        [column for column in jstor.columns if column not in ims2jstor.columns]
+    ] = ""
     ims2jstor["SSID"] = "NEW"
     ims2jstor.index.rename("Document ID[19474]", inplace=True)
     ims2jstor.to_excel(os.environ["IMS2JSTOR"])

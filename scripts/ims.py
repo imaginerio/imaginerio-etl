@@ -6,13 +6,13 @@ from xml.etree import ElementTree
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import distinct
 
 from helpers import ims2jstor
 from portals import main as query_portals
 from pull_images import main as pull_images
 
 load_dotenv(override=True)
+
 
 def xml_to_df(path):
     """
@@ -21,8 +21,8 @@ def xml_to_df(path):
     # Find the uids
 
     with open(path, encoding="utf8") as f:
-      tree = ElementTree.parse(f)
-      root = tree.getroot()
+        tree = ElementTree.parse(f)
+        root = tree.getroot()
 
     uids = {}
     for thing in root[0][0]:
@@ -70,7 +70,7 @@ def xml_to_df(path):
     ].applymap(lambda x: x.split(".")[0])
 
     return cumulus_df
- 
+
 
 def extract_dimensions(df):
     """
@@ -102,13 +102,13 @@ def format_dates(df):
     df["date_accuracy"] = np.select(accuracy_conditions, accuracy_choices)
 
     # format dates
-    
+
     df["First Year"] = df["First Year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
     df["Last Year"] = df["Last Year"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
-    df["datetime"] = df["Date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)") 
-    df[["First Year","Last Year","datetime"]] = df[["First Year","Last Year","datetime"]].applymap(
-        lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True)
-        )
+    df["datetime"] = df["Date"].str.extract(r"([\d\/-]*\d{4}[-\/\d]*)")
+    df[["First Year", "Last Year", "datetime"]] = df[
+        ["First Year", "Last Year", "datetime"]
+    ].applymap(lambda x: pd.to_datetime(x, errors="coerce", yearfirst=True))
 
     circa = df["date_accuracy"] == "circa"
     year = df["date_accuracy"] == "year"
@@ -160,23 +160,23 @@ def format_data(df):
             "DESIGNAÇÃO GENÉRICA": "Material",
             "FORMATO PADRÃO": "format",
         },
-        inplace=True
+        inplace=True,
     )
 
     # remove file extension
-    df["Document ID"] = df["Document ID"].str.split(
-        ".", n=1, expand=True
-    )[0]
+    df["Document ID"] = df["Document ID"].str.split(".", n=1, expand=True)[0]
 
     # replace newlines
-    df["Description (Portuguese)"] = df["Description (Portuguese)"].str.replace("\n", "")
+    df["Description (Portuguese)"] = df["Description (Portuguese)"].str.replace(
+        "\n", ""
+    )
 
     # reverse creator name
     df["Creator"] = df["Creator"].str.replace(r"(.+),\s+(.+)", r"\2 \1")
 
     # create columns
     df["Type"] = "Photograph"
-    df["Collections"] = "Views"
+    df["Collection"] = "Views"
     df["Provider"] = "Instituto Moreira Salles"
     df["Rights"] = np.nan
     df["Required Statement"] = "Provided by Instituto Moreira Salles"
@@ -201,55 +201,57 @@ def format_data(df):
         "AMBROTIPIA/ Prata": "Ambrotype",
         "COLOTIPIA/ Pigmento": "Collotype Print",
         "FOTOGRAVURA/ Pigmento": "Photogravure",
-        "MEIO-TOM/ Pigmento": "Photogravure"
+        "MEIO-TOM/ Pigmento": "Photogravure",
     }
-    
+
     df["Material"] = df["Material"].map(material_map)
     df["Fabrication Method"] = df["Fabrication Method"].map(fabrication_method_map)
-    df.loc[df["format"] == "Estereoscopia", "Type"] = (
-        df["Type"] + "|Stereoscopy"
-    )
+    df.loc[df["format"] == "Estereoscopia", "Type"] = df["Type"] + "|Stereoscopy"
 
     format_dates(df)
     extract_dimensions(df)
 
-    return df.filter(items=[
-        "Document ID",
-        "Title",
-        "Creator",
-        "Description (Portuguese)",
-        "Date",
-        "First Year",
-        "Last Year",
-        "Type",
-        "Collections",
-        "Provider",
-        "Material",
-        "Fabrication Method",
-        "Rights",
-        "Required Statement",
-        "Width",
-        "Height",
-        "Document URL",
-        "Media URL",
-    ]).set_index("Document ID")
+    return df.filter(
+        items=[
+            "Document ID",
+            "Title",
+            "Creator",
+            "Description (Portuguese)",
+            "Date",
+            "First Year",
+            "Last Year",
+            "Type",
+            "Collection",
+            "Provider",
+            "Material",
+            "Fabrication Method",
+            "Rights",
+            "Required Statement",
+            "Width",
+            "Height",
+            "Document URL",
+            "Media URL",
+        ]
+    ).set_index("Document ID")
+
 
 def main():
     ims = xml_to_df(os.environ["CUMULUS_XML"])
     ims = format_data(ims)
     ims.to_csv(os.environ["IMS_METADATA"])
 
-    #if args.mode == "portals" or args.mode == "all":
+    # if args.mode == "portals" or args.mode == "all":
     query_portals()
-    #if args.mode == "images" or args.mode == "all":
+    # if args.mode == "images" or args.mode == "all":
     pull_images()
     ims2jstor()
+
 
 if __name__ == "__main__":
     # parser = argparse.ArgumentParser()
     # parser.add_argument(
-    #     "--mode", "-m", 
-    #     help="Which operations to run (portals, images or all)", 
+    #     "--mode", "-m",
+    #     help="Which operations to run (portals, images or all)",
     #     choices=["portals", "images", "all"]
     # )
     # args = parser.parse_args()
