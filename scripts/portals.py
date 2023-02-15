@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import tqdm
 import urllib
 
 from dotenv import load_dotenv
@@ -11,11 +10,12 @@ load_dotenv(override=True)
 
 MAX_RETURNED = 55000
 
+
 def get_total_count():
     """
     Get total amount of published items
     """
-    
+
     payload = {
         "table": "AssetRecords",
         "quicksearchstring": "jpg",
@@ -27,6 +27,7 @@ def get_total_count():
     response = session.post(os.environ["PORTALS_API"], params=params)
     data = response.json()
     return data["totalcount"]
+
 
 def query_portals(start_index):
     """
@@ -41,17 +42,20 @@ def query_portals(start_index):
     }
 
     params = urllib.parse.urlencode(payload, quote_via=urllib.parse.quote)
-    #try:
+    # try:
     response = session.post(os.environ["PORTALS_API"], params=params)
     data = response.json()
     portals = pd.json_normalize(data["items"])[["id", "RecordName"]]
-    portals.rename(columns={"id":"Document URL","RecordName":"Document ID"}, inplace=True)
-    portals["Document ID"] = portals["Document ID"].str.split(
-            ".", n=1, expand=True
-        )[0]
-    portals["Document URL"] = os.environ["PORTALS_PREFIX"] + portals["Document URL"].astype(str)
+    portals.rename(
+        columns={"id": "Document URL", "RecordName": "Document ID"}, inplace=True
+    )
+    portals["Document ID"] = portals["Document ID"].str.split(".", n=1, expand=True)[0]
+    portals["Document URL"] = os.environ["PORTALS_PREFIX"] + portals[
+        "Document URL"
+    ].astype(str)
 
     return portals
+
 
 def main():
     start_index = 0
@@ -60,13 +64,16 @@ def main():
 
     while start_index < total_count:
         print("Querying portals from index {}".format(start_index))
-        portals_df = pd.concat([portals_df, query_portals(start_index)], ignore_index=True)
-        start_index+=MAX_RETURNED
+        portals_df = pd.concat(
+            [portals_df, query_portals(start_index)], ignore_index=True
+        )
+        start_index += MAX_RETURNED
 
     portals_df.drop_duplicates(subset="Document ID", inplace=True)
-    portals_df.to_csv(os.environ["PORTALS"])
+    # portals_df.to_csv(os.environ["PORTALS"])
     portals_df.set_index("Document ID", inplace=True)
     update_metadata(portals_df)
+
 
 if __name__ == "__main__":
     main()
