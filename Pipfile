@@ -21,6 +21,14 @@ boto3 = "*"
 pyiiifpres = {git = "https://github.com/giacomomarchioro/pyIIIFpres"}
 orjson = "*"
 openpyxl = "*"
+numpy = "*"
+botocore = "*"
+requests = "*"
+lxml = "*"
+pyproj = "*"
+shapely = "*"
+jsonschema = "*"
+pywikibot = "*"
 
 [dev-packages]
 black = "*"
