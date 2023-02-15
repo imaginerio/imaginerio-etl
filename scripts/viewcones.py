@@ -1,33 +1,25 @@
 import sys
 
-sys.path.insert(0, './classes')
+sys.path.insert(0, "./classes")
 
-import math
-from operator import index
+import json
+
 import os
-import re
-import shutil
+
+
 import sys
+from operator import index
 
 import geojson
-import mercantile
-import numpy as np
-import pandas as pd
-import requests
-import json
-from dotenv import load_dotenv
-from lxml import etree
-from PIL import Image
-from pykml import parser
-from pyproj import Proj
-from shapely.geometry import Point
-from SPARQLWrapper import JSON, SPARQLWrapper
-from turfpy.misc import sector
-from tqdm import tqdm
+
 
 from camera import KML, Folder, PhotoOverlay
+from dotenv import load_dotenv
+from helpers import geo_to_world_coors, load_xls, query_wikidata
+from lxml import etree
 
-from helpers import query_wikidata, geo_to_world_coors, load_xls
+from tqdm import tqdm
+from turfpy.misc import sector
 
 load_dotenv(override=True)
 
@@ -64,42 +56,42 @@ if __name__ == "__main__":
         if sample._folder is not None:
             folder = Folder(sample._folder)
             for child in folder._children:
-                #try:
+                # try:
                 photo_overlays.append(PhotoOverlay(child, metadata))
-                #except (ValueError):
+                # except (ValueError):
                 #    continue
         else:
             photo_overlays.append(PhotoOverlay(sample._photooverlay, metadata))
 
     # Manipulate PhotoOverlays
     with tqdm(photo_overlays, desc="Manipulating PhotoOverlays") as pbar:
-        for photo_overlay in pbar: 
-            if photo_overlay._ssid:
-                pbar.set_postfix_str(photo_overlay._id)
-                # photo_overlay.update_id(metadata)
-                if "relative" in photo_overlay._altitude_mode:
-                    photo_overlay.correct_altitude_mode()
-                if photo_overlay._depicts:
-                    photo_overlay.get_radius_via_depicted_entities(vocabulary)
-                else:
-                    photo_overlay.get_radius_via_trigonometry()
-
-                # Dispatch data
-                feature = photo_overlay.to_feature()
-                #if feature.properties:
-                features.append(feature)
-                #else:
-                #    continue
-                # print(photo_overlay.to_element())
-                master_folder.append(photo_overlay.to_element())
+        for photo_overlay in pbar:
+            # if photo_overlay._ssid:
+            pbar.set_postfix_str(photo_overlay._id)
+            # photo_overlay.update_id(metadata)
+            if "relative" in photo_overlay._altitude_mode:
+                photo_overlay.correct_altitude_mode()
+            if photo_overlay._depicts:
+                photo_overlay.get_radius_via_depicted_entities(vocabulary)
             else:
-                continue
+                photo_overlay.get_radius_via_trigonometry()
+
+            # Dispatch data
+            feature = photo_overlay.to_feature()
+            # if feature.properties:
+            features.append(feature)
+            # else:
+            #    continue
+            # print(photo_overlay.to_element())
+            master_folder.append(photo_overlay.to_element())
+            # else:
+            #    continue
 
         feature_collection = geojson.FeatureCollection(features=features)
         # print(etree.tostring(master))
         etree.ElementTree(master).write("data/output/main.kml", pretty_print=True)
-        with open(os.environ["CAMERA"], "w", encoding='utf8') as f:
-            #f.seek(0)
+        with open(os.environ["CAMERA"], "w", encoding="utf8") as f:
+            # f.seek(0)
             json.dump(feature_collection, f, indent=4, ensure_ascii=False)
-            #f.truncate()
+            # f.truncate()
         # print(feature_collection)

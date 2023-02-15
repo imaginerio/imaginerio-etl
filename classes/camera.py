@@ -1,6 +1,6 @@
 import sys
 
-sys.path.insert(0, '/scripts')
+sys.path.insert(0, "/scripts")
 
 import math
 import os
@@ -73,7 +73,7 @@ class PhotoOverlay:
         )
         if self._id.startswith("0"):
             try:
-                self._ssid = catalog.index[catalog['Document ID'] == self._id].item()   
+                self._ssid = catalog.index[catalog["Document ID"] == self._id].item()
             except ValueError:
                 self._ssid = None
         else:
@@ -98,8 +98,8 @@ class PhotoOverlay:
         )
         # try:
         self._altitude_mode = element.findtext(
-            "kml:Camera/kml:altitudeMode", default=
-            element.findtext(
+            "kml:Camera/kml:altitudeMode",
+            default=element.findtext(
                 "kml:Camera/gx:altitudeMode",
                 namespaces={
                     "kml": "http://www.opengis.net/kml/2.2",
@@ -145,47 +145,42 @@ class PhotoOverlay:
         )
         self._radius = None
         self._viewcone = None
+
         def try_using_column(column):
             value = str(catalog.loc[self._ssid, column])
             if value:
                 return value
             else:
                 return ""
+
         # try:
-            # property_columns = ["SSID", "Title", "Date", "Description (Portuguese)", 
-            # "Creator", "First Year", "Last Year", "Provider"]
-            # self._properties = {column: try_using_column(column) for column in property_columns}
-        try:  
-            self._depicts = catalog.loc[self._ssid, "Depicts"]
-            self._properties = {
-                "ss_id": str(self._ssid),
-                "document_id": str(self._id),
-                "title": ""
-                if pd.isna(catalog.loc[self._ssid, "Title"])
-                else str(catalog.loc[self._ssid, "Title"]),
-                "date": ""
-                if pd.isna(catalog.loc[self._ssid, "Date"])
-                else str(catalog.loc[self._ssid, "Date"]),
-                "creator": ""
-                if pd.isna(catalog.loc[self._ssid, "Creator"])
-                else str(catalog.loc[self._ssid, "Creator"]),
-                "firstyear": ""
-                if pd.isna(catalog.loc[self._ssid, "First Year"])
-                else str(int(catalog.loc[self._ssid, "First Year"])),
-                "lastyear": ""
-                if pd.isna(catalog.loc[self._ssid, "Last Year"])
-                else str(int(catalog.loc[self._ssid, "Last Year"])),
-                "source": str(catalog.loc[self._ssid, "Provider"]),
-                "longitude": str(round(self._longitude, 5)),
-                "latitude": str(round(self._latitude, 5)),
-                "altitude": str(round(self._altitude, 5)),
-                "heading": str(round(self._heading, 5)),
-                "tilt": str(round(self._tilt, 5)),
-                "fov": str(abs(self._left_fov) + abs(self._right_fov)),
-            }
+        # property_columns = ["SSID", "Title", "Date", "Description (Portuguese)",
+        # "Creator", "First Year", "Last Year", "Provider"]
+        # self._properties = {column: try_using_column(column) for column in property_columns}
+        try:
+            row = catalog.loc[self._ssid]
         except KeyError:
-            self._depicts = None
-            self._properties = None
+            row = pd.Series(dtype="object")
+
+        self._properties = {
+            "document_id": str(self._id),
+            "longitude": str(round(self._longitude, 5)),
+            "latitude": str(round(self._latitude, 5)),
+            "altitude": str(round(self._altitude, 5)),
+            "heading": str(round(self._heading, 5)),
+            "tilt": str(round(self._tilt, 5)),
+            "fov": str(abs(self._left_fov) + abs(self._right_fov)),
+        }
+
+        self._depicts = None if row.empty else row["Depicts"]
+
+        if row.any():
+            self._properties["ss_id"] = (str(self._ssid),)
+            self._properties["title"]: row["Title"]
+            self._properties["date"]: row["Date"]
+            self._properties["creator"]: row["Creator"]
+            self._properties["firstyear"]: str(int(row["First Year"]))
+            self._properties["lastyear"]: str(int(row["Last Year"]))
 
     @property
     def altitude(self):
@@ -255,7 +250,7 @@ class PhotoOverlay:
             if radius < 400:
                 self._radius = None
             else:
-                self._radius = radius/1000
+                self._radius = radius / 1000
         else:
             self._radius = None
 
@@ -274,7 +269,7 @@ class PhotoOverlay:
                     point = query_wikidata(q)
                     if point:
                         points.append(point[0])
-                    else: 
+                    else:
                         continue
                 except (KeyError, AttributeError):
                     continue
@@ -287,7 +282,7 @@ class PhotoOverlay:
                     distance = origin.distance(depicted)
                     distances.append(distance)
             if distances:
-                self._radius = max(distances)/1000
+                self._radius = max(distances) / 1000
             else:
                 self._radius = None
 
@@ -332,12 +327,12 @@ class PhotoOverlay:
         )
         if not altitude_mode:
             altitude_mode = self._element.xpath(
-            "kml:Camera/gx:altitudeMode",
-            namespaces={
-                "kml": "http://www.opengis.net/kml/2.2",
-                "gx": "http://www.google.com/kml/ext/2.2"
-            },
-        )
+                "kml:Camera/gx:altitudeMode",
+                namespaces={
+                    "kml": "http://www.opengis.net/kml/2.2",
+                    "gx": "http://www.google.com/kml/ext/2.2",
+                },
+            )
         href[0].text = self._image
         altitude[0].text = str(self._altitude)
         altitude_mode[0].text = self._altitude_mode
