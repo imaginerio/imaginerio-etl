@@ -31,6 +31,11 @@ class Item:
         logger.debug(f"Parsing item {id}")
         self._id = id
         self._title = row["Title"]
+        self._document_id = {
+            "label_en": ["Document ID"],
+            "label_pt": ["Identificador"],
+            "value": [str(row["Document ID"])],
+        }
         self._description = {
             "label_en": ["Description"],
             "label_pt": ["Descrição"],
@@ -42,34 +47,26 @@ class Item:
             else [row["Description (English)"]],
         }
         self._creator = self.map_wikidata(
-                {"en":"Creator","pt":"Criador"},
-                row["Creator"], 
-                vocabulary
-            )
+            {"en": "Creator", "pt": "Criador"}, row["Creator"], vocabulary
+        )
         self._date = {
             "label_en": ["Date"],
             "label_pt": ["Data"],
             "value": [str(row["Date"])],
         }
         self._depicts = self.map_wikidata(
-            {"en":"Depicts","pt":"Retrata"},
-            row["Depicts"],
-            vocabulary
+            {"en": "Depicts", "pt": "Retrata"}, row["Depicts"], vocabulary
         )
         self._type = self.map_wikidata(
-            {"en":"Type","pt":"Tipo"}, 
-            row["Type"], 
-            vocabulary
+            {"en": "Type", "pt": "Tipo"}, row["Type"], vocabulary
         )
         self._fabrication_method = self.map_wikidata(
-            {"en":"Fabrication Method", "pt":"Método de Fabricação"},
+            {"en": "Fabrication Method", "pt": "Método de Fabricação"},
             row["Fabrication Method"],
             vocabulary,
         )
         self._material = self.map_wikidata(
-            {"en":"Material", "pt":"Material"}, 
-            row["Material"], 
-            vocabulary
+            {"en": "Material", "pt": "Material"}, row["Material"], vocabulary
         )
         self._width = {
             "label_en": ["Width (mm)"],
@@ -82,6 +79,7 @@ class Item:
             "value": [str(row["Height"])],
         }
         self._metadata = [
+            self._document_id,
             self._description,
             self._creator,
             self._date,
@@ -100,7 +98,7 @@ class Item:
         self._provider = row["Provider"] if row["Provider"] else "imagineRio"
         self._wikidata_id = row["Wikidata ID"]
         self._smapshot_id = row["Smapshot ID"]
-        self._collections = row["Collections"]
+        self._collection = row["Collection"]
         self._remote_img_path = row["Media URL"]
         self._base_path = f"iiif/{id}"
         self._local_img_path = self._base_path + "/full/max/0/default.jpg"
@@ -128,17 +126,17 @@ class Item:
             "--tile-size",
             "256",
             self._local_img_path,
-            f"iiif/{self._id}"
+            f"iiif/{self._id}",
         ]
         start = time.time()
         subprocess.run(command)
         end = time.time()
         tqdm.write(f"Tiling done in {end - start} seconds")
-        factors = [16,8,4,2,1]
+        factors = [16, 8, 4, 2, 1]
         for factor in factors:
             with Image.open(self._local_img_path) as im:
                 full_width, full_height = im.size
-                width, height = full_width//factor, full_height//factor
+                width, height = full_width // factor, full_height // factor
                 if factor != 1:
                     path = f"{self._base_path}/full/{width},{height}/0"
                 else:
@@ -146,20 +144,20 @@ class Item:
 
                 os.makedirs(path, exist_ok=True)
                 im.resize((width, height)).save(
-                            f"{path}/default.jpg",
-                            quality=95,
-                            icc_profile=im.info.get("icc_profile"),
-                        )
+                    f"{path}/default.jpg",
+                    quality=95,
+                    icc_profile=im.info.get("icc_profile"),
+                )
             with open(self._info_path, "r+") as f:
                 info = json.load(f)
                 try:
-                    info["sizes"].append({"width":width, "height":height})
+                    info["sizes"].append({"width": width, "height": height})
                 except KeyError:
-                    info["sizes"] = [{"width":width, "height":height}]
+                    info["sizes"] = [{"width": width, "height": height}]
                 f.seek(0)  # rewind
                 json.dump(info, f, indent=4)
                 f.truncate()
-        #os.remove(os.path.abspath(self._local_img_path))
+        # os.remove(os.path.abspath(self._local_img_path))
 
     def map_wikidata(self, labels, value_en, vocabulary):
         if pd.isna(value_en):
@@ -174,39 +172,40 @@ class Item:
             #     logger.error(f"{labels['pt']} missing Portuguese label in vocabulary")
             #     label_pt = labels["en"]
             for value_en in values_en:
-                wikidata_id = vocabulary.loc[value_en, "Wikidata ID"]
-                value_pt = vocabulary.loc[value_en, "Label (pt)"]
-                if pd.notna(wikidata_id):
-                    url = "http://wikidata.org/wiki/{0}".format(wikidata_id)
-                else:
-                    url = None
-                if url and pd.notna(value_pt):
-                    # values = {value:
-                    #     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                    #         url, value
-                    #     ) for value in [value_en, value_pt]
-                    #     }
-                    # en.append(values["en"])
-                    # pt.append(values["pt"])
-                    en.append(
-                        '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                if value_en:
+                    wikidata_id = vocabulary.loc[value_en, "Wikidata ID"]
+                    value_pt = vocabulary.loc[value_en, "Label (pt)"]
+                    if pd.notna(wikidata_id):
+                        url = "http://wikidata.org/wiki/{0}".format(wikidata_id)
+                    else:
+                        url = None
+                    if url and pd.notna(value_pt):
+                        # values = {value:
+                        #     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                        #         url, value
+                        #     ) for value in [value_en, value_pt]
+                        #     }
+                        # en.append(values["en"])
+                        # pt.append(values["pt"])
+                        en.append(
+                            '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                                url, value_en
+                            )
+                        )
+                        pt.append(
+                            '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
+                                url, value_pt
+                            )
+                        )
+                    elif url and pd.isna(value_pt):
+                        value = '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
                             url, value_en
                         )
-                    )
-                    pt.append(
-                    '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        url, value_pt
-                        )
-                    )
-                elif url and pd.isna(value_pt):
-                    value = '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                            url, value_en
-                        )
-                    en.append(value)
-                    pt.append(value)
-                else:
-                    en.append(value_en)
-                    pt.append(value_en)
+                        en.append(value)
+                        pt.append(value)
+                    else:
+                        en.append(value_en)
+                        pt.append(value_en)
             return {
                 "label_en": [labels["en"]],
                 "label_pt": [labels["pt"]],
@@ -240,13 +239,13 @@ class Item:
     def write_manifest(self):
 
         id = str(self._id)
-        #logger.debug("Creating manifest {0}".format(str(id)))
+        # logger.debug("Creating manifest {0}".format(str(id)))
 
         # Get image sizes
         try:
             img_sizes = session.get(BUCKET + self._info_path).json()["sizes"]
         except JSONDecodeError:
-            #try:
+            # try:
             logger.debug("Attempting to download remote image")
             self.download_full_image()
             try:
@@ -258,9 +257,6 @@ class Item:
                 tqdm.write("Image corrupted, skipping")
                 return False
             img_sizes = json.load(open(self._info_path))["sizes"]
-            #except:
-            #    logger.error(f"Image {id} unavailable")
-            #    return False
 
         full_width, full_height = img_sizes[-1].values()
         # Pick size closer to 600px (long edge) for thumbnail
@@ -289,16 +285,22 @@ class Item:
         # Rights & Attribution
         if self._description["value_en"][0]:
             manifest.add_summary(language="en", text=self._description["value_en"][0])
-            manifest.add_summary(language="pt-BR", text=self._description["value_pt"][0])
+            manifest.add_summary(
+                language="pt-BR", text=self._description["value_pt"][0]
+            )
 
         required_statement = manifest.add_requiredStatement()
         required_statement.add_label("Attribution", "en")
         required_statement.add_label("Atribuição", "pt-BR")
 
         if self._attribution:
-            required_statement.add_value(self._attribution + " Hosted by imagineRio.", "en")
             required_statement.add_value(
-                self._attribution + " Hospedado por imagineRio.", "pt-BR"
+                self._attribution + ". Hosted by imagineRio.", "en"
+            )
+            required_statement.add_value(
+                self._attribution.replace("Provided by", "Disponibilizado por")
+                + ". Hospedado por imagineRio.",
+                "pt-BR",
             )
         else:
             required_statement.add_value("Hosted by imagineRio.", "en")
@@ -365,6 +367,16 @@ class Item:
             # smapshot_seealso.set_format("text/html")
             manifest.add_seeAlso(smapshot_seealso)
 
+        if self._provider == "Instituto Moreira Salles":
+            download_seealso = iiifpapi3.seeAlso()
+            download_seealso.set_id(
+                objid="{0}/{1}".format(CLOUDFRONT, self._local_img_path)
+            )
+            download_seealso.add_label("en", "Download image")
+            download_seealso.add_label("pt-BR", "Baixar imagem")
+            download_seealso.set_type("Text")
+            manifest.add_seeAlso(download_seealso)
+
         # Provider
         item_provider = iiifpapi3.provider()
         item_provider.set_id("https://imaginerio.org/")
@@ -412,11 +424,11 @@ class Item:
                 return False
 
         # Add to collection
-        for collection_name in self._collections.split("|"):  # ["Collections"]
+        for collection_name in self._collection.split("|"):  # ["Collections"]
             if collection_name:
                 try:
                     collection = read_API3_json(
-                        f"{COLLECTIONS}/{collection_name.lower()}.json"
+                        COLLECTIONS + collection_name.lower() + ".json"
                     )
                     for current_item in collection.items:
                         if f"/{id}/" in current_item.id:
@@ -433,7 +445,8 @@ class Item:
         os.makedirs(self._base_path, exist_ok=True)
 
         manifest.orjson_save(
-            self._manifest_path, context="http://iiif.io/api/presentation/3/context.json"
+            self._manifest_path,
+            context="http://iiif.io/api/presentation/3/context.json",
         )
         # logger.debug(f"Saved manifest at {self._manifest_path}")
 
