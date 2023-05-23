@@ -4,8 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dagster = "*"
-dagit = "*"
 geojson = "*"
 pandas = "*"
 geopandas = "*"
@@ -18,12 +16,19 @@ python-dotenv = "*"
 xlrd = "*"
 turfpy = "*"
 tqdm = "*"
-dagster-pandas = "*"
 validators = "*"
 boto3 = "*"
 pyiiifpres = {git = "https://github.com/giacomomarchioro/pyIIIFpres"}
-dagster-aws = "*"
-imgspy = "*"
+orjson = "*"
+openpyxl = "*"
+numpy = "*"
+botocore = "*"
+requests = "*"
+lxml = "*"
+pyproj = "*"
+shapely = "*"
+jsonschema = "*"
+pywikibot = "*"
 
 [dev-packages]
 black = "*"
