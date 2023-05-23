@@ -17,7 +17,6 @@ python scripts/iiif.py --mode test [--index] # defaults to first item
 # (requires JSTOR data and vocabulary XLS exports)
 python scripts/iiif.py --mode prod
 
-
 # Parse KMLs and generate viewcones geojson
 python scripts/viewcones.py
 
