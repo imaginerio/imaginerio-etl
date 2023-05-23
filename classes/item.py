@@ -166,27 +166,12 @@ class Item:
             en = []
             pt = []
             values_en = value_en.split("|")
-            # try:
-            #     label_pt = vocabulary.loc[labels["pt"], "Label (pt)"]
-            # except KeyError:
-            #     logger.error(f"{labels['pt']} missing Portuguese label in vocabulary")
-            #     label_pt = labels["en"]
             for value_en in values_en:
                 if value_en:
                     wikidata_id = vocabulary.loc[value_en, "Wikidata ID"]
                     value_pt = vocabulary.loc[value_en, "Label (pt)"]
-                    if pd.notna(wikidata_id):
-                        url = "http://wikidata.org/wiki/{0}".format(wikidata_id)
-                    else:
-                        url = None
+                    url = "http://wikidata.org/wiki/{0}".format(wikidata_id) if pd.notna(wikidata_id) else None
                     if url and pd.notna(value_pt):
-                        # values = {value:
-                        #     '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
-                        #         url, value
-                        #     ) for value in [value_en, value_pt]
-                        #     }
-                        # en.append(values["en"])
-                        # pt.append(values["pt"])
                         en.append(
                             '<a class="uri-value-link" target="_blank" href="{0}">{1}</a>'.format(
                                 url, value_en
