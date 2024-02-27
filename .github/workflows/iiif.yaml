@@ -11,7 +11,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build Docker image
-      uses: docker build . -t etl
+      run: docker build . -t etl
 
     - name: Run Docker Image
       run: docker run etl
