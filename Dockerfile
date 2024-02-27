@@ -12,7 +12,6 @@ RUN pip install -r requirements.txt
 
 COPY imaginerio-etl ./imaginerio-etl
 COPY data ./data
-COPY .env .
 
 ENTRYPOINT ["python"]
 
