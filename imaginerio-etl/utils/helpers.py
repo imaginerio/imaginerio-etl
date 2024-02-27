@@ -31,7 +31,7 @@ config.dictConfig(
         "disable_existing_loggers": True,
     }
 )
-log_filename = f"data/output/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+log_filename = f"logs/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
 
 rotating_handler = handlers.RotatingFileHandler(
     log_filename, maxBytes=1024 * 1024 * 5, backupCount=5
@@ -57,14 +57,12 @@ session.mount("https://", HTTPAdapter(max_retries=retries))
 float2str = lambda x: x.split(".")[0]
 
 
-def load_xls(xls, index=None):
+def load_xls(xls, index):
     df = pd.read_excel(xls)
     df.rename(columns=lambda x: re.sub(r"\[[0-9]*\]", "", x), inplace=True)
     if "SSID" in df.columns:
         df["SSID"] = df["SSID"].astype(str)
-    if index:
-        df.set_index(index, inplace=True)
-    return df
+    return df.set_index(index)
 
 
 def create_collection(label):
