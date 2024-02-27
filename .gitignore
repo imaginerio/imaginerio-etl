@@ -157,8 +157,6 @@ dmypy.json
 
 .vscode/
 
-.github/
-
 Pipfile.lock
 package-lock.json
 node_modules

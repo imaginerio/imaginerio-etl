@@ -1,0 +1,17 @@
+name: Build IIIF Manifests
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      uses: docker build . -t etl
+
+    - name: Run Docker Image
+      run: docker run etl
