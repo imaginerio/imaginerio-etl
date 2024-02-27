@@ -1,33 +1,19 @@
-FROM openjdk:11
-COPY --from=python:3.8-slim / /
+FROM python:3.12
 
-# Create a project folder
-RUN mkdir /dagster
+WORKDIR /usr/src/app
 
-# Change working dirtory
-WORKDIR /dagster
+RUN apt-get update && apt-get install -y \
+    libvips \
+    libvips-tools
 
-#ENV DAGSTER_HOME=/dagster/.dagster
-
-RUN apt-get update && apt-get install -y git
-
-COPY requirements.txt /dagster/
+COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY  . /dagster/
+COPY imaginerio-etl ./imaginerio-etl
+COPY data ./data
+COPY .env .
 
-WORKDIR /dagster/src
+ENTRYPOINT ["python"]
 
-# For debugging purposes
-# RUN pwd
-# RUN ls -la
-
-# By default, dagit listens on port 3000, so we need to expose it
-EXPOSE 10000
-
-# Launch dagit, but we need to use workspace_docker.yaml
-# instead of the default workspace.yaml since we are using the python
-# executable from the container image, not the local Python executable
-# ENTRYPOINT ["dagit", "-w", "workspace.yaml", "-h", "0.0.0.0", "-p", "10000"]
-# ENTRYPOINT ["dagster", "pipeline", "execute", "-f", "pipelines/IIIF_pipeline.py", "--preset", "default"]
+CMD ["-m", "imaginerio-etl.scripts.iiif"]
