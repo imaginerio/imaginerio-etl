@@ -49,7 +49,7 @@ config.dictConfig(
             "formatter": {"format": "%(asctime)s %(levelname)s %(message)s"}
         },
         "root": {
-            "handlers": ["fileHandler"],
+            "handlers": ["fileHandler", "console"],
             "level": "DEBUG",
         },
     }
