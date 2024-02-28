@@ -25,14 +25,32 @@ from ..config import *
 # from lxml import etree
 
 
+os.makedirs('logs', exist_ok=True)
+log_filename = f"logs/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+
 config.dictConfig(
     {
         "version": 1,
         "disable_existing_loggers": True,
+        'handlers': {
+            'fileHandler': {
+                'class': logging.FileHandler,
+                'formatter': 'formatter',
+                'filename': log_filename,
+            },
+        },
+        "formatters": {
+            "formatter": {
+                'format': "%(asctime)s %(levelname)s %(message)s"
+            }
+        },
+        'root': {
+            'handlers': ['fileHandler'],
+            'level': 'DEBUG',
+        }
     }
 )
-os.makedirs('logs', exist_ok=True)
-log_filename = f"logs/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+
 
 # rotating_handler = handlers.RotatingFileHandler(
 #     log_filename, maxBytes=1024 * 1024 * 5, backupCount=5
@@ -42,12 +60,12 @@ log_filename = f"logs/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
 #     log_filename, when="M", interval=30, backupCount=5
 # )
 
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(message)s",
-    # filename="data/output/debug.log",
-    level=logging.DEBUG,
+# logging.basicConfig(
+#     format="%(asctime)s %(levelname)s %(message)s",
+#     filename=log_filename,
+#     level=logging.DEBUG,
     # handlers=[timed_handler],
-)
+# )
 logger = logging.getLogger(__name__)
 
 session = requests.Session()
