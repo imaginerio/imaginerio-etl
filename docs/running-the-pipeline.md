@@ -19,4 +19,6 @@ Navigate to the `input` folder in the left panel, and drop your `jstor.xls` and 
 #### Consolidate your changes
 On the far-left of the screen there are tabs with icons. Hovering over the icons will show the tabs name. Go to "Source Control" (the icon with dots connected by lines). 
 
-In the text field at the top, you must enter a message explaining what changes you are commiting. Good examples are short and descriptive, such as "Added Thomas Ender kmls" or "Updated metadata files". After entering your message, click on "Commit & Push". That's it! The update will be triggered automatically.
+In the text field at the top, you must enter a message explaining what changes you are commiting. Good examples are short and descriptive, such as *"Added Thomas Ender kmls"* or *"Updated metadata files"*. After entering your message, click on "Commit & Push".
+
+That's it! The update will be triggered automatically.
