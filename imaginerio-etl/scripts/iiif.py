@@ -49,7 +49,7 @@ def get_metadata(metadata_path, vocabulary_path):
 
     logger.debug("Filtering items")
     # filter rows
-    if args.mode != "all":
+    if args.index != "all":
         metadata = pd.DataFrame(metadata.iloc[int(args.index)]).T
     else:
         metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
     )
-    parser.add_argument("--index", "-i", help="index to run", default='all')
+    parser.add_argument("--index", "-i", help="index to run", default="all")
     args = parser.parse_args()
 
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY)
