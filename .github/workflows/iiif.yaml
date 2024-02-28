@@ -2,6 +2,11 @@ name: Build IIIF Manifests
 
 on:
   workflow_dispatch:
+    inputs:
+      index:
+        description: 'Index to process (0, 1, 2, etc), leave blank to process all items'
+        required: false
+        default: ''
     
 jobs:
   build-and-run:
@@ -16,4 +21,9 @@ jobs:
       run: docker build . -t etl
 
     - name: Run Docker Image
-      run: docker run etl
+      run: |
+        if [ -z "${{ github.event.inputs.index }}" ]; then
+          docker run etl
+        else
+          docker run etl -m imaginerio-etl.scripts.iiif -i ${{ github.event.inputs.index }}
+        fi

@@ -64,7 +64,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
     )
-    parser.add_argument("--index", "-i", help="index to run", default=0)
+    parser.add_argument("--index", "-i", help="index to run", default='all')
     args = parser.parse_args()
 
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY)
