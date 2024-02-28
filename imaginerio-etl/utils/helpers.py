@@ -31,21 +31,22 @@ config.dictConfig(
         "disable_existing_loggers": True,
     }
 )
+os.makedirs('logs', exist_ok=True)
 log_filename = f"logs/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
 
-rotating_handler = handlers.RotatingFileHandler(
-    log_filename, maxBytes=1024 * 1024 * 5, backupCount=5
-)
+# rotating_handler = handlers.RotatingFileHandler(
+#     log_filename, maxBytes=1024 * 1024 * 5, backupCount=5
+# )
 
-timed_handler = handlers.TimedRotatingFileHandler(
-    log_filename, when="M", interval=30, backupCount=5
-)
+# timed_handler = handlers.TimedRotatingFileHandler(
+#     log_filename, when="M", interval=30, backupCount=5
+# )
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
     # filename="data/output/debug.log",
     level=logging.DEBUG,
-    handlers=[timed_handler],
+    # handlers=[timed_handler],
 )
 logger = logging.getLogger(__name__)
 
