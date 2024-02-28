@@ -25,29 +25,33 @@ from ..config import *
 # from lxml import etree
 
 
-os.makedirs('logs', exist_ok=True)
+os.makedirs("logs", exist_ok=True)
 log_filename = f"logs/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
 
 config.dictConfig(
     {
         "version": 1,
         "disable_existing_loggers": True,
-        'handlers': {
-            'fileHandler': {
-                'class': logging.FileHandler,
-                'formatter': 'formatter',
-                'filename': log_filename,
+        "handlers": {
+            "fileHandler": {
+                "class": logging.FileHandler,
+                "formatter": "formatter",
+                "filename": log_filename,
+            },
+            "console": {
+                "class": logging.StreamHandler,
+                "formatter": "formatter",
+                "level": "DEBUG",
+                "stream": "ext://sys.stdout",  # Use sys.stdout
             },
         },
         "formatters": {
-            "formatter": {
-                'format': "%(asctime)s %(levelname)s %(message)s"
-            }
+            "formatter": {"format": "%(asctime)s %(levelname)s %(message)s"}
         },
-        'root': {
-            'handlers': ['fileHandler'],
-            'level': 'DEBUG',
-        }
+        "root": {
+            "handlers": ["fileHandler"],
+            "level": "DEBUG",
+        },
     }
 )
 
@@ -64,7 +68,7 @@ config.dictConfig(
 #     format="%(asctime)s %(levelname)s %(message)s",
 #     filename=log_filename,
 #     level=logging.DEBUG,
-    # handlers=[timed_handler],
+# handlers=[timed_handler],
 # )
 logger = logging.getLogger(__name__)
 
