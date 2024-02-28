@@ -134,10 +134,10 @@ class Item:
         logger.debug("Called get_sizes()")
         try:
             img_sizes = session.get(self._info_path).json()["sizes"]
+            return img_sizes
         except JSONDecodeError:
-            return False
-        return img_sizes
-
+            return None
+        
     def download_image(self):
         logger.debug("Called download_image()")
         start = time.time()
@@ -148,30 +148,35 @@ class Item:
                 handler.write(response.content)
             end = time.time()
             logger.info(f"Image {self._id} downloaded in {end - start} seconds")
+            return True
         else:
-            logger.warning(f"Failed to download image {self._id}")
+            logger.warning(f"Failed to download image {self._id} at {self._jstor_img_path}")
+            return False
 
     def tile_image(self):
         logger.debug("Called tile_image()")
-        self.download_image()
-        command = [
-            "vips",
-            "dzsave",
-            "--layout",
-            "iiif3",
-            "--id",
-            f"{CLOUDFRONT}/iiif",
-            "--tile-size",
-            "256",
-            self._local_img_path,
-            f"iiif/{self._id}",
-        ]
-        start = time.time()
-        subprocess.run(command)
-        end = time.time()
-        logger.info(f"Tiling done in {end - start} seconds")
-        sizes = self.create_derivatives([16, 8, 4, 2, 1])
-        return sizes
+        image = self.download_image()
+        if image:
+            command = [
+                "vips",
+                "dzsave",
+                "--layout",
+                "iiif3",
+                "--id",
+                f"{CLOUDFRONT}/iiif",
+                "--tile-size",
+                "256",
+                self._local_img_path,
+                f"iiif/{self._id}",
+            ]
+            start = time.time()
+            subprocess.run(command)
+            end = time.time()
+            logger.info(f"Tiling done in {end - start} seconds")
+            sizes = self.create_derivatives([16, 8, 4, 2, 1])
+            return sizes
+        else:
+            return None
         # os.remove(os.path.abspath(self._local_img_path))
 
     def create_derivatives(self, factors):
@@ -225,6 +230,8 @@ class Item:
         return KeyValueString(label=label, value=value)
 
     def create_manifest(self, sizes):
+        if not sizes:
+            return None
         # Pick size closer to 600px (long edge) for thumbnail
         thumb_width, thumb_height = min(
             sizes, key=lambda x: abs(min(x.values()) - 600)
