@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       index:
-        description: 'Index to process (0, 1, 2, etc), leave blank to process all items'
+        description: 'SSID to process (e.g. 35103808), leave blank to process all items'
         required: false
         default: ''
     
