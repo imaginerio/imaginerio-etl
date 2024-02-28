@@ -130,8 +130,12 @@ class Item:
         self._manifest_path = f"{self._base_path}/manifest.json"
 
     def get_collections(self):
-        return self._collection.split("|")
-
+        if self._collection:
+            return self._collection.split("|")
+        else: 
+            logger.warning(f"Item {self._id} isn't associated with any collections")
+            return []
+            
     def get_sizes(self):
         logger.debug("Called get_sizes()")
         try:
