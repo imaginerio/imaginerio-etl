@@ -50,7 +50,7 @@ def get_metadata(metadata_path, vocabulary_path):
     logger.debug("Filtering items")
     # filter rows
     if args.index != "all":
-        metadata = pd.DataFrame(metadata.iloc[int(args.index)]).T
+        metadata = pd.DataFrame(metadata.loc[args.index]).T
     else:
         metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
 
