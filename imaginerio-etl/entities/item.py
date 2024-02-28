@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import subprocess
 import time
@@ -7,6 +8,8 @@ from json import JSONDecodeError
 import pandas as pd
 from iiif_prezi3 import KeyValueString, Manifest
 from PIL import Image
+
+logging.getLogger("PIL").setLevel(logging.WARNING)
 from tqdm import tqdm
 
 from ..config import *
@@ -17,7 +20,6 @@ Image.MAX_IMAGE_PIXELS = None
 
 class Item:
     def __init__(self, id, row, vocabulary):
-        logger.info(f"Parsing item {id}")
         self._id = id
         self._vocabulary = vocabulary
         self._title = row["Title"]
@@ -137,7 +139,7 @@ class Item:
             return img_sizes
         except JSONDecodeError:
             return None
-        
+
     def download_image(self):
         logger.debug("Called download_image()")
         start = time.time()
@@ -150,7 +152,9 @@ class Item:
             logger.info(f"Image {self._id} downloaded in {end - start} seconds")
             return True
         else:
-            logger.warning(f"Failed to download image {self._id} at {self._jstor_img_path}")
+            logger.warning(
+                f"Failed to download image {self._id} at {self._jstor_img_path}"
+            )
             return False
 
     def tile_image(self):
@@ -230,6 +234,7 @@ class Item:
         return KeyValueString(label=label, value=value)
 
     def create_manifest(self, sizes):
+        logger.debug(f"Called create_manifest()")
         if not sizes:
             return None
         # Pick size closer to 600px (long edge) for thumbnail
@@ -260,7 +265,6 @@ class Item:
             "width": 708,
         }
 
-        logger.debug(f"Creating manifest {self._id}")
         manifest = Manifest(
             id=self._manifest_path,
             label=self._title,

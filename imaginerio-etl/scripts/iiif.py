@@ -14,8 +14,8 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 
 from ..config import *
 from ..entities.item import Item
-from ..utils.helpers import (  # , invalidate_cache
-    create_collection,
+from ..utils.helpers import (
+    create_collection,  # , invalidate_cache
     fast_upload,
     load_xls,
     logger,
@@ -72,34 +72,33 @@ if __name__ == "__main__":
     manifests = []
     # items = get_items(metadata, vocabulary)
 
-    with logging_redirect_tqdm(loggers=[logger]):
-        main_pbar = tqdm(
-            metadata.fillna("").iterrows(),
-            total=len(metadata),
-            desc="Creating IIIF assets",
-        )
-        for id, row in main_pbar:
-            item = Item(id, row, vocabulary)
-            main_pbar.set_postfix_str(str(item._id))
-            sizes = item.get_sizes() or item.tile_image()
-            manifest = item.create_manifest(sizes)
-            if manifest:
-                manifests.append(manifest)
-                for name in item.get_collections():
-                    collections[name].add_item_by_reference(manifest)
-            else:
-                logger.warning(
-                    f"Couldn't create manifest for item {item._id}, skipping"
-                )
+    # with logging_redirect_tqdm(loggers=[logger]):
+    #     main_pbar = tqdm(
+    #         metadata.fillna("").iterrows(),
+    #         total=len(metadata),
+    #         desc="Creating IIIF assets",
+    #     )
+    for index, (id, row) in enumerate(metadata.fillna("").iterrows()):  # main_pbar
+        logger.info(f"{index}/{len(metadata)} - Parsing item {id}")
+        item = Item(id, row, vocabulary)
+        # main_pbar.set_postfix_str(str(item._id))
+        sizes = item.get_sizes() or item.tile_image()
+        manifest = item.create_manifest(sizes)
+        if manifest:
+            manifests.append(manifest)
+            for name in item.get_collections():
+                collections[name].add_item_by_reference(manifest)
+        else:
+            logger.warning(f"Couldn't create manifest for item {item._id}, skipping")
 
-        print(random.choice(manifests).json(indent=2))
-        if args.mode == "prod":
-            logger.info("Uploading collections to S3")
-            # fast_upload(
-            #     boto3.Session(),
-            #     "imaginerio-images",
-            #     [os.path.relpath(file) for file in os.listdir(COLLECTIONS)],
-            # )
-            # upload_folder_to_s3(COLLECTIONS, mode=args.mode)
+    print(random.choice(manifests).json(indent=2))
+    if args.mode == "prod":
+        logger.info("Uploading collections to S3")
+        # fast_upload(
+        #     boto3.Session(),
+        #     "imaginerio-images",
+        #     [os.path.relpath(file) for file in os.listdir(COLLECTIONS)],
+        # )
+        # upload_folder_to_s3(COLLECTIONS, mode=args.mode)
 
     # invalidate_cache("/*")
