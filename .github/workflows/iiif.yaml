@@ -23,7 +23,7 @@ jobs:
       - name: Run Docker Image
         run: |
           if [ -z "${{ github.event.inputs.index }}" ]; then
-            docker run etl
+            docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY etl
           else
             docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY etl -m imaginerio-etl.scripts.iiif -i ${{ github.event.inputs.index }}
           fi
