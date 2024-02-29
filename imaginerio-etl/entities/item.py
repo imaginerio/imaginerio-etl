@@ -10,7 +10,7 @@ from PIL import Image
 logging.getLogger("PIL").setLevel(logging.WARNING)
 
 from ..config import *
-from ..utils.helpers import session
+from ..utils.helpers import session, upload_folder_to_s3
 from ..utils.logger import CustomFormatter, logger
 
 Image.MAX_IMAGE_PIXELS = None
@@ -129,10 +129,10 @@ class Item:
     def get_collections(self):
         if self._collection:
             return self._collection.split("|")
-        else: 
+        else:
             logger.warning(f"Item {self._id} isn't associated with any collections")
             return []
-            
+
     def get_sizes(self):
         try:
             img_sizes = session.get(self._info_path).json()["sizes"]
@@ -157,7 +157,6 @@ class Item:
             return False
 
     def tile_image(self):
-        logger.info(f"{CustomFormatter.BLUE}Tiling image...{CustomFormatter.RESET}")
         image = self.download_image()
         if image:
             command = [
@@ -172,8 +171,10 @@ class Item:
                 self._local_img_path,
                 f"iiif/{self._id}",
             ]
+            logger.info(f"{CustomFormatter.BLUE}Tiling image...{CustomFormatter.RESET}")
             subprocess.run(command)
             sizes = self.create_derivatives([16, 8, 4, 2, 1])
+            upload_folder_to_s3(f"iiif/{self._id}")
             return sizes
         else:
             return None
