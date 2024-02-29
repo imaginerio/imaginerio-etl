@@ -15,50 +15,15 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from ..config import *
 from ..entities.item import Item
 from ..utils.helpers import (
-    create_collection,
-    fast_upload,
-    load_xls,
-    session,
+    get_collections,
+    get_metadata,
     upload_folder_to_s3,
+    upload_object_to_s3,
 )
 from ..utils.logger import CustomFormatter, logger
 
-
-def get_items(metadata, vocabulary):
-    return [Item(id, row, vocabulary) for id, row in metadata.fillna("").iterrows()]
-
-
-def get_collections(metadata):
-    collections = {}
-    # list all collection names
-    labels = metadata["Collection"].dropna().str.split("|").explode().unique()
-    # create collection(s)
-    for label in labels:
-        collection = create_collection(label)
-        collections[label] = collection
-
-    return collections
-
-
-def get_metadata(metadata_path, vocabulary_path):
-    logger.info("Loading metadata files")
-    # open files and rename columns
-    metadata = load_xls(metadata_path, "SSID")
-    vocabulary = load_xls(vocabulary_path, "Label (en)").to_dict("index")
-
-    logger.info("Filtering items")
-    # filter rows
-    if args.index != "all":
-        metadata = pd.DataFrame(metadata.loc[args.index]).T
-    else:
-        metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
-
-    return metadata, vocabulary
-
-
 if __name__ == "__main__":
     logger.info("Parsing arguments")
-    # parse arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
@@ -66,52 +31,40 @@ if __name__ == "__main__":
     parser.add_argument("--index", "-i", help="index to run", default="all")
     args = parser.parse_args()
 
-    metadata, vocabulary = get_metadata(JSTOR, VOCABULARY)
+    metadata, vocabulary = get_metadata(JSTOR, VOCABULARY, args.index)
     collections = get_collections(metadata)
     manifests = []
     errors = []
-    # items = get_items(metadata, vocabulary)
 
-    # with logging_redirect_tqdm(loggers=[logger]):
-    #     main_pbar = tqdm(
-    #         metadata.fillna("").iterrows(),
-    #         total=len(metadata),
-    #         desc="Creating IIIF assets",
-    #     )
-    for index, (id, row) in enumerate(metadata.fillna("").iterrows()):  # main_pbar
+    for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
         logger.info(
-            f"{CustomFormatter.BLUE}{index}/{len(metadata)} - Parsing item {id}{CustomFormatter.RESET}"
+            f"{CustomFormatter.LIGHT_BLUE}{index}/{len(metadata)} - Parsing item {id}"
         )
         item = Item(id, row, vocabulary)
-        # main_pbar.set_postfix_str(str(item._id))
         sizes = item.get_sizes() or item.tile_image()
         manifest = item.create_manifest(sizes)
         if manifest:
-            logger.info(
-                f"{CustomFormatter.GREEN}Manifest {item._id} created succesfully{CustomFormatter.RESET}"
-            )
             manifests.append(manifest)
+            upload_object_to_s3(manifest, f"iiif/{item._id}/manifest.json")
+            # logger.info(
+            #     f"{CustomFormatter.GREEN}Manifest {item._id} created and uploadedsuccesfully"
+            # )
             for name in item.get_collections():
                 collections[name].add_item_by_reference(manifest)
         else:
             logger.error(
-                f"{CustomFormatter.RED}Couldn't create manifest for item {item._id}, skipping{CustomFormatter.RESET}"
+                f"{CustomFormatter.RED}Couldn't create manifest for item {item._id}, skipping"
             )
             errors.append(item._id)
+
+    for name in collections.keys():
+        upload_object_to_s3(collections[name], f"iiif/collection/{name}.json")
     logger.info(
-        f"""Processing done. Parsed {CustomFormatter.BLUE}{len(metadata)}{CustomFormatter.RESET} 
-        items and created {CustomFormatter.GREEN}{len(manifests)}{CustomFormatter.RESET} IIIF manifests. 
-        Items {CustomFormatter.RED}{errors}{CustomFormatter.RESET} were skipped, likely due to issues with 
-        the images or metadata. Inspect the log above for more details."""
+        f"SUMMARY: Processing done. Parsed {CustomFormatter.BLUE}{len(metadata)}{CustomFormatter.RESET} "
+        f"items and created {CustomFormatter.GREEN}{len(manifests)}{CustomFormatter.RESET} IIIF manifests. "
+        f"Items {CustomFormatter.RED}{errors}{CustomFormatter.RESET} were skipped, likely due to issues with "
+        f"the images or metadata. Inspect the log above for more details."
     )
     print(random.choice(manifests).json(indent=2))
-    if args.mode == "prod":
-        logger.info("Uploading collections to S3")
-        # fast_upload(
-        #     boto3.Session(),
-        #     "imaginerio-images",
-        #     [os.path.relpath(file) for file in os.listdir(COLLECTIONS)],
-        # )
-        # upload_folder_to_s3(COLLECTIONS, mode=args.mode)
 
     # invalidate_cache("/*")
