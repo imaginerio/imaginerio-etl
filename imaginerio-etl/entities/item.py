@@ -149,35 +149,31 @@ class Item:
             os.makedirs(os.path.dirname(self._local_img_path), exist_ok=True)
             with open(self._local_img_path, "wb") as handler:
                 handler.write(response.content)
-            return True
         else:
             logger.error(
                 f"{CustomFormatter.RED}Failed to download image {self._id} at {self._jstor_img_path}{CustomFormatter.RESET}"
             )
-            return False
+            raise Exception(IOError)
 
     def tile_image(self):
-        image = self.download_image()
-        if image:
-            command = [
-                "vips",
-                "dzsave",
-                "--layout",
-                "iiif3",
-                "--id",
-                f"{CLOUDFRONT}/iiif",
-                "--tile-size",
-                "256",
-                self._local_img_path,
-                f"iiif/{self._id}",
-            ]
-            logger.info(f"{CustomFormatter.BLUE}Tiling image...{CustomFormatter.RESET}")
-            subprocess.run(command)
-            sizes = self.create_derivatives([16, 8, 4, 2, 1])
-            upload_folder_to_s3(f"iiif/{self._id}")
-            return sizes
-        else:
-            return None
+        self.download_image()
+        command = [
+            "vips",
+            "dzsave",
+            "--layout",
+            "iiif3",
+            "--id",
+            f"{CLOUDFRONT}/iiif",
+            "--tile-size",
+            "256",
+            self._local_img_path,
+            f"iiif/{self._id}",
+        ]
+        logger.info(f"{CustomFormatter.BLUE}Tiling image...{CustomFormatter.RESET}")
+        subprocess.run(command)
+        sizes = self.create_derivatives([16, 8, 4, 2, 1])
+        upload_folder_to_s3(f"iiif/{self._id}")
+        return sizes
         # os.remove(os.path.abspath(self._local_img_path))
 
     def create_derivatives(self, factors):

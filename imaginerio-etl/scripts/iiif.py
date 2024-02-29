@@ -33,38 +33,35 @@ if __name__ == "__main__":
 
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY, args.index)
     collections = get_collections(metadata)
-    manifests = []
+    n_manifests = 0
     errors = []
 
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
         logger.info(
             f"{CustomFormatter.LIGHT_BLUE}{index}/{len(metadata)} - Parsing item {id}"
         )
-        item = Item(id, row, vocabulary)
-        sizes = item.get_sizes() or item.tile_image()
-        manifest = item.create_manifest(sizes)
-        if manifest:
-            manifests.append(manifest)
-            upload_object_to_s3(manifest, f"iiif/{item._id}/manifest.json")
-            # logger.info(
-            #     f"{CustomFormatter.GREEN}Manifest {item._id} created and uploadedsuccesfully"
-            # )
+        try:
+            item = Item(id, row, vocabulary)
+            sizes = item.get_sizes() or item.tile_image()
+            manifest = item.create_manifest(sizes)
+            upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
             for name in item.get_collections():
                 collections[name].add_item_by_reference(manifest)
-        else:
-            logger.error(
+            n_manifests += 1
+        except Exception as e:
+            logger.exception(
                 f"{CustomFormatter.RED}Couldn't create manifest for item {item._id}, skipping"
             )
             errors.append(item._id)
 
     for name in collections.keys():
-        upload_object_to_s3(collections[name], f"iiif/collection/{name}.json")
+        upload_object_to_s3(collections[name], name, f"iiif/collection/{name}.json")
+
     logger.info(
         f"SUMMARY: Processing done. Parsed {CustomFormatter.BLUE}{len(metadata)}{CustomFormatter.RESET} "
-        f"items and created {CustomFormatter.GREEN}{len(manifests)}{CustomFormatter.RESET} IIIF manifests. "
+        f"items and created {CustomFormatter.GREEN}{n_manifests}{CustomFormatter.RESET} IIIF manifests. "
         f"Items {CustomFormatter.RED}{errors}{CustomFormatter.RESET} were skipped, likely due to issues with "
         f"the images or metadata. Inspect the log above for more details."
     )
-    print(random.choice(manifests).json(indent=2))
 
     # invalidate_cache("/*")

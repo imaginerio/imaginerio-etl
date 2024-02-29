@@ -19,7 +19,7 @@ from turfpy.misc import sector
 from urllib3.util import Retry
 
 from ..config import *
-from ..utils.logger import logger
+from ..utils.logger import CustomFormatter, logger
 
 # from lxml import etree
 
@@ -166,21 +166,24 @@ def invalidate_cache(path):
 def upload_folder_to_s3(source):
     for root, _, files in os.walk(source):
         for file in files:
-            path = os.path.join(root, file)
-            logger.debug(path)
-            # s3_client.upload_file(
-            #     path,
-            #     "imaginerio-images",
-            #     path,
-            #     ExtraArgs={
-            #         "ContentType": (
-            #             "image/jpeg"
-            #             if file.endswith(".jpg")
-            #             else "application/json"
-            #         )
-            #     },
-            # )
-            # invalidate_cache(path)
+            try:
+                path = os.path.join(root, file)
+                # logger.debug(path)
+                s3_client.upload_file(
+                    path,
+                    "imaginerio-images",
+                    path,
+                    ExtraArgs={
+                        "ContentType": (
+                            "image/jpeg"
+                            if file.endswith(".jpg")
+                            else "application/json"
+                        )
+                    },
+                )
+            except:
+                logger.error(f"{CustomFormatter.RED}Failed to upload {path}")
+        # invalidate_cache(path)
 
     # if mode == "test":
     #     return False
@@ -189,19 +192,19 @@ def upload_folder_to_s3(source):
     #     return True
 
 
-def upload_object_to_s3(obj, target):
-    logger.debug(f"{obj.id} -> {target}")
-    # try:
-    #     s3_client.put_object(
-    #         obj.json(indent=4), "imaginerio-images", target, ContentType="application/json"
-    #     )
-    #     logger.info(
-    #     f"{CustomFormatter.GREEN}Manifest {item._id} uploaded succesfully"
-    # )
-    #     return True
-    # except:
-    #     logger.error(f"Failed to upload to {target}")
-    #     return False
+def upload_object_to_s3(obj, name, key):
+    # logger.debug(f"{obj.id} -> {target}")
+    try:
+        s3_client.put_object(
+            Body=obj.json(indent=4),
+            Bucket="imaginerio-images",
+            Key=key,
+            ContentType="application/json",
+        )
+        logger.info(f"{CustomFormatter.GREEN}Object {name} uploaded succesfully")
+    except Exception as e:
+        logger.error(f"{CustomFormatter.RED}Failed to upload {name} to {key}: {e}")
+        # raise
 
 
 def query_wikidata(Q):
