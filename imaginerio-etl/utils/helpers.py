@@ -1,10 +1,8 @@
-import logging
 import os
 import re
 import shutil
 import sys
 from datetime import datetime
-from logging import config, handlers
 
 import boto3
 import boto3.s3.transfer as s3transfer
@@ -16,7 +14,6 @@ from pyproj import Proj
 from requests.adapters import HTTPAdapter
 from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
-from tqdm import tqdm
 from turfpy.misc import sector
 from urllib3.util import Retry
 
@@ -24,53 +21,6 @@ from ..config import *
 
 # from lxml import etree
 
-
-os.makedirs("logs", exist_ok=True)
-log_filename = f"logs/log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
-
-config.dictConfig(
-    {
-        "version": 1,
-        "disable_existing_loggers": True,
-        "handlers": {
-            "fileHandler": {
-                "class": logging.FileHandler,
-                "formatter": "formatter",
-                "filename": log_filename,
-            },
-            "console": {
-                "class": logging.StreamHandler,
-                "formatter": "formatter",
-                "level": "DEBUG",
-                "stream": "ext://sys.stdout",  # Use sys.stdout
-            },
-        },
-        "formatters": {
-            "formatter": {"format": "%(asctime)s %(levelname)s %(message)s"}
-        },
-        "root": {
-            "handlers": ["fileHandler", "console"],
-            "level": "DEBUG",
-        },
-    }
-)
-
-
-# rotating_handler = handlers.RotatingFileHandler(
-#     log_filename, maxBytes=1024 * 1024 * 5, backupCount=5
-# )
-
-# timed_handler = handlers.TimedRotatingFileHandler(
-#     log_filename, when="M", interval=30, backupCount=5
-# )
-
-# logging.basicConfig(
-#     format="%(asctime)s %(levelname)s %(message)s",
-#     filename=log_filename,
-#     level=logging.DEBUG,
-# handlers=[timed_handler],
-# )
-logger = logging.getLogger(__name__)
 
 session = requests.Session()
 retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])

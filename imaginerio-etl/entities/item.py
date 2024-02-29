@@ -2,18 +2,16 @@ import json
 import logging
 import os
 import subprocess
-import time
 from json import JSONDecodeError
 
-import pandas as pd
 from iiif_prezi3 import KeyValueString, Manifest
 from PIL import Image
 
 logging.getLogger("PIL").setLevel(logging.WARNING)
-from tqdm import tqdm
 
 from ..config import *
-from ..utils.helpers import logger, session
+from ..utils.helpers import session
+from ..utils.logger import CustomFormatter, logger
 
 Image.MAX_IMAGE_PIXELS = None
 
@@ -99,7 +97,6 @@ class Item:
             )
         )
 
-        # logger.debug(f"{self._id} ### {"\n".join([str(field) for field in self._metadata])}")
         if row.get("Required Statement"):
             attribution_en = row.get("Required Statement") + ". Hosted by imagineRio."
             attribution_pt = (
@@ -133,7 +130,6 @@ class Item:
         return self._collection.split("|")
 
     def get_sizes(self):
-        logger.debug("Called get_sizes()")
         try:
             img_sizes = session.get(self._info_path).json()["sizes"]
             return img_sizes
@@ -141,24 +137,23 @@ class Item:
             return None
 
     def download_image(self):
-        logger.debug("Called download_image()")
-        start = time.time()
+        logger.info(
+            f"{CustomFormatter.BLUE}Downloading image...{CustomFormatter.RESET}"
+        )
         response = session.get(self._jstor_img_path)
         if response.status_code == 200:
             os.makedirs(os.path.dirname(self._local_img_path), exist_ok=True)
             with open(self._local_img_path, "wb") as handler:
                 handler.write(response.content)
-            end = time.time()
-            logger.info(f"Image {self._id} downloaded in {end - start} seconds")
             return True
         else:
-            logger.warning(
-                f"Failed to download image {self._id} at {self._jstor_img_path}"
+            logger.error(
+                f"{CustomFormatter.RED}Failed to download image {self._id} at {self._jstor_img_path}{CustomFormatter.RESET}"
             )
             return False
 
     def tile_image(self):
-        logger.debug("Called tile_image()")
+        logger.info(f"{CustomFormatter.BLUE}Tiling image...{CustomFormatter.RESET}")
         image = self.download_image()
         if image:
             command = [
@@ -173,10 +168,7 @@ class Item:
                 self._local_img_path,
                 f"iiif/{self._id}",
             ]
-            start = time.time()
             subprocess.run(command)
-            end = time.time()
-            logger.info(f"Tiling done in {end - start} seconds")
             sizes = self.create_derivatives([16, 8, 4, 2, 1])
             return sizes
         else:
@@ -184,7 +176,9 @@ class Item:
         # os.remove(os.path.abspath(self._local_img_path))
 
     def create_derivatives(self, factors):
-        logger.debug("Called create_derivatives()")
+        logger.info(
+            f"{CustomFormatter.BLUE}Creating derivatives...{CustomFormatter.RESET}"
+        )
         sizes = []
         for factor in factors:
             with Image.open(self._local_img_path) as im:
@@ -219,8 +213,8 @@ class Item:
             value_pt = self._vocabulary[value_en].get("Label (pt)") or value_en
 
         if not wikidata_id:
-            logger.info(
-                f"No Wikidata ID found for {value_en}, will display text instead of link"
+            logger.warning(
+                f"{CustomFormatter.YELLOW}No Wikidata ID found for {value_en}, will display text instead of link{CustomFormatter.RESET}"
             )
             value["en"].append(value_en)
             value["pt-BR"].append(value_pt)
@@ -234,7 +228,6 @@ class Item:
         return KeyValueString(label=label, value=value)
 
     def create_manifest(self, sizes):
-        logger.debug(f"Called create_manifest()")
         if not sizes:
             return None
         # Pick size closer to 600px (long edge) for thumbnail

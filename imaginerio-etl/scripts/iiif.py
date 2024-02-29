@@ -15,17 +15,16 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from ..config import *
 from ..entities.item import Item
 from ..utils.helpers import (
-    create_collection,  # , invalidate_cache
+    create_collection,
     fast_upload,
     load_xls,
-    logger,
     session,
     upload_folder_to_s3,
 )
+from ..utils.logger import CustomFormatter, logger
 
 
 def get_items(metadata, vocabulary):
-    logger.debug("Creating objects")
     return [Item(id, row, vocabulary) for id, row in metadata.fillna("").iterrows()]
 
 
@@ -42,12 +41,12 @@ def get_collections(metadata):
 
 
 def get_metadata(metadata_path, vocabulary_path):
-    logger.debug("Loading metadata files")
+    logger.info("Loading metadata files")
     # open files and rename columns
     metadata = load_xls(metadata_path, "SSID")
     vocabulary = load_xls(vocabulary_path, "Label (en)").to_dict("index")
 
-    logger.debug("Filtering items")
+    logger.info("Filtering items")
     # filter rows
     if args.index != "all":
         metadata = pd.DataFrame(metadata.loc[args.index]).T
@@ -58,7 +57,7 @@ def get_metadata(metadata_path, vocabulary_path):
 
 
 if __name__ == "__main__":
-    logger.debug("Parsing arguments")
+    logger.info("Parsing arguments")
     # parse arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -70,6 +69,7 @@ if __name__ == "__main__":
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY)
     collections = get_collections(metadata)
     manifests = []
+    errors = []
     # items = get_items(metadata, vocabulary)
 
     # with logging_redirect_tqdm(loggers=[logger]):
@@ -79,18 +79,31 @@ if __name__ == "__main__":
     #         desc="Creating IIIF assets",
     #     )
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):  # main_pbar
-        logger.info(f"{index}/{len(metadata)} - Parsing item {id}")
+        logger.info(
+            f"{CustomFormatter.BLUE}{index}/{len(metadata)} - Parsing item {id}{CustomFormatter.RESET}"
+        )
         item = Item(id, row, vocabulary)
         # main_pbar.set_postfix_str(str(item._id))
         sizes = item.get_sizes() or item.tile_image()
         manifest = item.create_manifest(sizes)
         if manifest:
+            logger.info(
+                f"{CustomFormatter.GREEN}Manifest {item._id} created succesfully{CustomFormatter.RESET}"
+            )
             manifests.append(manifest)
             for name in item.get_collections():
                 collections[name].add_item_by_reference(manifest)
         else:
-            logger.warning(f"Couldn't create manifest for item {item._id}, skipping")
-
+            logger.error(
+                f"{CustomFormatter.RED}Couldn't create manifest for item {item._id}, skipping{CustomFormatter.RESET}"
+            )
+            errors.append(item._id)
+    logger.info(
+        f"""Processing done. Parsed {CustomFormatter.BLUE}{len(metadata)}{CustomFormatter.RESET} 
+        items and created {CustomFormatter.GREEN}{len(manifests)}{CustomFormatter.RESET} IIIF manifests. 
+        Items {CustomFormatter.RED}{errors}{CustomFormatter.RESET} were skipped, likely due to issues with 
+        the images or metadata. Inspect the log above for more details."""
+    )
     print(random.choice(manifests).json(indent=2))
     if args.mode == "prod":
         logger.info("Uploading collections to S3")
