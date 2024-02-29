@@ -1,29 +1,33 @@
 name: Build IIIF Manifests
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 on:
   workflow_dispatch:
     inputs:
       index:
-        description: 'SSID to process (e.g. 35103808), leave blank to process all items'
+        description: "SSID to process (e.g. 35103808), leave blank to process all items"
         required: false
-        default: ''
-    
+        default: ""
+
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v2
-      with:
-        submodules: true
+      - name: Check out the repo
+        uses: actions/checkout@v2
+        with:
+          submodules: true
 
-    - name: Build Docker image
-      run: docker build . -t etl
+      - name: Build Docker image
+        run: docker build . -t etl
 
-    - name: Run Docker Image
-      run: |
-        if [ -z "${{ github.event.inputs.index }}" ]; then
-          docker run etl
-        else
-          docker run etl -m imaginerio-etl.scripts.iiif -i ${{ github.event.inputs.index }}
-        fi
+      - name: Run Docker Image
+        run: |
+          if [ -z "${{ github.event.inputs.index }}" ]; then
+            docker run etl
+          else
+            docker run etl -m imaginerio-etl.scripts.iiif -i ${{ github.event.inputs.index }}
+          fi
