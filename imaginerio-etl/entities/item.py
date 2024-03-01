@@ -113,7 +113,9 @@ class Item:
             label={"en": ["Attribution"], "pt-BR": ["Atribuição"]},
             value={"en": [attribution_en], "pt-BR": [attribution_pt]},
         )
-        self._rights = row.get("Rights")
+        self._rights = RIGHTS.get(
+            row["Rights"], "http://rightsstatements.org/vocab/CNE/1.0/"
+        )
         self._document_url = row.get("Document URL")
         self._provider = row.get("Provider") or "imagineRio"
         self._wikidata_id = row.get("Wikidata ID")
@@ -168,7 +170,7 @@ class Item:
             self._local_img_path,
             f"iiif/{self._id}",
         ]
-        logger.info(f"{cf.BLUE}Tiling image...{cf.RESET}")
+        logger.info(f"{cf.BLUE}Tiling image...")
         subprocess.run(command)
         sizes = self.create_derivatives([16, 8, 4, 2, 1])
         upload_folder_to_s3(f"iiif/{self._id}")
@@ -176,7 +178,7 @@ class Item:
         # os.remove(os.path.abspath(self._local_img_path))
 
     def create_derivatives(self, factors):
-        logger.info(f"{cf.BLUE}Creating derivatives...{cf.RESET}")
+        logger.info(f"{cf.BLUE}Creating derivatives...")
         sizes = []
         for factor in factors:
             with Image.open(self._local_img_path) as im:

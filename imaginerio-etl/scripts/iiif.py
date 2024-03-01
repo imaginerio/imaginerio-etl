@@ -34,7 +34,7 @@ if __name__ == "__main__":
             manifest = item.create_manifest(sizes)
             upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
             for name in item.get_collections():
-                collections[name].add_item_by_reference(manifest)
+                collections[name.lower()].add_item_by_reference(manifest)
             n_manifests += 1
         except Exception as e:
             logger.exception(
@@ -45,11 +45,15 @@ if __name__ == "__main__":
     for name in collections.keys():
         upload_object_to_s3(collections[name], name, f"iiif/collection/{name}.json")
 
-    logger.info(
+    summary = (
         f"SUMMARY: Processing done. Parsed {cf.BLUE}{len(metadata)}{cf.RESET} "
         f"items and created {cf.GREEN}{n_manifests}{cf.RESET} IIIF manifests. "
-        f"Items {cf.RED}{errors}{cf.RESET} were skipped, likely due to issues with "
-        f"the images or metadata. Inspect the log above for more details."
     )
+    if errors:
+        summary += (
+            f"Items {cf.RED}{errors}{cf.RESET} were skipped, likely due to issues with "
+            f"the images or metadata. Inspect the log above for more details."
+        )
+    logger.info(summary)
 
     # invalidate_cache("/*")
