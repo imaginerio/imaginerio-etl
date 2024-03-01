@@ -19,8 +19,8 @@ from turfpy.misc import sector
 from urllib3.util import Retry
 
 from ..config import *
-from ..utils.logger import CustomFormatter as cf
-from ..utils.logger import logger
+from .logger import CustomFormatter as cf
+from .logger import logger
 
 # from lxml import etree
 
@@ -45,7 +45,7 @@ def get_collections(metadata):
     # create collection(s)
     for label in labels:
         collection = create_collection(label)
-        collections[label] = collection
+        collections[label.lower()] = collection
     return collections
 
 
@@ -165,7 +165,7 @@ def invalidate_cache(path):
 
 
 def upload_folder_to_s3(source):
-    logger.info(f"Uploading {source} to S3...")
+    logger.info(f"{cf.BLUE}Uploading {source} to S3...")
     for root, _, files in os.walk(source):
         for file in files:
             try:
