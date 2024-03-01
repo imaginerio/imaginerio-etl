@@ -22,7 +22,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY, args.index)
-    collections = get_collections(metadata)
+    collections = get_collections(metadata, args.index)
     n_manifests = 0
     errors = []
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
             manifest = item.create_manifest(sizes)
             upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
             for name in item.get_collections():
-                collections[name.lower()].add_item_by_reference(manifest)
+                collections[name].add_item_by_reference(manifest)
             n_manifests += 1
         except Exception as e:
             logger.exception(

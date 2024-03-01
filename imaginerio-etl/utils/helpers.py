@@ -38,14 +38,24 @@ float2str = lambda x: x.split(".")[0]
 #     return [Item(id, row, vocabulary) for id, row in metadata.fillna("").iterrows()]
 
 
-def get_collections(metadata):
+def get_collections(metadata, index):
     collections = {}
     # list all collection names
     labels = metadata["Collection"].dropna().str.split("|").explode().unique()
     # create collection(s)
     for label in labels:
-        collection = create_collection(label)
-        collections[label.lower()] = collection
+        if index == "all":
+            collection = create_collection(label)
+            collections[label.lower()] = collection
+        else:
+            try:
+                response = requests.get(
+                    f"https://iiif.imaginerio.org/iiif/collection/{label}.json"
+                )
+                collection = Collection(**response.json())
+            except:
+                collection = create_collection(label)
+            collections[label.lower()] = collection
     return collections
 
 

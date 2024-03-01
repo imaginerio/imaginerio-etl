@@ -131,7 +131,7 @@ class Item:
 
     def get_collections(self):
         if self._collection:
-            return self._collection.split("|")
+            return self._collection.lower().split("|")
         else:
             logger.warning(f"Item {self._id} isn't associated with any collections")
             return []
