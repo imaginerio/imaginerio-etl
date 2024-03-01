@@ -19,7 +19,8 @@ from turfpy.misc import sector
 from urllib3.util import Retry
 
 from ..config import *
-from ..utils.logger import CustomFormatter, logger
+from ..utils.logger import CustomFormatter as cf
+from ..utils.logger import logger
 
 # from lxml import etree
 
@@ -164,6 +165,7 @@ def invalidate_cache(path):
 
 
 def upload_folder_to_s3(source):
+    logger.info(f"Uploading {source} to S3...")
     for root, _, files in os.walk(source):
         for file in files:
             try:
@@ -182,7 +184,7 @@ def upload_folder_to_s3(source):
                     },
                 )
             except:
-                logger.error(f"{CustomFormatter.RED}Failed to upload {path}")
+                logger.error(f"{cf.RED}Failed to upload {path}")
         # invalidate_cache(path)
 
     # if mode == "test":
@@ -201,9 +203,9 @@ def upload_object_to_s3(obj, name, key):
             Key=key,
             ContentType="application/json",
         )
-        logger.info(f"{CustomFormatter.GREEN}Object {name} uploaded succesfully")
+        logger.info(f"{cf.GREEN}Object {name} uploaded succesfully")
     except Exception as e:
-        logger.error(f"{CustomFormatter.RED}Failed to upload {name} to {key}: {e}")
+        logger.error(f"{cf.RED}Failed to upload {name} to {key}: {e}")
         # raise
 
 
