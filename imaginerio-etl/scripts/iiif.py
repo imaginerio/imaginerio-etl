@@ -20,7 +20,8 @@ from ..utils.helpers import (
     upload_folder_to_s3,
     upload_object_to_s3,
 )
-from ..utils.logger import CustomFormatter, logger
+from ..utils.logger import CustomFormatter as cf
+from ..utils.logger import logger
 
 if __name__ == "__main__":
     logger.info("Parsing arguments")
@@ -37,9 +38,7 @@ if __name__ == "__main__":
     errors = []
 
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
-        logger.info(
-            f"{CustomFormatter.LIGHT_BLUE}{index}/{len(metadata)} - Parsing item {id}"
-        )
+        logger.info(f"{cf.LIGHT_BLUE}{index}/{len(metadata)} - Parsing item {id}")
         try:
             item = Item(id, row, vocabulary)
             sizes = item.get_sizes() or item.tile_image()
@@ -50,7 +49,7 @@ if __name__ == "__main__":
             n_manifests += 1
         except Exception as e:
             logger.exception(
-                f"{CustomFormatter.RED}Couldn't create manifest for item {item._id}, skipping"
+                f"{cf.RED}Couldn't create manifest for item {item._id}, skipping"
             )
             errors.append(item._id)
 
@@ -58,9 +57,9 @@ if __name__ == "__main__":
         upload_object_to_s3(collections[name], name, f"iiif/collection/{name}.json")
 
     logger.info(
-        f"SUMMARY: Processing done. Parsed {CustomFormatter.BLUE}{len(metadata)}{CustomFormatter.RESET} "
-        f"items and created {CustomFormatter.GREEN}{n_manifests}{CustomFormatter.RESET} IIIF manifests. "
-        f"Items {CustomFormatter.RED}{errors}{CustomFormatter.RESET} were skipped, likely due to issues with "
+        f"SUMMARY: Processing done. Parsed {cf.BLUE}{len(metadata)}{cf.RESET} "
+        f"items and created {cf.GREEN}{n_manifests}{cf.RESET} IIIF manifests. "
+        f"Items {cf.RED}{errors}{cf.RESET} were skipped, likely due to issues with "
         f"the images or metadata. Inspect the log above for more details."
     )
 

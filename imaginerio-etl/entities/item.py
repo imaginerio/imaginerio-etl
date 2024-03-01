@@ -11,7 +11,8 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 
 from ..config import *
 from ..utils.helpers import session, upload_folder_to_s3
-from ..utils.logger import CustomFormatter, logger
+from ..utils.logger import CustomFormatter as cf
+from ..utils.logger import logger
 
 Image.MAX_IMAGE_PIXELS = None
 
@@ -141,9 +142,7 @@ class Item:
             return None
 
     def download_image(self):
-        logger.info(
-            f"{CustomFormatter.BLUE}Downloading image...{CustomFormatter.RESET}"
-        )
+        logger.info(f"{cf.BLUE}Downloading image...{cf.RESET}")
         response = session.get(self._jstor_img_path)
         if response.status_code == 200:
             os.makedirs(os.path.dirname(self._local_img_path), exist_ok=True)
@@ -151,7 +150,7 @@ class Item:
                 handler.write(response.content)
         else:
             logger.error(
-                f"{CustomFormatter.RED}Failed to download image {self._id} at {self._jstor_img_path}{CustomFormatter.RESET}"
+                f"{cf.RED}Failed to download image {self._id} at {self._jstor_img_path}{cf.RESET}"
             )
             raise Exception(IOError)
 
@@ -169,7 +168,7 @@ class Item:
             self._local_img_path,
             f"iiif/{self._id}",
         ]
-        logger.info(f"{CustomFormatter.BLUE}Tiling image...{CustomFormatter.RESET}")
+        logger.info(f"{cf.BLUE}Tiling image...{cf.RESET}")
         subprocess.run(command)
         sizes = self.create_derivatives([16, 8, 4, 2, 1])
         upload_folder_to_s3(f"iiif/{self._id}")
@@ -177,9 +176,7 @@ class Item:
         # os.remove(os.path.abspath(self._local_img_path))
 
     def create_derivatives(self, factors):
-        logger.info(
-            f"{CustomFormatter.BLUE}Creating derivatives...{CustomFormatter.RESET}"
-        )
+        logger.info(f"{cf.BLUE}Creating derivatives...{cf.RESET}")
         sizes = []
         for factor in factors:
             with Image.open(self._local_img_path) as im:
@@ -215,7 +212,7 @@ class Item:
 
         if not wikidata_id:
             logger.warning(
-                f"{CustomFormatter.YELLOW}No Wikidata ID found for {value_en}, will display text instead of link{CustomFormatter.RESET}"
+                f"{cf.YELLOW}No Wikidata ID found for {value_en}, will display text instead of link{cf.RESET}"
             )
             value["en"].append(value_en)
             value["pt-BR"].append(value_pt)
