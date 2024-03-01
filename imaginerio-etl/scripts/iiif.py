@@ -1,16 +1,5 @@
 import argparse
-import json
-import logging.config
-import os
-import random
-import shutil
-import sys
 from math import *
-
-import boto3
-import pandas as pd
-from tqdm import tqdm
-from tqdm.contrib.logging import logging_redirect_tqdm
 
 from ..config import *
 from ..entities.item import Item
@@ -38,7 +27,7 @@ if __name__ == "__main__":
     errors = []
 
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
-        logger.info(f"{cf.LIGHT_BLUE}{index}/{len(metadata)} - Parsing item {id}")
+        logger.info(f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)} - Parsing item {id}")
         try:
             item = Item(id, row, vocabulary)
             sizes = item.get_sizes() or item.tile_image()
