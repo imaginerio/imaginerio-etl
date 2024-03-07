@@ -7,14 +7,10 @@ from ..utils.helpers import get_collections, get_metadata, upload_object_to_s3
 from ..utils.logger import CustomFormatter as cf
 from ..utils.logger import logger
 
-if __name__ == "__main__":
-    logger.info("Parsing arguments")
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
-    )
-    parser.add_argument("--index", "-i", nargs="+", help="index to run", default="all")
-    args = parser.parse_args()
+
+def main(args):
+    if args.retile and args.index == "all":
+        parser.error("The --retile option cannot be used together with --index='all'")
 
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY, args.index)
     collections = get_collections(metadata, args.index)
@@ -26,7 +22,9 @@ if __name__ == "__main__":
         logger.info(f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)} - Parsing item {id}")
         try:
             item = Item(id, row, vocabulary)
-            sizes = item.get_sizes() or item.tile_image()
+            sizes = item.get_sizes()
+            if not sizes or args.retile == True:
+                sizes = item.tile_image()
             manifest = item.create_manifest(sizes)
             upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
             for name in item.get_collections():
@@ -57,4 +55,15 @@ if __name__ == "__main__":
         )
     logger.info(summary)
 
-    # invalidate_cache("/*")
+
+if __name__ == "__main__":
+    logger.info("Parsing arguments")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
+    )
+    parser.add_argument("--index", "-i", nargs="+", help="index to run", default="all")
+    parser.add_argument("--retile", "-r", action="store_true", default=False)
+    args = parser.parse_args()
+
+    main(args)

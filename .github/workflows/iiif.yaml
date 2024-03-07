@@ -7,6 +7,10 @@ on:
         description: "SSID to process (e.g. 35103808), leave blank to process all items"
         required: false
         default: ""
+      retile:
+        description: "Whether to retile images. Should only be used when specifying ids above"
+        type: boolean
+        required: false
 
 jobs:
   build-and-run:
@@ -26,8 +30,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
         run: |
-          if [ -z "${{ github.event.inputs.index }}" ]; then
-            docker run -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID etl
-          else
-            docker run -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID etl -m imaginerio-etl.scripts.iiif -i ${{ github.event.inputs.index }}
+          ARGS=""
+          if [ ! -z "${{ github.event.inputs.index }}" ]; then
+            ARGS="-m imaginerio-etl.scripts.iiif -i ${{ github.event.inputs.index }}"
           fi
+          if [ "${{ github.event.inputs.retile }}" == "true" ]; then
+            ARGS="$ARGS --retile"
+          fi
+          docker run -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID etl $ARGS
