@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       index:
-        description: "SSID to process (e.g. 35103808), leave blank to process all items"
+        description: "SSIDs to process (space separated, e.g. '35103808 35103809'), leave blank to process all items"
         required: false
         default: ""
       retile:
-        description: "Whether to retile images. Should only be used when specifying ids above"
+        description: "Retile images. Should only be used when specifying ids above"
         type: boolean
         required: false
 
