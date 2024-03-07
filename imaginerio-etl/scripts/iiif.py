@@ -3,12 +3,7 @@ from math import *
 
 from ..config import *
 from ..entities.item import Item
-from ..utils.helpers import (
-    get_collections,
-    get_metadata,
-    upload_folder_to_s3,
-    upload_object_to_s3,
-)
+from ..utils.helpers import get_collections, get_metadata, upload_object_to_s3
 from ..utils.logger import CustomFormatter as cf
 from ..utils.logger import logger
 
@@ -18,13 +13,14 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
     )
-    parser.add_argument("--index", "-i", help="index to run", default="all")
+    parser.add_argument("--index", "-i", nargs="+", help="index to run", default="all")
     args = parser.parse_args()
 
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY, args.index)
     collections = get_collections(metadata, args.index)
     n_manifests = 0
     errors = []
+    no_collection = metadata.loc[metadata["collection"].isna()].index.to_list()
 
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
         logger.info(f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)} - Parsing item {id}")
@@ -49,10 +45,15 @@ if __name__ == "__main__":
         f"SUMMARY: Processing done. Parsed {cf.BLUE}{len(metadata)}{cf.RESET} "
         f"items and created {cf.GREEN}{n_manifests}{cf.RESET} IIIF manifests. "
     )
+    if no_collection:
+        summary += (
+            f"Items {cf.YELLOW}{no_collection}{cf.RESET} aren't associated with any collections. "
+            f"Please fill the Collection field in JSTOR so these images are displayed in imagineRio. "
+        )
     if errors:
         summary += (
             f"Items {cf.RED}{errors}{cf.RESET} were skipped, likely due to issues with "
-            f"the images or metadata. Inspect the log above for more details."
+            f"the images or metadata. Inspect the log above (with CTRL+F) for more details."
         )
     logger.info(summary)
 

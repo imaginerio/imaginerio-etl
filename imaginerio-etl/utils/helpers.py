@@ -68,7 +68,9 @@ def get_metadata(metadata_path, vocabulary_path, index):
     logger.info("Filtering items")
     # filter rows
     if index != "all":
-        metadata = pd.DataFrame(metadata.loc[index]).T
+        metadata = pd.DataFrame(metadata.loc[index])
+        if len(index) == 1:
+            metadata = metadata.T
     else:
         metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
 
