@@ -16,10 +16,12 @@ def main(args):
     collections = get_collections(metadata, args.index)
     n_manifests = 0
     errors = []
-    no_collection = metadata.loc[metadata["collection"].isna()].index.to_list()
+    no_collection = metadata.loc[metadata["Collection"].isna()].index.to_list()
 
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
-        logger.info(f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)} - Parsing item {id}")
+        logger.info(
+            f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)}{cf.RESET} - Parsing item {id}"
+        )
         try:
             item = Item(id, row, vocabulary)
             sizes = item.get_sizes()
