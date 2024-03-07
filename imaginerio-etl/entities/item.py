@@ -164,7 +164,7 @@ class Item:
             "--layout",
             "iiif3",
             "--id",
-            f"{CLOUDFRONT}/iiif",
+            CLOUDFRONT,
             "--tile-size",
             "256",
             self._local_img_path,
@@ -290,7 +290,7 @@ class Item:
             image_url=self._img_path,
             anno_page_id=f"{self._base_path}/annotation-page/1",
             anno_id=f"{self._base_path}/annotation/1",
-            format="image/png",
+            format="image/jpeg",
             height=canvas.height,
             width=canvas.width,
         )
