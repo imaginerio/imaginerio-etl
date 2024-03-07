@@ -63,8 +63,15 @@ def get_metadata(metadata_path, vocabulary_path, index):
     logger.info("Loading metadata files")
     # open files and rename columns
     metadata = load_xls(metadata_path, "SSID")
-    vocabulary = load_xls(vocabulary_path, "Label (en)").to_dict("index")
-
+    vocabulary = load_xls(vocabulary_path, "Label (en)")
+    try:
+        vocabulary.to_dict("index")
+    except ValueError:
+        logger.error(
+            "Vocabulary labels must be unique. Duplicated labels: "
+            f"{vocabulary[vocabulary.index.duplicated()].index.to_list()}"
+        )
+        sys.exit(1)
     logger.info("Filtering items")
     # filter rows
     if index != "all":
