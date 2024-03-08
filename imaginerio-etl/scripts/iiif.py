@@ -20,7 +20,7 @@ def main(args):
 
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
         logger.info(
-            f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)}{cf.RESET} - Parsing item {id}"
+            f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)}{cf.BLUE} - Parsing item {id}"
         )
         try:
             item = Item(id, row, vocabulary)
