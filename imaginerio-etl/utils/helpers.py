@@ -3,6 +3,7 @@ import re
 import shutil
 import sys
 from datetime import datetime
+from json import JSONDecodeError
 
 import boto3
 import boto3.s3.transfer as s3transfer
@@ -50,10 +51,10 @@ def get_collections(metadata, index):
         else:
             try:
                 response = requests.get(
-                    f"https://iiif.imaginerio.org/iiif/collection/{label}.json"
+                    f"https://iiif.imaginerio.org/iiif/collection/{label.lower()}.json"
                 )
                 collection = Collection(**response.json())
-            except:
+            except JSONDecodeError:
                 collection = create_collection(label)
             collections[label.lower()] = collection
     return collections
@@ -221,10 +222,9 @@ def upload_object_to_s3(obj, name, key):
             Key=key,
             ContentType="application/json",
         )
-        logger.info(f"{cf.GREEN}Object {name} uploaded succesfully")
+        logger.info(f"{cf.GREEN}Object {name} uploaded successfully")
     except Exception as e:
         logger.error(f"{cf.RED}Failed to upload {name} to {key}: {e}")
-        # raise
 
 
 def query_wikidata(Q):
