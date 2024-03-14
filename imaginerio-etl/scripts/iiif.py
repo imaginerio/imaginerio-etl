@@ -30,7 +30,11 @@ def main(args):
             manifest = item.create_manifest(sizes)
             upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
             for name in item.get_collections():
-                collections[name].add_item_by_reference(manifest)
+                collection = collections[name]
+                collection.items = [
+                    ref for ref in collection.items if ref.id != manifest.id
+                ]
+                collection.add_item_by_reference(manifest)
             n_manifests += 1
         except Exception as e:
             logger.exception(
