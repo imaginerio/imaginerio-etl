@@ -45,7 +45,6 @@ def get_collections(metadata, index):
     labels = metadata["Collection"].dropna().str.split("|").explode().unique()
     # create collection(s)
     for label in labels:
-        logger.debug(label)
         if index == "all":
             collection = create_collection(label)
             collections[label] = collection
@@ -132,7 +131,7 @@ def create_collection(label):
         thumbnail = None
 
     collection = Collection(
-        id=f"{CLOUDFRONT}/collection/{label}.json",
+        id=f"{CLOUDFRONT}/collection/{label.lower()}.json",
         label=label,
         logo=logo,
         homepage=homepage,
