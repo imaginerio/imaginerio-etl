@@ -43,7 +43,9 @@ def main(args):
             errors.append(item._id)
 
     for name in collections.keys():
-        upload_object_to_s3(collections[name], name, f"iiif/collection/{name}.json")
+        upload_object_to_s3(
+            collections[name], name, f"iiif/collection/{name.lower()}.json"
+        )
 
     summary = (
         f"SUMMARY: Processing done. Parsed {cf.BLUE}{len(metadata)}{cf.RESET} "

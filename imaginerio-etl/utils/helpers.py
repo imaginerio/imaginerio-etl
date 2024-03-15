@@ -45,9 +45,10 @@ def get_collections(metadata, index):
     labels = metadata["Collection"].dropna().str.split("|").explode().unique()
     # create collection(s)
     for label in labels:
+        logger.debug(label)
         if index == "all":
             collection = create_collection(label)
-            collections[label.lower()] = collection
+            collections[label] = collection
         else:
             try:
                 response = requests.get(
@@ -56,7 +57,7 @@ def get_collections(metadata, index):
                 collection = Collection(**response.json())
             except JSONDecodeError:
                 collection = create_collection(label)
-            collections[label.lower()] = collection
+            collections[label] = collection
     return collections
 
 
