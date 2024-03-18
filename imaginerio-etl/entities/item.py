@@ -212,19 +212,19 @@ class Item:
             wikidata_id = self._vocabulary[value_en].get("Wikidata ID")
             value_pt = self._vocabulary[value_en].get("Label (pt)") or value_en
 
-        if not wikidata_id:
-            logger.warning(
-                f"{cf.YELLOW}No Wikidata ID found for {value_en}, will display text instead of link{cf.RESET}"
-            )
-            value["en"].append(value_en)
-            value["pt-BR"].append(value_pt)
-        else:
-            value["en"].append(
-                f'<a class="uri-value-link" target="_blank" href="https://wikidata.org/wiki/{wikidata_id}">{value_en}</a>'
-            )
-            value["pt-BR"].append(
-                f'<a class="uri-value-link" target="_blank" href="https://wikidata.org/wiki/{wikidata_id}">{value_pt}</a>'
-            )
+            if not wikidata_id:
+                logger.warning(
+                    f"{cf.YELLOW}No Wikidata ID found for {value_en}, will display text instead of link{cf.RESET}"
+                )
+                value["en"].append(value_en)
+                value["pt-BR"].append(value_pt)
+            else:
+                value["en"].append(
+                    f'<a class="uri-value-link" target="_blank" href="https://wikidata.org/wiki/{wikidata_id}">{value_en}</a>'
+                )
+                value["pt-BR"].append(
+                    f'<a class="uri-value-link" target="_blank" href="https://wikidata.org/wiki/{wikidata_id}">{value_pt}</a>'
+                )
         return KeyValueString(label=label, value=value)
 
     def create_manifest(self, sizes):
