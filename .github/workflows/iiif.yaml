@@ -1,6 +1,8 @@
 name: Build IIIF Manifests
 
 on:
+  repository_dispatch:
+      types: [submodule-update]
   workflow_dispatch:
     inputs:
       index:
@@ -21,6 +23,22 @@ jobs:
         with:
           submodules: true
 
+      - name: Update submodule
+        run: |
+          cd data
+          git pull origin main
+          cd ..
+          git config --global user.name 'martimpassos'
+          git config --global user.email 'martimpassos@users.noreply.github.com'
+          git add data
+          if git diff --staged --quiet; then
+            echo "No changes detected, skipping commit."
+            exit 0
+          else
+            git commit -am "Update submodule"
+            git push
+          fi
+      
       - name: Build Docker image
         run: docker build . -t etl
 
