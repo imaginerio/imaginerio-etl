@@ -82,7 +82,7 @@ logging.config.dictConfig(
             #     "filename": log_filename,
             # },
             "console": {
-                "class": logging.StreamHandler,
+                "class": "logging.StreamHandler",
                 "formatter": "custom",
                 "level": "DEBUG",
                 "stream": "ext://sys.stdout",  # Use sys.stdout
