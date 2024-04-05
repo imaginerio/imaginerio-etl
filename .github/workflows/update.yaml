@@ -26,15 +26,7 @@ jobs:
       - name: Update submodule
         run: |
           cd data
-          git pull origin main
-
-      # - name: Commit updated submodule
-      #   run: |
-      #     git config --global user.name 'Your Name'
-      #     git config --global user.email 'your-email@example.com'
-      #     git add path/to/your/submodule
-      #     git commit -m "Update submodule to latest commit"
-      #     git push
+          git pull --ff-only origin main
 
       - name: Build Docker image
         run: docker build . -t etl
@@ -53,3 +45,25 @@ jobs:
             ARGS="$ARGS --retile"
           fi
           docker run -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID etl $ARGS
+
+      - name: Commit submodule changes and update pointer
+        run: |
+          cd data
+          git config --global user.name 'martimpassos'
+          git config --global user.email 'martimpassos@users.noreply.github.com'
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes detected, skipping commit."
+          else
+            git commit -m "Update output KMLs"
+            git push
+          fi
+          cd ..
+          git add data
+          if git diff --staged --quiet; then
+            echo "No changes detected, skipping commit."
+            exit 0
+          else
+            git commit -m "Update submodule"
+            git push
+          fi
