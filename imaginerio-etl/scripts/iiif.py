@@ -9,9 +9,6 @@ from ..utils.logger import logger
 
 
 def main(args):
-    if args.retile and args.index == "all":
-        parser.error("The --retile option cannot be used together with --index='all'")
-
     metadata, vocabulary = get_metadata(JSTOR, VOCABULARY, args.index)
     collections = get_collections(metadata, args.index)
     n_manifests = 0
@@ -62,16 +59,3 @@ def main(args):
             f"the images or metadata. Inspect the log above (with CTRL+F) for more details."
         )
     logger.info(summary)
-
-
-if __name__ == "__main__":
-    logger.info("Parsing arguments")
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
-    )
-    parser.add_argument("--index", "-i", nargs="+", help="index to run", default="all")
-    parser.add_argument("--retile", "-r", action="store_true", default=False)
-    args = parser.parse_args()
-
-    main(args)
