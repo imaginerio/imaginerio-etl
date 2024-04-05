@@ -39,7 +39,6 @@ def main():
                     photo_overlays.append(PhotoOverlay(child, metadata))
             else:
                 photo_overlays.append(PhotoOverlay(sample._photooverlay, metadata))
-            os.rename(path, path.replace("kmls", "kmls_old"))
         else:
             continue
     if photo_overlays:
@@ -84,7 +83,7 @@ def main():
         )
 
         viewcones_layer = FeatureLayer(
-            VIEWCONES_LAYER,
+            VIEWCONES_LAYER_URL,
             gis,
         )
 
