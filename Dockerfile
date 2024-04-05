@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM python:3.11
 
 WORKDIR /usr/src/app
 
@@ -15,4 +15,4 @@ COPY data ./data
 
 ENTRYPOINT ["python"]
 
-CMD ["-m", "imaginerio-etl.scripts.iiif"]
+CMD ["-m", "imaginerio-etl.scripts.update"]
