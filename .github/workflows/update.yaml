@@ -52,7 +52,7 @@ jobs:
             -e AWS_ACCESS_KEY_ID \
             -e ARCGIS_USER \
             -e ARCGIS_PASSWORD \
-            -e VIEWCONES_LAYER_URL \ 
+            -e VIEWCONES_LAYER_URL \
             etl $ARGS
 
       - name: Commit submodule changes and update pointer
