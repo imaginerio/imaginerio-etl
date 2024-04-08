@@ -35,6 +35,9 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ARCGIS_USER: ${{ secrets.ARCGIS_USER }}
+          ARCGIS_PASSWORD: ${{ secrets.ARCGIS_PASSWORD }}
+          VIEWCONES_LAYER_URL: ${{ secrets.VIEWCONES_LAYER_URL }}
 
         run: |
           ARGS=""
@@ -44,7 +47,13 @@ jobs:
           if [ "${{ github.event.inputs.retile }}" == "true" ]; then
             ARGS="$ARGS --retile"
           fi
-          docker run -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY_ID etl $ARGS
+          docker run \
+            -e AWS_SECRET_ACCESS_KEY 
+            -e AWS_ACCESS_KEY_ID
+            -e ARCGIS_USER
+            -e ARCGIS_PASSWORD
+            -e VIEWCONES_LAYER_URL 
+            etl $ARGS
 
       - name: Commit submodule changes and update pointer
         run: |
