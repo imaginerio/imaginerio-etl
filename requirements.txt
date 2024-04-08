@@ -96,7 +96,7 @@ pandocfilters==1.5.1
 parso==0.8.4
 partd==1.4.1
 pexpect==4.9.0
-Pillow==9.5.0
+Pillow==10.3.0
 platformdirs==4.2.0
 prometheus_client==0.20.0
 prompt-toolkit==3.0.43
