@@ -28,44 +28,43 @@ def main():
 
     # Parse PhotoOverlays
     source = KMLS_IN
-    for sample in os.listdir(source):
-        if sample.endswith("kml"):
-            photo_overlays = []
-            path = os.path.join(source, sample)
-            sample = KML(path)
-            if sample._folder is not None:
-                folder = Folder(sample._folder)
-                for child in folder._children:
-                    photo_overlays.append(PhotoOverlay(child, metadata))
+    for item in [sample for sample in os.listdir(source) if sample.endswith("kml")]:
+        photo_overlays = []
+        path = os.path.join(source, item)
+        kml = KML(path)
+        if kml._folder is not None:
+            folder = Folder(kml._folder)
+            for child in folder._children:
+                photo_overlays.append(PhotoOverlay(child, metadata))
+        else:
+            photo_overlays.append(PhotoOverlay(kml._photooverlay, metadata))
+
+        for photo_overlay in photo_overlays:
+            # logger.debug(f"Processing image {index}/{len(photo_overlays)}")
+            if "relative" in photo_overlay._altitude_mode:
+                photo_overlay.correct_altitude_mode()
+
+            if photo_overlay._depicts:
+                photo_overlay.get_radius_via_depicted_entities(vocabulary)
             else:
-                photo_overlays.append(PhotoOverlay(sample._photooverlay, metadata))
+                photo_overlay.get_radius_via_trigonometry()
 
-            for photo_overlay in photo_overlays:
-                # logger.debug(f"Processing image {index}/{len(photo_overlays)}")
-                if "relative" in photo_overlay._altitude_mode:
-                    photo_overlay.correct_altitude_mode()
-
-                if photo_overlay._depicts:
-                    photo_overlay.get_radius_via_depicted_entities(vocabulary)
-                else:
-                    photo_overlay.get_radius_via_trigonometry()
-
-                # Dispatch data
-                feature = photo_overlay.to_feature()
-                identifier = feature.properties.get("ss_id") or feature.properties.get(
-                    "document_id"
+            # Dispatch data
+            feature = photo_overlay.to_feature()
+            identifier = feature.properties.get("ss_id") or feature.properties.get(
+                "document_id"
+            )
+            if identifier in features:
+                logger.warning(
+                    f"Object {identifier} is duplicated, will use the last one available"
                 )
-                if identifier in features:
-                    logger.warning(
-                        f"Object {identifier} is duplicated, will use the last one available"
-                    )
-                features[identifier] = feature
-                individual = KML.to_element()
-                individual.append(photo_overlay.to_element())
-                etree.ElementTree(individual).write(
-                    f"{KMLS_OUT}/{identifier}.kml", pretty_print=True
-                )
-            os.remove(path)
+            features[identifier] = feature
+            individual = KML.to_element()
+            individual.append(photo_overlay.to_element())
+            etree.ElementTree(individual).write(
+                f"{KMLS_OUT}/{identifier}.kml", pretty_print=True
+            )
+        os.remove(path)
 
     geojson_feature_collection = geojson.FeatureCollection(
         features=[
@@ -74,6 +73,9 @@ def main():
             if feature["properties"].get("ss_id")
         ]
     )
+
+    with open("data/output/viewcones.geojson", "w", encoding="utf8") as f:
+        json.dump(geojson_feature_collection, f, ensure_ascii=False, allow_nan=False)
 
     gis = GIS(
         url="https://www.arcgis.com",
@@ -91,9 +93,9 @@ def main():
             "title": "Viewcones",
             "type": "GeoJson",
             "overwrite": True,
-            "filename": "viewcones.geojson",
+            # "fileName": "viewcones.geojson",
         },
-        data=io.StringIO(json.dumps(geojson_feature_collection)),
+        data="data/output/viewcones.geojson",
     )
 
     viewcones_layer.append(
@@ -105,9 +107,6 @@ def main():
     )
 
     data_item.delete()
-
-    # with open(GEOJSON, "w", encoding="utf8") as f:
-    #    json.dump(geojson_feature_collection, f, ensure_ascii=False, allow_nan=False)
 
 
 if __name__ == "__main__":
