@@ -161,5 +161,5 @@ Pipfile.lock
 package-lock.json
 node_modules
 
-data/output/items_to_process.csv
+data/input/items_to_process.csv
 # End of https://www.gitignore.io/api/macos,python
