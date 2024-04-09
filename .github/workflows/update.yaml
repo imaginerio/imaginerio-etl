@@ -15,7 +15,7 @@ on:
         required: false
 
 jobs:
-  build-and-run:
+  update-process:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -23,10 +23,25 @@ jobs:
         with:
           submodules: true
 
-      - name: Update submodule
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Puppeteer script
+        run: node imaginerio-etl/utils/fetchData.js
+        env:
+          JSTOR_USER: ${{ secrets.JSTOR_USER }}
+          JSTOR_PASSWORD: ${{ secrets.JSTOR_PASSWORD }}
+          JSTOR_PROJECT: ${{ secrets.JSTOR_PROJECT }}
+
+      - name: Compare data
         run: |
-          cd data
-          git pull --ff-only origin main
+          pip install pandas xlrd openpyxl
+          python3 imaginerio-etl/utils/compare_data.py
 
       - name: Build Docker image
         run: docker build . -t etl
@@ -38,7 +53,6 @@ jobs:
           ARCGIS_USER: ${{ secrets.ARCGIS_USER }}
           ARCGIS_PASSWORD: ${{ secrets.ARCGIS_PASSWORD }}
           VIEWCONES_LAYER_URL: ${{ secrets.VIEWCONES_LAYER_URL }}
-
         run: |
           ARGS=""
           if [ ! -z "${{ github.event.inputs.index }}" ]; then
@@ -53,9 +67,10 @@ jobs:
             -e ARCGIS_USER \
             -e ARCGIS_PASSWORD \
             -e VIEWCONES_LAYER_URL \
+            -v $(pwd)/data:/usr/src/app/data \
             etl $ARGS
 
-      - name: Commit submodule changes and update pointer
+      - name: Commit and push changes
         run: |
           cd data
           git config --global user.name 'martimpassos'
@@ -64,7 +79,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes detected, skipping commit."
           else
-            git commit -m "Update output KMLs"
+            git commit -m "Update data"
             git push
           fi
           cd ..
