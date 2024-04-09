@@ -1,5 +1,6 @@
 import argparse
 
+from .. import config
 from ..utils.logger import logger
 from . import iiif, viewcones
 
@@ -9,6 +10,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
+    )
+    parser.add_argument(
+        "--source", "-s", help="data source file", default=config.ITEMS_TO_PROCESS
     )
     parser.add_argument("--index", "-i", nargs="+", help="index to run", default="all")
     parser.add_argument("--retile", "-r", action="store_true", default=False)
