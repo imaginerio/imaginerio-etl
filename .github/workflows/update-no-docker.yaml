@@ -55,7 +55,7 @@ jobs:
       - name: Process viewcones
         if: steps.check_kml_files.outputs.kml_exists == 'true'
         run: |
-          pip install arcgis turfpy lxml geojson
+          sudo pip install arcgis turfpy lxml geojson
           python3 imaginerio-etl/scripts/viewcones.py
 
       - name: Install libvips
