@@ -1,5 +1,5 @@
 import argparse
-from math import *
+import sys
 
 from ..config import *
 from ..entities.item import Item
@@ -7,10 +7,14 @@ from ..utils.helpers import get_collections, get_metadata, upload_object_to_s3
 from ..utils.logger import CustomFormatter as cf
 from ..utils.logger import logger
 
+# from math import *
 
-def main(args):
+
+def main(args):  # ={"source": ITEMS_TO_PROCESS, "index": "all", "retile": False}
     metadata, vocabulary = get_metadata(args.source, VOCABULARY, args.index)
-    logger.info("Metadata:", metadata)
+    if metadata.empty:
+        logger.info("There aren't any new or changed items to process. Exiting.")
+        sys.exit(0)
     collections = get_collections(metadata, args.index)
     n_manifests = 0
     errors = []
@@ -60,3 +64,20 @@ def main(args):
             f"the images or metadata. Inspect the log above (with CTRL+F) for more details."
         )
     logger.info(summary)
+
+
+if __name__ == "__main__":
+    logger.info("Parsing arguments")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
+    )
+    parser.add_argument(
+        "--source", "-s", help="data source file", default=config.ITEMS_TO_PROCESS
+    )
+    parser.add_argument("--index", "-i", nargs="+", help="index to run", default="all")
+    parser.add_argument("--retile", "-r", action="store_true", default=False)
+    args = parser.parse_args()
+    if args.retile and args.index == "all":
+        parser.error("The --retile option cannot be used together with --index='all'")
+    main(args)
