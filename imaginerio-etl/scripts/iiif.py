@@ -10,6 +10,7 @@ from ..utils.logger import logger
 
 def main(args):
     metadata, vocabulary = get_metadata(args.source, VOCABULARY, args.index)
+    logger.info("Metadata:", metadata)
     collections = get_collections(metadata, args.index)
     n_manifests = 0
     errors = []
