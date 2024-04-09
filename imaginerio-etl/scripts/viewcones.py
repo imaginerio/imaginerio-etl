@@ -25,10 +25,13 @@ def main():
     features = {}
 
     # Parse PhotoOverlays
-    for item in [sample for sample in os.listdir(KMLS_IN) if sample.endswith("kml")]:
+    for item in [
+        os.path.join(KMLS_IN, filename)
+        for filename in os.listdir(KMLS_IN)
+        if filename.endswith("kml")
+    ]:
         photo_overlays = []
-        path = os.path.join(source, item)
-        kml = KML(path)
+        kml = KML(item)
         if kml._folder is not None:
             folder = Folder(kml._folder)
             for child in folder._children:
@@ -61,7 +64,7 @@ def main():
             etree.ElementTree(individual).write(
                 f"{KMLS_OUT}/{identifier}.kml", pretty_print=True
             )
-        os.remove(path)
+        os.remove(item)
 
     geojson_feature_collection = geojson.FeatureCollection(
         features=[
