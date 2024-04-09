@@ -2,9 +2,7 @@ import os
 
 import pandas as pd
 
-from .. import config
-
-current_file = config.JSTOR
+current_file = "data/input/jstor.xls"
 current = pd.read_excel(current_file)
 
 new_file = os.path.join("jstor_download", os.listdir("jstor_download")[0])
