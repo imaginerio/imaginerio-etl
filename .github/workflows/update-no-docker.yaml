@@ -1,4 +1,4 @@
-name: Update imagineRio
+name: Update imagineRio (no docker)
 
 on:
   repository_dispatch:
