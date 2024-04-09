@@ -2,6 +2,7 @@ import os
 
 JSTOR = "data/input/jstor.xls"
 VOCABULARY = "data/input/vocabulary.xls"
+ITEMS_TO_PROCESS = "data/input/items_to_process.xls"
 KMLS_IN = "data/input/kmls"
 KMLS_OUT = "data/output/kmls"
 GEOJSON = "data/output/viewcones.geojson"
