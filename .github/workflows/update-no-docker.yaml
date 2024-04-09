@@ -50,7 +50,7 @@ jobs:
 
       - name: Check for KML files
         id: check_kml_files
-        run: echo "::set-output name=kml_exists::$(find data/inputs/kmls -type f -name '*.kml' | wc -l | awk '{if($1>0) print "true"; else print "false"}')"
+        run: echo "::set-output name=kml_exists::$(find data/input/kmls -type f -name '*.kml' | wc -l | awk '{if($1>0) print "true"; else print "false"}')"
 
       - name: Process viewcones
         if: steps.check_kml_files.outputs.kml_exists == 'true'
