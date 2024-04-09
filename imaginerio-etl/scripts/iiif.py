@@ -9,7 +9,7 @@ from ..utils.logger import logger
 
 
 def main(args):
-    metadata, vocabulary = get_metadata(JSTOR, VOCABULARY, args.index)
+    metadata, vocabulary = get_metadata(args.source, VOCABULARY, args.index)
     collections = get_collections(metadata, args.index)
     n_manifests = 0
     errors = []
