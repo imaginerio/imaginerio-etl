@@ -16,8 +16,6 @@ from ..entities.camera import KML, Folder, PhotoOverlay
 from ..utils.helpers import geo_to_world_coors, load_xls, query_wikidata
 from ..utils.logger import logger
 
-logging.getLogger("PIL").setLevel(logging.WARNING)
-
 
 def main():
 
@@ -27,8 +25,7 @@ def main():
     features = {}
 
     # Parse PhotoOverlays
-    source = KMLS_IN
-    for item in [sample for sample in os.listdir(source) if sample.endswith("kml")]:
+    for item in [sample for sample in os.listdir(KMLS_IN) if sample.endswith("kml")]:
         photo_overlays = []
         path = os.path.join(source, item)
         kml = KML(path)
