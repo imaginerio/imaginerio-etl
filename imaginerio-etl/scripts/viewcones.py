@@ -13,14 +13,25 @@ from turfpy.misc import sector
 
 from ..config import *
 from ..entities.camera import KML, Folder, PhotoOverlay
-from ..utils.helpers import geo_to_world_coors, load_xls, query_wikidata
+from ..utils.helpers import geo_to_world_coors, get_vocabulary, load_xls, query_wikidata
 from ..utils.logger import logger
 
 
-def main():
+def update():
 
-    metadata = load_xls(JSTOR, "SSID").fillna("")
-    vocabulary = load_xls(VOCABULARY, "Label (en)")
+    metadata = load_xls(CURRENT_JSTOR, "SSID").fillna("")
+    vocabulary = get_vocabulary(VOCABULARY)
+
+    gis = GIS(
+        url="https://www.arcgis.com",
+        username=ARCGIS_USER,
+        password=ARCGIS_PASSWORD,
+    )
+
+    viewcones_layer = FeatureLayer(
+        VIEWCONES_LAYER_URL,
+        gis,
+    )
 
     features = {}
 
@@ -54,6 +65,7 @@ def main():
             identifier = feature.properties.get("ss_id") or feature.properties.get(
                 "document_id"
             )
+            dest = KMLS_OUT if feature.properites.get("ss_id") else KMLS_IN
             if identifier in features:
                 logger.warning(
                     f"Object {identifier} is duplicated, will use the last one available"
@@ -62,52 +74,50 @@ def main():
             individual = KML.to_element()
             individual.append(photo_overlay.to_element())
             etree.ElementTree(individual).write(
-                f"{KMLS_OUT}/{identifier}.kml", pretty_print=True
+                f"{dest}/{identifier}.kml", pretty_print=True
             )
         os.remove(item)
 
-    geojson_feature_collection = geojson.FeatureCollection(
-        features=[
-            feature
-            for feature in features.values()
-            if feature["properties"].get("ss_id")
-        ]
-    )
+    if features:
+        geojson_feature_collection = geojson.FeatureCollection(
+            features=[
+                feature
+                for feature in features.values()
+                if feature["properties"].get("ss_id")
+            ]
+        )
 
-    with open("data/output/viewcones.geojson", "w", encoding="utf8") as f:
-        json.dump(geojson_feature_collection, f, ensure_ascii=False, allow_nan=False)
+        with open(GEOJSON, "w", encoding="utf8") as f:
+            json.dump(
+                geojson_feature_collection, f, ensure_ascii=False, allow_nan=False
+            )
 
-    gis = GIS(
-        url="https://www.arcgis.com",
-        username=ARCGIS_USER,
-        password=ARCGIS_PASSWORD,
-    )
+        data_item = gis.content.add(
+            item_properties={
+                "title": "Viewcones",
+                "type": "GeoJson",
+                "overwrite": True,
+                # "fileName": "viewcones.geojson",
+            },
+            data=GEOJSON,
+        )
 
-    viewcones_layer = FeatureLayer(
-        VIEWCONES_LAYER_URL,
-        gis,
-    )
+        viewcones_layer.append(
+            item_id=data_item.id,
+            upload_format="geojson",
+            upsert=True,
+            upsert_matching_field="ss_id",
+            update_geometry=True,
+        )
 
-    data_item = gis.content.add(
-        item_properties={
-            "title": "Viewcones",
-            "type": "GeoJson",
-            "overwrite": True,
-            # "fileName": "viewcones.geojson",
-        },
-        data="data/output/viewcones.geojson",
-    )
+        data_item.delete()
 
-    viewcones_layer.append(
-        item_id=data_item.id,
-        upload_format="geojson",
-        upsert=True,
-        upsert_matching_field="ss_id",
-        update_geometry=True,
-    )
+    features = viewcones_layer.query(
+        where="1=1", out_fields="ss_id", return_geometry=False
+    ).features
+    viewcones_ssids = {feature.attributes["ss_id"] for feature in features}
+    jstor_ssids = set(metadata.loc[metadata["Status"] == "In imagineRio"].index)
 
-    data_item.delete()
-
-
-if __name__ == "__main__":
-    main()
+    not_in_arcgis = jstor_ssids.difference(viewcones_ssids)
+    not_marked_as_ready = viewcones_ssids.difference(jstor_ssids)
+    return {"not_in_arcgis": not_in_arcgis, "not_marked_as_ready": not_marked_as_ready}
