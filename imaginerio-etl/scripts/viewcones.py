@@ -65,7 +65,7 @@ def update():
             identifier = feature.properties.get("ss_id") or feature.properties.get(
                 "document_id"
             )
-            dest = KMLS_OUT if feature.properites.get("ss_id") else KMLS_IN
+            dest = KMLS_OUT if feature.properties.get("ss_id") else KMLS_IN
             if identifier in features:
                 logger.warning(
                     f"Object {identifier} is duplicated, will use the last one available"
