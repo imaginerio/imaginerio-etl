@@ -1,22 +1,17 @@
 import os
 import re
-import shutil
 import sys
 from datetime import datetime
 from json import JSONDecodeError
 
 import boto3
-import boto3.s3.transfer as s3transfer
-import botocore
 import pandas as pd
 import requests
 from iiif_prezi3 import Collection
-from moto import mock_aws
 from pyproj import Proj
 from requests.adapters import HTTPAdapter
 from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
-from turfpy.misc import sector
 from urllib3.util import Retry
 
 from ..config import *
@@ -39,49 +34,99 @@ float2str = lambda x: x.split(".")[0]
 #     return [Item(id, row, vocabulary) for id, row in metadata.fillna("").iterrows()]
 
 
-def get_collections(metadata, index):
+def get_collections(metadata):  # , index
     collections = {}
     # list all collection names
     labels = metadata["Collection"].dropna().str.split("|").explode().unique()
     # create collection(s)
     for label in labels:
-        if index == "all":
+        # if index == "all":
+        #     collection = create_collection(label)
+        #     collections[label] = collection
+        # else:
+        try:
+            response = requests.get(
+                f"https://iiif.imaginerio.org/iiif/collection/{label.lower()}.json"
+            )
+            collection = Collection(**response.json())
+        except JSONDecodeError:
             collection = create_collection(label)
-            collections[label] = collection
-        else:
-            try:
-                response = requests.get(
-                    f"https://iiif.imaginerio.org/iiif/collection/{label.lower()}.json"
-                )
-                collection = Collection(**response.json())
-            except JSONDecodeError:
-                collection = create_collection(label)
-            collections[label] = collection
+        collections[label] = collection
     return collections
 
 
-def get_metadata(metadata_path, vocabulary_path, index):
-    logger.info("Loading metadata")
-    # open files and rename columns
-    metadata = load_xls(metadata_path, "SSID")
+def get_metadata_changes(current_file, download_dir):
+    current_data = load_xls(current_file, "SSID")
+
+    new_file = os.path.join(download_dir, os.listdir(download_dir)[0])
+    new_data = load_xls(new_file, "SSID")
+
+    comparison = new_data.compare(current_data, keep_shape=True)
+    changes = comparison.notna().any(axis=1)
+    changed = new_data[changes]
+
+    if not changed.empty:
+        os.replace(new_file, current_file)
+
+    return changed
+
+
+def get_vocabulary(vocabulary_path):
     vocabulary = load_xls(vocabulary_path, "Label (en)")
     try:
         vocabulary = vocabulary.to_dict("index")
+        return vocabulary
     except ValueError:
         logger.error(
             "Vocabulary labels must be unique. Duplicated labels: "
             f"{vocabulary[vocabulary.index.duplicated()].index.to_list()}"
         )
         sys.exit(1)
-    # filter rows
-    if index != "all":
-        metadata = pd.DataFrame(metadata.loc[index])
-        if len(index) == 1:
-            metadata = metadata.T
-    else:
-        metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
 
-    return metadata, vocabulary
+
+# def get_metadata(metadata_path, index):
+#     logger.info("Loading metadata")
+#     # open files and rename columns
+#     #metadata = compare_data()
+
+#     # filter rows
+#     if index != "all":
+#         metadata = pd.DataFrame(metadata.loc[index])
+#         if len(index) == 1:
+#             metadata = metadata.T
+#     else:
+#         metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
+
+#     return metadata
+
+
+def summarize(viewcones_info, manifests_info):
+    summary = ""
+    if manifests_info:
+        summary += (
+            f"SUMMARY: Processing done. Parsed {cf.BLUE}{manifests_info['n_items']}{cf.RESET} "
+            f"items and created/updated {cf.GREEN}{manifests_info['n_manifests']}{cf.RESET} IIIF manifests. "
+        )
+
+        if manifests_info.get("no_collection"):
+            summary += (
+                f"Items {cf.YELLOW}{manifests_info['no_collection']}{cf.RESET} aren't associated with any collections. "
+                f"Please fill the Collection field in JSTOR so these images are displayed in imagineRio. "
+            )
+
+        if manifests_info.get("errors"):
+            summary += (
+                f"Items {cf.RED}{manifests_info['errors']}{cf.RESET} were skipped, likely due to issues with "
+                f"the images or metadata. Inspect the log above (with CTRL+F) for more details."
+            )
+
+    if viewcones_info:
+        summary += (
+            f"Items {cf.YELLOW}{viewcones_info['not_in_arcgis']}{cf.RESET} are marked as ready in JSTOR but have no viewcone. "
+            f"Items {cf.YELLOW}{viewcones_info['not_marked_as_ready']}{cf.RESET} have viewcones but aren't marked as ready."
+        )
+
+    return summary
 
 
 def load_xls(xls, index):
@@ -274,7 +319,7 @@ def geo_to_world_coors(coors, inverse=False):
 
 def update_metadata(df):
     metadata = pd.read_csv(
-        "IMS_METADATA",
+        "data/output/faltantes.csv",
         index_col="Document ID",
         converters={
             "First Year": float2str,
@@ -283,56 +328,62 @@ def update_metadata(df):
             "Height": float2str,
         },
     )
+    print(metadata["Document URL"].dtype)
+    print("metadata", len(metadata))
     metadata.update(df)
-    metadata.to_csv("IMS_METADATA")
+    print("metadata after update", len(metadata))
+    metadata.to_csv("data/output/faltantes.csv")
     # return metadata
 
 
-# def ims2jstor():
-#     jstor = pd.read_excel(JSTOR)
-#     jstor.set_index("Document ID[19474]", inplace=True)
-#     ims = pd.read_csv(
-#         IMS_METADATA,
-#         index_col="Document ID",
-#         converters={
-#             "First Year": float2str,
-#             "Last Year": float2str,
-#             "Width": float2str,
-#             "Height": float2str,
-#         },
-#     )
-#     digitized = ims["Media URL"].notna()
-#     published = ims["Document URL"].notna()
-#     not_in_jstor = ~(ims.index.isin(jstor.index))
-#     has_dates = ims["First Year"].notna() & ims["Last Year"].notna()
-#     ims2jstor = ims.loc[has_dates & digitized & published & not_in_jstor].copy()
-#     ims2jstor.loc[ims2jstor["Creator"] == "Autoria não identificada", "Creator"] = (
-#         "Unknown Authorship"
-#     )
-#     ims2jstor.rename(
-#         columns={
-#             "Title": "Title[19462]",
-#             "Date": "Date[19486]",
-#             "First Year": "First Year[19466]",
-#             "Last Year": "Last Year[19467]",
-#             "Creator": "Creator[1603501]",
-#             "Description (Portuguese)": "Description (Portuguese)[1612567]",
-#             "Type": "Type[1604106]",
-#             "Collection": "Collection[1711006]",
-#             "Provider": "Provider[1731287]",
-#             "Material": "Material[1612569]",
-#             "Fabrication Method": "Fabrication Method[1612568]",
-#             "Rights": "Rights[1861241]",
-#             "Required Statement": "Required Statement[19484]",
-#             "Width": "Width[1604102]",
-#             "Height": "Height[1604103]",
-#             "Document URL": "Document URL[796463]",
-#         },
-#         inplace=True,
-#     )
-#     ims2jstor[
-#         [column for column in jstor.columns if column not in ims2jstor.columns]
-#     ] = ""
-#     ims2jstor["SSID"] = "NEW"
-#     ims2jstor.index.rename("Document ID[19474]", inplace=True)
-#     ims2jstor.to_excel(IMS2JSTOR)
+def ims2jstor():
+    jstor = pd.read_excel("data/input/jstor.xls")
+    jstor.set_index("Document ID[19474]", inplace=True)
+    ims = pd.read_csv(
+        "data/output/faltantes.csv",
+        index_col="Document ID",
+        converters={
+            "First Year": float2str,
+            "Last Year": float2str,
+            "Width": float2str,
+            "Height": float2str,
+        },
+    )
+    print("ims", len(ims))
+    # digitized = ims["Media URL"].notna()
+    published = ims["Document URL"].notna()
+    not_in_jstor = ~(ims.index.isin(jstor.index))
+    has_dates = ims["First Year"].notna() & ims["Last Year"].notna()
+    ims2jstor = ims.loc[has_dates & published & not_in_jstor].copy()
+    print("ims2jstor", len(ims2jstor))
+    ims2jstor.loc[ims2jstor["Creator"] == "Autoria não identificada", "Creator"] = (
+        "Unknown Authorship"
+    )
+    ims2jstor["Document URL"] = ims2jstor["Document URL"].astype(str)
+    ims2jstor.rename(
+        columns={
+            "Title": "Title[19462]",
+            "Date": "Date[19486]",
+            "First Year": "First Year[19466]",
+            "Last Year": "Last Year[19467]",
+            "Creator": "Creator[1603501]",
+            "Description (Portuguese)": "Description (Portuguese)[1612567]",
+            "Type": "Type[1604106]",
+            "Collection": "Collection[1711006]",
+            "Provider": "Provider[1731287]",
+            "Material": "Material[1612569]",
+            "Fabrication Method": "Fabrication Method[1612568]",
+            "Rights": "Rights[1861241]",
+            "Required Statement": "Required Statement[19484]",
+            "Width": "Width[1604102]",
+            "Height": "Height[1604103]",
+            "Document URL": "Document URL[796463]",
+        },
+        inplace=True,
+    )
+    ims2jstor[
+        [column for column in jstor.columns if column not in ims2jstor.columns]
+    ] = ""
+    ims2jstor["SSID"] = "NEW"
+    ims2jstor.index.rename("Document ID[19474]", inplace=True)
+    ims2jstor.to_excel("data/output/ims2jstor.xls", engine="openpyxl")
