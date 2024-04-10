@@ -10,17 +10,11 @@ import mercantile
 import numpy as np
 import pandas as pd
 import requests
-
-# from dotenv import load_dotenv
 from lxml import etree
 from PIL import Image
-
-# from pykml import parser
 from pyproj import Proj
 from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
-
-# from tqdm import tqdm
 from turfpy.misc import sector
 
 from ..utils.helpers import geo_to_world_coors, query_wikidata
