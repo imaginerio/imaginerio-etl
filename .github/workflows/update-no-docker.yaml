@@ -58,18 +58,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc heimdal-dev
           pip install arcgis --no-deps
-          pip install turfpy lxml geojson cachetools requests requests-oauthlib
+          pip install turfpy lxml geojson cachetools requests requests-oauthlib requests-toolbelt ujson
           python3 -m imaginerio-etl.scripts.viewcones
-
-      - name: Install libvips
-        if: steps.compare_data.outputs.file_created == 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libvips libvips-tools
 
       - name: Create IIIF manifests
         if: steps.compare_data.outputs.file_created == 'true'
         run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips libvips-tools
           pip install -r requirements.txt
           python3 -m imaginerio-etl.scripts.iiif
 
