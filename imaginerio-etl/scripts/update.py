@@ -1,26 +1,35 @@
 import argparse
+import os
 
-from .. import config
+from ..config import *
+from ..utils.helpers import get_metadata_changes, summarize
 from ..utils.logger import logger
 from . import iiif, viewcones
 
 
 def main():
-    logger.info("Parsing arguments")
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--mode", "-m", help="run mode", choices=["test", "prod"], default="test"
-    )
-    parser.add_argument(
-        "--source", "-s", help="data source file", default=config.ITEMS_TO_PROCESS
-    )
-    parser.add_argument("--index", "-i", nargs="+", help="index to run", default="all")
-    parser.add_argument("--retile", "-r", action="store_true", default=False)
-    args = parser.parse_args()
-    if args.retile and args.index == "all":
-        parser.error("The --retile option cannot be used together with --index='all'")
-    viewcones.main()
-    iiif.main(args)
+    # Compare data, overwrite current data file if there are changes and return those changes
+    metadata = get_metadata_changes(CURRENT_JSTOR, NEW_JSTOR)
+    # Filter changes in published items
+    metadata = metadata.loc[metadata["Status"] == "In imagineRio"]
+
+    # Update viewcones if any
+    if any(file for file in os.listdir(KMLS_IN) if file != ".gitkeep"):
+        viewcones_info = viewcones.update()
+    else:
+        logger.info("No KMLs to process, skipping")
+        viewcones_info = None
+
+    # Update manifests if published items data has changed
+    if metadata.empty:
+        logger.info("No metadata changes detected, exiting")
+        manifest_info = None
+    else:
+        manifest_info = iiif.update_manifests(metadata)
+
+    if viewcones_info or manifest_info:
+        summary = summarize(viewcones_info, manifest_info)
+        logger.info(summary)
 
 
 if __name__ == "__main__":
