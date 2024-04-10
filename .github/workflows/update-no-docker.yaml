@@ -58,8 +58,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc heimdal-dev
           pip install arcgis --no-deps
-          pip install turfpy lxml geojson cachetools
-          python3 -m imaginerio-etl.scripts.viewcones.py
+          pip install turfpy lxml geojson cachetools requests-oauthlib
+          python3 -m imaginerio-etl.scripts.viewcones
 
       - name: Install libvips
         if: steps.compare_data.outputs.file_created == 'true'
@@ -71,7 +71,7 @@ jobs:
         if: steps.compare_data.outputs.file_created == 'true'
         run: |
           pip install -r requirements.txt
-          python3 imaginerio-etl.scripts.iiif.py
+          python3 -m imaginerio-etl.scripts.iiif
 
       - name: Commit and push changes
         run: |
