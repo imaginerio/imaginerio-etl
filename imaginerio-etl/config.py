@@ -1,6 +1,7 @@
 import os
 
-JSTOR = "data/input/jstor.xls"
+CURRENT_JSTOR = "data/input/jstor.xls"
+NEW_JSTOR = "data/jstor_download"
 VOCABULARY = "data/input/vocabulary.xls"
 ITEMS_TO_PROCESS = "data/input/items_to_process.xls"
 KMLS_IN = "data/input/kmls"
