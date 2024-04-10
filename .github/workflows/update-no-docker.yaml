@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Puppeteer script
+      - name: Fetch JSTOR data
         run: node imaginerio-etl/utils/fetchData.js
         env:
           JSTOR_USER: ${{ secrets.JSTOR_USER }}
@@ -57,8 +57,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc heimdal-dev
-          sudo pip install arcgis turfpy lxml geojson
-          python3 imaginerio-etl/scripts/viewcones.py
+          pip install arcgis --no-deps
+          pip install turfpy lxml geojson
+          python3 -m imaginerio-etl.scripts.viewcones.py
 
       - name: Install libvips
         if: steps.compare_data.outputs.file_created == 'true'
@@ -70,7 +71,7 @@ jobs:
         if: steps.compare_data.outputs.file_created == 'true'
         run: |
           pip install -r requirements.txt
-          python3 imaginerio-etl/scripts/iiif.py
+          python3 imaginerio-etl.scripts.iiif.py
 
       - name: Commit and push changes
         run: |
