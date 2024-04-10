@@ -4,15 +4,6 @@ on:
   repository_dispatch:
     types: [submodule-update]
   workflow_dispatch:
-    inputs:
-      index:
-        description: "SSIDs to process (space separated, e.g. '35103808 35103809'), leave blank to process all items"
-        required: false
-        default: ""
-      retile:
-        description: "Retile images. Should only be used when specifying ids above"
-        type: boolean
-        required: false
 
 jobs:
   update-process:
@@ -31,17 +22,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Puppeteer script
+      - name: Fetch data
         run: node imaginerio-etl/utils/fetchData.js
         env:
           JSTOR_USER: ${{ secrets.JSTOR_USER }}
           JSTOR_PASSWORD: ${{ secrets.JSTOR_PASSWORD }}
           JSTOR_PROJECT: ${{ secrets.JSTOR_PROJECT }}
-
-      - name: Compare data
-        run: |
-          pip install pandas xlrd openpyxl
-          python3 imaginerio-etl/utils/compare_data.py
 
       - name: Build Docker image
         run: docker build . -t etl
@@ -54,13 +40,6 @@ jobs:
           ARCGIS_PASSWORD: ${{ secrets.ARCGIS_PASSWORD }}
           VIEWCONES_LAYER_URL: ${{ secrets.VIEWCONES_LAYER_URL }}
         run: |
-          ARGS=""
-          if [ ! -z "${{ github.event.inputs.index }}" ]; then
-            ARGS="-m imaginerio-etl.scripts.iiif -i ${{ github.event.inputs.index }}"
-          fi
-          if [ "${{ github.event.inputs.retile }}" == "true" ]; then
-            ARGS="$ARGS --retile"
-          fi
           docker run \
             -e AWS_SECRET_ACCESS_KEY \
             -e AWS_ACCESS_KEY_ID \
@@ -68,7 +47,7 @@ jobs:
             -e ARCGIS_PASSWORD \
             -e VIEWCONES_LAYER_URL \
             -v $(pwd)/data:/usr/src/app/data \
-            etl $ARGS
+            etl
 
       - name: Commit and push changes
         run: |
