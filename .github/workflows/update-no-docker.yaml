@@ -23,30 +23,30 @@ jobs:
         with:
           submodules: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18"
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: "18"
 
-      - name: Install dependencies
-        run: npm install
+      # - name: Install dependencies
+      #   run: npm install
 
-      - name: Fetch JSTOR data
-        run: node imaginerio-etl/utils/fetchData.js
-        env:
-          JSTOR_USER: ${{ secrets.JSTOR_USER }}
-          JSTOR_PASSWORD: ${{ secrets.JSTOR_PASSWORD }}
-          JSTOR_PROJECT: ${{ secrets.JSTOR_PROJECT }}
+      # - name: Fetch JSTOR data
+      #   run: node imaginerio-etl/utils/fetchData.js
+      #   env:
+      #     JSTOR_USER: ${{ secrets.JSTOR_USER }}
+      #     JSTOR_PASSWORD: ${{ secrets.JSTOR_PASSWORD }}
+      #     JSTOR_PROJECT: ${{ secrets.JSTOR_PROJECT }}
 
-      - name: Compare data
-        run: |
-          pip install pandas xlrd openpyxl
-          python3 imaginerio-etl/utils/compare_data.py
-          if [ -f "data/input/items_to_process.xls" ]; then
-            echo "::set-output name=file_created::true"
-          else
-            echo "::set-output name=file_created::false"
-          fi
+      # - name: Compare data
+      #   run: |
+      #     pip install pandas xlrd openpyxl
+      #     python3 imaginerio-etl/utils/compare_data.py
+      #     if [ -f "data/input/items_to_process.xls" ]; then
+      #       echo "::set-output name=file_created::true"
+      #     else
+      #       echo "::set-output name=file_created::false"
+      #     fi
 
       - name: Check for KML files
         id: check_kml_files
@@ -58,7 +58,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc heimdal-dev
           pip install arcgis --no-deps
-          pip install turfpy lxml geojson cachetools requests
+          pip install turfpy lxml geojson cachetools requests requests-oauthlib
           python3 -m imaginerio-etl.scripts.viewcones
 
       - name: Install libvips
