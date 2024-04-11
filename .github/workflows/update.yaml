@@ -56,10 +56,13 @@ jobs:
             etl
 
       - name: Commit and push changes
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           cd data
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git remote set-url origin https://x-access-token:${PERSONAL_ACCESS_TOKEN}@github.com/imaginerio/imaginerio-data.git
           git add .
           git commit -m "Auto updated data" && git push origin HEAD:main || echo "No changes to commit"
           cd ..
