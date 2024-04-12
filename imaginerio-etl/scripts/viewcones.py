@@ -17,9 +17,9 @@ from ..utils.helpers import geo_to_world_coors, get_vocabulary, load_xls, query_
 from ..utils.logger import logger
 
 
-def update():
+def update(metadata):
 
-    metadata = load_xls(CURRENT_JSTOR, "SSID").fillna("")
+    metadata.fillna("", inplace=True)
     vocabulary = get_vocabulary(VOCABULARY)
 
     gis = GIS(
