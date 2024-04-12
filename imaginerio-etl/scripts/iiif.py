@@ -6,6 +6,8 @@ from ..utils.logger import logger
 
 
 def update(metadata):
+    n_items = len(metadata)
+    logger.info(f"IIIF: {cf.GREEN}{n_items}{cf.RESET} to process")
     vocabulary = get_vocabulary(VOCABULARY)
     collections = get_collections(metadata)
     n_manifests = 0
@@ -13,9 +15,7 @@ def update(metadata):
     no_collection = metadata.loc[metadata["Collection"].isna()].index.to_list()
 
     for index, (id, row) in enumerate(metadata.fillna("").iterrows()):
-        logger.info(
-            f"{cf.LIGHT_BLUE}{index+1}/{len(metadata)}{cf.BLUE} - Parsing item {id}"
-        )
+        logger.info(f"{cf.LIGHT_BLUE}{index+1}/{n_items}{cf.BLUE} - Parsing item {id}")
         try:
             item = Item(id, row, vocabulary)
             sizes = item.get_sizes()
@@ -43,7 +43,7 @@ def update(metadata):
 
     return {
         "n_manifests": n_manifests,
-        "n_items": len(metadata),
+        "n_items": n_items,
         "no_collection": no_collection,
         "errors": errors,
     }

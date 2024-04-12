@@ -73,8 +73,8 @@ def get_metadata_changes(current_file, download_dir):
         filtered_new_data[changes] if not filtered_new_data[changes].empty else None
     )
 
-    # Replace current with new filtered data
-    if changed_data:
+    # Replace current with new filtered data if any
+    if changed_data != None:
         new_file = filtered_new_data.to_excel(current_file, engine="openpyxl")
 
     return new_data, changed_data
