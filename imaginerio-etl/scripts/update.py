@@ -19,7 +19,7 @@ def main():
         viewcones_info = None
 
     # Update manifests if published items data has changed
-    if not changed_data:
+    if changed_data == None:
         logger.info("No metadata changes detected, exiting")
         manifest_info = None
     else:
