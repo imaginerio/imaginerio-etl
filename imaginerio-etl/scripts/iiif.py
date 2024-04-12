@@ -5,7 +5,7 @@ from ..utils.logger import CustomFormatter as cf
 from ..utils.logger import logger
 
 
-def update_manifests(metadata):
+def update(metadata):
     vocabulary = get_vocabulary(VOCABULARY)
     collections = get_collections(metadata)
     n_manifests = 0
