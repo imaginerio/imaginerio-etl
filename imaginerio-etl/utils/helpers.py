@@ -63,16 +63,18 @@ def get_metadata_changes(current_file, download_dir):
     new_file = os.path.join(download_dir, os.listdir(download_dir)[0])
     new_data = load_xls(new_file, "SSID")
     filtered_new_data = new_data.drop(columns=["Notes"]).loc[
-        filtered_new_data["Status"] == "In imagineRio"
+        new_data["Status"] == "In imagineRio"
     ]
 
     # Compare files and get changed rows
     comparison = filtered_new_data.compare(current_data, keep_shape=True)
     changes = comparison.notna().any(axis=1)
-    changed_data = filtered_new_data[changes]
+    changed_data = (
+        filtered_new_data[changes] if not filtered_new_data[changes].empty else None
+    )
 
     # Replace current with new filtered data
-    if not changed_data.empty:
+    if changed_data:
         new_file = filtered_new_data.to_excel(current_file, engine="openpyxl")
 
     return new_data, changed_data
