@@ -4,6 +4,12 @@ on:
   repository_dispatch:
     types: [submodule-update]
   workflow_dispatch:
+    inputs:
+      retile:
+        description: "Retile images"
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   update-process:
@@ -46,6 +52,7 @@ jobs:
           ARCGIS_USER: ${{ secrets.ARCGIS_USER }}
           ARCGIS_PASSWORD: ${{ secrets.ARCGIS_PASSWORD }}
           VIEWCONES_LAYER_URL: ${{ secrets.VIEWCONES_LAYER_URL }}
+          RETILE: ${{ github.event.inputs.retile }}
         run: |
           docker run \
             -e AWS_SECRET_ACCESS_KEY \
@@ -53,6 +60,7 @@ jobs:
             -e ARCGIS_USER \
             -e ARCGIS_PASSWORD \
             -e VIEWCONES_LAYER_URL \
+            -e RETILE \
             -v $(pwd)/data:/usr/src/app/data \
             etl
 

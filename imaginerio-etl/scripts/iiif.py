@@ -19,7 +19,7 @@ def update(metadata):
         try:
             item = Item(id, row, vocabulary)
             sizes = item.get_sizes()
-            if not sizes:
+            if not sizes or RETILE == "true":  # github action input, not boolean
                 sizes = item.tile_image()
             manifest = item.create_manifest(sizes)
             upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
