@@ -64,5 +64,7 @@ jobs:
           git add .
           git commit -m "Auto updated data" && git push origin HEAD:main || echo "No changes to commit"
           cd ..
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git add data
           git commit -m "Auto updated submodule reference" && git push || echo "No changes to commit"
