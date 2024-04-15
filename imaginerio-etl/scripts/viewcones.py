@@ -23,7 +23,7 @@ def update(metadata):
     vocabulary = get_vocabulary(VOCABULARY)
 
     gis = GIS(
-        url="https://www.arcgis.com",
+        url=ARCGIS_PORTAL,
         username=ARCGIS_USER,
         password=ARCGIS_PASSWORD,
     )

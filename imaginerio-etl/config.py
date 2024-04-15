@@ -12,6 +12,7 @@ BUCKET = "https://imaginerio-images.s3.us-east-1.amazonaws.com/"
 DISTRIBUTION_ID = os.getenv("DISTRIBUTION_ID")
 ARCGIS_USER = os.getenv("ARCGIS_USER")
 ARCGIS_PASSWORD = os.getenv("ARCGIS_PASSWORD")
+ARCGIS_PORTAL = os.getenv("ARCGIS_PORTAL")
 VIEWCONES_LAYER_URL = os.getenv("VIEWCONES_LAYER_URL")
 RETILE = os.getenv("RETILE", False)
 RIGHTS = {
