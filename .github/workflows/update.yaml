@@ -51,6 +51,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           ARCGIS_USER: ${{ secrets.ARCGIS_USER }}
           ARCGIS_PASSWORD: ${{ secrets.ARCGIS_PASSWORD }}
+          ARCGIS_PORTAL: ${{ secrets.ARCGIS_PORTAL }}
           VIEWCONES_LAYER_URL: ${{ secrets.VIEWCONES_LAYER_URL }}
           RETILE: ${{ github.event.inputs.retile }}
         run: |
@@ -59,6 +60,7 @@ jobs:
             -e AWS_ACCESS_KEY_ID \
             -e ARCGIS_USER \
             -e ARCGIS_PASSWORD \
+            -e ARCGIS_PORTAL \
             -e VIEWCONES_LAYER_URL \
             -e RETILE \
             -v $(pwd)/data:/usr/src/app/data \
