@@ -14,7 +14,13 @@ from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
 from urllib3.util import Retry
 
-from ..config import *
+from ..config import (
+    REPROCESS,
+    CLOUDFRONT,
+    BUCKET_NAME,
+    DISTRIBUTION_ID,
+    IIIFConfig as IC,
+)
 from .logger import CustomFormatter as cf
 from .logger import logger
 
@@ -55,12 +61,11 @@ def get_collections(metadata):  # , index
     return collections
 
 
-def get_metadata_changes(current_file, download_dir):
+def get_metadata_changes(current_file, new_file):
     # Load current (filtered) file
     current_data = load_xls(current_file, "SSID")
 
     # Load downloaded file and filter data
-    new_file = os.path.join(download_dir, os.listdir(download_dir)[0])
     new_data = load_xls(new_file, "SSID")
     filtered_new_data = new_data.drop(columns=["Notes"]).loc[
         new_data["Status"] == "In imagineRio"
@@ -74,6 +79,9 @@ def get_metadata_changes(current_file, download_dir):
     # Replace current with new filtered data if any
     if not changed_data.empty:
         new_file = filtered_new_data.to_excel(current_file, engine="openpyxl")
+
+    if REPROCESS == "true": # github action input, not boolean
+        changed_data = filtered_new_data
 
     return new_data, changed_data
 
@@ -153,11 +161,11 @@ def create_collection(label):
     }
 
     logo = {
-        "id": "https://aws1.discourse-cdn.com/free1/uploads/imaginerio/original/1X/8c4f71106b4c8191ffdcafb4edeedb6f6f58b482.png",
+        "id": IC.LOGO_URL,
         "type": "Image",
         "format": "image/png",
-        "height": 164,
-        "width": 708,
+        "height": IC.LOGO_HEIGHT,
+        "width": IC.LOGO_WIDTH,
     }
 
     thumb_info = {
@@ -215,7 +223,7 @@ def file_exists(identifier, type):
         key = "iiif/{0}/full/max/0/default.jpg".format(identifier)
 
     s3 = boto3.resource("s3")
-    bucket = s3.Bucket("imaginerio-images")
+    bucket = s3.Bucket(BUCKET_NAME)
     objs = list(bucket.objects.filter(Prefix=key))
     if any([obj.key == key for obj in objs]):
         return True
@@ -270,7 +278,7 @@ def upload_object_to_s3(obj, name, key):
     try:
         s3_client.put_object(
             Body=obj.json(indent=4),
-            Bucket="imaginerio-images",
+            Bucket=BUCKET_NAME,
             Key=key,
             ContentType="application/json",
         )
