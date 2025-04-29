@@ -143,6 +143,30 @@ class Item:
         except JSONDecodeError:
             return None
 
+    def _format_dimension(self, value: str | None) -> str | None:
+        """Convert dimension from millimeters to centimeters and format with unit.
+
+        Args:
+            value: Dimension value in millimeters as string, or None
+
+        Returns:
+            Formatted string with value in centimeters and unit, or None if input is None
+        """
+        if not value:
+            return None
+
+        try:
+            # Convert from string to float, divide by 10 to convert mm to cm
+            cm_value = float(value) / 10
+            # Format with 1 decimal place if needed, remove trailing zeros
+            formatted = f"{cm_value:.1f}".rstrip("0").rstrip(".")
+            return f"{formatted} cm"
+        except (ValueError, TypeError):
+            logger.warning(
+                f"{cf.YELLOW}Invalid dimension value: {value}, using as is{cf.RESET}"
+            )
+            return str(value)
+
     def download_image(self):
         logger.info(f"{cf.BLUE}Downloading image...{cf.RESET}")
         response = session.get(self._jstor_img_path)
