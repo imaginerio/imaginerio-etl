@@ -1,15 +1,17 @@
-from ..config import *
+import os
+import json
+from ..config import VOCABULARY, RETILE
 from ..entities.item import Item
 from ..utils.helpers import get_collections, get_vocabulary, upload_object_to_s3
 from ..utils.logger import CustomFormatter as cf
 from ..utils.logger import logger
 
 
-def update(metadata):
+def update(metadata, testing=False):
     n_items = len(metadata)
     logger.info(f"IIIF: {cf.GREEN}{n_items}{cf.RESET} to process")
     vocabulary = get_vocabulary(VOCABULARY)
-    collections = get_collections(metadata)
+    collections = get_collections(metadata) if not testing else {}
     n_manifests = 0
     errors = []
     no_collection = metadata.loc[metadata["Collection"].isna()].index.to_list()
@@ -19,16 +21,23 @@ def update(metadata):
         try:
             item = Item(id, row, vocabulary)
             sizes = item.get_sizes()
-            if not sizes or RETILE == "true":  # github action input, not boolean
+            if not sizes or RETILE == "true": # github action input, not boolean
                 sizes = item.tile_image()
             manifest = item.create_manifest(sizes)
-            upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
-            for name in item.get_collections():
-                collection = collections[name]
-                collection.items = [
-                    ref for ref in collection.items if ref.id != manifest.id
-                ]
-                collection.add_item_by_reference(manifest)
+            
+            if testing:
+                os.makedirs(f"iiif/{item._id}", exist_ok=True)
+                with open(f"iiif/{item._id}/manifest.json", 'w', encoding="utf-8") as f:
+                    f.write(manifest.json(indent=4))
+                logger.info(f"Saved manifest locally to iiif/{item._id}/manifest.json")
+            else:
+                upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
+                for name in item.get_collections():
+                    collection = collections[name]
+                    collection.items = [
+                        ref for ref in collection.items if ref.id != manifest.id
+                    ]
+                    collection.add_item_by_reference(manifest)
             n_manifests += 1
         except Exception:
             logger.exception(
@@ -36,10 +45,11 @@ def update(metadata):
             )
             errors.append(item._id)
 
-    for name in collections.keys():
-        upload_object_to_s3(
-            collections[name], name, f"iiif/collection/{name.lower()}.json"
-        )
+    if not testing:
+        for name in collections.keys():
+            upload_object_to_s3(
+                collections[name], name, f"iiif/collection/{name.lower()}.json"
+            )
 
     return {
         "n_manifests": n_manifests,
