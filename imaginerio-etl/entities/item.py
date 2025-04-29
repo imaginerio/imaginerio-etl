@@ -279,6 +279,17 @@ class Item:
 
         final_value = {L.EN: processed_en, L.PT_BR: processed_pt}
         return KeyValueString(label=label, value=final_value)
+
+    def _create_thumbnail(self, sizes: list[dict]) -> dict:
+        """Create thumbnail for the manifest.
+
+        Args:
+            sizes: List of available image sizes.
+
+        Returns:
+            Dictionary with thumbnail configuration.
+        """
+        # Pick size closer to 200px (long edge) for thumbnail
         thumb_width, thumb_height = min(
             sizes, key=lambda x: abs(min(x.values()) - 600)
         ).values()
@@ -291,45 +302,46 @@ class Item:
             "width": thumb_width,
         }
 
-        homepage = {
-            "id": self._document_url,
-            "label": {"none": [self._provider]},
+    def _create_homepage(self) -> dict:
+        """Create homepage for the manifest."""
+        url = self._document_url
+        if not url and self._provider in self._vocabulary:
+            url = self._vocabulary[self._provider].get(VF.URL)
+
+        return {
+            "id": url,
+            "label": {L.NONE: [self._provider]},
             "type": "Text",
-            "format": "text/html",
+            "format": IC.TEXT_FORMAT,
         }
 
-        logo = {
-            "id": "https://aws1.discourse-cdn.com/free1/uploads/imaginerio/original/1X/8c4f71106b4c8191ffdcafb4edeedb6f6f58b482.png",
+    def _create_logo(self) -> dict:
+        """Create logo for the manifest."""
+        return {
+            "id": IC.LOGO_URL,
             "type": "Image",
             "format": "image/png",
             "height": 164,
             "width": 708,
         }
 
-        manifest = Manifest(
-            id=self._manifest_path,
-            label=self._title,
-            summary=self._description,
-            metadata=self._metadata,
-            requiredStatement=self._attribution,
-            rights=(
-                self._rights
-                if self._rights.startswith("http")
-                else "http://rightsstatements.org/vocab/CNE/1.0/"
-            ),
-            homepage=homepage,
-            thumbnail=thumbnail,
-            provider={
-                "id": "https://imaginerio.org/",
-                "type": "Agent",
-                "label": {"none": ["imagineRio"]},
-                "homepage": homepage,
-                "logo": logo,
-            },
-        )
+    def _create_provider(self, logo: dict) -> dict:
+        """Create provider for the manifest."""
+        return {
+            "id": IC.PROVIDER_ID,
+            "type": "Agent",
+            "label": {L.NONE: [IC.PROVIDER_LABEL]},
+            "logo": logo,
+        }
 
-        canvas = manifest.make_canvas(
-            label={"none": [self._id]},
+    def _create_canvas(self, sizes: list[dict]) -> Canvas:
+        """Create canvas and annotation page for the manifest.
+
+        Returns:
+            Tuple of (canvas, annotation_page)
+        """
+        canvas = Canvas(
+            label={L.NONE: [self._id]},
             id=f"{self._base_path}/canvas/1",
             height=sizes[-1]["height"],
             width=sizes[-1]["width"],
@@ -346,14 +358,54 @@ class Item:
             id=self._base_path, type="ImageService3", profile="level0"
         )
 
-        # manifest.make_canvas_from_iiif(
-        #     self._info_path,
-        #     id=f"{self._base_path}/canvas/1",
-        #     anno_page_id=f"{self._base_path}/annopage/1",
-        #     anno_id=f"{self._base_path}/anno/1",
-        # )
+        canvas = self._create_annotations(canvas)
 
-        seeAlso = [
+        return canvas
+
+    def _create_annotations(self, canvas: Canvas):
+        """Create annotations for the canvas"""
+        if self._transcription:
+            canvas.make_annotation(
+                anno_page_id=f"{self._base_path}/annotation-page/2",
+                id=f"{self._base_path}/annotation/2",
+                motivation="supplementing",
+                body={
+                    "type": "TextualBody",
+                    "value": self._transcription,
+                    "format": "text/plain",
+                },
+                target=canvas.id,
+            )
+        if self._transcription_en or self._transcription_pt:
+            canvas.make_annotation(
+                anno_page_id=f"{self._base_path}/annotation-page/2",
+                id=f"{self._base_path}/annotation/3",
+                motivation="supplementing",
+                body={
+                    "type": "Choice",
+                    "items": [
+                        {
+                            "type": "TextualBody",
+                            "value": self._transcription_en,
+                            "language": L.EN,
+                            "format": "text/plain",
+                        },
+                        {
+                            "type": "TextualBody",
+                            "value": self._transcription_pt,
+                            "language": L.PT_BR,
+                            "format": "text/plain",
+                        },
+                    ],
+                },
+                target=canvas.id,
+            )
+
+        return canvas
+
+    def _create_see_also(self) -> list[dict]:
+        """Create seeAlso links for the manifest."""
+        see_also = [
             {
                 "id": "https://www.imaginerio.org/map#35103808",
                 "type": "Text",
@@ -390,6 +442,44 @@ class Item:
                     "label": {"en": ["Download image"], "pt-BR": ["Baixar imagem"]},
                 }
             )
-        manifest.seeAlso = seeAlso
+
+        return see_also
+
+    def create_manifest(self, sizes: list[dict]) -> Manifest | None:
+        """Create IIIF manifest for the item.
+
+        Args:
+            sizes: List of available image sizes.
+
+        Returns:
+            IIIF Manifest object or None if no sizes available.
+        """
+        if not sizes:
+            return None
+
+        # Create manifest components
+        thumbnail = self._create_thumbnail(sizes)
+        homepage = self._create_homepage()
+        logo = self._create_logo()
+        provider = self._create_provider(logo)
+        see_also = self._create_see_also()
+
+        # Create the manifest
+        manifest = Manifest(
+            id=self._manifest_path,
+            label=self._title,
+            summary=self._description,
+            metadata=self._metadata,
+            requiredStatement=self._attribution,
+            rights=self._rights,
+            homepage=homepage,
+            thumbnail=thumbnail,
+            provider=provider,
+            seeAlso=see_also,
+        )
+
+        # Add canvas and annotation page
+        canvas = self._create_canvas(sizes)
+        manifest.add_item(canvas)
 
         return manifest
