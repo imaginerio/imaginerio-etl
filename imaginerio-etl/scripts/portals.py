@@ -1,12 +1,9 @@
 import os
-import pandas as pd
 import urllib
 
-from dotenv import load_dotenv
+import pandas as pd
 
-from helpers import session, update_metadata
-
-load_dotenv(override=True)
+from ..utils.helpers import session, update_metadata
 
 MAX_RETURNED = 55000
 

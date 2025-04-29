@@ -1,20 +1,15 @@
-import sys 
-sys.path.insert(0, './classes')
-
 import argparse
 import os
 import re
+import sys
 
 import numpy as np
 import pandas as pd
-from image import Highres, Image, Tif
-from dotenv import load_dotenv
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from helpers import logger, update_metadata
-
-load_dotenv(override=True)
+from ..entities.image import Highres, Image, Tif
+from ..utils.helpers import logger, update_metadata
 
 
 def get_images(metadata):
@@ -68,13 +63,17 @@ def create_images_df(images):
     prefix = os.environ["BUCKET"]
 
     id = [img.id for img in images]
-    url = {"Media URL":[
-        os.path.join(prefix, "iiif", img.id, "full", "max", "0", "default.jpg")
-        # if img.is_geolocated
-        if img.in_catalog
-        else np.nan
-        for img in images
-    ]}
+    url = {
+        "Media URL": [
+            (
+                os.path.join(prefix, "iiif", img.id, "full", "max", "0", "default.jpg")
+                # if img.is_geolocated
+                if img.in_catalog
+                else np.nan
+            )
+            for img in images
+        ]
+    }
     images_df = pd.DataFrame(url, index=id)
     images_df.drop_duplicates(inplace=True)
 
@@ -93,7 +92,7 @@ def main():
             dispatch(image)
             # if image.is_geolocated:
             if image.in_catalog:
-                #image.get_metadata(metadata)
+                # image.get_metadata(metadata)
                 image.embed_metadata()
                 # if not file_exists(image.id, "image"):
                 #     upload_file_to_s3(
@@ -107,7 +106,8 @@ def main():
                 continue
 
     update_metadata(images_df)
-    #return images_df
+    # return images_df
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -117,4 +117,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main()
-    
