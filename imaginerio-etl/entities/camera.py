@@ -1,7 +1,3 @@
-import sys
-
-sys.path.insert(0, "/scripts")
-
 import math
 import os
 import re
@@ -14,23 +10,22 @@ import mercantile
 import numpy as np
 import pandas as pd
 import requests
-from dotenv import load_dotenv
-from helpers import geo_to_world_coors, query_wikidata
 from lxml import etree
 from PIL import Image
-from pykml import parser
 from pyproj import Proj
 from shapely.geometry import Point
 from SPARQLWrapper import JSON, SPARQLWrapper
-from tqdm import tqdm
 from turfpy.misc import sector
+
+from ..utils.helpers import geo_to_world_coors, query_wikidata
+from ..utils.logger import logger
 
 
 class KML:
 
     header = b"""\
 <?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom"></kml>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom"></kml>\n
 """
 
     def __init__(self, path):
@@ -65,38 +60,34 @@ class Folder:
 
 
 class PhotoOverlay:
+
+    tag = "PhotoOverlay"
+
     def __init__(self, element, catalog):
         self._element = element
         self._id = element.findtext(
             "kml:name",
             namespaces={"kml": "http://www.opengis.net/kml/2.2"},
         )
-        if self._id.startswith("0"):
+        if self._id.startswith(("0", "P", "C")):
             try:
                 self._ssid = catalog.index[catalog["Document ID"] == self._id].item()
             except ValueError:
                 self._ssid = None
         else:
             self._ssid = self._id
-        self._latitude = float(
-            element.findtext(
-                "kml:Camera/kml:latitude",
+
+        def get_camera_property(property):
+            return self._element.findtext(
+                f"kml:Camera/kml:{property}",
                 namespaces={"kml": "http://www.opengis.net/kml/2.2"},
             )
-        )
-        self._longitude = float(
-            element.findtext(
-                "kml:Camera/kml:longitude",
-                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
-            )
-        )
-        self._altitude = float(
-            element.findtext(
-                "kml:Camera/kml:altitude",
-                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
-            )
-        )
-        # try:
+
+        self._Latitude = float(get_camera_property("latitude"))
+        self._Longitude = float(get_camera_property("longitude"))
+        self._altitude = float(get_camera_property("altitude"))
+        self._heading = float(get_camera_property("heading"))
+        self._tilt = float(get_camera_property("tilt"))
         self._altitude_mode = element.findtext(
             "kml:Camera/kml:altitudeMode",
             default=element.findtext(
@@ -107,26 +98,6 @@ class PhotoOverlay:
                 },
             ),
             namespaces={"kml": "http://www.opengis.net/kml/2.2"},
-        )
-        # except:
-        #     self._altitude_mode = element.findtext(
-        #         "kml:Camera/gx:altitudeMode",
-        #         namespaces={
-        #             "kml": "http://www.opengis.net/kml/2.2",
-        #             "gx": "http://www.google.com/kml/ext/2.2",
-        #         },
-        #     )
-        self._heading = float(
-            element.findtext(
-                "kml:Camera/kml:heading",
-                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
-            )
-        )
-        self._tilt = float(
-            element.findtext(
-                "kml:Camera/kml:tilt",
-                namespaces={"kml": "http://www.opengis.net/kml/2.2"},
-            )
         )
         self._left_fov = float(
             element.findtext(
@@ -140,8 +111,10 @@ class PhotoOverlay:
                 namespaces={"kml": "http://www.opengis.net/kml/2.2"},
             )
         )
-        self._image = "https://imaginerio-images.s3.us-east-1.amazonaws.com/iiif/{0}/full/max/0/default.jpg".format(
-            self._id
+        self._image = (
+            "https://iiif.imaginerio.org/iiif/{0}/full/max/0/default.jpg".format(
+                self._id
+            )
         )
         self._radius = None
         self._viewcone = None
@@ -160,27 +133,30 @@ class PhotoOverlay:
         try:
             row = catalog.loc[self._ssid]
         except KeyError:
+            logger.debug(f"{self._ssid}: {self._id} data not found")
             row = pd.Series(dtype="object")
 
         self._properties = {
-            "document_id": str(self._id),
-            "longitude": str(round(self._longitude, 5)),
-            "latitude": str(round(self._latitude, 5)),
-            "altitude": str(round(self._altitude, 5)),
-            "heading": str(round(self._heading, 5)),
-            "tilt": str(round(self._tilt, 5)),
-            "fov": str(abs(self._left_fov) + abs(self._right_fov)),
+            prop: round(getattr(self, f"_{prop}"), 5)
+            for prop in ["Longitude", "Latitude", "altitude", "heading", "tilt"]
         }
+        self._properties.update(
+            {
+                "document_id": str(self._id),
+                "fov": (abs(self._left_fov) + abs(self._right_fov)),
+                "ss_id": self._ssid,
+                "Title": row.get("Title"),
+                "date": row.get("Date"),
+                "Creator": row.get("Creator"),
+            }
+        )
+        if row.get("First Year") and row.get("Last Year"):
+            self._properties.update(
+                {"FirstYear": int(row["First Year"]), "LastYear": int(row["Last Year"])}
+            )
+        self._properties = {k: v for k, v in self._properties.items() if v}
 
         self._depicts = None if row.empty else row["Depicts"]
-
-        if row.any():
-            self._properties["ss_id"] = (str(self._ssid),)
-            self._properties["title"]: row["Title"]
-            self._properties["date"]: row["Date"]
-            self._properties["creator"]: row["Creator"]
-            self._properties["firstyear"]: str(int(row["First Year"]))
-            self._properties["lastyear"]: str(int(row["Last Year"]))
 
     @property
     def altitude(self):
@@ -223,10 +199,10 @@ class PhotoOverlay:
         """
 
         z = 15
-        tile = mercantile.tile(self._longitude, self._latitude, z)
+        tile = mercantile.tile(self._Longitude, self._Latitude, z)
         westmost, southmost, eastmost, northmost = mercantile.bounds(tile)
-        pixel_column = int(np.interp(self._longitude, [westmost, eastmost], [0, 256]))
-        pixel_row = int(np.interp(self._latitude, [southmost, northmost], [256, 0]))
+        pixel_column = int(np.interp(self._Longitude, [westmost, eastmost], [0, 256]))
+        pixel_row = int(np.interp(self._Latitude, [southmost, northmost], [256, 0]))
         tile_img = Image.open(
             requests.get(
                 "https://api.mapbox.com/v4/mapbox.terrain-rgb/10/800/200.pngraw?access_token=pk.eyJ1IjoibWFydGltcGFzc29zIiwiYSI6ImNra3pmN2QxajBiYWUycW55N3E1dG1tcTEifQ.JFKSI85oP7M2gbeUTaUfQQ",
@@ -278,7 +254,7 @@ class PhotoOverlay:
                     lng = float(lnglat.group(1))
                     lat = float(lnglat.group(2))
                     depicted = geo_to_world_coors(coors=(lng, lat))
-                    origin = geo_to_world_coors(coors=(self._longitude, self._latitude))
+                    origin = geo_to_world_coors(coors=(self._Longitude, self._Latitude))
                     distance = origin.distance(depicted)
                     distances.append(distance)
             if distances:
@@ -291,7 +267,7 @@ class PhotoOverlay:
         Draws a viewcone and returns a geojson polygon with properties
         """
 
-        point = Point(self._longitude, self._latitude)
+        point = Point(self._Longitude, self._Latitude)
         center = geojson.Feature(geometry=point)
         start_angle = self._heading + self._left_fov
         end_angle = self._heading + self._right_fov

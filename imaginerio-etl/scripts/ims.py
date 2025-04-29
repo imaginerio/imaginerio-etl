@@ -5,13 +5,10 @@ from xml.etree import ElementTree
 
 import numpy as np
 import pandas as pd
-from dotenv import load_dotenv
-
-from helpers import ims2jstor
 from portals import main as query_portals
 from pull_images import main as pull_images
 
-load_dotenv(override=True)
+from ..utils.helpers import ims2jstor
 
 
 def xml_to_df(path):

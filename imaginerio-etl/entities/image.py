@@ -1,15 +1,15 @@
-import sys
-sys.path.insert(0, '/scripts')
-
 import os
 import shutil
-
-from PIL import Image as PILImage
-from helpers import logger
+import sys
 
 from exiftool import ExifTool
+from PIL import Image as PILImage
+
+from ..config import *
+from ..utils.helpers import logger
 
 PILImage.MAX_IMAGE_PIXELS = None
+
 
 class Tif(object):
     def copy(self, image):
@@ -38,7 +38,7 @@ class Lowres(object):
     def copy(self, image):
         origin = os.path.join(os.environ["TIF"], image.tif)
         if image.to_review:
-            destination = os.path.join(os.environ["REVIEW"], image.jpg)
+            destination = os.path.join(REVIEW, image.jpg)
         else:
             destination = os.path.join(os.environ["BACKLOG"], image.jpg)
         logger.debug("Copying {} to {}".format(origin, destination))
@@ -166,7 +166,9 @@ class Image:
             with ExifTool() as et:
                 et.execute(
                     *self.__metadata,
-                    os.path.join(os.environ["JPG"], self.__jpg).encode(encoding="utf-8"),
+                    os.path.join(os.environ["JPG"], self.__jpg).encode(
+                        encoding="utf-8"
+                    ),
                 )
             logger.debug(f"Embedded metadata in {self.id}")
         else:
