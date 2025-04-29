@@ -3,13 +3,21 @@ import logging
 import os
 import subprocess
 from json import JSONDecodeError
+import pandas as pd
 
-from iiif_prezi3 import KeyValueString, Manifest
+from iiif_prezi3 import KeyValueString, Manifest, Canvas
 from PIL import Image
 
 logging.getLogger("PIL").setLevel(logging.WARNING)
 
-from ..config import *
+from ..config import (
+    CLOUDFRONT,
+    RIGHTS,
+    MetadataFields as MF,
+    VocabularyFields as VF,
+    Languages as L,
+    IIIFConfig as IC,
+)
 from ..utils.helpers import session, upload_folder_to_s3
 from ..utils.logger import CustomFormatter as cf
 from ..utils.logger import logger
@@ -21,19 +29,13 @@ class Item:
     def __init__(self, id, row, vocabulary):
         self._id = id
         self._vocabulary = vocabulary
-        self._title = row["Title"]
+        self._title = row[MF.TITLE]
         self._description = (
             {
-                "en": [
-                    row.get("Description (English)")
-                    or row.get("Description (Portuguese)")
-                ],
-                "pt-BR": [
-                    row.get("Description (Portuguese)")
-                    or row.get("Description (English)")
-                ],
+                L.EN: [row.get(MF.DESC_EN) or row.get(MF.DESC_PT)],
+                L.PT_BR: [row.get(MF.DESC_PT) or row.get(MF.DESC_EN)],
             }
-            if row.get("Description (English)") or row.get("Description (Portuguese)")
+            if row.get(MF.DESC_EN) or row.get(MF.DESC_PT)
             else None
         )
         self._metadata = list(
@@ -42,86 +44,89 @@ class Item:
                 [
                     (
                         KeyValueString(
-                            label={"en": ["Document ID"], "pt-BR": ["Identificador"]},
-                            value=str(row.get("Document ID")),
+                            label={L.EN: ["Document ID"], L.PT_BR: ["Identificador"]},
+                            value=str(row.get(MF.DOCUMENT_ID)),
                         )
-                        if row.get("Document ID")
+                        if row.get(MF.DOCUMENT_ID)
                         else None
                     ),
                     self.map_wikidata(
-                        {"en": ["Creator"], "pt-BR": ["Criador"]},
-                        row.get("Creator"),
+                        {L.EN: ["Creator"], L.PT_BR: ["Criador"]},
+                        row.get(MF.CREATOR),
                     ),
                     (
                         KeyValueString(
-                            label={"en": ["Date"], "pt-BR": ["Data"]},
-                            value=str(row.get("Date")),
+                            label={L.EN: ["Date"], L.PT_BR: ["Data"]},
+                            value=str(row.get(MF.DATE)),
                         )
-                        if row.get("Date")
+                        if row.get(MF.DATE)
                         else None
                     ),
                     self.map_wikidata(
-                        {"en": ["Depicts"], "pt-BR": ["Retrata"]},
-                        row.get("Depicts"),
+                        {L.EN: ["Depicts"], L.PT_BR: ["Retrata"]},
+                        row.get(MF.DEPICTS),
                     ),
                     self.map_wikidata(
-                        {"en": ["Type"], "pt-BR": ["Tipo"]}, row.get("Type")
+                        {L.EN: ["Type"], L.PT_BR: ["Tipo"]}, row.get(MF.TYPE)
                     ),
                     self.map_wikidata(
-                        {"en": ["Material"], "pt-BR": ["Material"]},
-                        row.get("Material"),
+                        {L.EN: ["Material"], L.PT_BR: ["Material"]},
+                        row.get(MF.MATERIAL),
                     ),
                     self.map_wikidata(
                         {
-                            "en": ["Fabrication Method"],
-                            "pt-BR": ["Método de Fabricação"],
+                            L.EN: ["Fabrication Method"],
+                            L.PT_BR: ["Método de Fabricação"],
                         },
-                        row.get("Fabrication Method"),
+                        row.get(MF.FABRICATION_METHOD),
                     ),
                     (
                         KeyValueString(
-                            label={"en": ["Width (mm)"], "pt-BR": ["Largura (mm)"]},
-                            value=str(row.get("Width")),
+                            label={L.EN: ["Width"], L.PT_BR: ["Largura"]},
+                            value=self._format_dimension(row.get(MF.WIDTH)),
                         )
-                        if row.get("Width")
+                        if row.get(MF.WIDTH)
                         else None
                     ),
                     (
                         KeyValueString(
-                            label={"en": ["Height (mm)"], "pt-BR": ["Altura (mm)"]},
-                            value=str(row.get("Height")),
+                            label={L.EN: ["Height"], L.PT_BR: ["Altura"]},
+                            value=self._format_dimension(row.get(MF.HEIGHT)),
                         )
-                        if row.get("Height")
+                        if row.get(MF.HEIGHT)
                         else None
                     ),
                 ],
             )
         )
 
-        if row.get("Required Statement"):
-            attribution_en = row.get("Required Statement") + ". Hosted by imagineRio."
+        if row.get(MF.REQUIRED_STATEMENT):
+            attribution_en = (
+                row.get(MF.REQUIRED_STATEMENT) + f". Hosted by {IC.PROVIDER_LABEL}."
+            )
             attribution_pt = (
-                row.get("Required Statement").replace(
+                row.get(MF.REQUIRED_STATEMENT).replace(
                     "Provided by", "Disponibilizado por"
                 )
-                + ". Hospedado por imagineRio."
+                + f". Hospedado por {IC.PROVIDER_LABEL}."
             )
         else:
-            attribution_en = "Hosted by imagineRio."
-            attribution_pt = "Hospedado por imagineRio."
+            attribution_en = f"Hosted by {IC.PROVIDER_LABEL}."
+            attribution_pt = f"Hospedado por {IC.PROVIDER_LABEL}."
         self._attribution = KeyValueString(
-            label={"en": ["Attribution"], "pt-BR": ["Atribuição"]},
-            value={"en": [attribution_en], "pt-BR": [attribution_pt]},
+            label={L.EN: ["Attribution"], L.PT_BR: ["Atribuição"]},
+            value={L.EN: [attribution_en], L.PT_BR: [attribution_pt]},
         )
-        self._rights = RIGHTS.get(
-            row["Rights"], "http://rightsstatements.org/vocab/CNE/1.0/"
-        )
-        self._document_url = row.get("Document URL")
-        self._provider = row.get("Provider") or "imagineRio"
-        self._wikidata_id = row.get("Wikidata ID")
-        self._smapshot_id = row.get("Smapshot ID")
-        self._collection = row.get("Collection")
-        self._jstor_img_path = row.get("Media URL")
+        self._rights = RIGHTS.get(row[MF.RIGHTS], IC.DEFAULT_RIGHTS)
+        self._transcription = row.get(MF.TRANSCRIPTION)
+        self._transcription_en = row.get(MF.TRANSCRIPTION_EN)
+        self._transcription_pt = row.get(MF.TRANSCRIPTION_PT)
+        self._document_url = row.get(MF.DOCUMENT_URL)
+        self._provider = row.get(MF.PROVIDER) or IC.PROVIDER_LABEL
+        self._wikidata_id = row.get(MF.WIKIDATA_ID)
+        self._smapshot_id = row.get(MF.SMAPSHOT_ID)
+        self._collection = row.get(MF.COLLECTION)
+        self._jstor_img_path = row.get(MF.MEDIA_URL)
         self._base_path = f"{CLOUDFRONT}/{id}"
         self._local_img_path = f"iiif/{id}/full/max/0/default.jpg"
         self._img_path = f"{self._base_path}/full/max/0/default.jpg"
@@ -291,13 +296,13 @@ class Item:
         """
         # Pick size closer to 200px (long edge) for thumbnail
         thumb_width, thumb_height = min(
-            sizes, key=lambda x: abs(min(x.values()) - 600)
+            sizes, key=lambda x: abs(max(x.values()) - 200)
         ).values()
 
-        thumbnail = {
+        return {
             "id": f"{self._base_path}/full/{thumb_width},{thumb_height}/0/default.jpg",
             "type": "Image",
-            "format": "image/jpeg",
+            "format": IC.IMAGE_FORMAT,
             "height": thumb_height,
             "width": thumb_width,
         }
@@ -321,8 +326,8 @@ class Item:
             "id": IC.LOGO_URL,
             "type": "Image",
             "format": "image/png",
-            "height": 164,
-            "width": 708,
+            "height": IC.LOGO_HEIGHT,
+            "width": IC.LOGO_WIDTH,
         }
 
     def _create_provider(self, logo: dict) -> dict:
@@ -346,16 +351,18 @@ class Item:
             height=sizes[-1]["height"],
             width=sizes[-1]["width"],
         )
+
         anno_page = canvas.add_image(
             image_url=self._img_path,
             anno_page_id=f"{self._base_path}/annotation-page/1",
             anno_id=f"{self._base_path}/annotation/1",
-            format="image/jpeg",
+            format=IC.IMAGE_FORMAT,
             height=canvas.height,
             width=canvas.width,
         )
+
         anno_page.items[0].body.make_service(
-            id=self._base_path, type="ImageService3", profile="level0"
+            id=self._base_path, type="ImageService3", profile=IC.IMAGE_SERVICE_PROFILE
         )
 
         canvas = self._create_annotations(canvas)
@@ -410,36 +417,37 @@ class Item:
                 "id": "https://www.imaginerio.org/map#35103808",
                 "type": "Text",
                 "format": "text/html",
-                "label": {"none": ["imagineRio"]},
-            },
+                "label": {L.NONE: ["imagineRio"]},
+            }
         ]
+
         if self._wikidata_id:
-            seeAlso.append(
+            see_also.append(
                 {
-                    "id": "https://www.wikidata.org/wiki/{0}".format(self._wikidata_id),
+                    "id": f"https://www.wikidata.org/wiki/{self._wikidata_id}",
                     "type": "Text",
                     "format": "text/html",
-                    "label": {"none": ["Wikidata"]},
+                    "label": {L.NONE: ["Wikidata"]},
                 }
             )
+
         if self._smapshot_id:
-            seeAlso.append(
+            see_also.append(
                 {
-                    "id": "https://smapshot.heig-vd.ch/visit/{0}".format(
-                        self._smapshot_id
-                    ),
+                    "id": f"https://smapshot.heig-vd.ch/visit/{self._smapshot_id}",
                     "type": "Text",
                     "format": "text/html",
-                    "label": {"none": ["Smapshot"]},
+                    "label": {L.NONE: ["Smapshot"]},
                 }
             )
+
         if self._provider == "Instituto Moreira Salles":
-            seeAlso.append(
+            see_also.append(
                 {
                     "id": self._img_path,
                     "type": "Text",
                     "format": "text/html",
-                    "label": {"en": ["Download image"], "pt-BR": ["Baixar imagem"]},
+                    "label": {L.EN: ["Download image"], L.PT_BR: ["Baixar imagem"]},
                 }
             )
 
