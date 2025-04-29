@@ -31,7 +31,7 @@ def update(metadata, testing=False):
                     f.write(manifest.json(indent=4))
                 logger.info(f"Saved manifest locally to iiif/{item._id}/manifest.json")
             else:
-                upload_object_to_s3(manifest, item._id, f"iiif/{item._id}/manifest.json")
+                upload_object_to_s3(manifest.json(), item._id, f"iiif/{item._id}/manifest.json")
                 for name in item.get_collections():
                     collection = collections[name]
                     collection.items = [
