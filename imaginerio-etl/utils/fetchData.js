@@ -195,7 +195,7 @@ function renameDownloadedFiles(downloadDir) {
     }
 
     console.log("Launching browser...");
-    const browser = await puppeteer.launch({ headless: false, slowMo: 50 });
+    const browser = await puppeteer.launch({ headless: true, slowMo: 50 });
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 720 });
 
