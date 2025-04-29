@@ -49,6 +49,7 @@ jobs:
           JSTOR_USER: ${{ secrets.JSTOR_USER }}
           JSTOR_PASSWORD: ${{ secrets.JSTOR_PASSWORD }}
           JSTOR_PROJECT: ${{ secrets.JSTOR_PROJECT }}
+          JSTOR_VOCABULARY: ${{ secrets.JSTOR_VOCABULARY }}
 
       - name: Build Docker image
         run: docker build . -t etl
