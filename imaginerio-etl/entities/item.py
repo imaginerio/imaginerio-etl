@@ -227,34 +227,58 @@ class Item:
                 f.truncate()
         return sizes
 
+    def _format_wikidata_term(self, value_en: str) -> tuple[str, str] | None:
+        """
+        Processes a single English term, looking up Wikidata info and translation.
+
+        Args:
+            value_en: The single English term.
+
+        Returns:
+            A tuple (formatted_en, formatted_pt) or None if the term is invalid
+            or not found in the vocabulary. Formatted strings include HTML links
+            if a Wikidata ID is found.
+        """
+        if value_en not in self._vocabulary:
+            logger.warning(
+                f"{cf.YELLOW}Value '{value_en}' not found in vocabulary, skipping{cf.RESET}"
+            )
+            return None
+
+        term_data = self._vocabulary[value_en]
+        wikidata_id = term_data.get(VF.WIKIDATA_ID)
+        value_pt = term_data.get(VF.LABEL_PT)
+        value_pt = value_pt if pd.notna(value_pt) else value_en
+
+        if not wikidata_id:
+            logger.warning(
+                f"{cf.YELLOW}No Wikidata ID found for '{value_en}', will display text instead of link{cf.RESET}"
+            )
+            return value_en, value_pt
+        else:
+            link_template = '<a class="uri-value-link" target="_blank" href="https://wikidata.org/wiki/{wikidata_id}">{text}</a>'
+            formatted_en = link_template.format(wikidata_id=wikidata_id, text=value_en)
+            formatted_pt = link_template.format(wikidata_id=wikidata_id, text=value_pt)
+            return formatted_en, formatted_pt
+
     def map_wikidata(self, label, values_en):
         if not values_en:
             return None
 
-        value = {"en": [], "pt-BR": []}
+        processed_en = []
+        processed_pt = []
+
         for value_en in values_en.split("|"):
-            wikidata_id = self._vocabulary[value_en].get("Wikidata ID")
-            value_pt = self._vocabulary[value_en].get("Label (pt)") or value_en
+            formatted_pair = self._format_wikidata_term(value_en)
+            if formatted_pair:
+                processed_en.append(formatted_pair[0])
+                processed_pt.append(formatted_pair[1])
 
-            if not wikidata_id:
-                logger.warning(
-                    f"{cf.YELLOW}No Wikidata ID found for {value_en}, will display text instead of link{cf.RESET}"
-                )
-                value["en"].append(value_en)
-                value["pt-BR"].append(value_pt)
-            else:
-                value["en"].append(
-                    f'<a class="uri-value-link" target="_blank" href="https://wikidata.org/wiki/{wikidata_id}">{value_en}</a>'
-                )
-                value["pt-BR"].append(
-                    f'<a class="uri-value-link" target="_blank" href="https://wikidata.org/wiki/{wikidata_id}">{value_pt}</a>'
-                )
-        return KeyValueString(label=label, value=value)
-
-    def create_manifest(self, sizes):
-        if not sizes:
+        if not processed_en:
             return None
-        # Pick size closer to 600px (long edge) for thumbnail
+
+        final_value = {L.EN: processed_en, L.PT_BR: processed_pt}
+        return KeyValueString(label=label, value=final_value)
         thumb_width, thumb_height = min(
             sizes, key=lambda x: abs(min(x.values()) - 600)
         ).values()
