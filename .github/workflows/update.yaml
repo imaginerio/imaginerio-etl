@@ -10,6 +10,14 @@ on:
         type: boolean
         required: false
         default: false
+      reprocess:
+        description: "Reprocess all items"
+        type: boolean
+        required: false
+        default: false
+  schedule:
+    # Run at 00:00 UTC on the first day of every month
+    - cron: "0 0 1 * *"
 
 jobs:
   update-process:
@@ -54,6 +62,7 @@ jobs:
           ARCGIS_PORTAL: ${{ secrets.ARCGIS_PORTAL }}
           VIEWCONES_LAYER_URL: ${{ secrets.VIEWCONES_LAYER_URL }}
           RETILE: ${{ github.event.inputs.retile }}
+          REPROCESS: ${{ github.event.inputs.reprocess }}
         run: |
           docker run \
             -e AWS_SECRET_ACCESS_KEY \
