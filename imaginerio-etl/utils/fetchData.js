@@ -132,7 +132,7 @@ async function exportFromPage(page) {
   
   // Wait for the grid and checkbox to be ready
   await page.waitForSelector('.ag-header-select-all.ag-checkbox', {
-    timeout: 30000,
+    timeout: 60000,
     visible: true
   });
   
@@ -218,6 +218,7 @@ function renameDownloadedFiles(downloadDir) {
 
     console.log("Launching browser...");
     const browser = await puppeteer.launch({
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
       headless: true,
       slowMo: 100, // Increase from 50 to 100
       args: [
