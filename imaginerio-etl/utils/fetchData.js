@@ -129,10 +129,31 @@ async function login(page) {
 
 async function exportFromPage(page) {
   console.log("Selecting all items...");
-  await page.waitForSelector('.ag-header-cell[col-id="select"]');
+  
+  // Wait for the grid and checkbox to be ready
+  await page.waitForSelector('.ag-header-select-all.ag-checkbox', {
+    timeout: 30000,
+    visible: true
+  });
+  
   await delay(2000);
-  await page.click('.ag-header-cell[col-id="select"]');
+
+  // Click the checkbox using the more specific selector
+  await page.evaluate(() => {
+    const checkbox = document.querySelector('.ag-header-select-all.ag-checkbox');
+    if (!checkbox) throw new Error('Select all checkbox not found');
+    
+    // Find and click the checkbox or its icon
+    const icon = checkbox.querySelector('.ag-icon-checkbox-unchecked');
+    if (icon) {
+      icon.click();
+    } else {
+      checkbox.click();
+    }
+  });
+
   await delay(2000);
+  
   console.log('Clicking "select all in project"...');
   await page.waitForFunction(() => {
     const panel = document.querySelector(".select-all-panel.visible");
@@ -143,6 +164,7 @@ async function exportFromPage(page) {
         ?.shadowRoot?.querySelector("#button-element")
     );
   });
+  
   await page.evaluate(() => {
     const button = document
       .querySelector(".select-all-panel.visible")
