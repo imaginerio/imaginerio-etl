@@ -219,8 +219,18 @@ function renameDownloadedFiles(downloadDir) {
     console.log("Launching browser...");
     const browser = await puppeteer.launch({
       headless: true,
-      slowMo: 50,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      slowMo: 100, // Increase from 50 to 100
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage', // Add this for CI environments
+        '--disable-gpu', // Add this for CI environments
+        '--window-size=1280,720'
+      ],
+      defaultViewport: {
+        width: 1280,
+        height: 720
+      }
     });
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 720 });
