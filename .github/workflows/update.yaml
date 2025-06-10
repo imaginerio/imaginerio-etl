@@ -41,11 +41,7 @@ jobs:
           JSTOR_PASSWORD: ${{ secrets.JSTOR_PASSWORD }}
           JSTOR_PROJECT: ${{ secrets.JSTOR_PROJECT }}
           JSTOR_VOCABULARY: ${{ secrets.JSTOR_VOCABULARY }}
-        run: |
-          # Create necessary directories
-          mkdir -p data/jstor_download
-          
-          # Run Puppeteer in Docker
+        run: |    
           docker run -i \
             --init \
             --cap-add=SYS_ADMIN \
@@ -53,11 +49,11 @@ jobs:
             -e JSTOR_PASSWORD \
             -e JSTOR_PROJECT \
             -e JSTOR_VOCABULARY \
-            -v $(pwd)/imaginerio-etl:/app/scripts \
-            -v $(pwd)/data:/app/data \
+            -w /app \                           
+            -v $(pwd):/app \                    
             --rm \
             ghcr.io/puppeteer/puppeteer:latest \
-            node -e "$(cat scripts/utils/fetchData.js)"
+            node imaginerio-etl/utils/fetchData.js 
 
       - name: Build Docker image
         run: docker build . -t etl
