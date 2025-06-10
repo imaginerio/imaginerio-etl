@@ -49,11 +49,10 @@ jobs:
             -e JSTOR_PASSWORD \
             -e JSTOR_PROJECT \
             -e JSTOR_VOCABULARY \
-            -v $(pwd)/imaginerio-etl:/app/scripts \
-            -v $(pwd)/data:/app/data \
+            -v $(pwd):/app \
             --rm \
             ghcr.io/puppeteer/puppeteer:latest \
-            node -e "$(cat scripts/utils/fetchData.js)"
+            node -e "$(cat /app/imaginerio-etl/utils/fetchData.js)"
 
       - name: Build Docker image
         run: docker build . -t etl
