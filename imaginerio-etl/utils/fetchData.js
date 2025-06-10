@@ -2,8 +2,8 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
-const downloadDir = "./data/jstor_download";
-const dataDir = "./data/input";
+const downloadDir = "/app/data/jstor_download";
+const dataDir = "/app/data/input";
 
 // Check required environment variables
 const requiredEnvVars = [
