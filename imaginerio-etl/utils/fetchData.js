@@ -218,7 +218,7 @@ function renameDownloadedFiles(downloadDir) {
 
     console.log("Launching browser...");
     const browser = await puppeteer.launch({
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+      executablePath: '/usr/bin/google-chrome',
       headless: true,
       slowMo: 100, // Increase from 50 to 100
       args: [
