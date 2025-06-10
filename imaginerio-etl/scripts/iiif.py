@@ -21,7 +21,7 @@ def update(metadata, testing=False):
         try:
             item = Item(id, row, vocabulary)
             sizes = item.get_sizes()
-            if not sizes or RETILE == "true": # github action input, not boolean
+            if not sizes or testing or RETILE == "true": # github action input, not boolean
                 sizes = item.tile_image()
             manifest = item.create_manifest(sizes)
             
@@ -48,7 +48,7 @@ def update(metadata, testing=False):
     if not testing:
         for name in collections.keys():
             upload_object_to_s3(
-                collections[name], name, f"iiif/collection/{name.lower()}.json"
+                collections[name].json(), name, f"iiif/collection/{name.lower()}.json"
             )
 
     return {
