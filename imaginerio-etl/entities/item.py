@@ -3,6 +3,7 @@ import logging
 import os
 import subprocess
 from json import JSONDecodeError
+from typing import Union
 import pandas as pd
 
 from iiif_prezi3 import KeyValueString, Manifest, Canvas
@@ -32,8 +33,14 @@ class Item:
         self._title = row[MF.TITLE]
         self._description = (
             {
-                L.EN: [row.get(MF.DESC_EN) or row.get(MF.DESC_PT)],
-                L.PT_BR: [row.get(MF.DESC_PT) or row.get(MF.DESC_EN)],
+                L.EN: [
+                    row.get(MF.DESC_EN)
+                    or row.get(MF.DESC_PT)
+                ],
+                L.PT_BR: [
+                    row.get(MF.DESC_PT)
+                    or row.get(MF.DESC_EN)
+                ],
             }
             if row.get(MF.DESC_EN) or row.get(MF.DESC_PT)
             else None
@@ -67,7 +74,8 @@ class Item:
                         row.get(MF.DEPICTS),
                     ),
                     self.map_wikidata(
-                        {L.EN: ["Type"], L.PT_BR: ["Tipo"]}, row.get(MF.TYPE)
+                        {L.EN: ["Type"], L.PT_BR: ["Tipo"]},
+                        row.get(MF.TYPE)
                     ),
                     self.map_wikidata(
                         {L.EN: ["Material"], L.PT_BR: ["Material"]},
@@ -101,9 +109,7 @@ class Item:
         )
 
         if row.get(MF.REQUIRED_STATEMENT):
-            attribution_en = (
-                row.get(MF.REQUIRED_STATEMENT) + f". Hosted by {IC.PROVIDER_LABEL}."
-            )
+            attribution_en = row.get(MF.REQUIRED_STATEMENT) + f". Hosted by {IC.PROVIDER_LABEL}."
             attribution_pt = (
                 row.get(MF.REQUIRED_STATEMENT).replace(
                     "Provided by", "Disponibilizado por"
@@ -117,7 +123,9 @@ class Item:
             label={L.EN: ["Attribution"], L.PT_BR: ["Atribuição"]},
             value={L.EN: [attribution_en], L.PT_BR: [attribution_pt]},
         )
-        self._rights = RIGHTS.get(row[MF.RIGHTS], IC.DEFAULT_RIGHTS)
+        self._rights = RIGHTS.get(
+            row[MF.RIGHTS], IC.DEFAULT_RIGHTS
+        )
         self._transcription = row.get(MF.TRANSCRIPTION)
         self._transcription_en = row.get(MF.TRANSCRIPTION_EN)
         self._transcription_pt = row.get(MF.TRANSCRIPTION_PT)
@@ -147,24 +155,24 @@ class Item:
             return img_sizes
         except JSONDecodeError:
             return None
-
-    def _format_dimension(self, value: str | None) -> str | None:
+            
+    def _format_dimension(self, value: Union[str, None]) -> Union[str, None]:
         """Convert dimension from millimeters to centimeters and format with unit.
-
+        
         Args:
             value: Dimension value in millimeters as string, or None
-
+            
         Returns:
             Formatted string with value in centimeters and unit, or None if input is None
         """
         if not value:
             return None
-
+            
         try:
             # Convert from string to float, divide by 10 to convert mm to cm
             cm_value = float(value) / 10
             # Format with 1 decimal place if needed, remove trailing zeros
-            formatted = f"{cm_value:.1f}".rstrip("0").rstrip(".")
+            formatted = f"{cm_value:.1f}".rstrip('0').rstrip('.')
             return f"{formatted} cm"
         except (ValueError, TypeError):
             logger.warning(
@@ -185,7 +193,7 @@ class Item:
             )
             raise Exception(IOError)
 
-    def tile_image(self):
+    def tile_image(self, testing=False):
         self.download_image()
         command = [
             "vips",
@@ -202,7 +210,8 @@ class Item:
         logger.info(f"{cf.BLUE}Tiling image...")
         subprocess.run(command)
         sizes = self.create_derivatives([16, 8, 4, 2, 1])
-        upload_folder_to_s3(f"iiif/{self._id}")
+        if not testing:
+            upload_folder_to_s3(f"iiif/{self._id}")
         return sizes
         # os.remove(os.path.abspath(self._local_img_path))
 
@@ -232,7 +241,7 @@ class Item:
                 f.truncate()
         return sizes
 
-    def _format_wikidata_term(self, value_en: str) -> tuple[str, str] | None:
+    def _format_wikidata_term(self, value_en: str) -> Union[tuple[str, str], None]:
         """
         Processes a single English term, looking up Wikidata info and translation.
 
@@ -287,10 +296,10 @@ class Item:
 
     def _create_thumbnail(self, sizes: list[dict]) -> dict:
         """Create thumbnail for the manifest.
-
+        
         Args:
             sizes: List of available image sizes.
-
+            
         Returns:
             Dictionary with thumbnail configuration.
         """
@@ -341,7 +350,7 @@ class Item:
 
     def _create_canvas(self, sizes: list[dict]) -> Canvas:
         """Create canvas and annotation page for the manifest.
-
+        
         Returns:
             Tuple of (canvas, annotation_page)
         """
@@ -351,7 +360,7 @@ class Item:
             height=sizes[-1]["height"],
             width=sizes[-1]["width"],
         )
-
+        
         anno_page = canvas.add_image(
             image_url=self._img_path,
             anno_page_id=f"{self._base_path}/annotation-page/1",
@@ -360,15 +369,17 @@ class Item:
             height=canvas.height,
             width=canvas.width,
         )
-
+        
         anno_page.items[0].body.make_service(
-            id=self._base_path, type="ImageService3", profile=IC.IMAGE_SERVICE_PROFILE
+            id=self._base_path,
+            type="ImageService3",
+            profile=IC.IMAGE_SERVICE_PROFILE
         )
-
+        
         canvas = self._create_annotations(canvas)
 
         return canvas
-
+        
     def _create_annotations(self, canvas: Canvas):
         """Create annotations for the canvas"""
         if self._transcription:
@@ -379,9 +390,9 @@ class Item:
                 body={
                     "type": "TextualBody",
                     "value": self._transcription,
-                    "format": "text/plain",
+                    "format": "text/plain"
                 },
-                target=canvas.id,
+                target=canvas.id
             )
         if self._transcription_en or self._transcription_pt:
             canvas.make_annotation(
@@ -395,17 +406,17 @@ class Item:
                             "type": "TextualBody",
                             "value": self._transcription_en,
                             "language": L.EN,
-                            "format": "text/plain",
+                            "format": "text/plain"
                         },
                         {
                             "type": "TextualBody",
                             "value": self._transcription_pt,
                             "language": L.PT_BR,
-                            "format": "text/plain",
-                        },
+                            "format": "text/plain"
+                        }
                     ],
                 },
-                target=canvas.id,
+                target=canvas.id
             )
 
         return canvas
@@ -422,43 +433,37 @@ class Item:
         ]
 
         if self._wikidata_id:
-            see_also.append(
-                {
-                    "id": f"https://www.wikidata.org/wiki/{self._wikidata_id}",
-                    "type": "Text",
-                    "format": "text/html",
-                    "label": {L.NONE: ["Wikidata"]},
-                }
-            )
+            see_also.append({
+                "id": f"https://www.wikidata.org/wiki/{self._wikidata_id}",
+                "type": "Text",
+                "format": "text/html",
+                "label": {L.NONE: ["Wikidata"]},
+            })
 
         if self._smapshot_id:
-            see_also.append(
-                {
-                    "id": f"https://smapshot.heig-vd.ch/visit/{self._smapshot_id}",
-                    "type": "Text",
-                    "format": "text/html",
-                    "label": {L.NONE: ["Smapshot"]},
-                }
-            )
+            see_also.append({
+                "id": f"https://smapshot.heig-vd.ch/visit/{self._smapshot_id}",
+                "type": "Text",
+                "format": "text/html",
+                "label": {L.NONE: ["Smapshot"]},
+            })
 
         if self._provider == "Instituto Moreira Salles":
-            see_also.append(
-                {
-                    "id": self._img_path,
-                    "type": "Text",
-                    "format": "text/html",
-                    "label": {L.EN: ["Download image"], L.PT_BR: ["Baixar imagem"]},
-                }
-            )
+            see_also.append({
+                "id": self._img_path,
+                "type": "Text",
+                "format": "text/html",
+                "label": {L.EN: ["Download image"], L.PT_BR: ["Baixar imagem"]},
+            })
 
         return see_also
-
-    def create_manifest(self, sizes: list[dict]) -> Manifest | None:
+            
+    def create_manifest(self, sizes: list[dict]) -> Union[Manifest, None]:
         """Create IIIF manifest for the item.
-
+        
         Args:
             sizes: List of available image sizes.
-
+            
         Returns:
             IIIF Manifest object or None if no sizes available.
         """
@@ -491,3 +496,5 @@ class Item:
         manifest.add_item(canvas)
 
         return manifest
+
+
