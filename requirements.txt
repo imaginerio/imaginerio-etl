@@ -84,7 +84,7 @@ more-itertools==10.2.0
 moto==5.0.5
 nbclassic==1.0.0
 nbclient==0.10.0
-nbconvert==7.16.3
+nbconvert==7.17.0
 nbformat==5.10.4
 nest-asyncio==1.6.0
 notebook==6.5.6
